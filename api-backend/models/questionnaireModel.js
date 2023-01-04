@@ -15,9 +15,10 @@ const questionnaireSchema = new mongoose.Schema(
         questionnaireTitle: {
             type: String,
             required: [true, 'A questionnaire must have a title'],
+            unique: [true, "A questionnaire must have it's own unique title"],
             maxlength: [
                 60,
-                'A questionnaire title must have less or equal than 40 characters',
+                'A questionnaire title must have less or equal than 60 characters',
             ],
             minlength: [
                 10,
