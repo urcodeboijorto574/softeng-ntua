@@ -34,6 +34,7 @@ const questionSchema = new mongoose.Schema({
     ],
     wasAnsweredBy: {
         type: Number,
+        default: 0,
     },
     questionnaireID: {
         //type: mongoose.Schema.ObjectId,
