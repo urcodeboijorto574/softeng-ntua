@@ -210,6 +210,8 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
                               if (_formKey.currentState!.validate()) {
                                 print(email);
                                 print(password);
+                                Navigator.pushReplacementNamed(
+                                    context, '/choose_action');
                               }
                             },
                             child: Column(

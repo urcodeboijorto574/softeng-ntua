@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:questionnaires_app/main_screens/questionnaire_list.dart';
 
 class UserLoginScreen extends StatefulWidget {
   const UserLoginScreen({super.key});
@@ -210,6 +211,11 @@ class _UserLoginScreenState extends State<UserLoginScreen> {
                               if (_formKey.currentState!.validate()) {
                                 print(email);
                                 print(password);
+
+                                Navigator.pushAndRemoveUntil(context,
+                                    MaterialPageRoute(builder: (context) {
+                                  return QuestionnaireListScreen();
+                                }), (route) => false);
                               }
                             },
                             child: Column(

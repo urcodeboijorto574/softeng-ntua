@@ -4,6 +4,7 @@ import 'package:questionnaires_app/auth/admin_signup.dart';
 import 'package:questionnaires_app/auth/user_login.dart';
 import 'package:questionnaires_app/auth/user_signup.dart';
 
+import 'main_screens/choose_action.dart';
 import 'main_screens/welcome_screen.dart';
 
 void main() {
@@ -29,6 +30,7 @@ class MyApp extends StatelessWidget {
         '/user_login': (context) => const UserLoginScreen(),
         '/admin_signup': (context) => const AdminSignupScreen(),
         '/admin_login': (context) => const AdminLoginScreen(),
+        '/choose_action': (context) => const ChooseActionScreen(),
       },
     );
   }
