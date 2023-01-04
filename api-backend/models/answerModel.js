@@ -2,8 +2,8 @@ const mongoose = require('mongoose');
 const slugify = require('slugify');
 const validator = require('validator');
 
-const asnwerSchema = new mongoose.Schema({
-    questionID: {
+const answerSchema = new mongoose.Schema({
+    /*     questionID: {
         type: mongoose.ObjectID,
         ref: 'Answer',
     },
@@ -18,5 +18,21 @@ const asnwerSchema = new mongoose.Schema({
     questionnaireID: {
         type: mongoose.ObjectID,
         ref: 'Questionnaire',
+    }, */
+    qID: {
+        type: String,
+    },
+    optID: {
+        type: String,
+    },
+    sessionID: {
+        type: String,
+    },
+    questionnaireID: {
+        type: String,
     },
 });
+
+const Answer = mongoose.model('Answer', answerSchema);
+
+module.exports = Answer;
