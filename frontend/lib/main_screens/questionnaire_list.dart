@@ -1,18 +1,59 @@
+// ignore_for_file: void_checks
+
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:questionnaires_app/main_screens/question_screen.dart';
 
-class QuestionnaireListScreen extends StatefulWidget {
-  const QuestionnaireListScreen({super.key});
+import 'package:http/http.dart';
+import 'package:questionnaires_app/objects/question.dart';
+
+class QuestionnaireListToAnswerScreen extends StatefulWidget {
+  const QuestionnaireListToAnswerScreen({super.key});
 
   @override
-  State<QuestionnaireListScreen> createState() =>
-      _QuestionnaireListScreenState();
+  State<QuestionnaireListToAnswerScreen> createState() =>
+      _QuestionnaireListToAnswerScreenState();
 }
 
-class _QuestionnaireListScreenState extends State<QuestionnaireListScreen> {
+class _QuestionnaireListToAnswerScreenState
+    extends State<QuestionnaireListToAnswerScreen> {
+  late List questionnaires;
+  late Future<List> questionnaireTitles;
+
+  String _localhost() {
+    return 'http://127.0.0.1:3000/intelliq_api/questionnaire/getAllQuestionnaires';
+  }
+
+  Future<List> _getAllQuestionnaires() async {
+    List<String> titles = [];
+
+    final url = Uri.parse(_localhost());
+    Response response = await get(url);
+
+    if (response.statusCode == 200) {
+      questionnaires = jsonDecode(response.body)['data']['questionnaires'];
+
+      for (int i = 0; i < questionnaires.length; i++) {
+        titles.add(questionnaires[i]['questionnaireTitle']);
+      }
+      return titles;
+    } else {
+      throw Exception('Failed to load the questionnaires');
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      questionnaireTitles = _getAllQuestionnaires();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,7 +82,7 @@ class _QuestionnaireListScreenState extends State<QuestionnaireListScreen> {
           Padding(
             padding: const EdgeInsets.all(15),
             child: IconButton(
-              onPressed: () {
+              onPressed: () async {
                 Navigator.pushReplacementNamed(context, '/welcome_screen');
               },
               icon: const Icon(
@@ -53,41 +94,73 @@ class _QuestionnaireListScreenState extends State<QuestionnaireListScreen> {
           )
         ],
       ),
-      body: ListView.builder(
-        itemCount: 10,
-        itemBuilder: (context, index) {
-          return InkWell(
-            onTap: () {
-              Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => QuestionScreen(
-                      qId: '1',
-                      index: (index + 1),
+      body: FutureBuilder<List>(
+        future: questionnaireTitles,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return ListView.builder(
+              itemCount: snapshot.data!.length,
+              itemBuilder: (context, index) {
+                return InkWell(
+                  onTap: () {
+                    Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => QuestionScreen(
+                            questionnaireID: questionnaires[index]
+                                ['questionnaireID'],
+                            questionnaireTitle: questionnaires[index]
+                                ['questionnaireTitle'],
+                            answers: [],
+                            questions: questionnaires[index]['questions'],
+                            index: 1,
+                            question: Question(
+                                qID: questionnaires[index]['questions'][0]
+                                    ['qID'],
+                                qtext: questionnaires[index]['questions'][0]
+                                    ['qtext'],
+                                required_: questionnaires[index]['questions'][0]
+                                    ['required'],
+                                type: questionnaires[index]['questions'][0]
+                                    ['type'],
+                                options: questionnaires[index]['questions'][0]
+                                    ['options']),
+                          ),
+                        ),
+                        (route) => false);
+                  },
+                  child: Card(
+                    child: Row(
+                      children: [
+                        const Icon(
+                          FontAwesomeIcons.question,
+                          size: 40,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 10, left: 15),
+                          child: Text(
+                            snapshot.data![index],
+                            style: const TextStyle(
+                              fontSize: 20,
+                            ),
+                          ),
+                        )
+                      ],
                     ),
                   ),
-                  (route) => false);
-            },
-            child: Card(
-              child: Row(
-                children: [
-                  const Icon(
-                    FontAwesomeIcons.question,
-                    size: 40,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 10, left: 15),
-                    child: Text(
-                      'Questionnaire ${index + 1}',
-                      style: const TextStyle(
-                        fontSize: 20,
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            ),
-          );
+                );
+              },
+            );
+          } else if (snapshot.hasError) {
+            return Center(
+              child: Text('${snapshot.error}'),
+            );
+          }
+
+          return const Center(
+              child: CircularProgressIndicator(
+            color: Colors.pinkAccent,
+          ));
         },
       ),
     );

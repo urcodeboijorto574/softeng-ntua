@@ -1,12 +1,12 @@
 class Question {
-  final String qId;
+  final String qID;
   final String qtext;
-  final bool required_;
+  final String required_;
   final String type;
-  final List<String> options;
+  final List<dynamic> options;
 
   const Question({
-    required this.qId,
+    required this.qID,
     required this.qtext,
     required this.required_,
     required this.type,
@@ -15,7 +15,7 @@ class Question {
 
   factory Question.fromJson(Map<String, dynamic> json) {
     return Question(
-      qId: json['qId'],
+      qID: json['qID'],
       qtext: json['qtext'],
       required_: json['required'],
       type: json['type'],
