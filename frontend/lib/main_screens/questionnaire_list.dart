@@ -9,18 +9,19 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:questionnaires_app/main_screens/question_screen.dart';
 
 import 'package:http/http.dart';
+import 'package:questionnaires_app/main_screens/statistics_screen.dart';
 import 'package:questionnaires_app/objects/question.dart';
 
-class QuestionnaireListToAnswerScreen extends StatefulWidget {
-  const QuestionnaireListToAnswerScreen({super.key});
+class QuestionnaireListScreen extends StatefulWidget {
+  final String label;
+  const QuestionnaireListScreen({super.key, required this.label});
 
   @override
-  State<QuestionnaireListToAnswerScreen> createState() =>
-      _QuestionnaireListToAnswerScreenState();
+  State<QuestionnaireListScreen> createState() =>
+      _QuestionnaireListScreenState();
 }
 
-class _QuestionnaireListToAnswerScreenState
-    extends State<QuestionnaireListToAnswerScreen> {
+class _QuestionnaireListScreenState extends State<QuestionnaireListScreen> {
   late List questionnaires;
   late Future<List> questionnaireTitles;
 
@@ -44,6 +45,39 @@ class _QuestionnaireListToAnswerScreenState
     } else {
       throw Exception('Failed to load the questionnaires');
     }
+  }
+
+  void answerQuestionnaire(int index) {
+    Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+          builder: (context) => QuestionScreen(
+            questionnaireID: questionnaires[index]['questionnaireID'],
+            questionnaireTitle: questionnaires[index]['questionnaireTitle'],
+            answers: [],
+            questions: questionnaires[index]['questions'],
+            index: 1,
+            question: Question(
+                qID: questionnaires[index]['questions'][0]['qID'],
+                qtext: questionnaires[index]['questions'][0]['qtext'],
+                required_: questionnaires[index]['questions'][0]['required'],
+                type: questionnaires[index]['questions'][0]['type'],
+                options: questionnaires[index]['questions'][0]['options']),
+          ),
+        ),
+        (route) => false);
+  }
+
+  void showStatistics(int index) {
+    Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+          builder: (context) => StatisticsScreen(
+            questionnaireTitle: questionnaires[index]['questionnaireTitle'],
+            questions: questionnaires[index]['questions'],
+          ),
+        ),
+        (route) => false);
   }
 
   @override
@@ -103,31 +137,11 @@ class _QuestionnaireListToAnswerScreenState
               itemBuilder: (context, index) {
                 return InkWell(
                   onTap: () {
-                    Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => QuestionScreen(
-                            questionnaireID: questionnaires[index]
-                                ['questionnaireID'],
-                            questionnaireTitle: questionnaires[index]
-                                ['questionnaireTitle'],
-                            answers: [],
-                            questions: questionnaires[index]['questions'],
-                            index: 1,
-                            question: Question(
-                                qID: questionnaires[index]['questions'][0]
-                                    ['qID'],
-                                qtext: questionnaires[index]['questions'][0]
-                                    ['qtext'],
-                                required_: questionnaires[index]['questions'][0]
-                                    ['required'],
-                                type: questionnaires[index]['questions'][0]
-                                    ['type'],
-                                options: questionnaires[index]['questions'][0]
-                                    ['options']),
-                          ),
-                        ),
-                        (route) => false);
+                    if (widget.label == 'answer questionnaire') {
+                      answerQuestionnaire(index);
+                    } else if (widget.label == 'show statistics') {
+                      showStatistics(index);
+                    }
                   },
                   child: Card(
                     child: Row(

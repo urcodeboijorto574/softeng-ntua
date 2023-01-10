@@ -35,7 +35,7 @@ class _QuestionScreenState extends State<QuestionScreen> {
       GlobalKey<ScaffoldMessengerState>();
 
   int selectedItem = 0;
-  String answer = '';
+  String answer = ' ';
   late Question nextQuestion;
   bool processing = false;
 
@@ -43,7 +43,7 @@ class _QuestionScreenState extends State<QuestionScreen> {
   Widget build(BuildContext context) {
     final optionsLength = widget.question.options.length;
 
-    void _showNextQuestion(int optIndex) {
+    void _showNextQuestion(int optIndex, bool saveAnswer) {
       for (int i = 0; i < widget.questions.length; i++) {
         if (widget.question.options[optIndex]['nextqID'] ==
             widget.questions[i]['qID']) {
@@ -57,13 +57,16 @@ class _QuestionScreenState extends State<QuestionScreen> {
         }
       }
 
-      widget.answers.add(Answer(
-        questionnaireID: widget.questionnaireID,
-        questionID: widget.question.qID,
-        options: widget.question.options,
-        questiontxt: widget.question.qtext,
-        optionIndex: optIndex,
-      ));
+      if (saveAnswer) {
+        widget.answers.add(Answer(
+          questionnaireID: widget.questionnaireID,
+          questionID: widget.question.qID,
+          options: widget.question.options,
+          questiontxt: widget.question.qtext,
+          optionIndex: optIndex,
+          answertxt: answer,
+        ));
+      }
 
       Navigator.pushAndRemoveUntil(
           context,
@@ -80,14 +83,17 @@ class _QuestionScreenState extends State<QuestionScreen> {
           (route) => false);
     }
 
-    void _showOverview(int optIndex) {
-      widget.answers.add(Answer(
-        questionnaireID: widget.questionnaireID,
-        questionID: widget.question.qID,
-        options: widget.question.options,
-        questiontxt: widget.question.qtext,
-        optionIndex: optIndex,
-      ));
+    void _showOverview(int optIndex, bool saveAnswer) {
+      if (saveAnswer) {
+        widget.answers.add(Answer(
+          questionnaireID: widget.questionnaireID,
+          questionID: widget.question.qID,
+          options: widget.question.options,
+          questiontxt: widget.question.qtext,
+          optionIndex: optIndex,
+          answertxt: answer,
+        ));
+      }
 
       Navigator.pushAndRemoveUntil(
           context,
@@ -113,9 +119,17 @@ class _QuestionScreenState extends State<QuestionScreen> {
         } else {
           _formKey.currentState!.reset();
           if (widget.question.options[0]['nextqID'] == '-') {
-            _showOverview(0);
+            if (answer == ' ') {
+              _showOverview(0, false);
+            } else {
+              _showOverview(0, true);
+            }
           } else {
-            _showNextQuestion(0);
+            if (answer == ' ') {
+              _showNextQuestion(0, false);
+            } else {
+              _showNextQuestion(0, true);
+            }
           }
         }
       } else {
@@ -124,9 +138,9 @@ class _QuestionScreenState extends State<QuestionScreen> {
               'The question is required. Please answer before going to the next one!');
         } else {
           if (widget.question.options[selectedItem - 1]['nextqID'] == '-') {
-            _showOverview(selectedItem - 1);
+            _showOverview(selectedItem - 1, true);
           } else {
-            _showNextQuestion(selectedItem - 1);
+            _showNextQuestion(selectedItem - 1, true);
           }
         }
       }
@@ -262,11 +276,8 @@ class _QuestionScreenState extends State<QuestionScreen> {
                                         selectedItem = value!;
                                       });
                                     },
-                                    title: Padding(
-                                      padding: const EdgeInsets.only(bottom: 8),
-                                      child: Text(widget.question.options[index]
-                                          ['opttxt']),
-                                    ),
+                                    title: Text(widget.question.options[index]
+                                        ['opttxt']),
                                     activeColor:
                                         const Color.fromARGB(255, 9, 52, 58),
                                   );

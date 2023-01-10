@@ -214,7 +214,9 @@ class _UserLoginScreenState extends State<UserLoginScreen> {
 
                                 Navigator.pushAndRemoveUntil(context,
                                     MaterialPageRoute(builder: (context) {
-                                  return const QuestionnaireListToAnswerScreen();
+                                  return const QuestionnaireListScreen(
+                                    label: 'answer questionnaire',
+                                  );
                                 }), (route) => false);
                               }
                             },

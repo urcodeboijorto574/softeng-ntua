@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:questionnaires_app/main_screens/questionnaire_list.dart';
 
 class ChooseActionScreen extends StatelessWidget {
   const ChooseActionScreen({super.key});
@@ -51,7 +52,14 @@ class ChooseActionScreen extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           InkWell(
-            onTap: () {},
+            onTap: () {
+              Navigator.pushAndRemoveUntil(context,
+                  MaterialPageRoute(builder: (context) {
+                return const QuestionnaireListScreen(
+                  label: 'show statistics',
+                );
+              }), (route) => false);
+            },
             child: Container(
               height: 200,
               width: 200,

@@ -4,6 +4,7 @@ class Answer {
   final String questiontxt;
   final int optionIndex;
   final List<dynamic> options;
+  final String answertxt;
 
   const Answer({
     required this.questionnaireID,
@@ -11,5 +12,6 @@ class Answer {
     required this.questiontxt,
     required this.optionIndex,
     required this.options,
+    required this.answertxt,
   });
 }
