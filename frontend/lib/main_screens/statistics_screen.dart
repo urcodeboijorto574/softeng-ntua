@@ -3,6 +3,7 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
 import 'package:pie_chart/pie_chart.dart';
+import 'package:questionnaires_app/main_screens/questionnaire_list.dart';
 
 class StatisticsScreen extends StatefulWidget {
   final String questionnaireTitle;
@@ -97,7 +98,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
               borderRadius: BorderRadius.circular(10),
             ),
             child: ListView.builder(
-              itemCount: widget.questions.length + 1,
+              itemCount: widget.questions.length + 2,
               itemBuilder: ((context, index) {
                 if (index == 0) {
                   return Padding(
@@ -109,6 +110,44 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                           color: Colors.black,
                           fontWeight: FontWeight.bold,
                           fontSize: 30,
+                        ),
+                      ),
+                    ),
+                  );
+                } else if (index == widget.questions.length + 1) {
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 60, top: 80),
+                    child: Center(
+                      child: Container(
+                        height: 60,
+                        width: 400,
+                        decoration: BoxDecoration(
+                          color: const Color.fromARGB(255, 9, 52, 58),
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        child: MaterialButton(
+                          onPressed: () {
+                            Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const QuestionnaireListScreen(
+                                          label: 'show statistics'),
+                                ),
+                                (route) => false);
+                          },
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: const [
+                              Text(
+                                'Back to Questionnaires',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
