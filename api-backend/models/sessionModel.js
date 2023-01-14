@@ -5,13 +5,12 @@ const validator = require('validator');
 const sessionSchema = new mongoose.Schema({
     sessionID: {
         type: String,
-        required: [true, 'An option must have an id'],
-        unique: [true, "An option must have it's own unique id"],
-        length: [5, 'An optin id must have 5 characters'],
+        required: [true, 'A session must have an id'],
+        unique: [true, 'A session must have a unique id'],
+        length: [4, 'A session id must have 5 characters'],
     },
     questionnaireID: {
-        type: mongoose.Schema.ObjectId,
-        ref: 'Questionnaire',
+        type: String,
     },
     answers: {
         type: mongoose.Schema.ObjectId,
