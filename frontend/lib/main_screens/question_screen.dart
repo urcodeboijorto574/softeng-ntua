@@ -99,8 +99,10 @@ class _QuestionScreenState extends State<QuestionScreen> {
           context,
           MaterialPageRoute(
             builder: (context) => AnswersOverviewScreen(
-                answers: widget.answers,
-                questionnaireTitle: widget.questionnaireTitle),
+              answers: widget.answers,
+              questionnaireTitle: widget.questionnaireTitle,
+              label: 'submit answers',
+            ),
           ),
           (route) => false);
     }

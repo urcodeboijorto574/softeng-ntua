@@ -18,9 +18,13 @@ String generateRandomString(int len) {
 class AnswersOverviewScreen extends StatefulWidget {
   final List<Answer> answers;
   final String questionnaireTitle;
+  final String label;
 
   const AnswersOverviewScreen(
-      {super.key, required this.answers, required this.questionnaireTitle});
+      {super.key,
+      required this.answers,
+      required this.questionnaireTitle,
+      required this.label});
 
   @override
   State<AnswersOverviewScreen> createState() => _AnswersOverviewScreenState();
@@ -33,7 +37,7 @@ class _AnswersOverviewScreenState extends State<AnswersOverviewScreen> {
     return 'http://127.0.0.1:3000/intelliq_api/doanswer';
   }
 
-  Future<int> _sendAnswer(Answer single_answer, String session) async {
+  Future<void> _sendAnswer(Answer single_answer, String session) async {
     final url = Uri.parse(
         '${_localhost()}/${single_answer.questionnaireID}/${single_answer.questionID}/$session/${single_answer.options[single_answer.optionIndex]['optID']}');
     Response response = await post(
@@ -45,12 +49,12 @@ class _AnswersOverviewScreenState extends State<AnswersOverviewScreen> {
         'Allow': '*'
       },
       body: jsonEncode(<String, String>{
-        'text': single_answer.answertxt,
+        'answertext': single_answer.answertxt,
       }),
     );
 
-    if (response.statusCode == 201) {
-      return 0;
+    if (response.statusCode == 200) {
+      return;
     } else {
       throw Exception('Failed to send answer');
     }
@@ -135,50 +139,75 @@ class _AnswersOverviewScreenState extends State<AnswersOverviewScreen> {
                           color: const Color.fromARGB(255, 9, 52, 58),
                           borderRadius: BorderRadius.circular(15),
                         ),
-                        child: MaterialButton(
-                          onPressed: () async {
-                            setState(() {
-                              processing = true;
-                            });
+                        child: widget.label == 'submit answers'
+                            ? MaterialButton(
+                                onPressed: () async {
+                                  setState(() {
+                                    processing = true;
+                                  });
 
-                            int result;
-                            String sessionID = generateRandomString(4);
+                                  String sessionID = generateRandomString(4);
 
-                            for (int i = 0; i < widget.answers.length; i++) {
-                              result = await _sendAnswer(
-                                  widget.answers[i], sessionID);
-                            }
+                                  for (int i = 0;
+                                      i < widget.answers.length;
+                                      i++) {
+                                    await _sendAnswer(
+                                        widget.answers[i], sessionID);
+                                  }
 
-                            Navigator.pushAndRemoveUntil(context,
-                                MaterialPageRoute(builder: (context) {
-                              return const QuestionnaireListScreen(
-                                label: 'answer questionnaire',
-                              );
-                            }), (route) => false);
+                                  Navigator.pushAndRemoveUntil(context,
+                                      MaterialPageRoute(builder: (context) {
+                                    return const QuestionnaireListScreen(
+                                      label: 'answer questionnaire',
+                                    );
+                                  }), (route) => false);
 
-                            setState(() {
-                              processing = false;
-                            });
-                          },
-                          child: processing
-                              ? const Center(
-                                  child: CircularProgressIndicator(
-                                    color: Colors.white,
-                                  ),
-                                )
-                              : Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: const [
-                                    Text(
-                                      'Submit',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 20,
+                                  setState(() {
+                                    processing = false;
+                                  });
+                                },
+                                child: processing
+                                    ? const Center(
+                                        child: CircularProgressIndicator(
+                                          color: Colors.white,
+                                        ),
+                                      )
+                                    : Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: const [
+                                          Text(
+                                            'Submit',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 20,
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                    ),
-                                  ],
-                                ),
-                        ),
+                              )
+                            : MaterialButton(
+                                onPressed: () {},
+                                child: processing
+                                    ? const Center(
+                                        child: CircularProgressIndicator(
+                                          color: Colors.white,
+                                        ),
+                                      )
+                                    : Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: const [
+                                          Text(
+                                            'Back to Sessions',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 20,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                              ),
                       ),
                     ),
                   );

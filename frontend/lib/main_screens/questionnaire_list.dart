@@ -6,9 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:questionnaires_app/main_screens/choose_action.dart';
 import 'package:questionnaires_app/main_screens/question_screen.dart';
 
 import 'package:http/http.dart';
+import 'package:questionnaires_app/main_screens/session_list.dart';
 import 'package:questionnaires_app/main_screens/statistics_screen.dart';
 import 'package:questionnaires_app/objects/question.dart';
 
@@ -80,6 +82,19 @@ class _QuestionnaireListScreenState extends State<QuestionnaireListScreen> {
         (route) => false);
   }
 
+  void showSessions(int index) {
+    Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+          builder: (context) => SessionListScreen(
+            questionnaireID: questionnaires[index]['questionnaireID'],
+            questions: questionnaires[index]['questions'],
+            questionnaireTitle: questionnaires[index]['questionnaireTitle'],
+          ),
+        ),
+        (route) => false);
+  }
+
   @override
   void initState() {
     super.initState();
@@ -141,6 +156,8 @@ class _QuestionnaireListScreenState extends State<QuestionnaireListScreen> {
                       answerQuestionnaire(index);
                     } else if (widget.label == 'show statistics') {
                       showStatistics(index);
+                    } else if (widget.label == 'view answers') {
+                      showSessions(index);
                     }
                   },
                   child: Card(
@@ -177,6 +194,36 @@ class _QuestionnaireListScreenState extends State<QuestionnaireListScreen> {
           ));
         },
       ),
+      floatingActionButton: widget.label != 'answer questionnaire'
+          ? Padding(
+              padding: const EdgeInsets.all(40.0),
+              child: FloatingActionButton.extended(
+                onPressed: () {
+                  Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const ChooseActionScreen()),
+                      (route) => false);
+                },
+                label: const Padding(
+                  padding: EdgeInsets.only(bottom: 10),
+                  child: Text(
+                    'Back',
+                    style: TextStyle(
+                      color: Color.fromARGB(255, 9, 52, 58),
+                      fontWeight: FontWeight.w600,
+                      fontSize: 15,
+                    ),
+                  ),
+                ),
+                icon: const Icon(
+                  Icons.arrow_back,
+                  color: Color.fromARGB(255, 9, 52, 58),
+                ),
+                backgroundColor: Colors.pink,
+              ),
+            )
+          : const SizedBox(),
     );
   }
 }

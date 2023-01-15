@@ -94,7 +94,14 @@ class ChooseActionScreen extends StatelessWidget {
             width: 100,
           ),
           InkWell(
-            onTap: () {},
+            onTap: () {
+              Navigator.pushAndRemoveUntil(context,
+                  MaterialPageRoute(builder: (context) {
+                return const QuestionnaireListScreen(
+                  label: 'view answers',
+                );
+              }), (route) => false);
+            },
             child: Container(
               height: 200,
               width: 200,
