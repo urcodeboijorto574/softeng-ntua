@@ -27,9 +27,14 @@ const answerSchema = new mongoose.Schema({
     },
     sessionID: {
         type: String,
+        required: true,
     },
     questionnaireID: {
         type: String,
+    },
+    answertext: {
+        type: String,
+        default: '',
     },
 });
 
