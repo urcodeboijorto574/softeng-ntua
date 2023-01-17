@@ -5,7 +5,19 @@ baseUrl = "http://localhost:8000/"
 
 loginEndpoint = "http://localhost:8000/endpoint"
 
+def unknownArgsHandler(unknown):
+    print("Error: Unrecognized arguments passed.\nGot: ")
+    for i in range(len(unknown) - 1):
+        print(unknown[i], end = ", ")
+    print(unknown[-1])
+    print("\nWhile expecting at least one of:")
+    print("--usermod, --username, --passw, --users")
+    print("\nExiting...")
+    exit()
+
+# python cli.py login --username Stelios --passw Zarifis --format json
 def login(username, password, form):
+    """"""
     print("Will sent username:", username, "and password:", password)
     if form == "json":
         print("=== json ===")
@@ -21,14 +33,37 @@ def login(username, password, form):
     else:
         raise ValueError("Invalid format specified. Must be 'json' or 'csv'.")
 
+    if (response.status_code == 200):
+        print("Login successful!")
+    else:
+        print("Login failed")
+        print("Reason:", response.reason)
     
     return response
 
 def logout():
+    """ Posts with no body and expect a response.
+        If status == 200: success
+        Else: gives reason"""
     print("Will logout")
+    logoutUrl = baseUrl + "logout"
+    response = requests.post(logoutUrl)
+    if response.status_code == 200:
+        print("Logout successful!")
+    else:
+        print("Error: Unable to logout")
+        print("Reason: ", response.reason)
+
     return
 
+# login -> returned response with json containing username and a field blah 
+
 def healthcheck():
+    """ Performs healthcheck.
+        If status_code == 200:
+            If status == OK: prints dbconnection
+            Else: prints dbconnection
+        Else: gives reason"""
     healthUrl = baseUrl + "admin/healthcheck"
     print("Will perform a healthcheck at", healthUrl)
     response = requests.get(healthUrl)
@@ -41,7 +76,8 @@ def healthcheck():
         else:
             print(f"Connection failed: {dbconnection}")
     else:
-        print("Error: Unable to reach endpoint")
+        print("Error: Unable to perform healthcheck")
+        print("Reason: ", response.reason)
     
     return
 
@@ -118,16 +154,35 @@ def getquestionanswers(questionnaire_id, question_id):
           "and question with id:", question_id)
     return
 
-def admin(username, password):
-    print("Will sent username:", username, "and password:", password)
+def admin(args):
+    print("HERE")
+    # print("Will sent username:", username, "and password:", password)
+    if args.usermod:
+        print("user modification")
+    if args.username:
+        print("username :", args.username)
+    if args.passw:
+        print("password :", args.passw)
+    if args.users:
+        print("users :", args.users)
+
     return
 
 
 
 
-parser = argparse.ArgumentParser()
+parser = argparse.ArgumentParser(add_help=False)
 
 subparser = parser.add_subparsers(dest = "command")
+
+# def loginParser():
+#     ### LOGIN PARSER ###
+#     login_parser = subparser.add_parser("login", help = "login")
+#     login_parser.add_argument("--username", nargs = 1)
+#     login_parser.add_argument("--passw", nargs = 1)
+#     login_parser.add_argument("--format", nargs = 1)
+#     ####################
+#     return
 
 ### LOGIN PARSER ###
 login_parser = subparser.add_parser("login", help = "login")
@@ -138,6 +193,7 @@ login_parser.add_argument("--format", nargs = 1)
 
 ### LOGOUT PARSER ###
 logout_parser = subparser.add_parser("logout", help = "logout")
+# Why format is needed in logout???
 logout_parser.add_argument("--format", nargs = 1)
 #####################
 
@@ -201,18 +257,51 @@ getquestionanswers_parser.add_argument("--format", nargs = 1)
 
 ### ADMIN PARSER ###
 admin_parser = subparser.add_parser("admin", help = "admin")
-admin_subparsers = admin_parser.add_subparsers()
+admin_parser.add_argument("--usermod", help="modify user", action="store_true")
+admin_parser.add_argument("--username", help="username")
+admin_parser.add_argument("--passw", help="password")
+admin_parser.add_argument("--users", help="list of users")
 ####################
 
-####################
-adminUpd_parser = admin_subparsers.add_parser("questionnaire_upd", help = "questionnaire_upd")
-adminUpd_parser.add_argument("--source", nargs = 1)
-adminUpd_parser.add_argument("--format", nargs = 1) 
 
-####################
 
-### ADMINUSERMOD PARSER ###
+'''
+#admin_parser = subparser.add_parser("admin", help = "admin")
+#admin_subparsers = admin_parser.add_subparsers(dest = "command")
+
+
+admin_parser = subparser.add_parser("admin", help = "admin")
+#admin_parser.add_argument("--usermod", help="modify user", action="store_true")
+
+admin_subparsers = admin_parser.add_subparsers(dest = "subcommand")
+
 adminUserMod_parser = admin_subparsers.add_parser("--usermod", help = "adminUserMod")
+#adminUserMod_parser.add_argument("--usermod", help="modify user", action="store_true")
+adminUserMod_parser.add_argument("--username", help="username")
+adminUserMod_parser.add_argument("--passw", help="password")
+adminUserMod_parser.add_argument("--users", help="list of users")
+
+
+usermod_parser = admin_subparsers.add_parser("usermod", help="modify user")
+usermod_parser.add_argument("--username", help="username")
+usermod_parser.add_argument("--passw", help="password")
+
+users_parser = admin_subparsers.add_parser("users", help="list of users")
+users_parser.add_argument("--users", help="list of users")
+'''
+####################
+'''
+####################
+#adminUpd_parser = admin_subparsers.add_parser("questionnaire_upd", help = "questionnaire_upd")
+#adminUpd_parser.add_argument("--source", nargs = 1)
+#adminUpd_parser.add_argument("--format", nargs = 1) 
+
+####################
+'''
+'''
+### ADMINUSERMOD PARSER ###
+adminUserMod_parser = admin_subparsers.add_parser("--usermod", help = "adminUserMod", dest = "adminUserMod")
+#adminUserMod_parser.add_argument("--usermod", nargs = 0)
 adminUserMod_parser.add_argument("--username", nargs = 1)
 adminUserMod_parser.add_argument("--passw", nargs = 1)
 adminUserMod_parser.add_argument("--format", nargs = 1)
@@ -233,49 +322,71 @@ adminPassword_parser.add_argument("--format", nargs = 1)
 adminUsers_parser = admin_subparsers.add_parser("--users", help = "adminUsers")
 adminUsers_parser.add_argument("--format", nargs = 1)
 #########################
+'''
 
-args = parser.parse_args()
+args, unknown = parser.parse_known_args(["--usermod", "--username", "--passw", "--users"])
+
+if len(unknown) != 0:
+    unknownArgsHandler(unknown)
 
 print(args)
 
 if (args.command == "login"):
     login(args.username[0], args.passw[0], args.format[0])
 
-if (args.command == "logout"):
-    logout()
+elif (args.command == "logout"):
+    logout(args.format[0])
 
-if (args.command == "healthcheck"):
-    healthcheck()
+elif (args.command == "healthcheck"):
+    healthcheck(args.format[0])
 
-if (args.command == "resetall"):
-    resetall()
+elif (args.command == "resetall"):
+    resetall(args.format[0])
 
-if (args.command == "questionnaire_upd"):
+elif (args.command == "questionnaire_upd"):
     questionnaire_upd(args.source[0], args.format[0])
 
-if (args.command == "resetq"):
+elif (args.command == "resetq"):
     resetq(args.questionnaire_id[0], args.format[0])
 
-if (args.command == "questionnaire"):
+elif (args.command == "questionnaire"):
     questionnaire(args.questionnaire_id[0], args.format[0])
 
-if (args.command == "question"):
+elif (args.command == "question"):
     question(args.questionnaire_id[0], args.question_id[0], args.format[0])
 
-if (args.command == "doanswer"):
+elif (args.command == "doanswer"):
     doanswer(args.questionnaire_id[0], args.question_id[0],
              args.session_id[0], args.option_id[0], args.format[0])
     
-if (args.command == "getsessionanswers"):
-    getsessionanswers(args.questionnaire_id[0], args.session_id[0], args.format[0])
-    
-if (args.command == "getquestionanswers"):
-    getquestionanswers(args.questionnaire_id[0], args.question_id[0], args.format[0])
-    
-if (args.command == "admin"):
-    admin(args)
+elif (args.command == "getsessionanswers"):
+    if args.questionnaire_id and args.session_id and args.format:
+        getsessionanswers(args.questionnaire_id[0], args.session_id[0], args.format[0])
+    else:
+        print("getsessionanswers requires --questionnaire_id and --session_id and --format")
 
+elif (args.command == "getquestionanswers"):
+    if args.questionnaire_id and args.question_id and args.format:
+        getquestionanswers(args.questionnaire_id[0], args.question_id[0], args.format[0])
+    else:
+        print("getquestionanswers requires --questionnaire_id and --question_id  and --format")
 
-
-
-
+elif args.command == "admin":
+    if args.usermod:
+        if args.username and args.passw:
+            print("user modification for username :", args.username, "with password :", args.passw)
+        else:
+            print("usermod requires --username and --passw")
+    elif args.username:
+        if args.passw:
+            print("username :", args.username, "with password :", args.passw)
+        else:
+            print("username requires --passw")
+    elif args.passw:
+        print("password :", args.passw)
+    elif args.users:
+        print("users :", args.users)
+    else:
+        print("invalid option")
+else:
+    print("Erro in scope")
