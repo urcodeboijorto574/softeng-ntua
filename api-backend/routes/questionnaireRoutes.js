@@ -7,6 +7,8 @@ router
     .route('/getAllQuestionnaires')
     .get(questionnaireController.getAllQuestionnaires);
 
-router.route('/:questionnaireID').get(questionnaireController.getQuestionnaire);
+router
+    .route('/:questionnaireID')
+    .get(questionnaireController.getQuestionnaire);
 
 module.exports = router;

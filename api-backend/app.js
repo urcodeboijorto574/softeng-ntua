@@ -1,8 +1,9 @@
 const express = require('express');
 const morgan = require('morgan');
 const dotenv = require('dotenv');
-const adminRouter = require('./routes/adminRoutes.js');
+// const adminRouter = require('./routes/adminRoutes.js');
 const questionnaireRouter = require('./routes/questionnaireRoutes.js');
+const questionRouter = require(`${__dirname}/routes/questionRoutes.js`);
 const bp = require('body-parser');
 
 const app = express();
@@ -26,7 +27,8 @@ app.use((req, res, next) => {
     next();
 });
 
-app.use('/intelliq_api/admin', adminRouter);
+// app.use('/intelliq_api/admin', adminRouter);
 app.use('/intelliq_api/questionnaire', questionnaireRouter);
+app.use('/intelliq_api/question', questionRouter)
 
 module.exports = app;

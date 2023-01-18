@@ -3,7 +3,9 @@ const adminController = require('./../controllers/adminController.js');
 
 const router = express.Router();
 
-router.route('/healthcheck').get(adminController.getHealthcheck);
+router
+    .route('/healthcheck')
+    .get(adminController.getHealthcheck);
 
 router
     .route('/questionnaire_upd')
@@ -13,6 +15,8 @@ router
         adminController.createQuestionnaire
     );
 
-router.route('/resetall').delete(adminController.resetAll);
+router
+    .route('/resetall')
+    .delete(adminController.resetAll);
 
 module.exports = router;
