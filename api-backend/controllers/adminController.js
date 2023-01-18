@@ -20,13 +20,13 @@ exports.getHealthcheck = (res, req) => {
             () => { /* DB connection check is successful */
                 return res.status(200).json({
                     status: 'OK',
-                    dbconnection: '<connection string>'
+                    dbconnection: DB
                 });
             },
             err => { /* DB connection check failed */
                 return res.status(500).json({
                     status: 'failed',
-                    dbconnection: '<connection string>'
+                    dbconnection: DB
                 });
 
             });
