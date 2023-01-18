@@ -1,4 +1,7 @@
 const mongoose = require('mongoose');
+const dotenv = require('dotenv');
+
+dotenv.config({ path: `${__dirname}/../config.env` });
 
 /* DB is the database connection string */
 const DB = process.env.DATABASE.replace(
@@ -26,5 +29,5 @@ exports.getHealthcheck = (res, req) => {
                     dbconnection: '<connection string>'
                 });
 
-            })
+            });
 }
