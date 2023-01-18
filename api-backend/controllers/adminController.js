@@ -9,7 +9,7 @@ const DB = process.env.DATABASE.replace(
     process.env.DATABASE_PASSWORD
 );
 
-exports.getHealthcheck = (res, req) => {
+exports.getHealthcheck = (req, res, next) => {
     mongoose
         .connect(DB, {
             useNewUrlParser: true,
@@ -30,4 +30,5 @@ exports.getHealthcheck = (res, req) => {
                 });
 
             });
+    next();
 }
