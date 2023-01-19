@@ -1,5 +1,5 @@
 const express = require('express');
-const adminController = require('./../controllers/adminController.js');
+const adminController = require(`${__dirname}/../controllers/adminController.js`);
 
 const router = express.Router();
 
@@ -7,13 +7,13 @@ router
     .route('/healthcheck')
     .get(adminController.getHealthcheck);
 
-router
-    .route('/questionnaire_upd')
-    .post(
-        adminController.storeOptionsFromQuestion,
-        adminController.storeQuestionsFromQuestionnaire,
-        adminController.createQuestionnaire
-    );
+// router
+//     .route('/questionnaire_upd')
+//     .post(
+//         adminController.storeOptionsFromQuestion,
+//         adminController.storeQuestionsFromQuestionnaire,
+//         adminController.createQuestionnaire
+//     );
 
 router
     .route('/resetall')

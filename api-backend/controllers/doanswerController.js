@@ -5,22 +5,6 @@ const Session = require(`${__dirname}/../models/sessionModel.js`);
 
 exports.doAnswer = async (req, res) => {
     try {
-        console.log('req.params:', req.params);
-
-        const session = await Session
-            .findOne({
-                sessionID: req.params.session
-            });
-
-        console.log('session:', session);
-
-        if (!session) {
-            return res.status(202).json({
-                status: 'invalidSession',
-                msg: 'There\'s no existing session to submit this answer'
-            });
-        }
-
         const oldAnswer = await Answer
             .findOne({
                 qID: req.params.questionID,
@@ -29,15 +13,21 @@ exports.doAnswer = async (req, res) => {
                 optID: req.params.optionID
             });
 
-        console.log('oldAnswer:', oldAnswer);
-
         if (oldAnswer)
-            return res.status(202).json({
-                status: 'fail',
-                msg: 'There\'s already a submitted answer for this session'
+            return res.status(400).json({
+                status: 'bad request',
+                msg: 'There\'s already a submitted answer for this session',
+                oldAnswer
             });
 
-        console.log('Came through');
+        const session = await Session.findOne({ sessionID: req.params.session });
+
+        if (!session) {
+            return res.status(400).json({
+                status: 'bad request',
+                msg: 'There\'s no existing session to submit this answer'
+            });
+        }
 
         const answer = await Answer.create({
             qID: req.params.questionID,
@@ -49,10 +39,10 @@ exports.doAnswer = async (req, res) => {
 
         return res.status(200).json({
             status: 'success',
-            msg: 'All good'
+            msg: 'Answer submitted'
         });
     } catch (err) {
-        return res.status(404).json({
+        return res.status(500).json({
             status: 'fail',
             msg: err
         });

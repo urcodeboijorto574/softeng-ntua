@@ -7,8 +7,8 @@ exports.getAnswers = async (req, res) => {
             .find({ questionnaireID: req.params.questionnaireID, qID: req.params.questionID })
             .select('sessionID _id');
 
-        return res.status(200).json({
-            status: 'success',
+        return res.status(answers.length !== 0 ? 200 : 402).json({
+            status: answers.length !== 0 ? 'success' : 'no data',
             data: {
                 questionnaireID: req.params.questionnaireID,
                 questionID: req.params.questionID,
@@ -16,7 +16,7 @@ exports.getAnswers = async (req, res) => {
             }
         });
     } catch (err) {
-        return res.status(404).json({
+        return res.status(500).json({
             status: 'fail',
             mes: err
         });

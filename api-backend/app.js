@@ -1,7 +1,7 @@
 const express = require('express');
 const morgan = require('morgan');
 const dotenv = require('dotenv');
-// const adminRouter = require(`${__dirname}/routes/adminRoutes.js`);
+const adminRouter = require(`${__dirname}/routes/adminRoutes.js`);
 const questionnaireRouter = require(`${__dirname}/routes/questionnaireRoutes.js`);
 const questionRouter = require(`${__dirname}/routes/questionRoutes.js`);
 const doanswerRouter = require(`${__dirname}/routes/doanswerRoutes.js`);
@@ -30,7 +30,7 @@ app.use((req, res, next) => {
     next();
 });
 
-// app.use('/intelliq_api/admin', adminRouter);
+app.use('/intelliq_api/admin', adminRouter);
 app.use('/intelliq_api/questionnaire', questionnaireRouter);
 app.use('/intelliq_api/question', questionRouter);
 app.use('/intelliq_api/doanswer', doanswerRouter);

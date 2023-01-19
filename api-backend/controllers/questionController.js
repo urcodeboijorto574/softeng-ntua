@@ -8,14 +8,14 @@ exports.getQuestion = async (req, res) => {
             .select('-_id -wasAnsweredBy -__v')
             .populate('options', 'optID opttxt nextqID -_id');
 
-        return res.status(200).json({
-            status: 'success',
+        return res.status(question ? 200 : 400).json({
+            status: question ? 'success' : 'bad request',
             data: {
                 question
             }
         });
     } catch (err) {
-        return res.status(404).json({
+        return res.status(500).json({
             status: 'fail',
             msg: err
         });
