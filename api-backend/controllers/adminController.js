@@ -1,4 +1,6 @@
 const mongoose = require('mongoose');
+const catchAsync = require('./../utils/catchAsync');
+const AppError = require('./../utils/appError');
 
 /* DB is the database connection string */
 const DB = process.env.DATABASE.replace(
