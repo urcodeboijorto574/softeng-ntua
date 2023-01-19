@@ -3,9 +3,10 @@ const slugify = require('slugify');
 const validator = require('validator');
 
 const answerSchema = new mongoose.Schema({
-    /*     questionID: {
+    /*     
+    questionID: {
         type: mongoose.ObjectID,
-        ref: 'Answer',
+        ref: 'Question',
     },
     optID: {
         type: mongoose.ObjectID,
@@ -35,7 +36,7 @@ const answerSchema = new mongoose.Schema({
     answertext: {
         type: String,
         default: '',
-    },
+    }
 });
 
 const Answer = mongoose.model('Answer', answerSchema);

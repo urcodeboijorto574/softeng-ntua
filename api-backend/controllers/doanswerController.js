@@ -1,10 +1,11 @@
-const Question = require(`${__dirname}/../models/questionModel`);
-const Option = require(`${__dirname}/../models/optionModel`);
-const Answer = require(`${__dirname}/../models/answerModel`);
-const Session = require(`${__dirname}/../models/sessionModel`);
+const Question = require(`${__dirname}/../models/questionModel.js`);
+const Option = require(`${__dirname}/../models/optionModel.js`);
+const Answer = require(`${__dirname}/../models/answerModel.js`);
+const Session = require(`${__dirname}/../models/sessionModel.js`);
 
 exports.doAnswer = async (req, res) => {
     try {
+        const answer = await Answer.create(req.body);
 
         return res.status(200).json({
             status: 'success'
