@@ -26,11 +26,18 @@ exports.getAllQuestionnaires = async (req, res) => {
 exports.getQuestionnaire = async (req, res) => {
     try {
         const questionnaire = await Questionnaire
-            .findOne({ questionnaireID: req.params.questionnaireID })
-            .select({ questionnaireID: 1, questionnaireTitle: 1, keywords: 1, questions: 1 })
-            .populate('questions', { qID: 1, qtxt: 1, required: 1, type: 1 });
+            // .findOne({ questionnaireID: req.params.questionnaireID })
+            .findOne(req.params)
+            .select('-_id')
+            // .populate('questions', { qID: 1, qtext: 1, required: 1, type: 1, _id: 0 });
+            .populate('questions', 'qID qtext required type -_id');
 
-        console.log(questionnaire.questionnaireTitle);
+        /* The query could be built by mongoose function, as so: */
+        // const questionnaire = await Questionnaire.findOne()
+        //     .where('questionnaireID')
+        //     .equals(req.params.questionnaireID);
+        // // .where('(other field)')
+        // // .equals('(value)');
 
         return res.status(200).json({
             status: 'success',
