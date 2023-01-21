@@ -1,1 +1,5 @@
+import-data.js
+data/*.json
+node_modules
+api-backend/node_modules/
 .gitignore
