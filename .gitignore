@@ -1,1 +1,4 @@
+import-data.js
+data/
+node_modules/
 .gitignore
