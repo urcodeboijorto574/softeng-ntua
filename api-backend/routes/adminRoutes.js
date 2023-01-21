@@ -7,16 +7,16 @@ router
     .route('/healthcheck')
     .get(adminController.getHealthcheck);
 
-// router
-//     .route('/questionnaire_upd')
-//     .post(
-//         adminController.storeOptionsFromQuestion,
-//         adminController.storeQuestionsFromQuestionnaire,
-//         adminController.createQuestionnaire
-//     );
+router
+    .route('/questionnaire_upd')
+    .post(adminController.questionnaireUpdate);
 
 router
     .route('/resetall')
-    .delete(adminController.resetAll);
+    .post(adminController.resetAll);
+
+router
+    .route('/resetq/:questionnaireID')
+    .post(adminController.resetQuestionnaire);
 
 module.exports = router;
