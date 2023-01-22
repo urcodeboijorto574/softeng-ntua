@@ -1,7 +1,4 @@
 import-data.js
-data/*.json
 node_modules
 api-backend/node_modules/
-package.json
-package-lock.json
 .gitignore
