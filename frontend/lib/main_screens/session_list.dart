@@ -34,7 +34,7 @@ class _SessionListScreenState extends State<SessionListScreen> {
   late Future<List> sessionsTitles;
 
   String _localhost() {
-    return 'http://127.0.0.1:3000/intelliq_api/session/${widget.questionnaireID}';
+    return 'http://127.0.0.1:3000/intelliq_api/questionnaire/${widget.questionnaireID}/getAllSessions';
   }
 
   Future<List> _getAllSessions() async {
@@ -44,7 +44,7 @@ class _SessionListScreenState extends State<SessionListScreen> {
     Response response = await get(url);
 
     if (response.statusCode == 200) {
-      sessions = jsonDecode(response.body)['data']['sessions'];
+      sessions = jsonDecode(response.body)['data'];
 
       for (int i = 0; i < sessions.length; i++) {
         titles.add(sessions[i]['sessionID']);
@@ -82,7 +82,7 @@ class _SessionListScreenState extends State<SessionListScreen> {
             options: questions[i]['options'],
             questiontxt: questions[i]['qtext'],
             optionIndex: optIndex,
-            answertxt: sessions[index]['answers'][i]['answertxt'],
+            answertxt: sessions[index]['answers'][i]['answertext'],
           ));
           break;
         }

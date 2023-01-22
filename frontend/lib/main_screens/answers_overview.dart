@@ -53,7 +53,7 @@ class _AnswersOverviewScreenState extends State<AnswersOverviewScreen> {
       }),
     );
 
-    if (response.statusCode == 200) {
+    if (response.statusCode == 201) {
       return;
     } else {
       throw Exception('Failed to send answer');
@@ -187,7 +187,9 @@ class _AnswersOverviewScreenState extends State<AnswersOverviewScreen> {
                                       ),
                               )
                             : MaterialButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
                                 child: processing
                                     ? const Center(
                                         child: CircularProgressIndicator(
