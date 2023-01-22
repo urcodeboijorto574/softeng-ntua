@@ -1,0 +1,145 @@
+[
+    {
+        "_id": {
+            "$oid": "63c40c49131a83257c2eba64"
+        },
+        "answertext": "missirivassiliki@gmail.com",
+        "qID": "P30",
+        "optID": "P30TXT",
+        "sessionID": "bSHP",
+        "questionnaireID": "QQ062",
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "63c40c49131a83257c2eba6b"
+        },
+        "answertext": " ",
+        "qID": "Q31",
+        "optID": "Q31A1",
+        "sessionID": "bSHP",
+        "questionnaireID": "QQ062",
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "63c40c4a131a83257c2eba71"
+        },
+        "answertext": " ",
+        "qID": "Q32",
+        "optID": "Q32A2",
+        "sessionID": "bSHP",
+        "questionnaireID": "QQ062",
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "63c40c4a131a83257c2eba77"
+        },
+        "answertext": " ",
+        "qID": "Q34",
+        "optID": "Q34A1",
+        "sessionID": "bSHP",
+        "questionnaireID": "QQ062",
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "63c40fd50e2b074544a4e27e"
+        },
+        "answertext": " ",
+        "qID": "Q31",
+        "optID": "Q31A3",
+        "sessionID": "MS9y",
+        "questionnaireID": "QQ062",
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "63c40fd60e2b074544a4e285"
+        },
+        "answertext": " ",
+        "qID": "Q32",
+        "optID": "Q32A1",
+        "sessionID": "MS9y",
+        "questionnaireID": "QQ062",
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "63c40fd60e2b074544a4e28b"
+        },
+        "answertext": " ",
+        "qID": "Q33",
+        "optID": "Q33A3",
+        "sessionID": "MS9y",
+        "questionnaireID": "QQ062",
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "63c40fd70e2b074544a4e291"
+        },
+        "answertext": " ",
+        "qID": "Q34",
+        "optID": "Q34A1",
+        "sessionID": "MS9y",
+        "questionnaireID": "QQ062",
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "63c5be0a89d3063dac22c75a"
+        },
+        "answertext": "missirivassiliki@gmail.com",
+        "qID": "P30",
+        "optID": "P30TXT",
+        "sessionID": "ORcf",
+        "questionnaireID": "QQ062",
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "63c5be1b89d3063dac22c761"
+        },
+        "answertext": " ",
+        "qID": "Q31",
+        "optID": "Q31A1",
+        "sessionID": "ORcf",
+        "questionnaireID": "QQ062",
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "63c5be1c89d3063dac22c767"
+        },
+        "answertext": " ",
+        "qID": "Q32",
+        "optID": "Q32A1",
+        "sessionID": "ORcf",
+        "questionnaireID": "QQ062",
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "63c5be1f89d3063dac22c76d"
+        },
+        "answertext": " ",
+        "qID": "Q33",
+        "optID": "Q33A1",
+        "sessionID": "ORcf",
+        "questionnaireID": "QQ062",
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "63c5be2289d3063dac22c773"
+        },
+        "answertext": " ",
+        "qID": "Q34",
+        "optID": "Q34A2",
+        "sessionID": "ORcf",
+        "questionnaireID": "QQ062",
+        "__v": 0
+    }
+]
