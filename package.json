@@ -1,5 +1,8 @@
 {
   "dependencies": {
-    "dotenv": "^16.0.3"
+    "dotenv": "^16.0.3",
+    "mongoose": "^6.8.4",
+    "slugify": "^1.6.5",
+    "validator": "^13.7.0"
   }
 }
