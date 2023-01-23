@@ -1,5 +1,9 @@
 import argparse
 import requests
+import sys
+import json
+import pandas as pd
+from io import StringIO
 
 baseUrl = "http://localhost:8000/"
 
@@ -15,7 +19,7 @@ def unknownArgsHandler(unknown):
     print("\nExiting...")
     exit()
 
-# python cli.py login --username Stelios --passw Zarifis --format json
+# login: NOT DONE
 def login(username, password, form):
     """"""
     print("Will sent username:", username, "and password:", password)
@@ -33,15 +37,25 @@ def login(username, password, form):
     else:
         raise ValueError("Invalid format specified. Must be 'json' or 'csv'.")
 
-    if (response.status_code == 200):
-        print("Login successful!")
+    if response.status_code == 200:
+        if form == "json":
+            print("form:", form)
+            json_data = response.json()
+            json_formatted_str = json.dumps(json_data, indent=2)
+            print(json_formatted_str)
+        else:
+            print("form:", form)
+            csv_data = response.content.decode('utf-8')
+            print(csv_data)
+            df = pd.read_csv(StringIO(csv_data))
+            print(df.to_string())
     else:
-        print("Login failed")
-        print("Reason:", response.reason)
+        print("Error: Unable to reach endpoint")
     
     return response
 
-def logout():
+# logout: NOT DONE
+def logout(form):
     """ Posts with no body and expect a response.
         If status == 200: success
         Else: gives reason"""
@@ -49,111 +63,241 @@ def logout():
     logoutUrl = baseUrl + "logout"
     response = requests.post(logoutUrl)
     if response.status_code == 200:
-        print("Logout successful!")
+        if form == "json":
+            print("form:", form)
+            json_data = response.json()
+            json_formatted_str = json.dumps(json_data, indent=2)
+            print(json_formatted_str)
+        else:
+            print("form:", form)
+            csv_data = response.content.decode('utf-8')
+            print(csv_data)
+            df = pd.read_csv(StringIO(csv_data))
+            print(df.to_string())
     else:
-        print("Error: Unable to logout")
-        print("Reason: ", response.reason)
+        print("Error: Unable to reach endpoint")
 
     return
 
 # login -> returned response with json containing username and a field blah 
 
-def healthcheck():
+# healthcheck: DONE
+def healthcheck(form):
     """ Performs healthcheck.
         If status_code == 200:
             If status == OK: prints dbconnection
             Else: prints dbconnection
         Else: gives reason"""
-    healthUrl = baseUrl + "admin/healthcheck"
+    #healthUrl = baseUrl + "admin/healthcheck"
+    healthUrl = "http://127.0.0.1:3000/intelliq_api/admin/healthcheck?format=" + form
     print("Will perform a healthcheck at", healthUrl)
     response = requests.get(healthUrl)
     if response.status_code == 200:
-        data = response.json()
-        status = data['status']
-        dbconnection = data['dbconnection']
-        if status == "OK":
-            print(f"Connection successful: {dbconnection}")
+        if form == "json":
+            print("form:", form)
+            json_data = response.json()
+            json_formatted_str = json.dumps(json_data, indent=2)
+            print(json_formatted_str)
         else:
-            print(f"Connection failed: {dbconnection}")
-    else:
-        print("Error: Unable to perform healthcheck")
-        print("Reason: ", response.reason)
-    
-    return
-
-def resetall():
-    print("Will resetall")
-    responseUrl = baseUrl + "admin/resetall"
-    response = requests.post(responseUrl)
-    if response.status_code == 200:
-        data = response.json()
-        status = data['status']
-        if status == "OK":
-            print("Data reset successful")
-        else:
-            reason = data['reason']
-            print(f"Data reset failed: {reason}")
+            print("form:", form)
+            csv_data = response.content.decode('utf-8')
+            print(csv_data)
+            df = pd.read_csv(StringIO(csv_data))
+            print(df.to_string())
     else:
         print("Error: Unable to reach endpoint")
     
     return
 
-def questionnaire_upd(source, form):
-    updUrl = baseUrl + "admin/" + source
-    print("Will update at source:", updUrl)
-
-    if (form == "json"):
-        print("=== json ===")
-    elif (form == "csv"):
-        print("=== csv ===")
+# resetall: TO CHECK
+def resetall(form):
+    print("Will resetall")
+    resetallUrl = baseUrl + "admin/resetall"
+    response = requests.post(resetallUrl)
+    if response.status_code == 200:
+        if form == "json":
+            print("form:", form)
+            json_data = response.json()
+            json_formatted_str = json.dumps(json_data, indent=2)
+            print(json_formatted_str)
+        else:
+            print("form:", form)
+            csv_data = response.content.decode('utf-8')
+            print(csv_data)
+            df = pd.read_csv(StringIO(csv_data))
+            print(df.to_string())
     else:
-        print("Wrong format")
-    
+        print("Error: Unable to reach endpoint")
     
     return
 
+# questionnaire_upd: TO CHECK
+def questionnaire_upd(source, form):
+    #Just uploads a json, WHY DO WE NEED FORMAT???
+    updUrl = baseUrl + "admin/questionnaire_upd"
+    print("Will update at source:", updUrl)
+    with open(source) as json_file:
+        json_data = json.load(json_file)
+        print("Will sent:\n", json_data)
+        headers = {"Content-Type": "application/json"}
+        response = requests.post(loginEndpoint, json=json_data, headers=headers)
+    if response.status_code == 200:
+        if form == "json":
+            print("form:", form)
+            json_data = response.json()
+            json_formatted_str = json.dumps(json_data, indent=2)
+            print(json_formatted_str)
+        else:
+            print("form:", form)
+            csv_data = response.content.decode('utf-8')
+            print(csv_data)
+            df = pd.read_csv(StringIO(csv_data))
+            print(df.to_string())
+    else:
+        print("Error: Unable to reach endpoint")
+    
+    return
+
+# resetq: TO CHECK
 def resetq(questionnaire_id, form):
     resetqUrl = baseUrl + f"admin/resetq/{questionnaire_id}"
     print("Will reset questionnaire at", resetqUrl)
     response = requests.post(resetqUrl)
     if response.status_code == 200:
-        data = response.json()
-        status = data['status']
-        if status == "OK":
-            print("Data reset successful")
+        if form == "json":
+            print("form:", form)
+            json_data = response.json()
+            json_formatted_str = json.dumps(json_data, indent=2)
+            print(json_formatted_str)
         else:
-            reason = data['reason']
-            print(f"Data reset failed: {reason}")
+            print("form:", form)
+            csv_data = response.content.decode('utf-8')
+            print(csv_data)
+            df = pd.read_csv(StringIO(csv_data))
+            print(df.to_string())
     else:
         print("Error: Unable to reach endpoint")
     
     return
 
-def questionnaire(questionnaire_id):
+# questionnaire: TO CHECK
+def questionnaire(questionnaire_id, form):
     print("Will get questionnaire with id:", questionnaire_id)
+    questionnaireUrl = baseUrl + f"admin/questionnaire/{questionnaire_id}"
+    response = requests.get(questionnaireUrl)
+    if response.status_code == 200:
+        if form == "json":
+            print("form:", form)
+            json_data = response.json()
+            json_formatted_str = json.dumps(json_data, indent=2)
+            print(json_formatted_str)
+        else:
+            print("form:", form)
+            csv_data = response.content.decode('utf-8')
+            print(csv_data)
+            df = pd.read_csv(StringIO(csv_data))
+            print(df.to_string())
+    else:
+        print("Error: Unable to reach endpoint")
+    
     return
 
-def question(questionnaire_id, question_id):
+# question: TO DISCUSS & CHECK
+def question(questionnaire_id, question_id, form):
     print("Will get from questionnaire with id:", questionnaire_id,
           "question with id:", question_id)
+    questionUrl = baseUrl + f"admin/question/{questionnaire_id}/{question_id}"
+    response = requests.get(questionUrl)
+    if response.status_code == 200:
+        if form == "json":
+            print("form:", form)
+            json_data = response.json()
+            json_formatted_str = json.dumps(json_data, indent=2)
+            print(json_formatted_str)
+        else:
+            print("form:", form)
+            csv_data = response.content.decode('utf-8')
+            print(csv_data)
+            df = pd.read_csv(StringIO(csv_data))
+            print(df.to_string())
+    else:
+        print("Error: Unable to reach endpoint")
+
     return
 
-def doanswer(questionnaire_id, question_id, session_id, option_id):
+# doanswer: TO DISCUSS & CHECK
+def doanswer(questionnaire_id, question_id, session_id, option_id, form):
     print("Will answer from questionnaire with id:", questionnaire_id,
           "question with id:", question_id, "of session with id:", session_id,
           "and option with id:", option_id)
+    doanswerUrl = baseUrl + f"/doanswer/{questionnaire_id}/{question_id}/{session_id}/{option_id}"
+    json_data = {
+        "questionnaireID" : questionnaire_id,
+        "questionID" : question_id,
+        "session" : session_id,
+        "optionID" : option_id
+    }
+    
+    response = requests.post(doanswerUrl, json = json_data)
+    if response.status_code == 200:
+        if form == "json":
+            json_data = response.json()
+            print(json_data)
+        else:
+            csv_data = response.content.decode('utf-8')
+            print(csv_data)
+    else:
+        print("Error: Unable to reach endpoint")
+    
     return
 
-def getsessionanswers(questionnaire_id, session_id):
+# getsessionanswers: TO DISCUSS & CHECK
+def getsessionanswers(questionnaire_id, session_id, form):
     print("Will get session answers of questionnaire with id:", questionnaire_id,
           "and session with id:", session_id)
+    getsessionanswersUrl = baseUrl + f"getsessionanswers/{questionnaire_id}/{session_id}"
+    response = requests.get(getsessionanswersUrl)
+    if response.status_code == 200:
+        if form == "json":
+            print("form:", form)
+            json_data = response.json()
+            json_formatted_str = json.dumps(json_data, indent=2)
+            print(json_formatted_str)
+        else:
+            print("form:", form)
+            csv_data = response.content.decode('utf-8')
+            print(csv_data)
+            df = pd.read_csv(StringIO(csv_data))
+            print(df.to_string())
+    else:
+        print("Error: Unable to reach endpoint")
+
     return
 
-def getquestionanswers(questionnaire_id, question_id):
+# getquestionanswers: TO DISCUSS & CHECK
+def getquestionanswers(questionnaire_id, question_id, form):
     print("Will get question answers of questionnaire with id:", questionnaire_id,
           "and question with id:", question_id)
+    getquestionanswers = baseUrl + f"getquestionanswers/{questionnaire_id}/{question_id}"
+    response = requests.get(getquestionanswers)
+    if response.status_code == 200:
+        if form == "json":
+            print("form:", form)
+            json_data = response.json()
+            json_formatted_str = json.dumps(json_data, indent=2)
+            print(json_formatted_str)
+        else:
+            print("form:", form)
+            csv_data = response.content.decode('utf-8')
+            print(csv_data)
+            df = pd.read_csv(StringIO(csv_data))
+            print(df.to_string())
+    else:
+        print("Error: Unable to reach endpoint")
+
     return
 
+# admin: NOT DONE
 def admin(args):
     print("HERE")
     # print("Will sent username:", username, "and password:", password)
@@ -168,10 +312,7 @@ def admin(args):
 
     return
 
-
-
-
-parser = argparse.ArgumentParser(add_help=False)
+parser = argparse.ArgumentParser()#add_help=False)
 
 subparser = parser.add_subparsers(dest = "command")
 
@@ -265,6 +406,112 @@ admin_parser.add_argument("--users", help="list of users")
 
 
 
+
+known = ["command", "--usermod", "--username", "--passw",
+         "source", "--questionnaire_id", "--question_id",
+         "--session_id", "--option_id", "--users", "format"]
+
+#args, unknown = parser.parse_known_args(known)
+
+try:
+    args = parser.parse_args()
+
+#args, unknown = parser.parse_known_args(known)
+
+    if '--format' not in sys.argv:
+        parser.error("Incorrect format, it should be --format json")
+except Exception as e:
+    exit()
+
+print(vars(args))
+
+unknown = [arg for arg in vars(args) if arg not in known]
+
+print(unknown)
+
+if len(unknown) != 0:
+    unknownArgsHandler(unknown)
+
+allowed_formats = ["json", "csv"]
+
+if args.format[0] not in allowed_formats:
+    print("Wrong format: Expecting \"json\" or \"csv\"")
+    exit()
+
+allowed_commands = ["login", "logout", "healthcheck", "resetall",
+                    "questionnaire_upd", "resetq", "questionnaire",
+                    "question", "doanswer", "getsessionanswers",
+                    "getquestionanswers", "admin"]
+
+if args.command not in allowed_commands:
+    print("Wrong scope")
+    exit()
+
+if (args.command == "login"):
+    login(args.username[0], args.passw[0], args.format[0])
+
+elif (args.command == "logout"):
+    logout(args.format[0])
+
+elif (args.command == "healthcheck"):
+    healthcheck(args.format[0])
+
+elif (args.command == "resetall"):
+    resetall(args.format[0])
+
+elif (args.command == "questionnaire_upd"):
+    questionnaire_upd(args.source[0], args.format[0])
+
+elif (args.command == "resetq"):
+    resetq(args.questionnaire_id[0], args.format[0])
+
+elif (args.command == "questionnaire"):
+    questionnaire(args.questionnaire_id[0], args.format[0])
+
+elif (args.command == "question"):
+    question(args.questionnaire_id[0], args.question_id[0], args.format[0])
+
+elif (args.command == "doanswer"):
+    doanswer(args.questionnaire_id[0], args.question_id[0],
+             args.session_id[0], args.option_id[0], args.format[0])
+    
+elif (args.command == "getsessionanswers"):
+    if args.questionnaire_id and args.session_id and args.format:
+        getsessionanswers(args.questionnaire_id[0], args.session_id[0], args.format[0])
+    else:
+        print("getsessionanswers requires --questionnaire_id and --session_id and --format")
+
+elif (args.command == "getquestionanswers"):
+    if args.questionnaire_id and args.question_id and args.format:
+        getquestionanswers(args.questionnaire_id[0], args.question_id[0], args.format[0])
+    else:
+        print("getquestionanswers requires --questionnaire_id and --question_id and --format")
+
+elif args.command == "admin":
+    if args.usermod:
+        if args.username and args.passw:
+            print("user modification for username :", args.username, "with password :", args.passw)
+        else:
+            print("usermod requires --username and --passw")
+    elif args.username:
+        if args.passw:
+            print("username :", args.username, "with password :", args.passw)
+        else:
+            print("username requires --passw")
+    elif args.passw:
+        print("password :", args.passw)
+    elif args.users:
+        print("users :", args.users)
+    else:
+        print("invalid option")
+else:
+    print("Error in scope")
+
+
+
+
+
+
 '''
 #admin_parser = subparser.add_parser("admin", help = "admin")
 #admin_subparsers = admin_parser.add_subparsers(dest = "command")
@@ -323,70 +570,3 @@ adminUsers_parser = admin_subparsers.add_parser("--users", help = "adminUsers")
 adminUsers_parser.add_argument("--format", nargs = 1)
 #########################
 '''
-
-args, unknown = parser.parse_known_args(["--usermod", "--username", "--passw", "--users"])
-
-if len(unknown) != 0:
-    unknownArgsHandler(unknown)
-
-print(args)
-
-if (args.command == "login"):
-    login(args.username[0], args.passw[0], args.format[0])
-
-elif (args.command == "logout"):
-    logout(args.format[0])
-
-elif (args.command == "healthcheck"):
-    healthcheck(args.format[0])
-
-elif (args.command == "resetall"):
-    resetall(args.format[0])
-
-elif (args.command == "questionnaire_upd"):
-    questionnaire_upd(args.source[0], args.format[0])
-
-elif (args.command == "resetq"):
-    resetq(args.questionnaire_id[0], args.format[0])
-
-elif (args.command == "questionnaire"):
-    questionnaire(args.questionnaire_id[0], args.format[0])
-
-elif (args.command == "question"):
-    question(args.questionnaire_id[0], args.question_id[0], args.format[0])
-
-elif (args.command == "doanswer"):
-    doanswer(args.questionnaire_id[0], args.question_id[0],
-             args.session_id[0], args.option_id[0], args.format[0])
-    
-elif (args.command == "getsessionanswers"):
-    if args.questionnaire_id and args.session_id and args.format:
-        getsessionanswers(args.questionnaire_id[0], args.session_id[0], args.format[0])
-    else:
-        print("getsessionanswers requires --questionnaire_id and --session_id and --format")
-
-elif (args.command == "getquestionanswers"):
-    if args.questionnaire_id and args.question_id and args.format:
-        getquestionanswers(args.questionnaire_id[0], args.question_id[0], args.format[0])
-    else:
-        print("getquestionanswers requires --questionnaire_id and --question_id  and --format")
-
-elif args.command == "admin":
-    if args.usermod:
-        if args.username and args.passw:
-            print("user modification for username :", args.username, "with password :", args.passw)
-        else:
-            print("usermod requires --username and --passw")
-    elif args.username:
-        if args.passw:
-            print("username :", args.username, "with password :", args.passw)
-        else:
-            print("username requires --passw")
-    elif args.passw:
-        print("password :", args.passw)
-    elif args.users:
-        print("users :", args.users)
-    else:
-        print("invalid option")
-else:
-    print("Erro in scope")
