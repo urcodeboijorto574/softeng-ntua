@@ -14,6 +14,7 @@ router
 
 router
     .route('/:questionnaireID')
-    .get(questionnaireController.getQuestionnaire);
+    .get(questionnaireController.getQuestionnaire)
+    .delete(questionnaireController.deleteQuestionnaire);
 
 module.exports = router;
