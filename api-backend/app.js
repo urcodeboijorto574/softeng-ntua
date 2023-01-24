@@ -7,6 +7,7 @@ const questionRouter = require(`${__dirname}/routes/questionRoutes.js`);
 const doanswerRouter = require(`${__dirname}/routes/doanswerRoutes.js`);
 const getquestionanswersRouter = require(`${__dirname}/routes/getquestionanswersRoutes.js`);
 const getsessionanswersRouter = require(`${__dirname}/routes/getsessionanswersRoutes.js`);
+const importRouter = require(`${__dirname}/routes/importRoutes.js`);
 const bp = require('body-parser');
 
 const app = express();
@@ -36,5 +37,6 @@ app.use('/intelliq_api/question', questionRouter);
 app.use('/intelliq_api/doanswer', doanswerRouter);
 app.use('/intelliq_api/getquestionanswers', getquestionanswersRouter);
 app.use('/intelliq_api/getsessionanswers', getsessionanswersRouter);
+app.use('/dummy-data', importRouter);
 
 module.exports = app;
