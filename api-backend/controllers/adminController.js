@@ -68,10 +68,43 @@ exports.resetAll = async (req, res) => {
 
 exports.questionnaireUpdate = async (req, res) => {
     try {
-        /* Need to find out how to parse data from multi-part/file-data to JSON!!!!!!! */
-        const oldQuestionnaire = await Questionnaire.findOne();
+        /* For the line below: need to parse data from multipart/form-data to JSON! */
+        const newQuestionnaire = { questionnaireID: 4 };
+        const newQuestions = [{ qID: 1 }];
+        const newOptions = [{ optID: 10 }];
 
-        const newQuestionnaire = oldQuestionnaire;
+        const oldQuestionnaire = await Questionnaire.findOne(newQuestionnaire);
+        // await Session.deleteMany({ questionnaireID: oldQuestionnaire.questionnaireID });
+        if (oldQuestionnaire) {
+            // await Questionnaire.delete(oldQuestionnaire);
+            /* Delete the relevant data too... */
+        }
+
+        // await Questionnaire.create(newQuestionnaire);
+
+        /* Create all necessary documents 'cascadingly' */
+        newQuestionnaire.questions.forEach(async q_id => {
+            // const newQuestion = await Question.create({
+            //     _id: q_id,
+            //     qID,
+            //     qtext,
+            //     required,
+            //     type,
+            //     options,
+            //     questionnaireID: newQuestionnaire.questionnaireID
+            // });
+
+            // newQuestion.options.forEach(async opt_id => {
+            //     await Option.create({
+            //         _id: opt_id,
+            //         optID,
+            //         opttxt,
+            //         nextqID,
+            //         questionnaireID: newQuestionnaire.questionnaireID,
+            //         qID: newQuestion.qID
+            //     });
+            // });
+        });
 
         return res.status(200).json({
             status: 'success',

@@ -5,12 +5,23 @@ const Session = require(`${__dirname}/../models/sessionModel`);
 const Answer = require(`${__dirname}/../models/answerModel`);
 
 exports.getAllQuestionnaires = async (req, res) => {
-    try {
-        const questionnaires = await Questionnaire
-            .find()
-            .select({ _id: 0 })
-            .populate('questions', { options: 0, _id: 0, __v: 0, questionnaireID: 0, wasAnsweredBy: 0 });
+    const mongoose = require('mongoose');
 
+    try {
+        let questionnaires = await Questionnaire
+            .find({}, '-_id')
+            .populate('questions', 'options qID qtext required type -_id');
+
+        for (let i = 0; i < questionnaires.length; ++i) {
+            for (let j = 0; j < questionnaires[i].questions.length; ++j) {
+                for (let k = 0; k < questionnaires[i].questions[j].options.length; ++k) {
+                    const idStr = questionnaires[i].questions[j].options[k];
+                    const opt_id = mongoose.Types.ObjectId(idStr);
+                    const option = await Option.findOne({ _id: opt_id }, 'wasChosenBy optID opttxt nextqID');
+                    questionnaires[i].questions[j].options[k] = option;
+                }
+            }
+        }
         return res.status(questionnaires.length !== 0 ? 200 : 402).json({
             status: questionnaires.length !== 0 ? 'success' : 'no data',
             data: {

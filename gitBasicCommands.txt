@@ -21,9 +21,10 @@ git rm --cache *filename* = deletes one file from the git index (not from workin
 	(if the file still exists in your working tree, then if you hit 'git status' you will this file in your unsaved changes)
 
 ---INTERMEDIATE COMMANDS---
-git reset --soft HEAD~ = if you ever commit some changes and then you realise that you didn't finish a line or made a typo,
-	you can use this command to undo the commit. All the changes you have on your working tree won't be lost. Then, you can
-	commit the changes you want, like nothing ever happend.
+git reset --mixed HEAD~ = undo the commit you just committed, while you keep your working directory as it is (so you don't lose your changes)
+	(https://www.freecodecamp.org/news/save-the-day-with-git-reset/)
+git cherry-pick *branch* = apply the last commit on a branch to HEAD (last commit of *branch* --> HEAD)
+	and remove it from *branch*. (This is useful when you commit changes to the wrong branch)
 
 
 *NOTE*: HEAD~ means one commit right before the most recent. HEAD~2 means two commits before the most recent, and so on...
