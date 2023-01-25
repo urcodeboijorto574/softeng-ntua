@@ -8,5 +8,8 @@ router
     .get(questionnaireController.getAllQuestionnaires);
 
 router.route('/:questionnaireID').get(questionnaireController.getQuestionnaire);
+router
+    .route('/:questionnaireID/getAllSessions')
+    .get(questionnaireController.getAllSessions);
 
 module.exports = router;
