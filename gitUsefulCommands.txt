@@ -25,6 +25,9 @@ git reset --mixed HEAD~ = undo the commit you just committed, while you keep you
 	(https://www.freecodecamp.org/news/save-the-day-with-git-reset/)
 git cherry-pick *branch* = apply the last commit on a branch to HEAD (last commit of *branch* --> HEAD)
 	and remove it from *branch*. (This is useful when you commit changes to the wrong branch)
+git checkout *branch* *file* = copy one file's changes from one branch to HEAD
+	(useful for 1-on-1 file transfer, though those changes
+	 will have to be committed by the receiver to take place in git)
 
 
 *NOTE*: HEAD~ means one commit right before the most recent. HEAD~2 means two commits before the most recent, and so on...
@@ -78,6 +81,7 @@ projects and view the code that other people write. It is basically
 the link between you and your co-workers.
 
 	·But how github actually works?
+https://www.freecodecamp.org/news/save-the-day-with-git-reset/
 When you use git, you basically create a git repository in your computer,
 so a local repository. But when you work with other people and want to
 work on the same project, you can have a repository on github and write
