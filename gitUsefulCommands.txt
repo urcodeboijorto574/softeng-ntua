@@ -26,8 +26,7 @@ git reset --mixed HEAD~ = undo the commit you just committed, while you keep you
 git cherry-pick *branch* = apply the last commit on a branch to HEAD (last commit of *branch* --> HEAD)
 	and remove it from *branch*. (This is useful when you commit changes to the wrong branch)
 git checkout *branch* *file* = copy one file's changes from one branch to HEAD
-	(useful for 1-on-1 file transfer, though those changes
-	 will have to be committed by the receiver to take place in git)
+	(useful for 1-on-1 file transfer, though those changes will have to be committed by the receiver to take place in git)
 
 
 *NOTE*: HEAD~ means one commit right before the most recent. HEAD~2 means two commits before the most recent, and so on...
@@ -37,67 +36,51 @@ git checkout *branch* *file* = copy one file's changes from one branch to HEAD
 ---USEFUL COMMENTS---
 	·What is git?
 https://youtu.be/mJ-qvsxPHpY :)
-Git is a program that operates in your comoputer to help you
-manage all the changes and different versions of your files.
-(You will firstly need to know how git works, so you can
-understand how github works on its part).
+Git is a program that operates in your comoputer to help you manage all the changes and different versions of your files.
+(You will firstly need to know how git works, so you can understand how github works on its part).
 
 	·How to start using git?
-Let's say you start a new project in a new directory 'my-project'.
-If you want to use git for this project, you have to initialize
-git inside the 'my-project' folder. This way, everything that you
-write will be tracked (and your career as a developer will begin :)).
+Let's say you start a new project in a new directory 'my-project'. If you want to use git for this project, you have to initialize
+git inside the 'my-project' folder. This way, everything that you write will be tracked (and your career as a developer will begin :)).
 
 	·How to track my progress?
-Your folder in this stage will have only the file .git that is created
-when you initialize git. Then you make whatever changes you want,
-i.e. you create files/folders, make changes, delete stuff etc.
-Every time you make changes, they are unstaged, so they are not
-in the staging area.
+Your folder in this stage will have only the file .git that is created when you initialize git. Then you make whatever changes you want,
+i.e. you create files/folders, make changes, delete stuff etc. Every time you make changes, they are unstaged, so they are not in the staging area.
 The two fundamental steps you take at this point are:
 1) move the changes you make to the staging area (git add),
 2) commit the staged changes to your work (git commit).
-(You can only include the staged changes to one commit. This is
-why the staging area exists. Once you commit the changes,
-the staging area will be empty, so that you can stage other changes
-to another commit.)
+(You can only include the staged changes to one commit. This is why the staging area exists. Once you commit the changes,
+the staging area will be empty, so that you can stage other changes to another commit.)
 
 	·What should I track?
-Every commit you make is a step of progress of your code. A useful
-advice is to not commit changes that do nothing, like if you've only
-corrected typos, or changed the name of a local variable... you get the
-point.
+Every commit you make is a step of progress of your code. A useful advice is to not commit changes that do nothing, like if you've only
+corrected typos, or changed the name of a local variable... you get the point.
 
 	·What are branches?
 https://youtu.be/Q1kHG842HoI
 
 	·What is HEAD?
-Head is a pointer pointing at a branch that you are currently working in.
-Every commit you make will be added to this branch.
+Head is a pointer pointing at a branch that you are currently working in. Every commit you make will be added to this branch.
 
 	·Soo.. what is github?
-GitHub on the other hand, is a website that you can publish your
-projects and view the code that other people write. It is basically
+GitHub on the other hand, is a website that you can publish your projects and view the code that other people write. It is basically
 the link between you and your co-workers.
 
 	·But how github actually works?
 https://www.freecodecamp.org/news/save-the-day-with-git-reset/
-When you use git, you basically create a git repository in your computer,
-so a local repository. But when you work with other people and want to
-work on the same project, you can have a repository on github and write
-your code there! (well.. not actually, but stick with me!)..
+When you use git, you basically create a git repository in your computer, so a local repository. But when you work with other people and want to
+work on the same project, you can have a repository on github and write your code there! (well.. not actually, but stick with me!)..
 
 Let me explain the workflow that you follow when you use github:
-First you create a local repository in your computer, and then you
-connect it with the github repository that your team will work on.
-Then, you write your code on your computer and commit any changes you make
-to your local repository.
-Lastly, you 'push' (= publish) the state of your local repository to the github
-repository, that synchronizes the two.
+First you create a local repository in your computer, and then you connect it with the github repository that your team will work on.
+Then, you write your code on your computer and commit any changes you make to your local repository.
+Lastly, you 'push' (= publish) the state of your local repository to the github repository, that synchronizes the two.
 
-(A nice idea is for each person to have their own branch, and commit
-their work there, so they don't commit the changes in the master branch,
-that usually has the checked and ready-to-work stuff).
+(One idea is for each person to have their own branch, and commit their work there, so they don't commit the changes in the master branch,
+that usually has the checked and ready-to-work stuff.
+Another idea is to create branches based on the functionality that needs to be create.
+For example, there could be login-branch, adminEndpoints-branch etc in which we do
+one thing only. Also, i.e. the branch adminEndpoints-branch could be also broken into different branches like healthcheck-branch...).
 
 	·What is origin?
 https://youtu.be/LIHIRBz5ZXk

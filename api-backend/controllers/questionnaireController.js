@@ -3,10 +3,10 @@ const Question = require(`${__dirname}/../models/questionModel`);
 const Option = require(`${__dirname}/../models/optionModel`);
 const Session = require(`${__dirname}/../models/sessionModel`);
 const Answer = require(`${__dirname}/../models/answerModel`);
+const mongoose = require('mongoose');
+const json2csv = require('json2csv');
 
 exports.getAllQuestionnaires = async (req, res) => {
-    const mongoose = require('mongoose');
-
     try {
         let questionnaires = await Questionnaire
             .find({}, '-_id')
@@ -40,25 +40,44 @@ exports.getAllQuestionnaires = async (req, res) => {
 exports.getQuestionnaire = async (req, res) => {
     try {
         const questionnaire = await Questionnaire
-            // .findOne({ questionnaireID: req.params.questionnaireID })
-            .findOne(req.params)
-            .select('-_id')
-            // .populate('questions', { qID: 1, qtext: 1, required: 1, type: 1, _id: 0 });
+            .findOne(req.params, '-_id')
             .populate('questions', 'qID qtext required type -_id');
 
-        /* The query could be built by mongoose function, as so: */
-        // const questionnaire = await Questionnaire.findOne()
-        //     .where('questionnaireID')
-        //     .equals(req.params.questionnaireID);
-        // // .where('(other field)')
-        // // .equals('(value)');
+        res.status(questionnaire ? 200 : 400);
 
-        return res.status(questionnaire ? 200 : 400).json({
-            status: questionnaire ? 'success' : 'bad request',
-            data: {
-                questionnaire
+        if (req.query.format === 'json') {
+            return res.json({
+                status: questionnaire ? 'success' : 'bad request',
+                data: { questionnaire }
+            });
+        } else if (req.query.format === 'csv') {
+            const fieldNames = ['ID', 'Title', 'Question', 'Keyword'];
+            let retval = [];
+
+            /* Fill retval array */
+            for (let i = 0, index = 0; i < questionnaire.questions.length; ++i) {
+                for (let j = 0; j < questionnaire.keywords.length; ++j) {
+                    retval[index++] = {
+                        ID: questionnaire.questionnaireID,
+                        Title: questionnaire.questionnaireTitle,
+                        Question: questionnaire.questions[i],
+                        Keyword: questionnaire.keywords[j]
+                    };
+                }
             }
-        });
+
+            /* Parse data to result: csv variable */
+            const json2csvparser = new json2csv.Parser({ fieldNames });
+            const result = json2csvparser.parse(retval);
+            console.log('result:'); console.log(result);
+
+            return res.send(result);
+        } else {
+            return res.status(400).json({
+                status: 'fail',
+                msg: 'Content-type can be either application/json or text/csv'
+            });
+        }
     } catch (err) {
         return res.status(500).json({
             status: 'fail',
@@ -80,22 +99,22 @@ exports.deleteQuestionnaire = async (req, res, next) => {
         }
 
         /* Delete the questionnaire itself */
-        // await Questionnaire.delete(theQuestionnaire);
+        await Questionnaire.delete(theQuestionnaire);
 
         /* Delete relevant documents */
-        // const questions = await Question.deleteMany(req.params);
-        // if (questions)
-        //     await Option.deleteMany(req.params);
-        // const sessions = await Session.deleteMany(req.params);
-        // if (sessions)
-        //     await Answer.deleteMany(req.params);
+        const questions = await Question.deleteMany(req.params);
+        if (questions)
+            await Option.deleteMany(req.params);
+        const sessions = await Session.deleteMany(req.params);
+        if (sessions)
+            await Answer.deleteMany(req.params);
 
         /* Show in console the deleted documents */
-        // console.log('theQuestionnaire:', theQuestionnaire);
-        // console.log('questions:', questions);
-        // console.log('options:', options);
-        // console.log('sessions:', sessions);
-        // console.log('answers:', answers);
+        console.log('theQuestionnaire:', theQuestionnaire);
+        console.log('questions:', questions);
+        console.log('options:', options);
+        console.log('sessions:', sessions);
+        console.log('answers:', answers);
 
         return res.status(402).json({
             status: 'success',
