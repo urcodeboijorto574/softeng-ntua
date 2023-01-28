@@ -1,11 +1,11 @@
 const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
-    name: {
+    username: {
         type: String,
-        unique: [true, 'User name taken! Please provide a new name'],
-        required: [true, 'Please provide a name'],
-        maxlength: [20, 'A name must have at most 20 characters']
+        unique: [true, 'Username taken! Please provide a new username'],
+        required: [true, 'Please provide a username'],
+        maxlength: [20, 'A username must have at most 20 characters']
     },
     role: {
         type: String,
