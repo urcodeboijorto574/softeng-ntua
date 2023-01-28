@@ -19,38 +19,50 @@ def unknownArgsHandler(unknown):
     print("\nExiting...")
     exit()
 
+def handlePost(url, json_data = {}):
+    try:
+        if (json_data == {}):
+            response = requests.post(url, timeout=10)
+        else:
+            response = requests.post(url, json = json_data, timeout=10)
+    except requests.exceptions.ReadTimeout:
+        print("Timeout error, the server took more than 10 seconds to respond")
+        exit()
+
+    return response
+
+def handleGet(url):
+    try:
+        response = requests.get(url, timeout=10)
+    except requests.exceptions.ReadTimeout:
+        print("Timeout error, the server took more than 10 seconds to respond")
+        exit()
+
+    return response
+
+def handleResponse(response, form):
+    if form == "json":
+        print("form:", form)
+        json_data = response.json()
+        json_formatted_str = json.dumps(json_data, indent=2)
+        print(json_formatted_str)
+    else:
+        print("form:", form)
+        csv_data = response.content.decode('utf-8')
+        print(csv_data)
+        df = pd.read_csv(StringIO(csv_data))
+        print(df.to_string())
+
+    return
+
 # login: NOT DONE
 def login(username, password, form):
     """"""
     print("Will sent username:", username, "and password:", password)
-    if form == "json":
-        print("=== json ===")
-        print(isinstance(username, str))
-        data = {"username": username, "password": password}
-        headers = {"Content-Type": "application/json"}
-        response = requests.post(loginEndpoint, json=data, headers=headers)
-    elif form == "csv":
-        print("=== csv ===")
-        data = f"{username},{password}"
-        headers = {"Content-Type": "text/csv"}
-        response = requests.post(loginEndpoint, data=data, headers=headers)
-    else:
-        raise ValueError("Invalid format specified. Must be 'json' or 'csv'.")
-
-    if response.status_code == 200:
-        if form == "json":
-            print("form:", form)
-            json_data = response.json()
-            json_formatted_str = json.dumps(json_data, indent=2)
-            print(json_formatted_str)
-        else:
-            print("form:", form)
-            csv_data = response.content.decode('utf-8')
-            print(csv_data)
-            df = pd.read_csv(StringIO(csv_data))
-            print(df.to_string())
-    else:
-        print("Error: Unable to reach endpoint")
+    print("Will login")
+    loginUrl = baseUrl + "login"    # !!
+    response = handlePost(loginUrl)
+    handleResponse(response, form)
     
     return response
 
@@ -61,21 +73,8 @@ def logout(form):
         Else: gives reason"""
     print("Will logout")
     logoutUrl = baseUrl + "logout"
-    response = requests.post(logoutUrl)
-    if response.status_code == 200:
-        if form == "json":
-            print("form:", form)
-            json_data = response.json()
-            json_formatted_str = json.dumps(json_data, indent=2)
-            print(json_formatted_str)
-        else:
-            print("form:", form)
-            csv_data = response.content.decode('utf-8')
-            print(csv_data)
-            df = pd.read_csv(StringIO(csv_data))
-            print(df.to_string())
-    else:
-        print("Error: Unable to reach endpoint")
+    response = handlePost(logoutUrl)
+    handleResponse(response, form)
 
     return
 
@@ -91,21 +90,8 @@ def healthcheck(form):
     #healthUrl = baseUrl + "admin/healthcheck"
     healthUrl = "http://127.0.0.1:3000/intelliq_api/admin/healthcheck?format=" + form
     print("Will perform a healthcheck at", healthUrl)
-    response = requests.get(healthUrl)
-    if response.status_code == 200:
-        if form == "json":
-            print("form:", form)
-            json_data = response.json()
-            json_formatted_str = json.dumps(json_data, indent=2)
-            print(json_formatted_str)
-        else:
-            print("form:", form)
-            csv_data = response.content.decode('utf-8')
-            print(csv_data)
-            df = pd.read_csv(StringIO(csv_data))
-            print(df.to_string())
-    else:
-        print("Error: Unable to reach endpoint")
+    response = handleGet(healthUrl)
+    handleResponse(response, form)
     
     return
 
@@ -113,21 +99,8 @@ def healthcheck(form):
 def resetall(form):
     print("Will resetall")
     resetallUrl = baseUrl + "admin/resetall"
-    response = requests.post(resetallUrl)
-    if response.status_code == 200:
-        if form == "json":
-            print("form:", form)
-            json_data = response.json()
-            json_formatted_str = json.dumps(json_data, indent=2)
-            print(json_formatted_str)
-        else:
-            print("form:", form)
-            csv_data = response.content.decode('utf-8')
-            print(csv_data)
-            df = pd.read_csv(StringIO(csv_data))
-            print(df.to_string())
-    else:
-        print("Error: Unable to reach endpoint")
+    response = handlePost(resetallUrl)
+    handleResponse(response, form)
     
     return
 
@@ -139,34 +112,8 @@ def questionnaire_upd(source, form):
     with open(source) as json_file:
         json_data = json.load(json_file)
         print("Will sent:\n", json_data)
-        headers = {"Content-Type": "application/json"}
-        response = requests.post(loginEndpoint, json=json_data, headers=headers)
-    if response.status_code == 200:
-        if form == "json":
-            print("form:", form)
-            json_data = response.json()
-            json_formatted_str = json.dumps(json_data, indent=2)
-            print(json_formatted_str)
-        else:
-            print("form:", form)
-            csv_data = response.content.decode('utf-8')
-            print(csv_data)
-            df = pd.read_csv(StringIO(csv_data))
-            print(df.to_string())
-    elif response.status_code == 404:
-        if form == "json":
-            print("form:", form)
-            json_data = response.json()
-            json_formatted_str = json.dumps(json_data, indent=2)
-            print(json_formatted_str)
-        else:
-            print("form:", form)
-            csv_data = response.content.decode('utf-8')
-            print(csv_data)
-            df = pd.read_csv(StringIO(csv_data))
-            print(df.to_string())
-    else:
-        print("Error: Unable to reach endpoint")
+        response = handlePost(updUrl)
+        handleResponse(response, form)
     
     return
 
@@ -174,21 +121,8 @@ def questionnaire_upd(source, form):
 def resetq(questionnaire_id, form):
     resetqUrl = baseUrl + f"admin/resetq/{questionnaire_id}"
     print("Will reset questionnaire at", resetqUrl)
-    response = requests.post(resetqUrl)
-    if response.status_code == 200:
-        if form == "json":
-            print("form:", form)
-            json_data = response.json()
-            json_formatted_str = json.dumps(json_data, indent=2)
-            print(json_formatted_str)
-        else:
-            print("form:", form)
-            csv_data = response.content.decode('utf-8')
-            print(csv_data)
-            df = pd.read_csv(StringIO(csv_data))
-            print(df.to_string())
-    else:
-        print("Error: Unable to reach endpoint")
+    response = handlePost(resetqUrl)
+    handleResponse(response, form)
     
     return
 
@@ -196,33 +130,8 @@ def resetq(questionnaire_id, form):
 def questionnaire(questionnaire_id, form):
     print("Will get questionnaire with id:", questionnaire_id)
     questionnaireUrl = baseUrl + f"questionnaire/{questionnaire_id}"
-    response = requests.get(questionnaireUrl)
-    if response.status_code == 200:
-        if form == "json":
-            print("form:", form)
-            json_data = response.json()
-            json_formatted_str = json.dumps(json_data, indent=2)
-            print(json_formatted_str)
-        else:
-            print("form:", form)
-            csv_data = response.content.decode('utf-8')
-            print(csv_data)
-            df = pd.read_csv(StringIO(csv_data))
-            print(df.to_string())
-    elif response.status_code == 404:
-        if form == "json":
-            print("form:", form)
-            json_data = response.json()
-            json_formatted_str = json.dumps(json_data, indent=2)
-            print(json_formatted_str)
-        else:
-            print("form:", form)
-            csv_data = response.content.decode('utf-8')
-            print(csv_data)
-            df = pd.read_csv(StringIO(csv_data))
-            print(df.to_string())
-    else:
-        print("Error: Unable to reach endpoint")
+    response = handleGet(questionnaireUrl)
+    handleResponse(response, form)
     
     return
 
@@ -231,33 +140,8 @@ def question(questionnaire_id, question_id, form):
     print("Will get from questionnaire with id:", questionnaire_id,
           "question with id:", question_id)
     questionUrl = baseUrl + f"question/{questionnaire_id}/{question_id}"
-    response = requests.get(questionUrl)
-    if response.status_code == 200:
-        if form == "json":
-            print("form:", form)
-            json_data = response.json()
-            json_formatted_str = json.dumps(json_data, indent=2)
-            print(json_formatted_str)
-        else:
-            print("form:", form)
-            csv_data = response.content.decode('utf-8')
-            print(csv_data)
-            df = pd.read_csv(StringIO(csv_data))
-            print(df.to_string())
-    elif response.status_code == 404:
-        if form == "json":
-            print("form:", form)
-            json_data = response.json()
-            json_formatted_str = json.dumps(json_data, indent=2)
-            print(json_formatted_str)
-        else:
-            print("form:", form)
-            csv_data = response.content.decode('utf-8')
-            print(csv_data)
-            df = pd.read_csv(StringIO(csv_data))
-            print(df.to_string())
-    else:
-        print("Error: Unable to reach endpoint")
+    response = handleGet(questionUrl)
+    handleResponse(response, form)
 
     return
 
@@ -273,68 +157,20 @@ def doanswer(questionnaire_id, question_id, session_id, option_id, form):
         "session" : session_id,
         "optionID" : option_id
     }
-    response = requests.post(doanswerUrl, json = json_data)
-    if response.status_code == 201:
-        if form == "json":
-            print("form:", form)
-            json_data = response.json()
-            json_formatted_str = json.dumps(json_data, indent=2)
-            print(json_formatted_str)
-        else:
-            print("form:", form)
-            csv_data = response.content.decode('utf-8')
-            print(csv_data)
-            df = pd.read_csv(StringIO(csv_data))
-            print(df.to_string())
-    elif response.status_code == 404:
-        if form == "json":
-            print("form:", form)
-            json_data = response.json()
-            json_formatted_str = json.dumps(json_data, indent=2)
-            print(json_formatted_str)
-        else:
-            print("form:", form)
-            csv_data = response.content.decode('utf-8')
-            print(csv_data)
-            df = pd.read_csv(StringIO(csv_data))
-            print(df.to_string())
-    else:
-        print("Error: Unable to reach endpoint")
+    response = handlePost(doanswerUrl, json_data)
+    handleResponse(response, form)
     
     return
+
+
 
 # getsessionanswers: TO DISCUSS & CHECK
 def getsessionanswers(questionnaire_id, session_id, form):
     print("Will get session answers of questionnaire with id:", questionnaire_id,
           "and session with id:", session_id)
     getsessionanswersUrl = baseUrl + f"getsessionanswers/{questionnaire_id}/{session_id}"
-    response = requests.get(getsessionanswersUrl)
-    if response.status_code == 200:
-        if form == "json":
-            print("form:", form)
-            json_data = response.json()
-            json_formatted_str = json.dumps(json_data, indent=2)
-            print(json_formatted_str)
-        else:
-            print("form:", form)
-            csv_data = response.content.decode('utf-8')
-            print(csv_data)
-            df = pd.read_csv(StringIO(csv_data))
-            print(df.to_string())
-    elif response.status_code == 404:
-        if form == "json":
-            print("form:", form)
-            json_data = response.json()
-            json_formatted_str = json.dumps(json_data, indent=2)
-            print(json_formatted_str)
-        else:
-            print("form:", form)
-            csv_data = response.content.decode('utf-8')
-            print(csv_data)
-            df = pd.read_csv(StringIO(csv_data))
-            print(df.to_string())
-    else:
-        print("Error: Unable to reach endpoint")
+    response = handleGet(getsessionanswersUrl)
+    handleResponse(response, form)
 
     return
 
@@ -343,33 +179,8 @@ def getquestionanswers(questionnaire_id, question_id, form):
     print("Will get question answers of questionnaire with id:", questionnaire_id,
           "and question with id:", question_id)
     getquestionanswers = baseUrl + f"getquestionanswers/{questionnaire_id}/{question_id}"
-    response = requests.get(getquestionanswers)
-    if response.status_code == 200:
-        if form == "json":
-            print("form:", form)
-            json_data = response.json()
-            json_formatted_str = json.dumps(json_data, indent=2)
-            print(json_formatted_str)
-        else:
-            print("form:", form)
-            csv_data = response.content.decode('utf-8')
-            print(csv_data)
-            df = pd.read_csv(StringIO(csv_data))
-            print(df.to_string())
-    elif response.status_code == 404:
-        if form == "json":
-            print("form:", form)
-            json_data = response.json()
-            json_formatted_str = json.dumps(json_data, indent=2)
-            print(json_formatted_str)
-        else:
-            print("form:", form)
-            csv_data = response.content.decode('utf-8')
-            print(csv_data)
-            df = pd.read_csv(StringIO(csv_data))
-            print(df.to_string())
-    else:
-        print("Error: Unable to reach endpoint")
+    response = handleGet(getquestionanswers)
+    handleResponse(response, form)
 
     return
 
