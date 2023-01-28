@@ -1,11 +1,9 @@
 [
     {
-        "_id": {
-            "$oid": "63b57c04edfc7d4fccdb9a29"
-        },
+        "_id": "63b57c04edfc7d4fccdb9a29",
         "options": [
             {
-                "$oid": "63b57c03edfc7d4fccdb9a1f"
+                "_id": "63b57c03edfc7d4fccdb9a1f"
             }
         ],
         "wasAnsweredBy": 0,
@@ -17,21 +15,19 @@
         "__v": 0
     },
     {
-        "_id": {
-            "$oid": "63b57c04edfc7d4fccdb9a2b"
-        },
+        "_id": "63b57c04edfc7d4fccdb9a2b",
         "options": [
             {
-                "$oid": "63b57c03edfc7d4fccdb9a21"
+                "_id": "63b57c03edfc7d4fccdb9a21"
             },
             {
-                "$oid": "63b57c03edfc7d4fccdb9a23"
+                "_id": "63b57c03edfc7d4fccdb9a23"
             },
             {
-                "$oid": "63b57c03edfc7d4fccdb9a25"
+                "_id": "63b57c03edfc7d4fccdb9a25"
             },
             {
-                "$oid": "63b57c03edfc7d4fccdb9a27"
+                "_id": "63b57c03edfc7d4fccdb9a27"
             }
         ],
         "wasAnsweredBy": 0,
@@ -43,18 +39,16 @@
         "__v": 0
     },
     {
-        "_id": {
-            "$oid": "63b57c15edfc7d4fccdb9a43"
-        },
+        "_id": "63b57c15edfc7d4fccdb9a43",
         "options": [
             {
-                "$oid": "63b57c15edfc7d4fccdb9a2f"
+                "_id": "63b57c15edfc7d4fccdb9a2f"
             },
             {
-                "$oid": "63b57c15edfc7d4fccdb9a31"
+                "_id": "63b57c15edfc7d4fccdb9a31"
             },
             {
-                "$oid": "63b57c15edfc7d4fccdb9a33"
+                "_id": "63b57c15edfc7d4fccdb9a33"
             }
         ],
         "wasAnsweredBy": 2,
@@ -66,15 +60,13 @@
         "__v": 0
     },
     {
-        "_id": {
-            "$oid": "63b57c16edfc7d4fccdb9a45"
-        },
+        "_id": "63b57c16edfc7d4fccdb9a45",
         "options": [
             {
-                "$oid": "63b57c15edfc7d4fccdb9a35"
+                "_id": "63b57c15edfc7d4fccdb9a35"
             },
             {
-                "$oid": "63b57c15edfc7d4fccdb9a37"
+                "_id": "63b57c15edfc7d4fccdb9a37"
             }
         ],
         "wasAnsweredBy": 0,
@@ -86,18 +78,16 @@
         "__v": 0
     },
     {
-        "_id": {
-            "$oid": "63b57c16edfc7d4fccdb9a47"
-        },
+        "_id": "63b57c16edfc7d4fccdb9a47",
         "options": [
             {
-                "$oid": "63b57c15edfc7d4fccdb9a39"
+                "_id": "63b57c15edfc7d4fccdb9a39"
             },
             {
-                "$oid": "63b57c15edfc7d4fccdb9a3b"
+                "_id": "63b57c15edfc7d4fccdb9a3b"
             },
             {
-                "$oid": "63b57c15edfc7d4fccdb9a3d"
+                "_id": "63b57c15edfc7d4fccdb9a3d"
             }
         ],
         "wasAnsweredBy": 7,
@@ -109,15 +99,13 @@
         "__v": 0
     },
     {
-        "_id": {
-            "$oid": "63b57c16edfc7d4fccdb9a49"
-        },
+        "_id": "63b57c16edfc7d4fccdb9a49",
         "options": [
             {
-                "$oid": "63b57c15edfc7d4fccdb9a3f"
+                "_id": "63b57c15edfc7d4fccdb9a3f"
             },
             {
-                "$oid": "63b57c15edfc7d4fccdb9a41"
+                "_id": "63b57c15edfc7d4fccdb9a41"
             }
         ],
         "wasAnsweredBy": 0,
@@ -129,18 +117,16 @@
         "__v": 0
     },
     {
-        "_id": {
-            "$oid": "63b6f8cc945aba5410493f7a"
-        },
+        "_id": "63b6f8cc945aba5410493f7a",
         "options": [
             {
-                "$oid": "63b6f8cc945aba5410493f66"
+                "_id": "63b6f8cc945aba5410493f66"
             },
             {
-                "$oid": "63b6f8cc945aba5410493f68"
+                "_id": "63b6f8cc945aba5410493f68"
             },
             {
-                "$oid": "63b6f8cc945aba5410493f6a"
+                "_id": "63b6f8cc945aba5410493f6a"
             }
         ],
         "wasAnsweredBy": 0,
@@ -152,15 +138,13 @@
         "__v": 0
     },
     {
-        "_id": {
-            "$oid": "63b6f8cd945aba5410493f7c"
-        },
+        "_id": "63b6f8cd945aba5410493f7c",
         "options": [
             {
-                "$oid": "63b6f8cc945aba5410493f6c"
+                "_id": "63b6f8cc945aba5410493f6c"
             },
             {
-                "$oid": "63b6f8cc945aba5410493f6e"
+                "_id": "63b6f8cc945aba5410493f6e"
             }
         ],
         "wasAnsweredBy": 0,
@@ -172,18 +156,16 @@
         "__v": 0
     },
     {
-        "_id": {
-            "$oid": "63b6f8cd945aba5410493f7e"
-        },
+        "_id": "63b6f8cd945aba5410493f7e",
         "options": [
             {
-                "$oid": "63b6f8cc945aba5410493f70"
+                "_id": "63b6f8cc945aba5410493f70"
             },
             {
-                "$oid": "63b6f8cc945aba5410493f72"
+                "_id": "63b6f8cc945aba5410493f72"
             },
             {
-                "$oid": "63b6f8cc945aba5410493f74"
+                "_id": "63b6f8cc945aba5410493f74"
             }
         ],
         "wasAnsweredBy": 0,
@@ -195,15 +177,13 @@
         "__v": 0
     },
     {
-        "_id": {
-            "$oid": "63b6f8cd945aba5410493f80"
-        },
+        "_id": "63b6f8cd945aba5410493f80",
         "options": [
             {
-                "$oid": "63b6f8cc945aba5410493f76"
+                "_id": "63b6f8cc945aba5410493f76"
             },
             {
-                "$oid": "63b6f8cc945aba5410493f78"
+                "_id": "63b6f8cc945aba5410493f78"
             }
         ],
         "wasAnsweredBy": 0,
@@ -215,12 +195,10 @@
         "__v": 0
     },
     {
-        "_id": {
-            "$oid": "63bc110ded7ab64f38d3967d"
-        },
+        "_id": "63bc110ded7ab64f38d3967d",
         "options": [
             {
-                "$oid": "63bc110ced7ab64f38d39667"
+                "_id": "63bc110ced7ab64f38d39667"
             }
         ],
         "wasAnsweredBy": 0,
@@ -232,18 +210,16 @@
         "__v": 0
     },
     {
-        "_id": {
-            "$oid": "63bc110ded7ab64f38d3967f"
-        },
+        "_id": "63bc110ded7ab64f38d3967f",
         "options": [
             {
-                "$oid": "63bc110ced7ab64f38d39669"
+                "_id": "63bc110ced7ab64f38d39669"
             },
             {
-                "$oid": "63bc110ced7ab64f38d3966b"
+                "_id": "63bc110ced7ab64f38d3966b"
             },
             {
-                "$oid": "63bc110ced7ab64f38d3966d"
+                "_id": "63bc110ced7ab64f38d3966d"
             }
         ],
         "wasAnsweredBy": 0,
@@ -255,15 +231,13 @@
         "__v": 0
     },
     {
-        "_id": {
-            "$oid": "63bc110ded7ab64f38d39681"
-        },
+        "_id": "63bc110ded7ab64f38d39681",
         "options": [
             {
-                "$oid": "63bc110ced7ab64f38d3966f"
+                "_id": "63bc110ced7ab64f38d3966f"
             },
             {
-                "$oid": "63bc110ced7ab64f38d39671"
+                "_id": "63bc110ced7ab64f38d39671"
             }
         ],
         "wasAnsweredBy": 0,
@@ -275,18 +249,16 @@
         "__v": 0
     },
     {
-        "_id": {
-            "$oid": "63bc110ded7ab64f38d39683"
-        },
+        "_id": "63bc110ded7ab64f38d39683",
         "options": [
             {
-                "$oid": "63bc110ced7ab64f38d39673"
+                "_id": "63bc110ced7ab64f38d39673"
             },
             {
-                "$oid": "63bc110ced7ab64f38d39675"
+                "_id": "63bc110ced7ab64f38d39675"
             },
             {
-                "$oid": "63bc110ced7ab64f38d39677"
+                "_id": "63bc110ced7ab64f38d39677"
             }
         ],
         "wasAnsweredBy": 0,
@@ -298,15 +270,13 @@
         "__v": 0
     },
     {
-        "_id": {
-            "$oid": "63bc110ded7ab64f38d39685"
-        },
+        "_id": "63bc110ded7ab64f38d39685",
         "options": [
             {
-                "$oid": "63bc110ded7ab64f38d39679"
+                "_id": "63bc110ded7ab64f38d39679"
             },
             {
-                "$oid": "63bc110ded7ab64f38d3967b"
+                "_id": "63bc110ded7ab64f38d3967b"
             }
         ],
         "wasAnsweredBy": 0,
@@ -318,12 +288,10 @@
         "__v": 0
     },
     {
-        "_id": {
-            "$oid": "63bd62915397442ec4c12436"
-        },
+        "_id": "63bd62915397442ec4c12436",
         "options": [
             {
-                "$oid": "63bd62905397442ec4c12420"
+                "_id": "63bd62905397442ec4c12420"
             }
         ],
         "wasAnsweredBy": 12,
@@ -335,18 +303,16 @@
         "__v": 0
     },
     {
-        "_id": {
-            "$oid": "63bd62915397442ec4c12438"
-        },
+        "_id": "63bd62915397442ec4c12438",
         "options": [
             {
-                "$oid": "63bd62905397442ec4c12422"
+                "_id": "63bd62905397442ec4c12422"
             },
             {
-                "$oid": "63bd62905397442ec4c12424"
+                "_id": "63bd62905397442ec4c12424"
             },
             {
-                "$oid": "63bd62905397442ec4c12426"
+                "_id": "63bd62905397442ec4c12426"
             }
         ],
         "wasAnsweredBy": 7,
@@ -358,15 +324,13 @@
         "__v": 0
     },
     {
-        "_id": {
-            "$oid": "63bd62915397442ec4c1243a"
-        },
+        "_id": "63bd62915397442ec4c1243a",
         "options": [
             {
-                "$oid": "63bd62905397442ec4c12428"
+                "_id": "63bd62905397442ec4c12428"
             },
             {
-                "$oid": "63bd62905397442ec4c1242a"
+                "_id": "63bd62905397442ec4c1242a"
             }
         ],
         "wasAnsweredBy": 5,
@@ -378,18 +342,16 @@
         "__v": 0
     },
     {
-        "_id": {
-            "$oid": "63bd62925397442ec4c1243c"
-        },
+        "_id": "63bd62925397442ec4c1243c",
         "options": [
             {
-                "$oid": "63bd62915397442ec4c1242c"
+                "_id": "63bd62915397442ec4c1242c"
             },
             {
-                "$oid": "63bd62915397442ec4c1242e"
+                "_id": "63bd62915397442ec4c1242e"
             },
             {
-                "$oid": "63bd62915397442ec4c12430"
+                "_id": "63bd62915397442ec4c12430"
             }
         ],
         "wasAnsweredBy": 4,
@@ -401,15 +363,13 @@
         "__v": 0
     },
     {
-        "_id": {
-            "$oid": "63bd62925397442ec4c1243e"
-        },
+        "_id": "63bd62925397442ec4c1243e",
         "options": [
             {
-                "$oid": "63bd62915397442ec4c12432"
+                "_id": "63bd62915397442ec4c12432"
             },
             {
-                "$oid": "63bd62915397442ec4c12434"
+                "_id": "63bd62915397442ec4c12434"
             }
         ],
         "wasAnsweredBy": 5,

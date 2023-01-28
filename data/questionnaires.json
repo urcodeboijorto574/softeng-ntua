@@ -1,8 +1,6 @@
 [
     {
-        "_id": {
-            "$oid": "63b57c04edfc7d4fccdb9a2d"
-        },
+        "_id": "63b57c04edfc7d4fccdb9a2d",
         "keywords": [
             "footbal",
             "islands",
@@ -10,19 +8,17 @@
         ],
         "questions": [
             {
-                "$oid": "63b57c04edfc7d4fccdb9a29"
+                "_id": "63b57c04edfc7d4fccdb9a29"
             },
             {
-                "$oid": "63b57c04edfc7d4fccdb9a2b"
+                "_id": "63b57c04edfc7d4fccdb9a2b"
             }
         ],
         "questionnaireID": "QQ000",
         "questionnaireTitle": "My first research questionnaire"
     },
     {
-        "_id": {
-            "$oid": "63b57c16edfc7d4fccdb9a4b"
-        },
+        "_id": "63b57c16edfc7d4fccdb9a4b",
         "keywords": [
             "footbal",
             "islands",
@@ -30,25 +26,23 @@
         ],
         "questions": [
             {
-                "$oid": "63b57c15edfc7d4fccdb9a43"
+                "_id": "63b57c15edfc7d4fccdb9a43"
             },
             {
-                "$oid": "63b57c16edfc7d4fccdb9a45"
+                "_id": "63b57c16edfc7d4fccdb9a45"
             },
             {
-                "$oid": "63b57c16edfc7d4fccdb9a47"
+                "_id": "63b57c16edfc7d4fccdb9a47"
             },
             {
-                "$oid": "63b57c16edfc7d4fccdb9a49"
+                "_id": "63b57c16edfc7d4fccdb9a49"
             }
         ],
         "questionnaireID": "QQ001",
         "questionnaireTitle": "My second research questionnaire"
     },
     {
-        "_id": {
-            "$oid": "63b6f8cd945aba5410493f82"
-        },
+        "_id": "63b6f8cd945aba5410493f82",
         "keywords": [
             "footbal",
             "islands",
@@ -56,25 +50,23 @@
         ],
         "questions": [
             {
-                "$oid": "63b6f8cc945aba5410493f7a"
+                "_id": "63b6f8cc945aba5410493f7a"
             },
             {
-                "$oid": "63b6f8cd945aba5410493f7c"
+                "_id": "63b6f8cd945aba5410493f7c"
             },
             {
-                "$oid": "63b6f8cd945aba5410493f7e"
+                "_id": "63b6f8cd945aba5410493f7e"
             },
             {
-                "$oid": "63b6f8cd945aba5410493f80"
+                "_id": "63b6f8cd945aba5410493f80"
             }
         ],
         "questionnaireID": "QQ042",
         "questionnaireTitle": "My third research questionnaire"
     },
     {
-        "_id": {
-            "$oid": "63bc110ded7ab64f38d39687"
-        },
+        "_id": "63bc110ded7ab64f38d39687",
         "keywords": [
             "footbal",
             "islands",
@@ -82,28 +74,26 @@
         ],
         "questions": [
             {
-                "$oid": "63bc110ded7ab64f38d3967d"
+                "_id": "63bc110ded7ab64f38d3967d"
             },
             {
-                "$oid": "63bc110ded7ab64f38d3967f"
+                "_id": "63bc110ded7ab64f38d3967f"
             },
             {
-                "$oid": "63bc110ded7ab64f38d39681"
+                "_id": "63bc110ded7ab64f38d39681"
             },
             {
-                "$oid": "63bc110ded7ab64f38d39683"
+                "_id": "63bc110ded7ab64f38d39683"
             },
             {
-                "$oid": "63bc110ded7ab64f38d39685"
+                "_id": "63bc110ded7ab64f38d39685"
             }
         ],
         "questionnaireID": "QQ052",
         "questionnaireTitle": "My fourth research questionnaire"
     },
     {
-        "_id": {
-            "$oid": "63bd62925397442ec4c12440"
-        },
+        "_id": "63bd62925397442ec4c12440",
         "keywords": [
             "footbal",
             "islands",
@@ -111,19 +101,19 @@
         ],
         "questions": [
             {
-                "$oid": "63bd62915397442ec4c12436"
+                "_id": "63bd62915397442ec4c12436"
             },
             {
-                "$oid": "63bd62915397442ec4c12438"
+                "_id": "63bd62915397442ec4c12438"
             },
             {
-                "$oid": "63bd62915397442ec4c1243a"
+                "_id": "63bd62915397442ec4c1243a"
             },
             {
-                "$oid": "63bd62925397442ec4c1243c"
+                "_id": "63bd62925397442ec4c1243c"
             },
             {
-                "$oid": "63bd62925397442ec4c1243e"
+                "_id": "63bd62925397442ec4c1243e"
             }
         ],
         "questionnaireID": "QQ062",
