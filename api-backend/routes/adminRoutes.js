@@ -7,7 +7,7 @@ const router = express.Router();
 router.route('/healthcheck').get(adminController.getHealthcheck);
 
 router.route('/:usermod/:username/:password').post(authController.createUser);
-router.route('/users/:username').get(authController.getUser);
+//router.route('/users/:username').get(authController.getUser);
 
 // router
 //     .route('/questionnaire_upd')
