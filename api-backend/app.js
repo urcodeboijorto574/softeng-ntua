@@ -1,14 +1,16 @@
 const express = require('express');
 const morgan = require('morgan');
 const dotenv = require('dotenv');
+const bp = require('body-parser');
+
 const adminRouter = require(`${__dirname}/routes/adminRoutes.js`);
 const questionnaireRouter = require(`${__dirname}/routes/questionnaireRoutes.js`);
 const questionRouter = require(`${__dirname}/routes/questionRoutes.js`);
-const doanswerRouter = require(`${__dirname}/routes/doanswerRoutes.js`);
-const getquestionanswersRouter = require(`${__dirname}/routes/getquestionanswersRoutes.js`);
-const getsessionanswersRouter = require(`${__dirname}/routes/getsessionanswersRoutes.js`);
+const answerRouter = require(`${__dirname}/routes/answerRoutes.js`);
+const sessionAnswerRouter = require(`${__dirname}/routes/sessionAnswerRoutes.js`);
+const questionAnswerRouter = require(`${__dirname}/routes/questionAnswerRoutes.js`);
+const sessionRouter = require(`${__dirname}/routes/sessionRoutes.js`);
 const importRouter = require(`${__dirname}/routes/importRoutes.js`);
-const bp = require('body-parser');
 
 const app = express();
 
@@ -31,12 +33,22 @@ app.use((req, res, next) => {
     next();
 });
 
+// Authentication endpoints
+
+
+// Admin endpoints
 app.use('/intelliq_api/admin', adminRouter);
-app.use('/intelliq_api/questionnaire', questionnaireRouter);
-app.use('/intelliq_api/question', questionRouter);
-app.use('/intelliq_api/doanswer', doanswerRouter);
-app.use('/intelliq_api/getquestionanswers', getquestionanswersRouter);
-app.use('/intelliq_api/getsessionanswers', getsessionanswersRouter);
+
+// Use case endpoints
+app.use('/intelliq_api/questionnaire', questionnaireRouter); // a + additional
+app.use('/intelliq_api/question', questionRouter); // b
+app.use('/intelliq_api/doanswer', answerRouter); // c
+app.use('/intelliq_api/getsessionanswers', sessionAnswerRouter); // d
+app.use('/intelliq_api/getquestionanswers', questionAnswerRouter); // e
+
+// Additional endpoints
+app.use('/intelliq_api/sessions', sessionRouter);
 app.use('/dummy-data', importRouter);
+
 
 module.exports = app;
