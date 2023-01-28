@@ -5,11 +5,11 @@ const sessionController = require(`${__dirname}/../controllers/sessionController
 const router = express.Router();
 
 router
-    .route('/getAllQuestionnaires')
+    .route('/getallquestionnaires')
     .get(questionnaireController.getAllQuestionnaires);
 
 router
-    .route('/:questionnaireID/getAllSessions')
+    .route('/:questionnaireID/getallsessions')
     .get(sessionController.getAllSessions);
 
 router
