@@ -17,7 +17,7 @@ exports.getAllQuestionnaires = async (req, res) => {
                 for (let k = 0; k < questionnaires[i].questions[j].options.length; ++k) {
                     const idStr = questionnaires[i].questions[j].options[k];
                     const opt_id = mongoose.Types.ObjectId(idStr);
-                    const option = await Option.findOne({ _id: opt_id }, 'wasChosenBy optID opttxt nextqID');
+                    const option = await Option.findOne({ _id: opt_id }, '+wasChosenBy +optID +opttxt +nextqID -_id -__v');
                     questionnaires[i].questions[j].options[k] = option;
                 }
             }
@@ -37,7 +37,7 @@ exports.getAllQuestionnaires = async (req, res) => {
     next();
 };
 
-exports.getQuestionnaire = async (req, res) => {
+exports.getQuestionnaire = async (req, res, next) => {
     try {
         const questionnaire = await Questionnaire
             .findOne(req.params, '-_id')
@@ -45,7 +45,7 @@ exports.getQuestionnaire = async (req, res) => {
 
         res.status(questionnaire ? 200 : 400);
 
-        if (req.query.format === 'json') {
+        if (!req.query.format || req.query.format === 'json') {
             return res.json({
                 status: questionnaire ? 'success' : 'bad request',
                 data: { questionnaire }
