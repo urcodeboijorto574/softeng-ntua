@@ -5,7 +5,7 @@ import json
 import pandas as pd
 from io import StringIO
 
-baseUrl = "http://localhost:8000/"
+baseUrl = "http://localhost:3000/intelliq_api/"
 
 loginEndpoint = "http://localhost:8000/endpoint"
 
@@ -153,6 +153,18 @@ def questionnaire_upd(source, form):
             print(csv_data)
             df = pd.read_csv(StringIO(csv_data))
             print(df.to_string())
+    elif response.status_code == 404:
+        if form == "json":
+            print("form:", form)
+            json_data = response.json()
+            json_formatted_str = json.dumps(json_data, indent=2)
+            print(json_formatted_str)
+        else:
+            print("form:", form)
+            csv_data = response.content.decode('utf-8')
+            print(csv_data)
+            df = pd.read_csv(StringIO(csv_data))
+            print(df.to_string())
     else:
         print("Error: Unable to reach endpoint")
     
@@ -183,9 +195,21 @@ def resetq(questionnaire_id, form):
 # questionnaire: TO CHECK
 def questionnaire(questionnaire_id, form):
     print("Will get questionnaire with id:", questionnaire_id)
-    questionnaireUrl = baseUrl + f"admin/questionnaire/{questionnaire_id}"
+    questionnaireUrl = baseUrl + f"questionnaire/{questionnaire_id}"
     response = requests.get(questionnaireUrl)
     if response.status_code == 200:
+        if form == "json":
+            print("form:", form)
+            json_data = response.json()
+            json_formatted_str = json.dumps(json_data, indent=2)
+            print(json_formatted_str)
+        else:
+            print("form:", form)
+            csv_data = response.content.decode('utf-8')
+            print(csv_data)
+            df = pd.read_csv(StringIO(csv_data))
+            print(df.to_string())
+    elif response.status_code == 404:
         if form == "json":
             print("form:", form)
             json_data = response.json()
@@ -206,9 +230,21 @@ def questionnaire(questionnaire_id, form):
 def question(questionnaire_id, question_id, form):
     print("Will get from questionnaire with id:", questionnaire_id,
           "question with id:", question_id)
-    questionUrl = baseUrl + f"admin/question/{questionnaire_id}/{question_id}"
+    questionUrl = baseUrl + f"question/{questionnaire_id}/{question_id}"
     response = requests.get(questionUrl)
     if response.status_code == 200:
+        if form == "json":
+            print("form:", form)
+            json_data = response.json()
+            json_formatted_str = json.dumps(json_data, indent=2)
+            print(json_formatted_str)
+        else:
+            print("form:", form)
+            csv_data = response.content.decode('utf-8')
+            print(csv_data)
+            df = pd.read_csv(StringIO(csv_data))
+            print(df.to_string())
+    elif response.status_code == 404:
         if form == "json":
             print("form:", form)
             json_data = response.json()
@@ -230,22 +266,38 @@ def doanswer(questionnaire_id, question_id, session_id, option_id, form):
     print("Will answer from questionnaire with id:", questionnaire_id,
           "question with id:", question_id, "of session with id:", session_id,
           "and option with id:", option_id)
-    doanswerUrl = baseUrl + f"/doanswer/{questionnaire_id}/{question_id}/{session_id}/{option_id}"
+    doanswerUrl = baseUrl + f"doanswer/{questionnaire_id}/{question_id}/{session_id}/{option_id}"
     json_data = {
         "questionnaireID" : questionnaire_id,
         "questionID" : question_id,
         "session" : session_id,
         "optionID" : option_id
     }
-    
     response = requests.post(doanswerUrl, json = json_data)
-    if response.status_code == 200:
+    if response.status_code == 201:
         if form == "json":
+            print("form:", form)
             json_data = response.json()
-            print(json_data)
+            json_formatted_str = json.dumps(json_data, indent=2)
+            print(json_formatted_str)
         else:
+            print("form:", form)
             csv_data = response.content.decode('utf-8')
             print(csv_data)
+            df = pd.read_csv(StringIO(csv_data))
+            print(df.to_string())
+    elif response.status_code == 404:
+        if form == "json":
+            print("form:", form)
+            json_data = response.json()
+            json_formatted_str = json.dumps(json_data, indent=2)
+            print(json_formatted_str)
+        else:
+            print("form:", form)
+            csv_data = response.content.decode('utf-8')
+            print(csv_data)
+            df = pd.read_csv(StringIO(csv_data))
+            print(df.to_string())
     else:
         print("Error: Unable to reach endpoint")
     
@@ -269,6 +321,18 @@ def getsessionanswers(questionnaire_id, session_id, form):
             print(csv_data)
             df = pd.read_csv(StringIO(csv_data))
             print(df.to_string())
+    elif response.status_code == 404:
+        if form == "json":
+            print("form:", form)
+            json_data = response.json()
+            json_formatted_str = json.dumps(json_data, indent=2)
+            print(json_formatted_str)
+        else:
+            print("form:", form)
+            csv_data = response.content.decode('utf-8')
+            print(csv_data)
+            df = pd.read_csv(StringIO(csv_data))
+            print(df.to_string())
     else:
         print("Error: Unable to reach endpoint")
 
@@ -281,6 +345,18 @@ def getquestionanswers(questionnaire_id, question_id, form):
     getquestionanswers = baseUrl + f"getquestionanswers/{questionnaire_id}/{question_id}"
     response = requests.get(getquestionanswers)
     if response.status_code == 200:
+        if form == "json":
+            print("form:", form)
+            json_data = response.json()
+            json_formatted_str = json.dumps(json_data, indent=2)
+            print(json_formatted_str)
+        else:
+            print("form:", form)
+            csv_data = response.content.decode('utf-8')
+            print(csv_data)
+            df = pd.read_csv(StringIO(csv_data))
+            print(df.to_string())
+    elif response.status_code == 404:
         if form == "json":
             print("form:", form)
             json_data = response.json()
@@ -402,22 +478,21 @@ admin_parser.add_argument("--usermod", help="modify user", action="store_true")
 admin_parser.add_argument("--username", help="username")
 admin_parser.add_argument("--passw", help="password")
 admin_parser.add_argument("--users", help="list of users")
+admin_parser.add_argument("--format", nargs = 1)
 ####################
 
 
 
 
-known = ["command", "--usermod", "--username", "--passw",
-         "source", "--questionnaire_id", "--question_id",
-         "--session_id", "--option_id", "--users", "format"]
+known = ["command", "usermod", "username", "passw",
+         "source", "questionnaire_id", "question_id",
+         "session_id", "option_id", "users", "format"]
 
 #args, unknown = parser.parse_known_args(known)
 
 try:
     args = parser.parse_args()
-
-#args, unknown = parser.parse_known_args(known)
-
+    #args, unknown = parser.parse_known_args(known)
     if '--format' not in sys.argv:
         parser.error("Incorrect format, it should be --format json")
 except Exception as e:
@@ -488,6 +563,7 @@ elif (args.command == "getquestionanswers"):
         print("getquestionanswers requires --questionnaire_id and --question_id and --format")
 
 elif args.command == "admin":
+    print("In admin")
     if args.usermod:
         if args.username and args.passw:
             print("user modification for username :", args.username, "with password :", args.passw)
