@@ -1,7 +1,7 @@
 {
   "name": "intelliQ",
   "version": "1.0.0",
-  "description": "Project for course Software Engineering NTUA-ECE 7th Semester",
+  "description": "Project for course Software Engineering, NTUA-ECE 7th Semester",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
