@@ -26,9 +26,11 @@ app.use((req, res, next) => {
     next();
 });
 
+// authentication endpoints through adminRouter
 app.use('/intelliq_api/admin', adminRouter);
-app.use('/intelliq_api/usermod', userRouter);
-app.use('/intelliq_api/admin/users', userRouter);
+
+/* app.use('/intelliq_api/:usermod', userRouter);
+app.use('/intelliq_api/admin/users', userRouter); */
 // app.use('/intelliq_api/questionnaire', questionnaireRouter);
 
 module.exports = app;
