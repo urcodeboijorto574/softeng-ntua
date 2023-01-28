@@ -3,7 +3,6 @@ const morgan = require('morgan');
 const dotenv = require('dotenv');
 const adminRouter = require('./routes/adminRoutes.js');
 const loginRouter = require('./routes/loginRouter.js');
-// const questionnaireRouter = require('./routes/questionnaireRoutes.js');
 const bp = require('body-parser');
 
 const app = express();
