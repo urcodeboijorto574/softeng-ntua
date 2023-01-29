@@ -3,6 +3,7 @@ const Question = require(`${__dirname}/../models/questionModel`);
 const Option = require(`${__dirname}/../models/optionModel`);
 const Session = require(`${__dirname}/../models/sessionModel`);
 const Answer = require(`${__dirname}/../models/answerModel`);
+const User = require(`${__dirname}/../models/userModel`);
 const mongoose = require('mongoose');
 const json2csv = require('json2csv');
 
@@ -10,6 +11,7 @@ exports.getAllQuestionnaires = async (req, res) => {
     try {
         let questionnaires = await Questionnaire
             .find({}, '-_id')
+            .sort('questionnaireID')
             .populate({
                 path: 'questions',
                 model: 'Question',
@@ -134,4 +136,32 @@ exports.deleteQuestionnaire = async (req, res, next) => {
         });
     }
     next();
+};
+
+exports.getUserQuestionnaires = async (req, res, next) => {
+    try {
+        // req.params = {username: 'jorto574'}
+        const user = await User
+            .findOne(req.params)
+            .populate({
+                path: 'questionnaires',
+                model: 'Questionnaire',
+                select: {
+                    '_id': 0
+                },
+                sort: {
+                    'questionnaireID': 1
+                }
+            });
+
+        return res.status(user && user.questionnaires ? 200 : 402).json({
+            status: 'success',
+            data: user.questionnaires
+        });
+    } catch (err) {
+        return res.status(500).json({
+            status: 'fail',
+            msg: err
+        });
+    }
 };

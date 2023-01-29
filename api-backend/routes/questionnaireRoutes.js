@@ -9,6 +9,10 @@ router
     .get(questionnaireController.getAllQuestionnaires);
 
 router
+    .route('/userquestionnaires/:username')
+    .get(questionnaireController.getUserQuestionnaires);
+
+router
     .route('/:questionnaireID/getallsessions')
     .get(sessionController.getAllSessions);
 
