@@ -39,7 +39,7 @@ exports.doAnswer = async (req, res, next) => {
         }
 
         /* Check if username is valid */
-        const user = await Session.findOne({ username: req.query.username }, '_id');
+        const user = await Session.findOne({ username: req.body.username }, '_id');
         if (!user) {
             /* Reject the request */
             return res.status(400).json({
