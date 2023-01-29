@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 
+dotenv.config({ path: './config.env' });
 const app = require('./app');
 
-dotenv.config({ path: './config.env' });
 
 // DB is the database connection string
 const DB = process.env.DATABASE.replace(
@@ -17,9 +17,9 @@ mongoose
         useNewUrlParser: true,
         useCreateIndex: true,
         useFindAndModify: false,
+        useUnifiedTopology: true /* Optional - Only for disabling a warning */
     })
     .then(() => {
-        //console.log(con.connections);
         console.log('DB connection succesful!');
     })
     .catch((err) => {
@@ -32,7 +32,7 @@ mongoose
 
 const port = process.env.PORT || 3000;
 
-// save the server
+// Save the server
 const server = app.listen(port, () => {
     console.log(`App running on port ${port}...`);
 });
