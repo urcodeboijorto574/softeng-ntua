@@ -1,8 +1,6 @@
 [
     {
-        "_id": {
-            "$oid": "63b57c03edfc7d4fccdb9a1f"
-        },
+        "_id": "63b57c03edfc7d4fccdb9a1f",
         "wasChosenBy": 0,
         "optID": "P00TXT",
         "opttxt": "<open string>",
@@ -12,9 +10,7 @@
         "__v": 0
     },
     {
-        "_id": {
-            "$oid": "63b57c03edfc7d4fccdb9a21"
-        },
+        "_id": "63b57c03edfc7d4fccdb9a21",
         "wasChosenBy": 0,
         "optID": "P01A1",
         "opttxt": "<30",
@@ -24,9 +20,7 @@
         "__v": 0
     },
     {
-        "_id": {
-            "$oid": "63b57c03edfc7d4fccdb9a23"
-        },
+        "_id": "63b57c03edfc7d4fccdb9a23",
         "wasChosenBy": 0,
         "optID": "P01A2",
         "opttxt": "30-50",
@@ -36,9 +30,7 @@
         "__v": 0
     },
     {
-        "_id": {
-            "$oid": "63b57c03edfc7d4fccdb9a25"
-        },
+        "_id": "63b57c03edfc7d4fccdb9a25",
         "wasChosenBy": 0,
         "optID": "P01A3",
         "opttxt": "50-70",
@@ -48,9 +40,7 @@
         "__v": 0
     },
     {
-        "_id": {
-            "$oid": "63b57c03edfc7d4fccdb9a27"
-        },
+        "_id": "63b57c03edfc7d4fccdb9a27",
         "wasChosenBy": 0,
         "optID": "P01A4",
         "opttxt": ">70",
@@ -60,9 +50,7 @@
         "__v": 0
     },
     {
-        "_id": {
-            "$oid": "63b57c15edfc7d4fccdb9a2f"
-        },
+        "_id": "63b57c15edfc7d4fccdb9a2f",
         "wasChosenBy": 7,
         "optID": "Q01A1",
         "opttxt": "Prasino",
@@ -72,9 +60,7 @@
         "__v": 0
     },
     {
-        "_id": {
-            "$oid": "63b57c15edfc7d4fccdb9a31"
-        },
+        "_id": "63b57c15edfc7d4fccdb9a31",
         "wasChosenBy": 0,
         "optID": "Q01A2",
         "opttxt": "Kokkino",
@@ -84,9 +70,7 @@
         "__v": 0
     },
     {
-        "_id": {
-            "$oid": "63b57c15edfc7d4fccdb9a33"
-        },
+        "_id": "63b57c15edfc7d4fccdb9a33",
         "wasChosenBy": 0,
         "optID": "Q01A3",
         "opttxt": "Kitrino",
@@ -96,9 +80,7 @@
         "__v": 0
     },
     {
-        "_id": {
-            "$oid": "63b57c15edfc7d4fccdb9a35"
-        },
+        "_id": "63b57c15edfc7d4fccdb9a35",
         "wasChosenBy": 0,
         "optID": "Q02A1",
         "opttxt": "Ναι",
@@ -108,9 +90,7 @@
         "__v": 0
     },
     {
-        "_id": {
-            "$oid": "63b57c15edfc7d4fccdb9a37"
-        },
+        "_id": "63b57c15edfc7d4fccdb9a37",
         "wasChosenBy": 0,
         "optID": "Q02A2",
         "opttxt": "Οχι",
@@ -120,9 +100,7 @@
         "__v": 0
     },
     {
-        "_id": {
-            "$oid": "63b57c15edfc7d4fccdb9a39"
-        },
+        "_id": "63b57c15edfc7d4fccdb9a39",
         "wasChosenBy": 7,
         "optID": "Q03A1",
         "opttxt": "Pao",
@@ -132,9 +110,7 @@
         "__v": 0
     },
     {
-        "_id": {
-            "$oid": "63b57c15edfc7d4fccdb9a3b"
-        },
+        "_id": "63b57c15edfc7d4fccdb9a3b",
         "wasChosenBy": 0,
         "optID": "Q03A2",
         "opttxt": "Osfp ",
@@ -144,9 +120,7 @@
         "__v": 0
     },
     {
-        "_id": {
-            "$oid": "63b57c15edfc7d4fccdb9a3d"
-        },
+        "_id": "63b57c15edfc7d4fccdb9a3d",
         "wasChosenBy": 0,
         "optID": "Q03A3",
         "opttxt": "AEK",
@@ -156,9 +130,7 @@
         "__v": 0
     },
     {
-        "_id": {
-            "$oid": "63b57c15edfc7d4fccdb9a3f"
-        },
+        "_id": "63b57c15edfc7d4fccdb9a3f",
         "wasChosenBy": 0,
         "optID": "Q04A1",
         "opttxt": "Nai",
@@ -168,9 +140,7 @@
         "__v": 0
     },
     {
-        "_id": {
-            "$oid": "63b57c15edfc7d4fccdb9a41"
-        },
+        "_id": "63b57c15edfc7d4fccdb9a41",
         "wasChosenBy": 0,
         "optID": "Q04A2",
         "opttxt": "Oxi",
@@ -180,9 +150,7 @@
         "__v": 0
     },
     {
-        "_id": {
-            "$oid": "63b6f8cc945aba5410493f66"
-        },
+        "_id": "63b6f8cc945aba5410493f66",
         "wasChosenBy": 7,
         "optID": "Q11A1",
         "opttxt": "Prasino",
@@ -192,9 +160,7 @@
         "__v": 0
     },
     {
-        "_id": {
-            "$oid": "63b6f8cc945aba5410493f68"
-        },
+        "_id": "63b6f8cc945aba5410493f68",
         "wasChosenBy": 0,
         "optID": "Q11A2",
         "opttxt": "Kokkino",
@@ -204,9 +170,7 @@
         "__v": 0
     },
     {
-        "_id": {
-            "$oid": "63b6f8cc945aba5410493f6a"
-        },
+        "_id": "63b6f8cc945aba5410493f6a",
         "wasChosenBy": 0,
         "optID": "Q11A3",
         "opttxt": "Kitrino",
@@ -216,9 +180,7 @@
         "__v": 0
     },
     {
-        "_id": {
-            "$oid": "63b6f8cc945aba5410493f6c"
-        },
+        "_id": "63b6f8cc945aba5410493f6c",
         "wasChosenBy": 0,
         "optID": "Q12A1",
         "opttxt": "Ναι",
@@ -228,9 +190,7 @@
         "__v": 0
     },
     {
-        "_id": {
-            "$oid": "63b6f8cc945aba5410493f6e"
-        },
+        "_id": "63b6f8cc945aba5410493f6e",
         "wasChosenBy": 0,
         "optID": "Q12A2",
         "opttxt": "Οχι",
@@ -240,9 +200,7 @@
         "__v": 0
     },
     {
-        "_id": {
-            "$oid": "63b6f8cc945aba5410493f70"
-        },
+        "_id": "63b6f8cc945aba5410493f70",
         "optID": "Q13A1",
         "opttxt": "Pao",
         "nextqID": "Q14",
@@ -251,9 +209,7 @@
         "__v": 0
     },
     {
-        "_id": {
-            "$oid": "63b6f8cc945aba5410493f72"
-        },
+        "_id": "63b6f8cc945aba5410493f72",
         "optID": "Q13A2",
         "opttxt": "Osfp ",
         "nextqID": "Q14",
@@ -262,9 +218,7 @@
         "__v": 0
     },
     {
-        "_id": {
-            "$oid": "63b6f8cc945aba5410493f74"
-        },
+        "_id": "63b6f8cc945aba5410493f74",
         "optID": "Q13A3",
         "opttxt": "AEK",
         "nextqID": "Q14",
@@ -273,9 +227,7 @@
         "__v": 0
     },
     {
-        "_id": {
-            "$oid": "63b6f8cc945aba5410493f76"
-        },
+        "_id": "63b6f8cc945aba5410493f76",
         "optID": "Q14A1",
         "opttxt": "Nai",
         "nextqID": "-",
@@ -284,9 +236,7 @@
         "__v": 0
     },
     {
-        "_id": {
-            "$oid": "63b6f8cc945aba5410493f78"
-        },
+        "_id": "63b6f8cc945aba5410493f78",
         "optID": "Q14A2",
         "opttxt": "Oxi",
         "nextqID": "-",
@@ -295,9 +245,7 @@
         "__v": 0
     },
     {
-        "_id": {
-            "$oid": "63bc110ced7ab64f38d39667"
-        },
+        "_id": "63bc110ced7ab64f38d39667",
         "optID": "P20TXT",
         "opttxt": "<open string>",
         "nextqID": "Q21",
@@ -306,9 +254,7 @@
         "__v": 0
     },
     {
-        "_id": {
-            "$oid": "63bc110ced7ab64f38d39669"
-        },
+        "_id": "63bc110ced7ab64f38d39669",
         "optID": "Q21A1",
         "opttxt": "Prasino",
         "nextqID": "Q22",
@@ -317,9 +263,7 @@
         "__v": 0
     },
     {
-        "_id": {
-            "$oid": "63bc110ced7ab64f38d3966b"
-        },
+        "_id": "63bc110ced7ab64f38d3966b",
         "optID": "Q21A2",
         "opttxt": "Kokkino",
         "nextqID": "Q22",
@@ -328,9 +272,7 @@
         "__v": 0
     },
     {
-        "_id": {
-            "$oid": "63bc110ced7ab64f38d3966d"
-        },
+        "_id": "63bc110ced7ab64f38d3966d",
         "optID": "Q21A3",
         "opttxt": "Kitrino",
         "nextqID": "Q22",
@@ -339,9 +281,7 @@
         "__v": 0
     },
     {
-        "_id": {
-            "$oid": "63bc110ced7ab64f38d3966f"
-        },
+        "_id": "63bc110ced7ab64f38d3966f",
         "optID": "Q22A1",
         "opttxt": "Ναι",
         "nextqID": "Q23",
@@ -350,9 +290,7 @@
         "__v": 0
     },
     {
-        "_id": {
-            "$oid": "63bc110ced7ab64f38d39671"
-        },
+        "_id": "63bc110ced7ab64f38d39671",
         "optID": "Q22A2",
         "opttxt": "Οχι",
         "nextqID": "Q24",
@@ -361,9 +299,7 @@
         "__v": 0
     },
     {
-        "_id": {
-            "$oid": "63bc110ced7ab64f38d39673"
-        },
+        "_id": "63bc110ced7ab64f38d39673",
         "optID": "Q23A1",
         "opttxt": "Pao",
         "nextqID": "Q24",
@@ -372,9 +308,7 @@
         "__v": 0
     },
     {
-        "_id": {
-            "$oid": "63bc110ced7ab64f38d39675"
-        },
+        "_id": "63bc110ced7ab64f38d39675",
         "optID": "Q23A2",
         "opttxt": "Osfp ",
         "nextqID": "Q24",
@@ -383,9 +317,7 @@
         "__v": 0
     },
     {
-        "_id": {
-            "$oid": "63bc110ced7ab64f38d39677"
-        },
+        "_id": "63bc110ced7ab64f38d39677",
         "optID": "Q23A3",
         "opttxt": "AEK",
         "nextqID": "Q24",
@@ -394,9 +326,7 @@
         "__v": 0
     },
     {
-        "_id": {
-            "$oid": "63bc110ded7ab64f38d39679"
-        },
+        "_id": "63bc110ded7ab64f38d39679",
         "optID": "Q24A1",
         "opttxt": "Nai",
         "nextqID": "-",
@@ -405,9 +335,7 @@
         "__v": 0
     },
     {
-        "_id": {
-            "$oid": "63bc110ded7ab64f38d3967b"
-        },
+        "_id": "63bc110ded7ab64f38d3967b",
         "optID": "Q24A2",
         "opttxt": "Oxi",
         "nextqID": "-",
@@ -416,9 +344,7 @@
         "__v": 0
     },
     {
-        "_id": {
-            "$oid": "63bd62905397442ec4c12420"
-        },
+        "_id": "63bd62905397442ec4c12420",
         "optID": "P30TXT",
         "opttxt": "<open string>",
         "nextqID": "Q31",
@@ -427,9 +353,7 @@
         "__v": 0
     },
     {
-        "_id": {
-            "$oid": "63bd62905397442ec4c12422"
-        },
+        "_id": "63bd62905397442ec4c12422",
         "optID": "Q31A1",
         "opttxt": "Prasino",
         "nextqID": "Q32",
@@ -438,9 +362,7 @@
         "__v": 0
     },
     {
-        "_id": {
-            "$oid": "63bd62905397442ec4c12424"
-        },
+        "_id": "63bd62905397442ec4c12424",
         "optID": "Q31A2",
         "opttxt": "Kokkino",
         "nextqID": "Q32",
@@ -449,9 +371,7 @@
         "__v": 0
     },
     {
-        "_id": {
-            "$oid": "63bd62905397442ec4c12426"
-        },
+        "_id": "63bd62905397442ec4c12426",
         "optID": "Q31A3",
         "opttxt": "Kitrino",
         "nextqID": "Q32",
@@ -460,9 +380,7 @@
         "__v": 0
     },
     {
-        "_id": {
-            "$oid": "63bd62905397442ec4c12428"
-        },
+        "_id": "63bd62905397442ec4c12428",
         "optID": "Q32A1",
         "opttxt": "Ναι",
         "nextqID": "Q33",
@@ -471,9 +389,7 @@
         "__v": 0
     },
     {
-        "_id": {
-            "$oid": "63bd62905397442ec4c1242a"
-        },
+        "_id": "63bd62905397442ec4c1242a",
         "optID": "Q32A2",
         "opttxt": "Οχι",
         "nextqID": "Q34",
@@ -482,9 +398,7 @@
         "__v": 0
     },
     {
-        "_id": {
-            "$oid": "63bd62915397442ec4c1242c"
-        },
+        "_id": "63bd62915397442ec4c1242c",
         "optID": "Q33A1",
         "opttxt": "Pao",
         "nextqID": "Q34",
@@ -493,9 +407,7 @@
         "__v": 0
     },
     {
-        "_id": {
-            "$oid": "63bd62915397442ec4c1242e"
-        },
+        "_id": "63bd62915397442ec4c1242e",
         "optID": "Q33A2",
         "opttxt": "Osfp ",
         "nextqID": "Q34",
@@ -504,9 +416,7 @@
         "__v": 0
     },
     {
-        "_id": {
-            "$oid": "63bd62915397442ec4c12430"
-        },
+        "_id": "63bd62915397442ec4c12430",
         "optID": "Q33A3",
         "opttxt": "AEK",
         "nextqID": "Q34",
@@ -515,9 +425,7 @@
         "__v": 0
     },
     {
-        "_id": {
-            "$oid": "63bd62915397442ec4c12432"
-        },
+        "_id": "63bd62915397442ec4c12432",
         "optID": "Q34A1",
         "opttxt": "Nai",
         "nextqID": "-",
@@ -526,9 +434,7 @@
         "__v": 0
     },
     {
-        "_id": {
-            "$oid": "63bd62915397442ec4c12434"
-        },
+        "_id": "63bd62915397442ec4c12434",
         "optID": "Q34A2",
         "opttxt": "Oxi",
         "nextqID": "-",
