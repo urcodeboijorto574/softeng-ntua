@@ -1,16 +1,22 @@
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
+const Questionnaire = require(`${__dirname}/../models/questionnaireModel.js`);
+const Question = require(`${__dirname}/../models/questionModel.js`);
+const Session = require('../models/sessionModel');
+const { find } = require('../models/sessionModel');
+const Option = require(`${__dirname}/../models/optionModel.js`);
+const Answer = require(`${__dirname}/../models/answerModel.js`);
+// const User = require(`${__dirname}/../models/useerModel.js`);
 
 dotenv.config({ path: `${__dirname}/../config.env` });
 
+exports.getHealthcheck = (req, res) => {
+    /* DB is the database connection string */
+    const DB = process.env.DATABASE.replace(
+        '<password>',
+        process.env.DATABASE_PASSWORD
+    );
 
-/* DB is the database connection string */
-const DB = process.env.DATABASE.replace(
-    '<password>',
-    process.env.DATABASE_PASSWORD
-);
-
-exports.getHealthcheck = (req, res, next) => {
     mongoose
         .connect(DB, {
             useNewUrlParser: true,
@@ -31,81 +37,111 @@ exports.getHealthcheck = (req, res, next) => {
                 });
 
             });
-    next();
-}
+};
 
-
-exports.createQuestionnaire = async (req, res, next) => {
+exports.resetAll = async (req, res) => {
     try {
-        for (let i = 0; i < req.body.questions.length; i++) {
-            for (let j = 0; j < req.body.questions[i].length; j++) {
-                optionsSave.push(req.body.questions[i].options[j]);
-            }
-        }
-        // make questions of questionnaire empty and save questionnaire
-        //req.body.questions.length = 0;
-        let newQuestionnaire = await Questionnaire.create({
-            questionnaireID: req.body.questionnaireID,
-            questionnaireTitle: req.body.questionnaireTitle,
-            keywords: req.body.keywords,
-            questions: [],
-        });
-        for (let i = 0; i < req.body.questions.length; i++) {
-            let newQuestion = await Question.create({
-                qID: req.body.questions[i].qID,
-                qtext: req.body.questions[i].qtext,
-                required: req.body.questions[i].required,
-                type: req.body.questions[i].type,
-                options: [],
-                questionnaireID: req.body.questionnaireID,
-            });
-            for (let j = 0; j < req.body.questions[i].options.length; j++) {
-                let newOption = await Option.create({
-                    optID: req.body.questions[i].options[j].optID,
-                    opttxt: req.body.questions[i].options[j].opttxt,
-                    nextqID: req.body.questions[i].options[j].nextqID,
-                    qID: req.body.questions[i].qID,
-                    questionnaireID: req.body.questionnaireID,
-                });
-                /* await Question.findOneAndUpdate(
-                    {
-                        qID: newQuestion.qID,
-                        questionnaireID: newQuestion.questionnaireID,
-                    },
-                    { $push: { options: newOption._id.toString() } }
-                ); */
-                await newQuestion.updateOne({
-                    $push: { options: newOption._id.toString() },
-                });
-            }
-            /* await Questionnaire.findOneAndUpdate(
-                { questionnaireID: newQuestionnaire.questionnaireID },
-                { $push: { questions: newQuestion._id.toString() } }
-            ); */
-            await newQuestionnaire.updateOne({
-                $push: { questions: newQuestion._id.toString() },
-            });
-        }
+        let questionnaires, questions, sessions, options, answers; //, users;
+        // questionnaires = await Questionnaire.find(),
+        // questions = await Question.find(),
+        // sessions = await Session.find(),
+        // options = await Option.find(),
+        // answers = await Answer.find(),
+        // users = await User.find();
+        console.log('questionnaires:', await Questionnaire.find().then(arr => arr.length).catch(err => new Error(err)));
+        console.log('\nquestions', await Question.find().then(arr => arr.length).catch(err => new Error(err)));
+        console.log('\nsessions', await Session.find().then(arr => arr.length).catch(err => new Error(err)));
+        console.log('\noptions', await Option.find().then(arr => arr.length).catch(err => new Error(err)));
+        console.log('\nanswers', await Answer.find().then(arr => arr.length).catch(err => new Error(err)));
+        console.log('\nusers', await User.find().then(arr => arr.length).catch(err => new Error(err)));
 
-        res.status(201).json({
-            status: 'OK',
+        return res.status(402).json({
+            status: 'OK'
         });
     } catch (err) {
-        await Questionnaire.deleteOne({
-            questionnaireID: req.body.questionnaireID,
-        });
-        await Question.deleteMany({
-            questionnaireID: req.body.questionnaireID,
-        });
-        await Option.deleteMany({
-            questionnaireID: req.body.questionnaireID,
-        });
-        res.status(500).json({
-            status: 'error',
-            message: err,
+        return res.status(500).json({
+            status: 'failed',
+            reason: err
         });
     }
 };
 
-// this is a comment
-//test2ggg
+exports.questionnaireUpdate = async (req, res) => {
+    try {
+        /* For the line below: need to parse data from multipart/form-data to JSON! */
+        const newQuestionnaire = { questionnaireID: 4 };
+        const newQuestions = [{ qID: 1 }];
+        const newOptions = [{ optID: 10 }];
+
+        const oldQuestionnaire = await Questionnaire.findOne(newQuestionnaire);
+        // await Session.deleteMany({ questionnaireID: oldQuestionnaire.questionnaireID });
+        if (oldQuestionnaire) {
+            // await Questionnaire.delete(oldQuestionnaire);
+            /* Delete the relevant data too... */
+        }
+
+        // await Questionnaire.create(newQuestionnaire);
+
+        /* Create all necessary documents 'cascadingly' */
+        newQuestionnaire.questions.forEach(async q_id => {
+            // const newQuestion = await Question.create({
+            //     _id: q_id,
+            //     qID,
+            //     qtext,
+            //     required,
+            //     type,
+            //     options,
+            //     questionnaireID: newQuestionnaire.questionnaireID
+            // });
+
+            // newQuestion.options.forEach(async opt_id => {
+            //     await Option.create({
+            //         _id: opt_id,
+            //         optID,
+            //         opttxt,
+            //         nextqID,
+            //         questionnaireID: newQuestionnaire.questionnaireID,
+            //         qID: newQuestion.qID
+            //     });
+            // });
+        });
+
+        return res.status(200).json({
+            status: 'success',
+            newQuestionnaire
+        });
+    } catch (err) {
+        return res.status(500).json({
+            status: 'failed',
+            reason: err
+        });
+    }
+};
+
+exports.resetQuestionnaire = async (req, res) => {
+    try {
+        const questionnaire = await Questionnaire.findOne(req.params);
+        if (!questionnaire)
+            return res.status(400).json({
+                status: 'OK'
+            });
+
+        const answers = await Answer.find(req.params);
+
+        answers.forEach(async el => {
+            const session = await Session.findOne({ sessionID: el.sessionID });
+            console.log(session.sessionID); // delete session;
+            console.log(el.answertext); // delete el;
+        });
+
+        return res.status(200).json({
+            status: 'OK'
+        });
+    } catch (err) {
+        return res.status(500).json({
+            status: 'failed',
+            reason: err
+        });
+    }
+    next();
+};
