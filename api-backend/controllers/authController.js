@@ -1,3 +1,4 @@
+const { promisify } = require('util');
 const jwt = require('jsonwebtoken');
 const User = require('./../models/userModel');
 const AppError = require('./../utils/appError');
@@ -23,6 +24,8 @@ const handleValidationErrorDB = (err) => {
     const message = `Invalid input data. ${errors.join('. ')}`;
     return new AppError(message, 400);
 };
+
+exports.signup = async (req, res) => {};
 
 exports.createUser = async (req, res) => {
     try {
@@ -95,4 +98,67 @@ exports.login = async (req, res, next) => {
     res.status(200).json({
         token: token,
     });
+};
+
+// protects routes access from unothorized users
+// the token is sent as an http header with name 'authorization'
+exports.protect = async (req, res, next) => {
+    try {
+        // 1) Getting token and check if it's there
+        let token;
+        if (
+            req.headers.authorization &&
+            req.headers.authorization.startsWith('Bearer')
+        ) {
+            token = req.headers.authorization.split(' ')[1];
+        }
+
+        if (!token) {
+            return res.status(401).json({
+                status: 'fail',
+                message: 'Please log in to get access.',
+            });
+        }
+        // 2) Verification of the token
+        const decoded = await promisify(jwt.verify)(
+            token,
+            process.env.JWT_SECRET
+        ); // make function to return a promise
+
+        // 3) Ckeck if user still exists
+        // a user logged in, and after a few time the user was deleted. But if someone gets the token he must not have access
+        const freshUser = await User.findById(decoded.id);
+        if (!freshUser) {
+            return res.status(401).json({
+                status: 'fail',
+                message: 'User no longer exists.',
+            });
+        }
+
+        // 4) Check if user changed password after token was issued
+        if (freshUser.changedPasswordAfter(decoded.iat)) {
+            return res.status(401).json({
+                status: 'fail',
+                message: 'User recently changed password. Please log in again.',
+            });
+        }
+
+        // grant access to protected route
+        // req.user = freshUser;
+        next();
+    } catch (err) {
+        // errors reference to case 2
+        if (err.name === 'JsonWebTokenError') {
+            return res.status(401).json({
+                status: 'fail',
+                message: 'Invalid token. Please log in again.',
+            });
+        } else if (err.name === 'TokenExpiredError') {
+            return res.status(401).json({
+                status: 'fail',
+                message: 'Token has expired. Please log in again.',
+            });
+        }
+        console.error(err);
+    }
 };

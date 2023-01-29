@@ -21,6 +21,7 @@ const userSchema = new mongoose.Schema({
         minlength: [8, 'A password must have at least 8 characters'],
         /* select: false, //never show password in query outputs */
     },
+    passwordChangedAt: Date,
 });
 
 // document middleware for password encryption. Runs right before the current document is saved in the database
@@ -35,6 +36,20 @@ userSchema.methods.correctPassword = async function (
     userPassword
 ) {
     return await bcrypt.compare(candidatePassword, userPassword);
+};
+
+// returns true if user changed password after the token was issued
+userSchema.methods.changedPasswordAfter = function (JTWTimestamp) {
+    // if user changed password
+    if (this.passwordChangedAt) {
+        const changedTimestamp = parseInt(
+            this.passwordChangedAt.getTime() / 1000,
+            10
+        );
+        return JTWTimestamp < changedTimestamp;
+    }
+
+    return false; // user didn't change password
 };
 
 const User = mongoose.model('User', userSchema);
