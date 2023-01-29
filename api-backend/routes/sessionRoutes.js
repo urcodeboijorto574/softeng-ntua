@@ -11,4 +11,8 @@ router
     .route('/sessionids')
     .get(sessionController.getAllSessionsIDs);
 
+router
+    .route('/getsession/:username/:questionnaireID')
+    .get(sessionController.getSession);
+
 module.exports = router;
