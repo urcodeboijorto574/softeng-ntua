@@ -29,8 +29,8 @@ exports.doAnswer = async (req, res, next) => {
         }
 
         /* Check if the optionID is valid */
-        const optionValid = question.options.some(el => el.optID === req.params.optionID);
-        if (!optionValid) {
+        const option = question.options.some(el => el.optID === req.params.optionID);
+        if (!option) {
             /* Reject the request */
             return res.status(400).json({
                 status: 'bad request',
@@ -88,6 +88,7 @@ exports.doAnswer = async (req, res, next) => {
 
         let newAnswer = queryObj;
         newAnswer['answertext'] = req.body.answertext, newAnswer['questionnaireID'] = req.params.questionnaireID;
+        ++option['wasChosenBy'];
 
         const newDoc = await Answer.create(newAnswer);
         currSession['answers'] = [newDoc._id];
