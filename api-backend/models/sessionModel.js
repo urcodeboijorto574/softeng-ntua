@@ -12,10 +12,16 @@ const sessionSchema = new mongoose.Schema({
     questionnaireID: {
         type: String,
     },
-    answers: [{
+    answers: [
+        {
+            type: mongoose.Schema.ObjectId,
+            ref: 'Answer',
+        }
+    ],
+    user: {
         type: mongoose.Schema.ObjectId,
-        ref: 'Answer',
-    }],
+        ref: 'User'
+    }
 });
 
 const Session = mongoose.model('Session', sessionSchema);
