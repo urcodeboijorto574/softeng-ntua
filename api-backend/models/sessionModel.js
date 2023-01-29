@@ -16,8 +16,13 @@ const sessionSchema = new mongoose.Schema({
         {
             type: mongoose.Schema.ObjectId,
             ref: 'Answer',
+<<<<<<< HEAD
         },
     ],
+=======
+        }
+    ]
+>>>>>>> origin/ioannis-branch
 });
 
 const Session = mongoose.model('Session', sessionSchema);
