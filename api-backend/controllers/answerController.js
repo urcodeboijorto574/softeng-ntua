@@ -1,3 +1,4 @@
+const Questionnaire = require(`${__dirname}/../models/questionnaireModel.js`);
 const Question = require(`${__dirname}/../models/questionModel.js`);
 const Session = require(`${__dirname}/../models/sessionModel.js`);
 const Answer = require(`${__dirname}/../models/answerModel.js`);
@@ -37,19 +38,36 @@ exports.doAnswer = async (req, res, next) => {
             });
         }
 
+        /* Check if username is valid */
+        const user = await Session.findOne({ username: req.query.username }, '_id');
+        if (!user) {
+            /* Reject the request */
+            return res.status(400).json({
+                status: 'bad request',
+                msg: 'The user specified doesn\'t exist'
+            })
+        }
+
         /* Check if a session already exists */
         const oldSession = await Session
-            .findOne({ sessionID: req.params.session }, '-__v')
+            .findOne({ sessionID: req.params.session, user: user._id }, '-__v')
             .populate('answers', '-questionnaireID');
+
         let currSession = oldSession;
+
         if (!oldSession) {
             /* Create new session */
             let newSession = await Session.create({
                 sessionID: req.params.session,
                 questionnaireID: req.params.questionnaireID,
-                answers: []
+                answers: [],
+                user: user._id
             });
             currSession = newSession;
+            const questionnaire_id = await Questionnaire
+                .findOne({ questionnaireID: req.params.questionnaireID }, '_id');
+
+            user.questionnaires.push(questionnaire_id);
         }
 
         /* Check if there's an old answer submitted to this session */
