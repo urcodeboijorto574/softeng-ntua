@@ -10,18 +10,25 @@ exports.getAllQuestionnaires = async (req, res) => {
     try {
         let questionnaires = await Questionnaire
             .find({}, '-_id')
-            .populate('questions', 'options qID qtext required type -_id');
+            .populate({
+                path: 'questions',
+                model: 'Question',
+                select: {
+                    '_id': 0,
+                    '__v': 0,
+                    'wasAnsweredBy': 0,
+                    'questionnaireID': 0
+                },
+                populate: {
+                    path: 'options',
+                    model: 'Option',
+                    select: {
+                        '_id': 0,
+                        '__v': 0
+                    }
+                },
+            });
 
-        for (let i = 0; i < questionnaires.length; ++i) {
-            for (let j = 0; j < questionnaires[i].questions.length; ++j) {
-                for (let k = 0; k < questionnaires[i].questions[j].options.length; ++k) {
-                    const idStr = questionnaires[i].questions[j].options[k];
-                    const opt_id = mongoose.Types.ObjectId(idStr);
-                    const option = await Option.findOne({ _id: opt_id }, '+wasChosenBy +optID +opttxt +nextqID -_id -__v');
-                    questionnaires[i].questions[j].options[k] = option;
-                }
-            }
-        }
         return res.status(questionnaires.length !== 0 ? 200 : 402).json({
             status: questionnaires.length !== 0 ? 'success' : 'no data',
             data: {
