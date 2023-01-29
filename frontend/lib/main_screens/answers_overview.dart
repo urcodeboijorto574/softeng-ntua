@@ -7,6 +7,8 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:http/http.dart';
 import 'package:questionnaires_app/main_screens/questionnaire_list.dart';
 import 'package:questionnaires_app/objects/answer.dart';
+import 'package:questionnaires_app/widgets/alert_dialog.dart';
+import 'package:questionnaires_app/widgets/app_bar.dart';
 
 String generateRandomString(int len) {
   var r = Random();
@@ -33,13 +35,33 @@ class AnswersOverviewScreen extends StatefulWidget {
 class _AnswersOverviewScreenState extends State<AnswersOverviewScreen> {
   bool processing = false;
 
-  String _localhost() {
+  String _localhost1() {
     return 'http://127.0.0.1:3000/intelliq_api/doanswer';
+  }
+
+  String _localhost2() {
+    return 'http://127.0.0.1:3000/intelliq_api/sessions/getAllSessionIDs';
+  }
+
+  Future<List> _getAllSessionIDs() async {
+    List<String> sessions = [];
+
+    final url = Uri.parse(_localhost2());
+    Response response = await get(url);
+
+    if (response.statusCode == 200) {
+      for (int i = 0; i < jsonDecode(response.body)['data'].length; i++) {
+        sessions.add(jsonDecode(response.body)['data'][i]['sessionID']);
+      }
+      return sessions;
+    } else {
+      throw Exception('Failed to load the session IDs');
+    }
   }
 
   Future<void> _sendAnswer(Answer single_answer, String session) async {
     final url = Uri.parse(
-        '${_localhost()}/${single_answer.questionnaireID}/${single_answer.questionID}/$session/${single_answer.options[single_answer.optionIndex]['optID']}');
+        '${_localhost1()}/${single_answer.questionnaireID}/${single_answer.questionID}/$session/${single_answer.options[single_answer.optionIndex]['optID']}');
     Response response = await post(
       url,
       headers: <String, String>{
@@ -64,42 +86,9 @@ class _AnswersOverviewScreenState extends State<AnswersOverviewScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 9, 52, 58),
-      appBar: AppBar(
+      appBar: const MyAppBar(
         elevation: 0,
-        toolbarHeight: 90,
-        backgroundColor: const Color.fromARGB(255, 9, 52, 58),
-        leading: const Icon(
-          Icons.question_mark_outlined,
-          color: Colors.pinkAccent,
-          size: 50,
-        ),
-        title: const Padding(
-          padding: EdgeInsets.only(bottom: 15),
-          child: Text(
-            'IntelliQ',
-            style: TextStyle(
-              color: Colors.pinkAccent,
-              fontWeight: FontWeight.bold,
-              fontSize: 30,
-              letterSpacing: 2,
-            ),
-          ),
-        ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.all(15),
-            child: IconButton(
-              onPressed: () {
-                Navigator.pushReplacementNamed(context, '/welcome_screen');
-              },
-              icon: const Icon(
-                Icons.logout,
-                color: Colors.pinkAccent,
-                size: 30,
-              ),
-            ),
-          )
-        ],
+        height: 90,
       ),
       body: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -115,18 +104,83 @@ class _AnswersOverviewScreenState extends State<AnswersOverviewScreen> {
               itemCount: widget.answers.length + 2,
               itemBuilder: ((context, index) {
                 if (index == 0) {
-                  return Padding(
-                    padding: const EdgeInsets.only(top: 30),
-                    child: Center(
-                      child: Text(
-                        widget.questionnaireTitle,
-                        style: const TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 30,
+                  return Column(
+                    children: [
+                      widget.label == 'submit answers'
+                          ? Padding(
+                              padding:
+                                  const EdgeInsets.only(top: 10, right: 10),
+                              child: SizedBox(
+                                height: 40,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(right: 20),
+                                      child: InkWell(
+                                        onTap: () async {
+                                          MyAlertDialog.show(
+                                            context: context,
+                                            title: 'Leave Questionnaire',
+                                            content:
+                                                'Are you sure you want to leave the questionnaire? Your progress will be lost!',
+                                            tapNo: () {
+                                              Navigator.pop(context);
+                                            },
+                                            tapYes: () {
+                                              Navigator.pop(context);
+                                              Navigator.pushAndRemoveUntil(
+                                                  context, MaterialPageRoute(
+                                                      builder: (context) {
+                                                return const QuestionnaireListScreen(
+                                                  label: 'answer questionnaire',
+                                                );
+                                              }), (route) => false);
+                                            },
+                                          );
+                                        },
+                                        child: Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: const [
+                                            Padding(
+                                              padding: EdgeInsets.only(top: 14),
+                                              child: Icon(
+                                                Icons.close,
+                                                color: Colors.pink,
+                                              ),
+                                            ),
+                                            SizedBox(width: 5),
+                                            Text(
+                                              'Cancel',
+                                              style: TextStyle(
+                                                fontSize: 18,
+                                                color: Colors.pink,
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            )
+                          : const SizedBox(
+                              height: 50,
+                            ),
+                      Center(
+                        child: Text(
+                          widget.questionnaireTitle,
+                          style: const TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 30,
+                          ),
                         ),
                       ),
-                    ),
+                    ],
                   );
                 } else if (index == widget.answers.length + 1) {
                   return Padding(
@@ -145,15 +199,29 @@ class _AnswersOverviewScreenState extends State<AnswersOverviewScreen> {
                                   setState(() {
                                     processing = true;
                                   });
+                                  bool isValid = false;
+                                  List<dynamic> sessions =
+                                      await _getAllSessionIDs();
+                                  String sessionID = ' ';
 
-                                  String sessionID = generateRandomString(4);
+                                  while (!isValid) {
+                                    sessionID = generateRandomString(4);
 
-                                  for (int i = 0;
-                                      i < widget.answers.length;
-                                      i++) {
-                                    await _sendAnswer(
-                                        widget.answers[i], sessionID);
+                                    for (int i = 0; i < sessions.length; i++) {
+                                      if (sessions[i] == sessionID) {
+                                        isValid = false;
+                                        break;
+                                      }
+                                      isValid = true;
+                                    }
                                   }
+
+                                  // for (int i = 0;
+                                  //     i < widget.answers.length;
+                                  //     i++) {
+                                  //   await _sendAnswer(
+                                  //       widget.answers[i], sessionID);
+                                  // }
 
                                   Navigator.pushAndRemoveUntil(context,
                                       MaterialPageRoute(builder: (context) {
@@ -240,12 +308,8 @@ class _AnswersOverviewScreenState extends State<AnswersOverviewScreen> {
                                       groupValue: widget
                                               .answers[index - 1].optionIndex +
                                           1,
-                                      title: Padding(
-                                        padding:
-                                            const EdgeInsets.only(bottom: 8),
-                                        child: Text(widget.answers[index - 1]
-                                            .options[index2]['opttxt']),
-                                      ),
+                                      title: Text(widget.answers[index - 1]
+                                          .options[index2]['opttxt']),
                                       activeColor:
                                           const Color.fromARGB(255, 9, 52, 58),
                                       onChanged: (int? value) {},

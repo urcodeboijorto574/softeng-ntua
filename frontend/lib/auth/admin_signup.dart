@@ -10,7 +10,7 @@ class AdminSignupScreen extends StatefulWidget {
 }
 
 class _AdminSignupScreenState extends State<AdminSignupScreen> {
-  late String email;
+  late String username;
   late String password;
   late String fullName;
 
@@ -123,18 +123,17 @@ class _AdminSignupScreenState extends State<AdminSignupScreen> {
                                 style: const TextStyle(fontSize: 15),
                                 validator: (value) {
                                   if (value!.isEmpty) {
-                                    return 'Please enter your email';
+                                    return 'Please enter your username';
                                   } else {
                                     return null;
                                   }
                                 },
                                 onChanged: (value) {
-                                  email = value;
+                                  username = value;
                                 },
-                                keyboardType: TextInputType.emailAddress,
                                 decoration: InputDecoration(
-                                  labelText: 'Email',
-                                  hintText: 'Enter your email',
+                                  labelText: 'Username',
+                                  hintText: 'Enter your username',
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(25),
                                   ),
@@ -254,7 +253,7 @@ class _AdminSignupScreenState extends State<AdminSignupScreen> {
                             onPressed: () {
                               if (_formKey.currentState!.validate()) {
                                 print(fullName);
-                                print(email);
+                                print(username);
                                 print(password);
 
                                 Navigator.pushReplacementNamed(

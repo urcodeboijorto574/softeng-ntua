@@ -11,7 +11,7 @@ class UserLoginScreen extends StatefulWidget {
 }
 
 class _UserLoginScreenState extends State<UserLoginScreen> {
-  late String email;
+  late String username;
   late String password;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -79,18 +79,17 @@ class _UserLoginScreenState extends State<UserLoginScreen> {
                                 style: const TextStyle(fontSize: 15),
                                 validator: (value) {
                                   if (value!.isEmpty) {
-                                    return 'Please enter your email';
+                                    return 'Please enter your username';
                                   } else {
                                     return null;
                                   }
                                 },
                                 onChanged: (value) {
-                                  email = value;
+                                  username = value;
                                 },
-                                keyboardType: TextInputType.emailAddress,
                                 decoration: InputDecoration(
-                                  labelText: 'Email',
-                                  hintText: 'Enter your email',
+                                  labelText: 'Username',
+                                  hintText: 'Enter your username',
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(25),
                                   ),
@@ -209,7 +208,7 @@ class _UserLoginScreenState extends State<UserLoginScreen> {
                           child: MaterialButton(
                             onPressed: () {
                               if (_formKey.currentState!.validate()) {
-                                print(email);
+                                print(username);
                                 print(password);
 
                                 Navigator.pushAndRemoveUntil(context,

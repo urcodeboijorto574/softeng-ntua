@@ -10,7 +10,7 @@ class AdminLoginScreen extends StatefulWidget {
 }
 
 class _AdminLoginScreenState extends State<AdminLoginScreen> {
-  late String email;
+  late String username;
   late String password;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -78,18 +78,17 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
                                 style: const TextStyle(fontSize: 15),
                                 validator: (value) {
                                   if (value!.isEmpty) {
-                                    return 'Please enter your email';
+                                    return 'Please enter your username';
                                   } else {
                                     return null;
                                   }
                                 },
                                 onChanged: (value) {
-                                  email = value;
+                                  username = value;
                                 },
-                                keyboardType: TextInputType.emailAddress,
                                 decoration: InputDecoration(
-                                  labelText: 'Email',
-                                  hintText: 'Enter your email',
+                                  labelText: 'Username',
+                                  hintText: 'Enter your username',
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(25),
                                   ),
@@ -208,7 +207,7 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
                           child: MaterialButton(
                             onPressed: () {
                               if (_formKey.currentState!.validate()) {
-                                print(email);
+                                print(username);
                                 print(password);
                                 Navigator.pushReplacementNamed(
                                     context, '/choose_action');

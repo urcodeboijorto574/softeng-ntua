@@ -4,6 +4,7 @@ import 'package:flutter/src/widgets/framework.dart';
 
 import 'package:pie_chart/pie_chart.dart';
 import 'package:questionnaires_app/main_screens/questionnaire_list.dart';
+import 'package:questionnaires_app/widgets/app_bar.dart';
 
 class StatisticsScreen extends StatefulWidget {
   final String questionnaireTitle;
@@ -50,42 +51,9 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 9, 52, 58),
-      appBar: AppBar(
+      appBar: const MyAppBar(
         elevation: 0,
-        toolbarHeight: 90,
-        backgroundColor: const Color.fromARGB(255, 9, 52, 58),
-        leading: const Icon(
-          Icons.question_mark_outlined,
-          color: Colors.pinkAccent,
-          size: 50,
-        ),
-        title: const Padding(
-          padding: EdgeInsets.only(bottom: 15),
-          child: Text(
-            'IntelliQ',
-            style: TextStyle(
-              color: Colors.pinkAccent,
-              fontWeight: FontWeight.bold,
-              fontSize: 30,
-              letterSpacing: 2,
-            ),
-          ),
-        ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.all(15),
-            child: IconButton(
-              onPressed: () {
-                Navigator.pushReplacementNamed(context, '/welcome_screen');
-              },
-              icon: const Icon(
-                Icons.logout,
-                color: Colors.pinkAccent,
-                size: 30,
-              ),
-            ),
-          )
-        ],
+        height: 90,
       ),
       body: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -102,7 +70,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
               itemBuilder: ((context, index) {
                 if (index == 0) {
                   return Padding(
-                    padding: const EdgeInsets.only(top: 30),
+                    padding: const EdgeInsets.only(top: 50),
                     child: Center(
                       child: Text(
                         widget.questionnaireTitle,

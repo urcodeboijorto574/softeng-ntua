@@ -3,6 +3,7 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:questionnaires_app/main_screens/questionnaire_list.dart';
+import 'package:questionnaires_app/widgets/app_bar.dart';
 
 class ChooseActionScreen extends StatelessWidget {
   const ChooseActionScreen({super.key});
@@ -11,42 +12,7 @@ class ChooseActionScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 127, 156, 160),
-      appBar: AppBar(
-        toolbarHeight: 100,
-        backgroundColor: const Color.fromARGB(255, 9, 52, 58),
-        leading: const Icon(
-          Icons.question_mark_outlined,
-          color: Colors.pinkAccent,
-          size: 50,
-        ),
-        title: const Padding(
-          padding: EdgeInsets.only(bottom: 15),
-          child: Text(
-            'IntelliQ',
-            style: TextStyle(
-              color: Colors.pinkAccent,
-              fontWeight: FontWeight.bold,
-              fontSize: 30,
-              letterSpacing: 2,
-            ),
-          ),
-        ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.all(15),
-            child: IconButton(
-              onPressed: () {
-                Navigator.pushReplacementNamed(context, '/welcome_screen');
-              },
-              icon: const Icon(
-                Icons.logout,
-                color: Colors.pinkAccent,
-                size: 30,
-              ),
-            ),
-          )
-        ],
-      ),
+      appBar: const MyAppBar(),
       body: Center(
           child: Row(
         mainAxisAlignment: MainAxisAlignment.center,

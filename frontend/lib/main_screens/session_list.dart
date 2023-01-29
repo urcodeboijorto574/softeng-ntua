@@ -14,6 +14,7 @@ import 'package:questionnaires_app/main_screens/questionnaire_list.dart';
 import 'package:questionnaires_app/main_screens/statistics_screen.dart';
 import 'package:questionnaires_app/objects/answer.dart';
 import 'package:questionnaires_app/objects/question.dart';
+import 'package:questionnaires_app/widgets/app_bar.dart';
 
 class SessionListScreen extends StatefulWidget {
   final String questionnaireTitle;
@@ -34,7 +35,7 @@ class _SessionListScreenState extends State<SessionListScreen> {
   late Future<List> sessionsTitles;
 
   String _localhost() {
-    return 'http://127.0.0.1:3000/intelliq_api/questionnaire/${widget.questionnaireID}/getAllSessions';
+    return 'http://127.0.0.1:3000/intelliq_api/sessions/${widget.questionnaireID}/getAllSessions';
   }
 
   Future<List> _getAllSessions() async {
@@ -50,8 +51,10 @@ class _SessionListScreenState extends State<SessionListScreen> {
         titles.add(sessions[i]['sessionID']);
       }
       return titles;
+    } else if (response.statusCode == 402) {
+      throw Exception('No sessions yet!');
     } else {
-      throw Exception('Failed to load the sessions');
+      throw Exception('Failed to load the sessions!');
     }
   }
 
@@ -113,42 +116,7 @@ class _SessionListScreenState extends State<SessionListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 127, 156, 160),
-      appBar: AppBar(
-        toolbarHeight: 100,
-        backgroundColor: const Color.fromARGB(255, 9, 52, 58),
-        leading: const Icon(
-          Icons.question_mark_outlined,
-          color: Colors.pinkAccent,
-          size: 50,
-        ),
-        title: const Padding(
-          padding: EdgeInsets.only(bottom: 15),
-          child: Text(
-            'IntelliQ',
-            style: TextStyle(
-              color: Colors.pinkAccent,
-              fontWeight: FontWeight.bold,
-              fontSize: 30,
-              letterSpacing: 2,
-            ),
-          ),
-        ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.all(15),
-            child: IconButton(
-              onPressed: () async {
-                Navigator.pushReplacementNamed(context, '/welcome_screen');
-              },
-              icon: const Icon(
-                Icons.logout,
-                color: Colors.pinkAccent,
-                size: 30,
-              ),
-            ),
-          )
-        ],
-      ),
+      appBar: const MyAppBar(),
       body: FutureBuilder<List>(
         future: sessionsTitles,
         builder: (context, snapshot) {
