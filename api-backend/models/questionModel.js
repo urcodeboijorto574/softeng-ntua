@@ -37,9 +37,7 @@ const questionSchema = new mongoose.Schema({
         default: 0,
     },
     questionnaireID: {
-        //type: mongoose.Schema.ObjectId,
         type: String,
-        //ref: 'Questionnaire',
     },
 });
 
