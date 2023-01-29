@@ -17,7 +17,11 @@ const sessionSchema = new mongoose.Schema({
             type: mongoose.Schema.ObjectId,
             ref: 'Answer',
         }
-    ]
+    ],
+    user: {
+        type: mongoose.Schema.ObjectId,
+        ref: 'User'
+    }
 });
 
 const Session = mongoose.model('Session', sessionSchema);
