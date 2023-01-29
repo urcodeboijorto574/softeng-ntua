@@ -10,11 +10,10 @@ const handleCastErrorDB = (err) => {
 
 const handleDuplicateFieldsDB = (err) => {
     //const value = err.message.match(/(["'])(\\?.)*?\1/)[0];
-    const value = Object.values(err.keyValue);
+    //const value = Object.values(err.keyValue);
+    //const message = `Duplicate field value: ${value}. Please use another value!`;
 
-    console.log(value);
-
-    const message = `Duplicate field value: ${value}. Please use another value!`;
+    const message = 'Username taken! Please provide a new username.';
     return new AppError(message, 400);
 };
 
@@ -25,7 +24,34 @@ const handleValidationErrorDB = (err) => {
     return new AppError(message, 400);
 };
 
-exports.signup = async (req, res) => {};
+exports.signup = async (req, res) => {
+    try {
+        const newUser = await User.create({
+            username: req.body.username,
+            role: req.body.usermod,
+            password: req.body.password,
+        });
+        const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
+            expiresIn: process.env.JWT_EXPIRES_IN,
+        });
+        res.status(201).json({
+            status: 'OK',
+            token: token,
+        });
+    } catch (err) {
+        let error = { ...err };
+        if (err.code === 11000) {
+            error = handleDuplicateFieldsDB(error);
+        }
+        if (err.name === 'ValidationError') {
+            error = handleValidationErrorDB(error);
+        }
+        return res.status(error.statusCode).json({
+            status: error.status,
+            message: error.message,
+        });
+    }
+};
 
 exports.createUser = async (req, res) => {
     try {
