@@ -1,10 +1,10 @@
 const express = require('express');
-const doanswerController = require(`${__dirname}/../controllers/doanswerController.js`);
+const answerController = require(`${__dirname}/../controllers/answerController.js`);
 
 const router = express.Router();
 
 router
     .route('/:questionnaireID/:questionID/:session/:optionID')
-    .post(doanswerController.doAnswer);
+    .post(answerController.doAnswer);
 
 module.exports = router;

@@ -3,6 +3,7 @@ const Question = require(`${__dirname}/../models/questionModel`);
 const Option = require(`${__dirname}/../models/optionModel`);
 const Session = require(`${__dirname}/../models/sessionModel`);
 const Answer = require(`${__dirname}/../models/answerModel`);
+const User = require(`${__dirname}/../models/userModel`);
 const mongoose = require('mongoose');
 const json2csv = require('json2csv');
 
@@ -10,18 +11,26 @@ exports.getAllQuestionnaires = async (req, res) => {
     try {
         let questionnaires = await Questionnaire
             .find({}, '-_id')
-            .populate('questions', 'options qID qtext required type -_id');
+            .sort('questionnaireID')
+            .populate({
+                path: 'questions',
+                model: 'Question',
+                select: {
+                    '_id': 0,
+                    '__v': 0,
+                    'wasAnsweredBy': 0,
+                    'questionnaireID': 0
+                },
+                populate: {
+                    path: 'options',
+                    model: 'Option',
+                    select: {
+                        '_id': 0,
+                        '__v': 0
+                    }
+                },
+            });
 
-        for (let i = 0; i < questionnaires.length; ++i) {
-            for (let j = 0; j < questionnaires[i].questions.length; ++j) {
-                for (let k = 0; k < questionnaires[i].questions[j].options.length; ++k) {
-                    const idStr = questionnaires[i].questions[j].options[k];
-                    const opt_id = mongoose.Types.ObjectId(idStr);
-                    const option = await Option.findOne({ _id: opt_id }, 'wasChosenBy optID opttxt nextqID');
-                    questionnaires[i].questions[j].options[k] = option;
-                }
-            }
-        }
         return res.status(questionnaires.length !== 0 ? 200 : 402).json({
             status: questionnaires.length !== 0 ? 'success' : 'no data',
             data: {
@@ -37,7 +46,7 @@ exports.getAllQuestionnaires = async (req, res) => {
     next();
 };
 
-exports.getQuestionnaire = async (req, res) => {
+exports.getQuestionnaire = async (req, res, next) => {
     try {
         const questionnaire = await Questionnaire
             .findOne(req.params, '-_id')
@@ -45,7 +54,7 @@ exports.getQuestionnaire = async (req, res) => {
 
         res.status(questionnaire ? 200 : 400);
 
-        if (req.query.format === 'json') {
+        if (!req.query.format || req.query.format === 'json') {
             return res.json({
                 status: questionnaire ? 'success' : 'bad request',
                 data: { questionnaire }
@@ -127,4 +136,32 @@ exports.deleteQuestionnaire = async (req, res, next) => {
         });
     }
     next();
+};
+
+exports.getUserQuestionnaires = async (req, res, next) => {
+    try {
+        // req.params = {username: 'jorto574'}
+        const user = await User
+            .findOne(req.params)
+            .populate({
+                path: 'questionnaires',
+                model: 'Questionnaire',
+                select: {
+                    '_id': 0
+                },
+                sort: {
+                    'questionnaireID': 1
+                }
+            });
+
+        return res.status(user && user.questionnaires ? 200 : 402).json({
+            status: 'success',
+            data: user.questionnaires
+        });
+    } catch (err) {
+        return res.status(500).json({
+            status: 'fail',
+            msg: err
+        });
+    }
 };
