@@ -5,6 +5,9 @@ const User = require(`${__dirname}/../models/userModel`);
 
 dotenv.config({ path: `${__dirname}/../config.env` });
 
+/**
+ * URL: {baseURL}/intelliq_api/sessions/getallsessions/:questionnaireID
+ */
 exports.getAllSessions = async (req, res, next) => {
     try {
         const sessions = await Session
@@ -26,6 +29,9 @@ exports.getAllSessions = async (req, res, next) => {
     next();
 };
 
+/**
+ * URL: {baseURL}/intelliq_api/sessions/sessionids
+ */
 exports.getAllSessionsIDs = async (req, res, next) => {
     try {
         const sessionIDs = await Session
@@ -45,6 +51,9 @@ exports.getAllSessionsIDs = async (req, res, next) => {
     next();
 };
 
+/**
+ * URL: {baseURL}/intelliq_api/sessions/getsession/:username/:questionnaireID
+ */
 exports.getSession = async (req, res, next) => {
     try {
         const sessions = await Session

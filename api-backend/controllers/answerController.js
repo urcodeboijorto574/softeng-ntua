@@ -2,6 +2,7 @@ const Questionnaire = require(`${__dirname}/../models/questionnaireModel.js`);
 const Question = require(`${__dirname}/../models/questionModel.js`);
 const Session = require(`${__dirname}/../models/sessionModel.js`);
 const Answer = require(`${__dirname}/../models/answerModel.js`);
+const json2csv = require('json2csv');
 
 /**
  * URL: /intelliq_api/doanswer/:questionnaireID/:questionID/:session/:optionID

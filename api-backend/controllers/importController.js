@@ -6,6 +6,9 @@ const Session = require(`${__dirname}/../models/sessionModel.js`);
 const Answer = require(`${__dirname}/../models/answerModel.js`);
 const Models = [Answer, Session, Option, Question, Questionnaire];
 
+/**
+ * URL: {baseURL}/dummy-data/import
+ */
 exports.importData = async (req, res, next) => {
     /* Read JSON files */
     const questionnairesInDataFolder = JSON.parse(fs.readFileSync(`${__dirname}/../../data/questionnaires.json`, 'utf-8'));
@@ -78,6 +81,9 @@ exports.importData = async (req, res, next) => {
     next();
 };
 
+/**
+ * URL: {baseURL}/dummy-data/delete
+ */
 exports.deleteData = async (req, res, next) => {
     try {
         console.log('Start deleting data');

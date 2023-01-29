@@ -9,7 +9,10 @@ const User = require(`${__dirname}/../models/userModel.js`);
 
 dotenv.config({ path: `${__dirname}/../config.env` });
 
-exports.getHealthcheck = async (req, res, next) => {
+/**
+ * URL: {baseURL}/intelliq_api/admin/healthcheck
+ */
+exports.getHealthcheck = async (req, res) => {
     /* DB is the database connection string */
     const DB = process.env.DATABASE.replace(
         '<password>',
@@ -37,6 +40,9 @@ exports.getHealthcheck = async (req, res, next) => {
     next();
 };
 
+/**
+ * URL: {baseURL}/intelliq_api/admin/questionnaire_upd
+ */
 exports.questionnaireUpdate = async (req, res, next) => {
     try {
         /* For the line below: need to parse data from multipart/form-data to JSON! */

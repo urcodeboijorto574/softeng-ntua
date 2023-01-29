@@ -2,6 +2,9 @@ const Question = require(`${__dirname}/../models/questionModel`);
 const Option = require(`${__dirname}/../models/optionModel`);
 const json2csv = require('json2csv');
 
+/**
+ * URL: {baseURL}/intelliq_api/question/:questionnaireID/:questionID
+ */
 exports.getQuestion = async (req, res) => {
     try {
         const question = await Question

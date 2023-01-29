@@ -4,8 +4,12 @@ const Option = require(`${__dirname}/../models/optionModel`);
 const Session = require(`${__dirname}/../models/sessionModel`);
 const Answer = require(`${__dirname}/../models/answerModel`);
 const User = require(`${__dirname}/../models/userModel`);
+const mongoose = require('mongoose');
+const json2csv = require('json2csv');
 
-
+/**
+ * URL: {baseURL}/intelliq_api/questionnaire/getallquestionnaires
+ */
 exports.getAllQuestionnaires = async (req, res, next) => {
     try {
         let questionnaires = await Questionnaire
@@ -45,6 +49,9 @@ exports.getAllQuestionnaires = async (req, res, next) => {
     next();
 };
 
+/**
+ * URL:  {baseURL}/intelliq_api/questionnaire/:questionnaireID
+ */
 exports.deleteQuestionnaire = async (req, res, next) => {
     try {
         /* Check if given questionnaireID is valid */
@@ -56,23 +63,12 @@ exports.deleteQuestionnaire = async (req, res, next) => {
             });
         }
 
-        /* Delete the questionnaire itself */
+        /* Delete the questionnaire and all related documents */
         await Questionnaire.delete(theQuestionnaire);
-
-        /* Delete relevant documents */
-        const questions = await Question.deleteMany(req.params);
-        if (questions)
-            await Option.deleteMany(req.params);
-        const sessions = await Session.deleteMany(req.params);
-        if (sessions)
-            await Answer.deleteMany(req.params);
-
-        /* Show in console the deleted documents */
-        console.log('theQuestionnaire:', theQuestionnaire);
-        console.log('questions:', questions);
-        console.log('options:', options);
-        console.log('sessions:', sessions);
-        console.log('answers:', answers);
+        await Question.deleteMany(req.params);
+        await Option.deleteMany(req.params);
+        await Session.deleteMany(req.params);
+        await Answer.deleteMany(req.params);
 
         return res.status(402).json({
             status: 'success',
@@ -87,6 +83,9 @@ exports.deleteQuestionnaire = async (req, res, next) => {
     next();
 };
 
+/**
+ * URL: {baseURL}/intelliq_api/questionnaire/userquestionnaires/:username
+ */
 exports.getUserQuestionnaires = async (req, res, next) => {
     try {
         // req.params = {username: 'jorto574'}
