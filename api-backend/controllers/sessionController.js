@@ -28,10 +28,10 @@ exports.getAllSessions = async (req, res, next) => {
 exports.getAllSessionsIDs = async (req, res, next) => {
     try {
         const sessionIDs = await Session
-            .find({ sessionID: req.params.sessionID }, 'sessionID -_id -__v');
+            .find({}, 'sessionID -_id');
 
         return res.status(sessionIDs ? 200 : 402).json({
-            status: success,
+            status: 'success',
             data: sessionIDs
         });
     } catch (err) {

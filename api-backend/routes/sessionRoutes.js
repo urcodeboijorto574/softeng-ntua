@@ -4,11 +4,11 @@ const sessionController = require(`${__dirname}/../controllers/sessionController
 const router = express.Router();
 
 router
-    .route('/getallsessions')
+    .route('/getallsessions/:questionnaireID')
     .get(sessionController.getAllSessions);
 
 router
-    .route('/:sessionID')
+    .route('/sessionids')
     .get(sessionController.getAllSessionsIDs);
 
 module.exports = router;
