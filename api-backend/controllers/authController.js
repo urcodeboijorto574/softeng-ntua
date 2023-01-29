@@ -34,7 +34,7 @@ exports.signup = async (req, res) => {
         const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
             expiresIn: process.env.JWT_EXPIRES_IN,
         });
-        res.status(201).json({
+        res.status(200).json({
             status: 'OK',
             token: token,
         });
@@ -67,7 +67,7 @@ exports.createUser = async (req, res) => {
                 password: req.params.password,
                 role: req.params.usermod,
             });
-            res.status(201).json({
+            res.status(200).json({
                 status: 'OK',
             });
         }

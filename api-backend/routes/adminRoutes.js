@@ -1,19 +1,14 @@
 const express = require('express');
 const adminController = require(`${__dirname}/../controllers/adminController.js`);
+const authController = require('./../controllers/authController.js');
 
 const router = express.Router();
 
-router
-    .route('/healthcheck')
-    .get(adminController.getHealthcheck);
+router.route('/healthcheck').get(adminController.getHealthcheck);
 
-router
-    .route('/questionnaire_upd')
-    .post(adminController.questionnaireUpdate);
+router.route('/questionnaire_upd').post(adminController.questionnaireUpdate);
 
-router
-    .route('/resetall')
-    .post(adminController.resetAll);
+router.route('/resetall').post(adminController.resetAll);
 
 router
     .route('/resetq/:questionnaireID')

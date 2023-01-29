@@ -1,6 +1,7 @@
 const express = require('express');
 const questionnaireController = require(`${__dirname}/../controllers/questionnaireController.js`);
 const sessionController = require(`${__dirname}/../controllers/sessionController.js`);
+const authController = require('./../controllers/authController.js');
 
 const router = express.Router();
 
