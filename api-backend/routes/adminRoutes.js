@@ -4,14 +4,48 @@ const authController = require('./../controllers/authController.js');
 
 const router = express.Router();
 
-router.route('/healthcheck').get(adminController.getHealthcheck);
+router
+    .route('/healthcheck')
+    .get(
+        authController.protect,
+        authController.restrictTo('super-admin'),
+        adminController.getHealthcheck
+    );
 
-router.route('/questionnaire_upd').post(adminController.questionnaireUpdate);
+router
+    .route('/questionnaire_upd')
+    .post(
+        authController.protect,
+        authController.restrictTo('admin'),
+        adminController.questionnaireUpdate
+    );
 
-router.route('/resetall').post(adminController.resetAll);
+router
+    .route('/resetall')
+    .post(
+        authController.protect,
+        authController.restrictTo('super-admin'),
+        adminController.resetAll
+    );
 
 router
     .route('/resetq/:questionnaireID')
     .post(adminController.resetQuestionnaire);
+
+router
+    .route('/:usermod/:username/:password')
+    .post(
+        authController.protect,
+        authController.restrictTo('super-admin'),
+        authController.createUser
+    );
+
+router
+    .route('/users/:username')
+    .get(
+        authController.protect,
+        authController.restrictTo('super-admin'),
+        authController.getUser
+    );
 
 module.exports = router;

@@ -21,21 +21,24 @@ exports.getHealthcheck = (req, res) => {
             useNewUrlParser: true,
             useCreateIndex: true,
             useFindAndModify: false,
-            useUnifiedTopology: true /* Only for Ioannis' PC */
+            useUnifiedTopology: true /* Only for Ioannis' PC */,
         })
         .then(
-            () => { /* DB connection check is successful */
+            () => {
+                /* DB connection check is successful */
                 return res.status(200).json({
                     status: 'OK',
-                    dbconnection: DB
+                    dbconnection: DB,
                 });
             },
-            err => { /* DB connection check failed */
+            (err) => {
+                /* DB connection check failed */
                 return res.status(500).json({
                     status: 'failed',
-                    err
+                    err,
                 });
-            });
+            }
+        );
 };
 
 exports.resetAll = async (req, res, next) => {
@@ -49,68 +52,21 @@ exports.resetAll = async (req, res, next) => {
         // users = await User.deleteMany();
 
         return res.status(402).json({
-            status: 'OK'
+            status: 'OK',
         });
     } catch (err) {
         return res.status(500).json({
             status: 'failed',
-            reason: err
+            reason: err,
         });
     }
     next();
 };
 
-exports.questionnaireUpdate = async (req, res, next) => {
-    try {
-        /* For the line below: need to parse data from multipart/form-data to JSON! */
-        const newQuestionnaire = { questionnaireID: 4 };
-        const newQuestions = [{ qID: 1 }];
-        const newOptions = [{ optID: 10 }];
-
-        const oldQuestionnaire = await Questionnaire.findOne(newQuestionnaire);
-        // await Session.deleteMany({ questionnaireID: oldQuestionnaire.questionnaireID });
-        if (oldQuestionnaire) {
-            // await Questionnaire.delete(oldQuestionnaire);
-            /* Delete the relevant data too... */
-        }
-
-        // await Questionnaire.create(newQuestionnaire);
-
-        /* Create all necessary documents 'cascadingly' */
-        newQuestionnaire.questions.forEach(async q_id => {
-            // const newQuestion = await Question.create({
-            //     _id: q_id,
-            //     qID,
-            //     qtext,
-            //     required,
-            //     type,
-            //     options,
-            //     questionnaireID: newQuestionnaire.questionnaireID
-            // });
-
-            // newQuestion.options.forEach(async opt_id => {
-            //     await Option.create({
-            //         _id: opt_id,
-            //         optID,
-            //         opttxt,
-            //         nextqID,
-            //         questionnaireID: newQuestionnaire.questionnaireID,
-            //         qID: newQuestion.qID
-            //     });
-            // });
-        });
-
-        return res.status(200).json({
-            status: 'success',
-            newQuestionnaire
-        });
-    } catch (err) {
-        return res.status(500).json({
-            status: 'failed',
-            reason: err
-        });
-    }
-    next();
+exports.questionnaireUpdate = (req, res, next) => {
+    return res.status(200).json({
+        status: 'OK',
+    });
 };
 
 exports.resetQuestionnaire = async (req, res, next) => {
@@ -119,27 +75,26 @@ exports.resetQuestionnaire = async (req, res, next) => {
         if (!questionnaire)
             return res.status(400).json({
                 status: 'failed',
-                reason: 'Invalid questionnaireID'
+                reason: 'Invalid questionnaireID',
             });
 
         const sessions = await Session.find(req.params);
 
-
-        sessions.forEach(async session => {
+        sessions.forEach(async (session) => {
             await Answer.deleteMany(session.answers);
-            session.answers.forEach(async ans => {
+            session.answers.forEach(async (ans) => {
                 await Answer.deleteMany(req.params);
             });
             await Session.deleteOne(session);
         });
 
         return res.status(200).json({
-            status: 'OK'
+            status: 'OK',
         });
     } catch (err) {
         return res.status(500).json({
             status: 'failed',
-            reason: err
+            reason: err,
         });
     }
     next();

@@ -6,6 +6,11 @@ const router = express.Router();
 
 router
     .route('/:questionnaireID/:questionID')
-    .get(questionController.getQuestion);
+    .get(
+        authController.protect,
+        authController.restrictTo('super-admin'),
+        authController.createUser,
+        questionController.getQuestion
+    );
 
 module.exports = router;

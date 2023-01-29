@@ -31,12 +31,13 @@ exports.signup = async (req, res) => {
             role: req.body.usermod,
             password: req.body.password,
         });
-        const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
+
+        /* const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
             expiresIn: process.env.JWT_EXPIRES_IN,
-        });
+        }); */
         res.status(200).json({
             status: 'OK',
-            token: token,
+            //token: token,
         });
     } catch (err) {
         let error = { ...err };
@@ -49,6 +50,33 @@ exports.signup = async (req, res) => {
         return res.status(error.statusCode).json({
             status: error.status,
             message: error.message,
+        });
+    }
+};
+
+exports.getUser = async (req, res) => {
+    try {
+        const user = await User.findOne({
+            username: req.params.username,
+        }).select({
+            password: 0,
+            _id: 0,
+            __v: 0,
+        });
+        if (!user) {
+            return res.status(402).json({
+                status: 'fail',
+                message: 'No user found with the given username.',
+            });
+        }
+        return res.status(200).json({
+            status: 'OK',
+            user: user,
+        });
+    } catch (err) {
+        return res.status(500).json({
+            status: 'fail',
+            message: 'Internal Server Error',
         });
     }
 };
@@ -138,6 +166,9 @@ exports.protect = async (req, res, next) => {
         ) {
             token = req.headers.authorization.split(' ')[1];
         }
+        /* if (req.headers('X-AUBSERVATORY-AUTH')) {
+            token = req.headers('X-AUBSERVATORY-AUTH');
+        } */
 
         if (!token) {
             return res.status(401).json({
@@ -170,7 +201,7 @@ exports.protect = async (req, res, next) => {
         }
 
         // grant access to protected route
-        // req.user = freshUser;
+        req.userRole = freshUser.role;
         next();
     } catch (err) {
         // errors reference to case 2
@@ -187,4 +218,17 @@ exports.protect = async (req, res, next) => {
         }
         console.error(err);
     }
+};
+
+exports.restrictTo = (...roles) => {
+    return (req, res, next) => {
+        console.log(req.headers);
+        if (!roles.includes(req.userRole)) {
+            return res.status(402).json({
+                status: 'fail',
+                message: 'User unauthorized to continue!',
+            });
+        }
+        next();
+    };
 };
