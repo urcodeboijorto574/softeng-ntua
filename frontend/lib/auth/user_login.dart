@@ -6,6 +6,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart';
 import 'package:questionnaires_app/main_screens/questionnaire_list.dart';
+import 'package:questionnaires_app/main_screens/user_homescreen.dart';
 import 'package:questionnaires_app/widgets/snackbar.dart';
 
 class UserLoginScreen extends StatefulWidget {
@@ -56,9 +57,7 @@ class _UserLoginScreenState extends State<UserLoginScreen> {
 
       Navigator.pushAndRemoveUntil(context,
           MaterialPageRoute(builder: (context) {
-        return const QuestionnaireListScreen(
-          label: 'answer questionnaire',
-        );
+        return const UserHomeScreen();
       }), (route) => false);
     } else {
       MyMessageHandler.showSnackbar(

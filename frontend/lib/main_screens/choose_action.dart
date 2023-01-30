@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:questionnaires_app/main_screens/admin_questionnaire_list.dart';
 import 'package:questionnaires_app/main_screens/questionnaire_list.dart';
 import 'package:questionnaires_app/widgets/app_bar.dart';
 
@@ -21,7 +22,7 @@ class ChooseActionScreen extends StatelessWidget {
             onTap: () {
               Navigator.pushAndRemoveUntil(context,
                   MaterialPageRoute(builder: (context) {
-                return const QuestionnaireListScreen(
+                return const AdminQuestionnaireList(
                   label: 'show statistics',
                 );
               }), (route) => false);
@@ -63,7 +64,7 @@ class ChooseActionScreen extends StatelessWidget {
             onTap: () {
               Navigator.pushAndRemoveUntil(context,
                   MaterialPageRoute(builder: (context) {
-                return const QuestionnaireListScreen(
+                return const AdminQuestionnaireList(
                   label: 'view answers',
                 );
               }), (route) => false);

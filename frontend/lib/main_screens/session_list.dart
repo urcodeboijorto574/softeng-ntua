@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:questionnaires_app/main_screens/admin_questionnaire_list.dart';
 import 'package:questionnaires_app/main_screens/answers_overview.dart';
 import 'package:questionnaires_app/main_screens/question_screen.dart';
 
@@ -171,7 +172,7 @@ class _SessionListScreenState extends State<SessionListScreen> {
           onPressed: () {
             Navigator.pushAndRemoveUntil(context,
                 MaterialPageRoute(builder: (context) {
-              return const QuestionnaireListScreen(
+              return const AdminQuestionnaireList(
                 label: 'view answers',
               );
             }), (route) => false);

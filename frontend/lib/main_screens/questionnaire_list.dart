@@ -31,14 +31,42 @@ class _QuestionnaireListScreenState extends State<QuestionnaireListScreen> {
 
   final storage = const FlutterSecureStorage();
 
-  String _localhost() {
+  String _localhost1() {
     return 'http://127.0.0.1:3000/intelliq_api/questionnaire/getallquestionnaires';
   }
 
   Future<List> _getAllQuestionnaires() async {
     List<String> titles = [];
 
-    final url = Uri.parse(_localhost());
+    final url = Uri.parse(_localhost1());
+    var jwt = await storage.read(key: "jwt");
+    Response response = await get(
+      url,
+      headers: <String, String>{'Authorization': 'Bearer ${jwt!}'},
+    );
+
+    if (response.statusCode == 200) {
+      questionnaires = jsonDecode(response.body)['data']['questionnaires'];
+
+      for (int i = 0; i < questionnaires.length; i++) {
+        titles.add(questionnaires[i]['questionnaireTitle']);
+      }
+      return titles;
+    } else if (response.statusCode == 402) {
+      throw Exception('No questionnaires yet!');
+    } else {
+      throw Exception('Failed to load the questionnaires!');
+    }
+  }
+
+  String _localhost2() {
+    return 'http://127.0.0.1:3000/intelliq_api/questionnaire/userquestionnaires';
+  }
+
+  Future<List> _getUserQuestionnaires() async {
+    List<String> titles = [];
+
+    final url = Uri.parse(_localhost2());
     var jwt = await storage.read(key: "jwt");
     Response response = await get(
       url,
@@ -109,96 +137,66 @@ class _QuestionnaireListScreenState extends State<QuestionnaireListScreen> {
   void initState() {
     super.initState();
     setState(() {
-      questionnaireTitles = _getAllQuestionnaires();
+      if (widget.label == 'answer questionnaire') {
+        questionnaireTitles = _getAllQuestionnaires();
+      } else if (widget.label == 'answered questionnaires') {
+        questionnaireTitles = _getUserQuestionnaires();
+      }
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 127, 156, 160),
-      appBar: const MyAppBar(),
-      body: FutureBuilder<List>(
-        future: questionnaireTitles,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return ListView.builder(
-              itemCount: snapshot.data!.length,
-              itemBuilder: (context, index) {
-                return InkWell(
-                  onTap: () {
-                    if (widget.label == 'answer questionnaire') {
-                      answerQuestionnaire(index);
-                    } else if (widget.label == 'show statistics') {
-                      showStatistics(index);
-                    } else if (widget.label == 'view answers') {
-                      showSessions(index);
-                    }
-                  },
-                  child: Card(
-                    child: Row(
-                      children: [
-                        const Icon(
-                          FontAwesomeIcons.question,
-                          size: 40,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 10, left: 15),
-                          child: Text(
-                            snapshot.data![index],
-                            style: const TextStyle(
-                              fontSize: 20,
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                );
-              },
-            );
-          } else if (snapshot.hasError) {
-            return Center(
-              child: Text('${snapshot.error}'),
-            );
-          }
-
-          return const Center(
-              child: CircularProgressIndicator(
-            color: Colors.pinkAccent,
-          ));
-        },
-      ),
-      floatingActionButton: widget.label != 'answer questionnaire'
-          ? Padding(
-              padding: const EdgeInsets.all(40.0),
-              child: FloatingActionButton.extended(
-                onPressed: () {
-                  Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const ChooseActionScreen()),
-                      (route) => false);
+    return FutureBuilder<List>(
+      future: questionnaireTitles,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return ListView.builder(
+            itemCount: snapshot.data!.length,
+            itemBuilder: (context, index) {
+              return InkWell(
+                onTap: () {
+                  if (widget.label == 'answer questionnaire') {
+                    answerQuestionnaire(index);
+                  } else if (widget.label == 'show statistics') {
+                    showStatistics(index);
+                  } else if (widget.label == 'view answers') {
+                    showSessions(index);
+                  }
                 },
-                label: const Padding(
-                  padding: EdgeInsets.only(bottom: 10),
-                  child: Text(
-                    'Back',
-                    style: TextStyle(
-                      color: Color.fromARGB(255, 9, 52, 58),
-                      fontWeight: FontWeight.w600,
-                      fontSize: 15,
-                    ),
+                child: Card(
+                  child: Row(
+                    children: [
+                      const Icon(
+                        FontAwesomeIcons.question,
+                        size: 40,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 10, left: 15),
+                        child: Text(
+                          snapshot.data![index],
+                          style: const TextStyle(
+                            fontSize: 20,
+                          ),
+                        ),
+                      )
+                    ],
                   ),
                 ),
-                icon: const Icon(
-                  Icons.arrow_back,
-                  color: Color.fromARGB(255, 9, 52, 58),
-                ),
-                backgroundColor: Colors.pink,
-              ),
-            )
-          : const SizedBox(),
+              );
+            },
+          );
+        } else if (snapshot.hasError) {
+          return Center(
+            child: Text('${snapshot.error}'),
+          );
+        }
+
+        return const Center(
+            child: CircularProgressIndicator(
+          color: Colors.pinkAccent,
+        ));
+      },
     );
   }
 }
