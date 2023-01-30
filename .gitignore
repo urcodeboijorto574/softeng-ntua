@@ -2,5 +2,4 @@ api-backend/node_modules/
 import-data.js
 data/
 node_modules/
-api-backend/controllers/adminController.js
 .gitignore
