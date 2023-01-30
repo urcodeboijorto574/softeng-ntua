@@ -35,6 +35,9 @@ const questionnaireSchema = new mongoose.Schema(
                 ref: 'Question',
             },
         ],
+        creator: {
+            type: String,
+        },
     },
     { versionKey: false },
     {

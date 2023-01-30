@@ -266,4 +266,4 @@ exports.restrictTo = (...roles) => {
     };
 };
 
-exports.restrictAdminByName = (req, res, next) => {};
+//exports.restrictAdminByName = (req, res, next) => {};

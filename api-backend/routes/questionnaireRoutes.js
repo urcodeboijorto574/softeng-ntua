@@ -7,19 +7,39 @@ const router = express.Router();
 
 router
     .route('/getallquestionnaires')
-    .get(questionnaireController.getAllQuestionnaires);
+    .get(
+        authController.protect,
+        authController.restrictTo('user'),
+        questionnaireController.getAllQuestionnaires
+    );
 
 router
     .route('/userquestionnaires/:username')
-    .get(questionnaireController.getUserQuestionnaires);
+    .get(
+        authController.protect,
+        authController.restrictTo('user'),
+        questionnaireController.getUserQuestionnaires
+    );
 
-router
-    .route('/:questionnaireID/getallsessions')
-    .get(sessionController.getAllSessions);
+router.route('/:questionnaireID/getallsessions').get(
+    authController.protect,
+    authController.restrictTo('admin'),
+    //authController.restrictAdminByName,
+    sessionController.getAllSessions
+);
 
+// getQuestionnaire and deleteQuestionnaire must be restricted only to admins that have created the questionnaire
 router
     .route('/:questionnaireID')
-    .get(questionnaireController.getQuestionnaire)
-    .delete(questionnaireController.deleteQuestionnaire);
+    .get(
+        authController.protect,
+        authController.restrictTo('admin'),
+        questionnaireController.getQuestionnaire
+    )
+    .delete(
+        authController.protect,
+        authController.restrictTo('admin'),
+        questionnaireController.deleteQuestionnaire
+    );
 
 module.exports = router;

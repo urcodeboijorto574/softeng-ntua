@@ -8,7 +8,7 @@ router
     .route('/:questionnaireID/:questionID')
     .get(
         authController.protect,
-        authController.restrictTo('super-admin'),
+        authController.restrictTo('admin'),
         authController.createUser,
         questionController.getQuestion
     );

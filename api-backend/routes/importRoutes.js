@@ -4,8 +4,20 @@ const authController = require('./../controllers/authController.js');
 
 const router = express.Router();
 
-router.route('/import').post(importController.importData);
+router
+    .route('/import')
+    .post(
+        authController.protect,
+        authController.restrictTo('super-admin'),
+        importController.importData
+    );
 
-router.route('/delete').delete(importController.deleteData);
+router
+    .route('/delete')
+    .delete(
+        authController.protect,
+        authController.restrictTo('super-admin'),
+        importController.deleteData
+    );
 
 module.exports = router;

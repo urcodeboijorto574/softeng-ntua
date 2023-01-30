@@ -4,8 +4,13 @@ const authController = require('./../controllers/authController.js');
 
 const router = express.Router();
 
+// endpoint must be rstreicted olnly to admins that have created the certain questionnaire with the given questionnaireID
 router
     .route('/:questionnaireID/:questionID')
-    .get(answerController.getQuestionAnswers);
+    .get(
+        authController.protect,
+        authController.restrictTo('admin'),
+        answerController.getQuestionAnswers
+    );
 
 module.exports = router;
