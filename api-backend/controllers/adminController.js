@@ -81,6 +81,7 @@ exports.resetAll = async (req, res, next) => {
         return res.status(500).json({
             status: 'failed',
             reason: err,
+<<<<<<< HEAD
         });
     }
     next();
@@ -123,6 +124,8 @@ exports.questionnaireUpdate = async (req, res, next) => {
         return res.status(error.statusCode).json({
             status: error.status,
             message: error.message,
+=======
+>>>>>>> 67b90ccee6ff57922ec81f856976878efe92ba5c
         });
     }
     for (let i = 0; i < req.body.questions.length; i++) {
