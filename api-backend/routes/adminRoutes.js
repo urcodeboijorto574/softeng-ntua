@@ -11,12 +11,12 @@ router
     .route('/questionnaire_upd')
     .post(adminController.questionnaireUpdate);
 
-router
-    .route('/resetall')
-    .post(adminController.resetAll);
+// router
+//     .route('/resetall')
+//     .post(adminController.resetAll);
 
-router
-    .route('/resetq/:questionnaireID')
-    .post(adminController.resetQuestionnaire);
+// router
+//     .route('/resetq/:questionnaireID')
+//     .post(adminController.resetQuestionnaire);
 
 module.exports = router;

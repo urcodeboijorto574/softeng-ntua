@@ -6,6 +6,14 @@ const Answer = require(`${__dirname}/../models/answerModel.js`);
 const User = require(`${__dirname}/../models/userModel.js`);
 const json2csv = require('json2csv');
 
+/**
+ * Returns all the information about every questionnaire in the data base.
+ * @param {JSON} req - JSON object of which no field is used in the function.
+ * @param {JSON} res - JSON object that contains a confirmation or a decline of the request.
+ * @return {JSON} - The response object created.
+ * 
+ * URL: {baseURL}/intelliq_api/questionnaire/getallquestionnaires
+ */
 exports.getAllQuestionnaires = async (req, res, next) => {
     try {
         let questionnaires = await Questionnaire
@@ -45,6 +53,14 @@ exports.getAllQuestionnaires = async (req, res, next) => {
     next();
 };
 
+/**
+ * Removes a questionnaire and all related entities from the DB.
+ * @param {JSON} req - JSON object that contains the questionnaireID of the to-be-deleted questionnaire.
+ * @param {JSON} res - JSON object taht contains the data to send.
+ * @return {JSON} - The response object created.
+ * 
+ * URL:  {baseURL}/intelliq_api/questionnaire/:questionnaireID
+ */
 exports.deleteQuestionnaire = async (req, res, next) => {
     try {
         /* Check if given questionnaireID is valid */
@@ -56,23 +72,12 @@ exports.deleteQuestionnaire = async (req, res, next) => {
             });
         }
 
-        /* Delete the questionnaire itself */
+        /* Delete the questionnaire and all related documents */
         await Questionnaire.delete(theQuestionnaire);
-
-        /* Delete relevant documents */
-        const questions = await Question.deleteMany(req.params);
-        if (questions)
-            await Option.deleteMany(req.params);
-        const sessions = await Session.deleteMany(req.params);
-        if (sessions)
-            await Answer.deleteMany(req.params);
-
-        /* Show in console the deleted documents */
-        console.log('theQuestionnaire:', theQuestionnaire);
-        console.log('questions:', questions);
-        console.log('options:', options);
-        console.log('sessions:', sessions);
-        console.log('answers:', answers);
+        await Question.deleteMany(req.params);
+        await Option.deleteMany(req.params);
+        await Session.deleteMany(req.params);
+        await Answer.deleteMany(req.params);
 
         return res.status(402).json({
             status: 'success',
@@ -87,8 +92,17 @@ exports.deleteQuestionnaire = async (req, res, next) => {
     next();
 };
 
+/**
+ * Returns all the questionnaires that a user has answered.
+ * @param {JSON} req - JSON object that contains the username of the specified user.
+ * @param {JSON} res - JSON object taht contains the data to send.
+ * @return {JSON} - The response object created.
+ * 
+ * URL: {baseURL}/intelliq_api/questionnaire/userquestionnaires/:username
+ */
 exports.getUserQuestionnaires = async (req, res, next) => {
     try {
+        // req.params = {username: 'jorto574'}
         const user = await User
             .findOne(req.params)
             .populate({

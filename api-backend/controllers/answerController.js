@@ -5,15 +5,13 @@ const Answer = require(`${__dirname}/../models/answerModel.js`);
 const json2csv = require('json2csv');
 
 /**
- * URL: /intelliq_api/doanswer/:questionnaireID/:questionID/:session/:optionID
+ * Stores an answer object in the database.
+ * @param {JSON} req - JSON object of which req.params contains the questionnaireID, questionID, sessionID and option ID.
+ * @param {JSON} res - JSON object that contains a confirmation or decline of the request.
+ * @return {JSON} - The response object created.
  * 
- * Κλήση http POST η οποία καταχωρεί την απάντηση optionID η οποία δόθηκε στο γεγονός απάντησης
- * session στην ερώτηση questionID του ερωτηματολογίου questionnaireID. Δεν επιστρέφει κάποιο
- * αντικείμενο. Το αναγνωριστικό session είναι μια συμβολοσειρά με 4 τυχαίους χαρακτήρες που
- * αντιστοιχούν στο γεγονός απάντησης του ερωτηματολογίου (προσοχή: όχι της ερώτησης) από
- * κάποιον χρήστη.
+ * URL: /intelliq_api/doanswer/:questionnaireID/:questionID/:session/:optionID
  */
-
 exports.doAnswer = async (req, res, next) => {
     try {
         /* Check if the questionID is valid */

@@ -3,39 +3,46 @@ const dotenv = require('dotenv');
 
 dotenv.config({ path: `${__dirname}/../config.env` });
 
+/**
+ * Checks if the remote DB is connect with the API.
+ * @param {JSON} req - JSON object of which no field is used in the function.
+ * @param {JSON} res - JSON object that contains the response.
+ * @return {JSON} - The response object created.
+ * 
+ * URL: {baseURL}/admin/healthcheck
+ */
+exports.getHealthcheck = async (req, res, next) => {
+    try {
+        /* DB is the database connection string */
+        const DB = process.env.DATABASE.replace(
+            '<password>',
+            process.env.DATABASE_PASSWORD
+        );
 
-/* DB is the database connection string */
-const DB = process.env.DATABASE.replace(
-    '<password>',
-    process.env.DATABASE_PASSWORD
-);
-
-exports.getHealthcheck = (req, res, next) => {
-    mongoose
-        .connect(DB, {
+        await mongoose.connect(DB, {
             useNewUrlParser: true,
             useCreateIndex: true,
             useFindAndModify: false,
-        })
-        .then(
-            () => { /* DB connection check is successful */
-                return res.status(200).json({
-                    status: 'OK',
-                    dbconnection: DB
-                });
-            },
-            err => { /* DB connection check failed */
-                return res.status(500).json({
-                    status: 'failed',
-                    dbconnection: DB
-                });
+            useUnifiedTopology: true /* Only to suppress a possible warning */
+        });
 
-            });
+        return res.status(200).json({
+            status: 'OK',
+            dbconnection: DB
+        });
+    } catch (err) {
+        return res.status(500).json({
+            status: 'failed',
+            err
+        });
+    }
     next();
 }
 
-
-exports.createQuestionnaire = async (req, res, next) => {
+/**
+ * URL: {baseURL}/admin/questionnaire_upd
+ */
+exports.questionnaireUpdate = async (req, res, next) => {
     try {
         for (let i = 0; i < req.body.questions.length; i++) {
             for (let j = 0; j < req.body.questions[i].length; j++) {
@@ -87,7 +94,7 @@ exports.createQuestionnaire = async (req, res, next) => {
             });
         }
 
-        res.status(201).json({
+        return res.status(201).json({
             status: 'OK',
         });
     } catch (err) {
@@ -100,9 +107,10 @@ exports.createQuestionnaire = async (req, res, next) => {
         await Option.deleteMany({
             questionnaireID: req.body.questionnaireID,
         });
-        res.status(500).json({
+        return res.status(500).json({
             status: 'error',
             message: err,
         });
     }
+    next();
 };
