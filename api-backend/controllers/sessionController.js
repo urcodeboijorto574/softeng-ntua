@@ -20,7 +20,7 @@ exports.getAllSessions = async (req, res, next) => {
             .select('+answers +sessionID -questionnaireID -_id -__v')
             .populate('answers', '-_id answertext qID optID');
 
-        return res.status(sessions ? 200 : 402).json({
+        return res.status(sessions || sessions.length !== 0 ? 200 : 402).json({
             status: 'success',
             data: sessions
         });
@@ -47,7 +47,7 @@ exports.getAllSessionsIDs = async (req, res, next) => {
         const sessionIDs = await Session
             .find({}, 'sessionID -_id');
 
-        return res.status(sessionIDs ? 200 : 402).json({
+        return res.status(sessionIDs || sessionIDs !== 0 ? 200 : 402).json({
             status: 'success',
             data: sessionIDs
         });
@@ -84,7 +84,7 @@ exports.getSession = async (req, res, next) => {
         const session = await sessions
             .findOne({ username: req.params.username });
 
-        return res.status(session ? 200 : 402).json({
+        return res.status(session || session.length !== 0 ? 200 : 402).json({
             status: 'success',
             data: session
         });
