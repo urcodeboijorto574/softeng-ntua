@@ -257,7 +257,7 @@ exports.restrictTo = (...roles) => {
     return (req, res, next) => {
         console.log(req.headers);
         if (!roles.includes(req.userRole)) {
-            return res.status(402).json({
+            return res.status(401).json({
                 status: 'fail',
                 message: 'User unauthorized to continue!',
             });

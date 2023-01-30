@@ -6,6 +6,10 @@ const router = express.Router();
 
 router
     .route('/:questionnaireID/:session')
-    .get(answerController.getSessionAnswers);
+    .get(
+        authController.protect,
+        authController.restrictTo('admin'),
+        answerController.getSessionAnswers
+    );
 
 module.exports = router;

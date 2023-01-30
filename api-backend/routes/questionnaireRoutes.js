@@ -9,7 +9,7 @@ router
     .route('/getallquestionnaires')
     .get(
         authController.protect,
-        authController.restrictTo('user'),
+        authController.restrictTo('user', 'admin'),
         questionnaireController.getAllQuestionnaires
     );
 
@@ -21,12 +21,13 @@ router
         questionnaireController.getUserQuestionnaires
     );
 
-router.route('/:questionnaireID/getallsessions').get(
-    authController.protect,
-    authController.restrictTo('admin'),
-    //authController.restrictAdminByName,
-    sessionController.getAllSessions
-);
+router
+    .route('/:questionnaireID/getallsessions')
+    .get(
+        authController.protect,
+        authController.restrictTo('admin'),
+        sessionController.getAllSessions
+    );
 
 // getQuestionnaire and deleteQuestionnaire must be restricted only to admins that have created the questionnaire
 router

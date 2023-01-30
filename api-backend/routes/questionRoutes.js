@@ -9,7 +9,6 @@ router
     .get(
         authController.protect,
         authController.restrictTo('admin'),
-        authController.createUser,
         questionController.getQuestion
     );
 
