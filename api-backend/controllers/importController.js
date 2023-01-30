@@ -4,7 +4,8 @@ const Question = require(`${__dirname}/../models/questionModel.js`);
 const Option = require(`${__dirname}/../models/optionModel.js`);
 const Session = require(`${__dirname}/../models/sessionModel.js`);
 const Answer = require(`${__dirname}/../models/answerModel.js`);
-const Models = [Answer, Session, Option, Question, Questionnaire];
+const User = require(`${__dirname}/../models/userModel.js`);
+const Models = [Answer, Session, Option, Question, Questionnaire, User];
 
 /**
  * Imports all the data from the folder data/ to the data base.
@@ -21,7 +22,15 @@ exports.importData = async (req, res, next) => {
     const optionsInDataFolder = JSON.parse(fs.readFileSync(`${__dirname}/../../data/options.json`, 'utf-8'));
     const sessionsInDataFolder = JSON.parse(fs.readFileSync(`${__dirname}/../../data/sessions.json`, 'utf-8'));
     const answersInDataFolder = JSON.parse(fs.readFileSync(`${__dirname}/../../data/answers.json`, 'utf-8'));
-    const dataFiles = [answersInDataFolder, sessionsInDataFolder, optionsInDataFolder, questionsInDataFolder, questionnairesInDataFolder];
+    const usersInDataFolder = JSON.parse(fs.readFileSync(`${__dirname}/../../data/users.json`, 'utf-8'));
+    const dataFiles = [
+        answersInDataFolder,
+        sessionsInDataFolder,
+        optionsInDataFolder,
+        questionsInDataFolder,
+        questionnairesInDataFolder,
+        usersInDataFolder
+    ];
 
     /* Check if there are questionnaires to import */
     for (let i = 2; i < 5; ++i) {
@@ -33,7 +42,7 @@ exports.importData = async (req, res, next) => {
     }
 
     /* (Optional) Change the prefix of the _id */
-    const prefix_id = '0';
+    const prefix_id = '';
     dataFiles.forEach(collection => {
         collection.forEach(doc => {
             doc['_id'] = prefix_id.concat(doc['_id'].slice(prefix_id.length));
@@ -57,7 +66,8 @@ exports.importData = async (req, res, next) => {
                 case dataFiles[1]: doctype = '--------------------------------------------------Sessions--------------------------------------------------'; break;
                 case dataFiles[2]: doctype = '--------------------------------------------------Options--------------------------------------------------'; break;
                 case dataFiles[3]: doctype = '--------------------------------------------------Questions--------------------------------------------------'; break;
-                default: doctype = '--------------------------------------------------Questionnaires--------------------------------------------------'; break;
+                case dataFiles[4]: doctype = '--------------------------------------------------Questionnaires--------------------------------------------------'; break;
+                default: doctype = '--------------------------------------------------Users--------------------------------------------------'; break;
             }
             console.log(doctype); console.log(collection);
         }
@@ -65,22 +75,22 @@ exports.importData = async (req, res, next) => {
 
     try {
         process.stdout.write('Start importing data');
-        for (let i = 0; i < 5; ++i) {
+        const limit = Models.length;
+        for (let i = 0; i < limit; ++i) {
             await Models[i].create(dataFiles[i]);
-            process.stdout.write(`...${i + 1}/5${i == 4 ? '\n' : ''}`);
+            process.stdout.write(`...${i + 1}/${limit}${i == limit - 1 ? '\n' : ''}`);
         }
-        const msg = 'Data successfully imported!';
-        console.log(msg);
+        const message = 'Data successfully imported!';
+        console.log(message);
 
         return res.status(200).json({
-            status: 'success',
-            msg
+            status: 'OK',
+            message
         });
     } catch (err) {
         return res.status(500).json({
             status: 'failed',
-            reason: err.name,
-            details: err.message
+            message: err
         });
     }
     next();
@@ -98,27 +108,26 @@ exports.deleteData = async (req, res, next) => {
     try {
         console.log('Start deleting data');
 
-        for (let i = 0; i < 5; ++i) {
+        for (let i = 0, limit = Models.length; i < limit; ++i) {
             const dataDeleted = await Models[i]
                 .deleteMany()
                 .where('_id')
-                .lte('100000000000000000000000');
+                .gte('                        '); // this string must have length 24 (if for _id)
             console.log('Deleted data:', dataDeleted);
-            process.stdout.write(`...${i + 1}/5${i == 4 ? '\n' : ''}`);
+            process.stdout.write(`...${i + 1}/${limit}${i == limit - 1 ? '\n' : ''}`);
         }
 
-        const msg = 'Data successfully deleted!';
-        console.log(msg);
+        const message = 'Data successfully deleted!';
+        console.log(message);
 
         return res.status(402).json({
-            status: 'success',
-            msg
+            status: 'OK',
+            message
         });
     } catch (err) {
         return res.status(500).json({
             status: 'failed',
-            reason: err.name,
-            details: err.message
+            message: err
         });
     }
     next();

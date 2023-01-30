@@ -21,14 +21,13 @@ exports.getAllSessions = async (req, res, next) => {
             .populate('answers', '-_id answertext qID optID');
 
         return res.status(sessions || sessions.length !== 0 ? 200 : 402).json({
-            status: 'success',
+            status: 'OK',
             data: sessions
         });
     } catch (err) {
         return res.status(500).json({
             status: 'failed',
-            reason: err.name,
-            details: err.message
+            message: err
         });
     }
     next();
@@ -54,8 +53,7 @@ exports.getAllSessionsIDs = async (req, res, next) => {
     } catch (err) {
         return res.status(500).json({
             status: 'failed',
-            reason: err.name,
-            details: err.message
+            message: err
         });
     }
     next();
@@ -85,14 +83,13 @@ exports.getSession = async (req, res, next) => {
             .findOne({ username: req.params.username });
 
         return res.status(session || session.length !== 0 ? 200 : 402).json({
-            status: 'success',
+            status: 'OK',
             data: session
         });
     } catch (err) {
         return res.status(500).json({
             status: 'failed',
-            reason: err.name,
-            details: err.message
+            message: err
         });
     }
     next();

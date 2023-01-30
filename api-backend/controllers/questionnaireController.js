@@ -4,6 +4,7 @@ const Option = require(`${__dirname}/../models/optionModel.js`);
 const Session = require(`${__dirname}/../models/sessionModel.js`);
 const Answer = require(`${__dirname}/../models/answerModel.js`);
 const User = require(`${__dirname}/../models/userModel.js`);
+const mongoose = require('mongoose');
 const json2csv = require('json2csv');
 
 /**
@@ -14,7 +15,7 @@ const json2csv = require('json2csv');
  * 
  * URL: {baseURL}/questionnaire/getallquestionnaires
  */
-exports.getAllQuestionnaires = async (req, res, next) => {
+exports.getAllQuestionnaires = async (req, res, next) => { /* PERFECT */
     try {
         let questionnaires = await Questionnaire
             .find({}, '-_id')
@@ -22,32 +23,27 @@ exports.getAllQuestionnaires = async (req, res, next) => {
             .populate({
                 path: 'questions',
                 model: 'Question',
-                select: {
-                    '_id': 0,
-                    '__v': 0,
-                    'wasAnsweredBy': 0,
-                    'questionnaireID': 0
-                },
+                select: '-_id -__v -questionnaireID -wasAnsweredBy',
+                sort: 'qID',
                 populate: {
                     path: 'options',
                     model: 'Option',
-                    select: {
-                        '_id': 0,
-                        '__v': 0
-                    }
+                    select: '-_id -__v',
+                    sort: 'optID',
                 },
             });
 
-        return res.status(questionnaires.length !== 0 ? 200 : 402).json({
-            status: questionnaires.length !== 0 ? 'success' : 'no data',
+        const questionnairesFound = questionnaires && questionnaires !== 0;
+        return res.status(questionnairesFound ? 200 : 402).json({
+            status: questionnairesFound ? 'success' : 'no data',
             data: {
-                questionnaires
+                questionnaires: questionnairesFound ? questionnaires : []
             }
         });
     } catch (err) {
         return res.status(500).json({
-            status: 'fail',
-            msg: err
+            status: 'failed',
+            message: err
         });
     }
     next();
@@ -56,7 +52,7 @@ exports.getAllQuestionnaires = async (req, res, next) => {
 /**
  * Removes a questionnaire and all related entities from the DB.
  * @param {JSON} req - JSON object that contains the questionnaireID of the to-be-deleted questionnaire.
- * @param {JSON} res - JSON object taht contains the data to send.
+ * @param {JSON} res - JSON object that contains the data to send.
  * @return {JSON} - The response object created.
  * 
  * URL:  {baseURL}/questionnaire/:questionnaireID
@@ -64,29 +60,47 @@ exports.getAllQuestionnaires = async (req, res, next) => {
 exports.deleteQuestionnaire = async (req, res, next) => {
     try {
         /* Check if given questionnaireID is valid */
-        const theQuestionnaire = await Questionnaire.findOne(req.params, 'questionnaireID _id');
+        const theQuestionnaire = await Questionnaire
+            .findOne(req.params, 'questionnaireID _id')
+            .populate({
+                path: 'questions',
+                model: 'Question',
+                select: {
+                    '_id': 1,
+                    'options': 1
+                },
+            });
         if (!theQuestionnaire) {
             return res.status(400).json({
-                status: 'bad request',
-                msg: `No questionnaire found with questionnaireID ${req.params.questionnaireID}`
+                status: 'failed',
+                message: `No questionnaire found with questionnaireID ${req.params.questionnaireID}`
             });
         }
 
         /* Delete the questionnaire and all related documents */
-        await Questionnaire.delete(theQuestionnaire);
-        await Question.deleteMany(req.params);
-        await Option.deleteMany(req.params);
-        await Session.deleteMany(req.params);
-        await Answer.deleteMany(req.params);
+        theQuestionnaire.questions.forEach(async question => {
+            question.options.forEach(async option_id => {
+                await Option.findByIdAndRemove(option_id);
+            });
+            await Question.findByIdAndRemove(question['_id']);
+        });
+        await Questionnaire.findByIdAndRemove(theQuestionnaire['_id']);
+        const sessions = await Session.find(req.params, '_id answers');
+        sessions.forEach(async session => {
+            session.answers.forEach(async answer_id => {
+                await Answer.findByIdAndRemove(answer_id);
+            });
+            await Session.findByIdAndRemove(session['_id']);
+        });
 
         return res.status(402).json({
-            status: 'success',
-            msg: `Everything related with questionnaire ${req.params.questionnaireID} has been deleted`
+            status: 'OK',
+            message: `Everything related with questionnaire ${req.params.questionnaireID} has been deleted`
         });
     } catch (err) {
         return res.status(500).json({
-            status: 'fail',
-            msg: err
+            status: 'failed',
+            message: err
         });
     }
     next();
@@ -95,24 +109,33 @@ exports.deleteQuestionnaire = async (req, res, next) => {
 /**
  * Returns all the questionnaires that a user has answered.
  * @param {JSON} req - JSON object that contains the username of the specified user.
- * @param {JSON} res - JSON object taht contains the data to send.
+ * @param {JSON} res - JSON object that contains the data to send.
  * @return {JSON} - The response object created.
  * 
  * URL: {baseURL}/questionnaire/userquestionnaires/:username
  */
-exports.getUserQuestionnaires = async (req, res, next) => {
+exports.getUserQuestionnaires = async (req, res, next) => { /* OK (NOT TESTED) */
     try {
-        // req.params = {username: 'jorto574'}
+        const queryObj = req.param;
+        // const queryObj = {username: req.username};
         const user = await User
-            .findOne(req.params)
+            .findOne({ username: req.username })
             .populate({
                 path: 'questionnaires',
                 model: 'Questionnaire',
-                select: {
-                    '_id': 0
-                },
-                sort: {
-                    'questionnaireID': 1
+                select: '-_id',
+                sort: 'questionnaireID',
+                populate: {
+                    path: 'questions',
+                    model: 'Question',
+                    select: '-_id -__v -questionnaireID -wasAnsweredBy',
+                    sort: 'qID',
+                    populate: {
+                        path: 'options',
+                        model: 'Option',
+                        select: '-_id -__v',
+                        sort: 'optID',
+                    }
                 }
             });
 
