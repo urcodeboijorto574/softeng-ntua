@@ -8,7 +8,6 @@ const optionSchema = new mongoose.Schema(
             type: String,
             required: [true, 'An option must have an id'],
             unique: [true, "An option must have it's own unique id"],
-            //length: [6, 'An option id must have 5 characters'],
         },
         opttxt: {
             type: String,
