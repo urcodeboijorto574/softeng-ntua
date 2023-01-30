@@ -2,6 +2,16 @@ const { promisify } = require('util');
 const jwt = require('jsonwebtoken');
 const User = require('./../models/userModel');
 const AppError = require('./../utils/appError');
+const converter = require('json-2-csv');
+const csv = require('csv-express');
+
+/* const returnCSV = (jsonData, headers) => {
+    let csvData = headers.join(',') + "\r\n"
+
+    jsonData.forEach((el)=> {
+        headers += 
+    })
+} */
 
 const handleCastErrorDB = (err) => {
     const message = `Invalid ${err.path}: ${err.value}.`;
@@ -35,10 +45,12 @@ exports.signup = async (req, res) => {
         /* const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
             expiresIn: process.env.JWT_EXPIRES_IN,
         }); */
-        res.status(200).json({
-            status: 'OK',
-            //token: token,
-        });
+        if (req.query.format === 'json' || !req.query.format) {
+            res.status(200).json({
+                status: 'OK',
+                //token: token,
+            });
+        }
     } catch (err) {
         let error = { ...err };
         if (err.code === 11000) {
@@ -64,15 +76,19 @@ exports.getUser = async (req, res) => {
             __v: 0,
         });
         if (!user) {
-            return res.status(402).json({
-                status: 'fail',
-                message: 'No user found with the given username.',
+            if (req.query.format === 'json' || !req.query.format) {
+                return res.status(402).json({
+                    status: 'fail',
+                    message: 'No user found with the given username.',
+                });
+            }
+        }
+        if (req.query.format === 'json' || !req.query.format) {
+            res.status(200).json({
+                status: 'OK',
+                user: user,
             });
         }
-        return res.status(200).json({
-            status: 'OK',
-            user: user,
-        });
     } catch (err) {
         return res.status(500).json({
             status: 'fail',
@@ -95,9 +111,12 @@ exports.createUser = async (req, res) => {
                 password: req.params.password,
                 role: req.params.usermod,
             });
-            res.status(200).json({
-                status: 'OK',
-            });
+            if (req.query.format === 'json' || !req.query.format) {
+                res.status(200).json({
+                    status: 'OK',
+                    //token: token,
+                });
+            }
         }
         // else if a user with this username and usermod exists, update the user's password
         else {
@@ -128,10 +147,15 @@ exports.login = async (req, res, next) => {
 
     // 1) Check if username and password exist
     if (!username || !password) {
-        return res.status(400).json({
+        const response = {
             status: 'fail',
             message: 'Please provide username and password!',
-        });
+        };
+        if (req.query.format === 'json' || !req.query.format) {
+            return res.status(400).json({
+                response,
+            });
+        }
     }
     // 2) Check if user exists and password is correct
     const user = await User.findOne({
@@ -139,11 +163,19 @@ exports.login = async (req, res, next) => {
     });
 
     if (!user || !(await user.correctPassword(password, user.password))) {
+        if (req.query.format === 'json' || !req.query.format) {
+            return res.status(401).json({
+                status: 'fail',
+                message: 'Incorrect username or password',
+            });
+        }
+    }
+    /* if (user.role != req.body.usermod) {
         return res.status(401).json({
             status: 'fail',
             message: 'Incorrect username or password',
         });
-    }
+    } */
 
     // 3) If everything ok, send token to the client
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
@@ -202,6 +234,7 @@ exports.protect = async (req, res, next) => {
 
         // grant access to protected route
         req.userRole = freshUser.role;
+        req.username = freshUser.username;
         next();
     } catch (err) {
         // errors reference to case 2
@@ -232,3 +265,5 @@ exports.restrictTo = (...roles) => {
         next();
     };
 };
+
+//exports.restrictAdminByName = (req, res, next) => {};
