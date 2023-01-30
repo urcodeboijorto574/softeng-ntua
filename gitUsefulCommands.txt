@@ -1,3 +1,5 @@
+You are strongly advised to checkout https://www.freecodecamp.org/ for any help you need with any of the commands below! 
+
 ---BASIC COMMANDS---
 git init = initialize project to use git
 git add . = add all changes to be saved
@@ -25,8 +27,10 @@ git reset --mixed HEAD~ = undo the commit you just committed, while you keep you
 	(https://www.freecodecamp.org/news/save-the-day-with-git-reset/)
 git cherry-pick *branch* = apply the last commit on a branch to HEAD (last commit of *branch* --> HEAD)
 	and remove it from *branch*. (This is useful when you commit changes to the wrong branch)
-git checkout *branch* *file* = copy one file's changes from one branch to HEAD
-	(useful for 1-on-1 file transfer, though those changes will have to be committed by the receiver to take place in git)
+git checkout *branch* -- *file* = copy one file's changes from one branch to HEAD/index
+	(this command is very useful when you want specific changes of one branch to another.)
+	(example: git switch main; git checkout someones-branch -- api-backend/controller/) (take all changes of controller/ directory)
+	(example: git switch someones-branch; git checkout main -- api-backend/app.js) (take all changes of app.js file)
 
 
 *NOTE*: HEAD~ means one commit right before the most recent. HEAD~2 means two commits before the most recent, and so on...
