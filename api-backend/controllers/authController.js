@@ -170,6 +170,12 @@ exports.login = async (req, res, next) => {
             });
         }
     }
+    /* if (user.role != req.body.usermod) {
+        return res.status(401).json({
+            status: 'fail',
+            message: 'Incorrect username or password',
+        });
+    } */
 
     // 3) If everything ok, send token to the client
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
@@ -228,6 +234,7 @@ exports.protect = async (req, res, next) => {
 
         // grant access to protected route
         req.userRole = freshUser.role;
+        req.username = freshUser.username;
         next();
     } catch (err) {
         // errors reference to case 2
@@ -258,3 +265,5 @@ exports.restrictTo = (...roles) => {
         next();
     };
 };
+
+exports.restrictAdminByName = (req, res, next) => {};
