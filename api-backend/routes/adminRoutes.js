@@ -30,7 +30,11 @@ router
 
 router
     .route('/resetq/:questionnaireID')
-    .post(adminController.resetQuestionnaire);
+    .post(
+        authController.protect,
+        authController.restrictTo('super-admin'),
+        adminController.resetAlladminController.resetQuestionnaire
+    );
 
 router
     .route('/:usermod/:username/:password')
