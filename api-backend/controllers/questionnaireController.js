@@ -1,3 +1,4 @@
+/* baseURL = http://localhost:{{port}}/intelliq_api */
 const Questionnaire = require(`${__dirname}/../models/questionnaireModel.js`);
 const Question = require(`${__dirname}/../models/questionModel.js`);
 const Option = require(`${__dirname}/../models/optionModel.js`);
@@ -12,7 +13,7 @@ const json2csv = require('json2csv');
  * @param {JSON} res - JSON object that contains a confirmation or a decline of the request.
  * @return {JSON} - The response object created.
  * 
- * URL: {baseURL}/intelliq_api/questionnaire/getallquestionnaires
+ * URL: {baseURL}/questionnaire/getallquestionnaires
  */
 exports.getAllQuestionnaires = async (req, res, next) => {
     try {
@@ -59,38 +60,9 @@ exports.getAllQuestionnaires = async (req, res, next) => {
  * @param {JSON} res - JSON object taht contains the data to send.
  * @return {JSON} - The response object created.
  * 
- * URL:  {baseURL}/intelliq_api/questionnaire/:questionnaireID
+ * URL:  {baseURL}/questionnaire/:questionnaireID
  */
-exports.deleteQuestionnaire = async (req, res, next) => {
-    try {
-        /* Check if given questionnaireID is valid */
-        const theQuestionnaire = await Questionnaire.findOne(req.params, 'questionnaireID _id');
-        if (!theQuestionnaire) {
-            return res.status(400).json({
-                status: 'bad request',
-                msg: `No questionnaire found with questionnaireID ${req.params.questionnaireID}`
-            });
-        }
-
-        /* Delete the questionnaire and all related documents */
-        await Questionnaire.delete(theQuestionnaire);
-        await Question.deleteMany(req.params);
-        await Option.deleteMany(req.params);
-        await Session.deleteMany(req.params);
-        await Answer.deleteMany(req.params);
-
-        return res.status(402).json({
-            status: 'success',
-            msg: `Everything related with questionnaire ${req.params.questionnaireID} has been deleted`
-        });
-    } catch (err) {
-        return res.status(500).json({
-            status: 'fail',
-            msg: err
-        });
-    }
-    next();
-};
+exports.deleteQuestionnaire = async (req, res, next) => { };
 
 /**
  * Returns all the questionnaires that a user has answered.
@@ -98,33 +70,6 @@ exports.deleteQuestionnaire = async (req, res, next) => {
  * @param {JSON} res - JSON object taht contains the data to send.
  * @return {JSON} - The response object created.
  * 
- * URL: {baseURL}/intelliq_api/questionnaire/userquestionnaires/:username
+ * URL: {baseURL}/questionnaire/userquestionnaires/:username
  */
-exports.getUserQuestionnaires = async (req, res, next) => {
-    try {
-        // req.params = {username: 'jorto574'}
-        const user = await User
-            .findOne(req.params)
-            .populate({
-                path: 'questionnaires',
-                model: 'Questionnaire',
-                select: {
-                    '_id': 0
-                },
-                sort: {
-                    'questionnaireID': 1
-                }
-            });
-
-        return res.status(user && user.questionnaires ? 200 : 402).json({
-            status: 'success',
-            data: user.questionnaires
-        });
-    } catch (err) {
-        return res.status(500).json({
-            status: 'fail',
-            msg: err
-        });
-    }
-    next();
-};
+exports.getUserQuestionnaires = async (req, res, next) => { };
