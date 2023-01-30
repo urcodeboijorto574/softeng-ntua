@@ -5,6 +5,11 @@ const Answer = require(`${__dirname}/../models/answerModel.js`);
 const json2csv = require('json2csv');
 
 /**
+ * Stores an answer object in the database.
+ * @param {JSON} req - JSON object of which req.params contains the questionnaireID, questionID, sessionID and option ID.
+ * @param {JSON} res - JSON object that contains a confirmation or decline of the request.
+ * @return {JSON} - The response object created.
+ * 
  * URL: /intelliq_api/doanswer/:questionnaireID/:questionID/:session/:optionID
  */
 exports.doAnswer = async (req, res, next) => {

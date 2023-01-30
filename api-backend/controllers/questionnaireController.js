@@ -1,13 +1,17 @@
-const Questionnaire = require(`${__dirname}/../models/questionnaireModel`);
-const Question = require(`${__dirname}/../models/questionModel`);
-const Option = require(`${__dirname}/../models/optionModel`);
-const Session = require(`${__dirname}/../models/sessionModel`);
-const Answer = require(`${__dirname}/../models/answerModel`);
-const User = require(`${__dirname}/../models/userModel`);
-const mongoose = require('mongoose');
+const Questionnaire = require(`${__dirname}/../models/questionnaireModel.js`);
+const Question = require(`${__dirname}/../models/questionModel.js`);
+const Option = require(`${__dirname}/../models/optionModel.js`);
+const Session = require(`${__dirname}/../models/sessionModel.js`);
+const Answer = require(`${__dirname}/../models/answerModel.js`);
+const User = require(`${__dirname}/../models/userModel.js`);
 const json2csv = require('json2csv');
 
 /**
+ * Returns all the information about every questionnaire in the data base.
+ * @param {JSON} req - JSON object of which no field is used in the function.
+ * @param {JSON} res - JSON object that contains a confirmation or a decline of the request.
+ * @return {JSON} - The response object created.
+ * 
  * URL: {baseURL}/intelliq_api/questionnaire/getallquestionnaires
  */
 exports.getAllQuestionnaires = async (req, res, next) => {
@@ -50,6 +54,11 @@ exports.getAllQuestionnaires = async (req, res, next) => {
 };
 
 /**
+ * Removes a questionnaire and all related entities from the DB.
+ * @param {JSON} req - JSON object that contains the questionnaireID of the to-be-deleted questionnaire.
+ * @param {JSON} res - JSON object taht contains the data to send.
+ * @return {JSON} - The response object created.
+ * 
  * URL:  {baseURL}/intelliq_api/questionnaire/:questionnaireID
  */
 exports.deleteQuestionnaire = async (req, res, next) => {
@@ -84,6 +93,11 @@ exports.deleteQuestionnaire = async (req, res, next) => {
 };
 
 /**
+ * Returns all the questionnaires that a user has answered.
+ * @param {JSON} req - JSON object that contains the username of the specified user.
+ * @param {JSON} res - JSON object taht contains the data to send.
+ * @return {JSON} - The response object created.
+ * 
  * URL: {baseURL}/intelliq_api/questionnaire/userquestionnaires/:username
  */
 exports.getUserQuestionnaires = async (req, res, next) => {
@@ -112,4 +126,5 @@ exports.getUserQuestionnaires = async (req, res, next) => {
             msg: err
         });
     }
+    next();
 };

@@ -7,6 +7,11 @@ const Answer = require(`${__dirname}/../models/answerModel.js`);
 const Models = [Answer, Session, Option, Question, Questionnaire];
 
 /**
+ * Imports all the data from the folder data/ to the data base.
+ * @param {JSON} req - JSON object of which no field is used in the function.
+ * @param {JSON} res - JSON object that contains a confirmation or a decline of the request.
+ * @return {JSON} - The response object created.
+ * 
  * URL: {baseURL}/dummy-data/import
  */
 exports.importData = async (req, res, next) => {
@@ -82,6 +87,11 @@ exports.importData = async (req, res, next) => {
 };
 
 /**
+ * Deletes all the data from the DB.
+ * @param {JSON} req - JSON object of which no field is used in the function.
+ * @param {JSON} res - JSON object that contains a confirmation or a decline of the request.
+ * @return {JSON} - The response object created.
+ * 
  * URL: {baseURL}/dummy-data/delete
  */
 exports.deleteData = async (req, res, next) => {
