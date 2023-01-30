@@ -35,7 +35,7 @@ class _SessionListScreenState extends State<SessionListScreen> {
   late Future<List> sessionsTitles;
 
   String _localhost() {
-    return 'http://127.0.0.1:3000/intelliq_api/sessions/${widget.questionnaireID}/getAllSessions';
+    return 'http://127.0.0.1:3000/intelliq_api/sessions/getallsessions/${widget.questionnaireID}';
   }
 
   Future<List> _getAllSessions() async {

@@ -40,7 +40,7 @@ class _AnswersOverviewScreenState extends State<AnswersOverviewScreen> {
   }
 
   String _localhost2() {
-    return 'http://127.0.0.1:3000/intelliq_api/sessions/getAllSessionIDs';
+    return 'http://127.0.0.1:3000/intelliq_api/sessions/sessionids';
   }
 
   Future<List> _getAllSessionIDs() async {
@@ -72,13 +72,14 @@ class _AnswersOverviewScreenState extends State<AnswersOverviewScreen> {
       },
       body: jsonEncode(<String, String>{
         'answertext': single_answer.answertxt,
+        'username': 'jimv',
       }),
     );
 
-    if (response.statusCode == 201) {
+    if (response.statusCode == 200) {
       return;
     } else {
-      throw Exception('Failed to send answer');
+      throw Exception(jsonDecode(response.body)['msg']);
     }
   }
 
@@ -207,6 +208,10 @@ class _AnswersOverviewScreenState extends State<AnswersOverviewScreen> {
                                   while (!isValid) {
                                     sessionID = generateRandomString(4);
 
+                                    if (sessions.isEmpty) {
+                                      isValid = true;
+                                    }
+
                                     for (int i = 0; i < sessions.length; i++) {
                                       if (sessions[i] == sessionID) {
                                         isValid = false;
@@ -216,12 +221,12 @@ class _AnswersOverviewScreenState extends State<AnswersOverviewScreen> {
                                     }
                                   }
 
-                                  // for (int i = 0;
-                                  //     i < widget.answers.length;
-                                  //     i++) {
-                                  //   await _sendAnswer(
-                                  //       widget.answers[i], sessionID);
-                                  // }
+                                  for (int i = 0;
+                                      i < widget.answers.length;
+                                      i++) {
+                                    await _sendAnswer(
+                                        widget.answers[i], sessionID);
+                                  }
 
                                   Navigator.pushAndRemoveUntil(context,
                                       MaterialPageRoute(builder: (context) {

@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:questionnaires_app/main_screens/choose_action.dart';
 import 'package:questionnaires_app/main_screens/question_screen.dart';
@@ -28,15 +29,21 @@ class _QuestionnaireListScreenState extends State<QuestionnaireListScreen> {
   late List questionnaires;
   late Future<List> questionnaireTitles;
 
+  final storage = const FlutterSecureStorage();
+
   String _localhost() {
-    return 'http://127.0.0.1:3000/intelliq_api/questionnaire/getAllQuestionnaires';
+    return 'http://127.0.0.1:3000/intelliq_api/questionnaire/getallquestionnaires';
   }
 
   Future<List> _getAllQuestionnaires() async {
     List<String> titles = [];
 
     final url = Uri.parse(_localhost());
-    Response response = await get(url);
+    var jwt = await storage.read(key: "jwt");
+    Response response = await get(
+      url,
+      headers: <String, String>{'Authorization': 'Bearer ${jwt!}'},
+    );
 
     if (response.statusCode == 200) {
       questionnaires = jsonDecode(response.body)['data']['questionnaires'];
