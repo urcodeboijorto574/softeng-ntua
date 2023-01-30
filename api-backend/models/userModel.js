@@ -7,7 +7,6 @@ const userSchema = new mongoose.Schema({
         enum: {
             values: ['user', 'admin'],
             message: 'Role must be user or admin',
-            /* Should we include 'super-admin' as an option here? */
         },
         required: [true, 'A user must have a role'],
     },
@@ -27,18 +26,12 @@ const userSchema = new mongoose.Schema({
         type: Date,
         default: Date.now().toString()
     },
-    questionnaires: [
+    questionnairesAnswered: [
         {
             type: mongoose.Types.ObjectId,
             ref: 'Questionnaire'
         }
     ],
-    sessions: [
-        {
-            type: mongoose.Types.ObjectId,
-            ref: 'Session'
-        }
-    ]
 });
 
 // document middleware for password encryption. Runs right before the current document is saved in the database

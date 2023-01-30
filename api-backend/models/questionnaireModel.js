@@ -25,8 +25,7 @@ const questionnaireSchema = new mongoose.Schema({
         },
     ],
     creator: {
-        type: mongooseSchema.ObjectId,
-        ref: 'User'
+        type: String,
     },
 },
     { versionKey: false },
