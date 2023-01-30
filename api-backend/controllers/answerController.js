@@ -10,7 +10,7 @@ const json2csv = require('json2csv');
  * @param {JSON} res - JSON object that contains a confirmation or decline of the request.
  * @return {JSON} - The response object created.
  * 
- * URL: /intelliq_api/doanswer/:questionnaireID/:questionID/:session/:optionID
+ * URL: {baseURL}/doanswer/:questionnaireID/:questionID/:session/:optionID
  */
 exports.doAnswer = async (req, res, next) => {
     try {

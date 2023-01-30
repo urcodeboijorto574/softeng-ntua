@@ -12,7 +12,7 @@ const json2csv = require('json2csv');
  * @param {JSON} res - JSON object that contains a confirmation or a decline of the request.
  * @return {JSON} - The response object created.
  * 
- * URL: {baseURL}/intelliq_api/questionnaire/getallquestionnaires
+ * URL: {baseURL}/questionnaire/getallquestionnaires
  */
 exports.getAllQuestionnaires = async (req, res, next) => {
     try {
@@ -59,7 +59,7 @@ exports.getAllQuestionnaires = async (req, res, next) => {
  * @param {JSON} res - JSON object taht contains the data to send.
  * @return {JSON} - The response object created.
  * 
- * URL:  {baseURL}/intelliq_api/questionnaire/:questionnaireID
+ * URL:  {baseURL}/questionnaire/:questionnaireID
  */
 exports.deleteQuestionnaire = async (req, res, next) => {
     try {
@@ -98,7 +98,7 @@ exports.deleteQuestionnaire = async (req, res, next) => {
  * @param {JSON} res - JSON object taht contains the data to send.
  * @return {JSON} - The response object created.
  * 
- * URL: {baseURL}/intelliq_api/questionnaire/userquestionnaires/:username
+ * URL: {baseURL}/questionnaire/userquestionnaires/:username
  */
 exports.getUserQuestionnaires = async (req, res, next) => {
     try {

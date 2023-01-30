@@ -11,7 +11,7 @@ dotenv.config({ path: `${__dirname}/../config.env` });
  * @param {JSON} res - JSON object that contains the data to send.
  * @return {JSON} - The response object.
  * 
- * URL: {baseURL}/intelliq_api/sessions/getallsessions/:questionnaireID
+ * URL: {baseURL}/sessions/getallsessions/:questionnaireID
  */
 exports.getAllSessions = async (req, res, next) => {
     try {
@@ -40,7 +40,7 @@ exports.getAllSessions = async (req, res, next) => {
  * @param {JSON} res - JSON object that contains the data to send.
  * @returns {JSON} - The response object.
  * 
- * URL: {baseURL}/intelliq_api/sessions/sessionids
+ * URL: {baseURL}/sessions/sessionids
  */
 exports.getAllSessionsIDs = async (req, res, next) => {
     try {
@@ -67,7 +67,7 @@ exports.getAllSessionsIDs = async (req, res, next) => {
  * @param {JSON} res - A response object that contains the data to send.
  * @return {JSON} - The response object created.
  * 
- * URL: {baseURL}/intelliq_api/sessions/getsession/:username/:questionnaireID
+ * URL: {baseURL}/sessions/getsession/:username/:questionnaireID
  */
 exports.getSession = async (req, res, next) => {
     try {
