@@ -24,15 +24,12 @@ exports.doAnswer = async (req, res, next) => { /* WORKING ON IT... */
             answertext: req.body.answertext ? req.body.answertext : ''
         },
         newAnswerCreated = false, optionUpdated = false, questionUpdated = false;
-    // let userName = req.params.username;
-    // let userName = req.username;
-    let userName = 'john-user';
     try {
         /* 1) CHECK VALIDITY OF PARAMETERS GIVEN */
 
         /* If user is not allowed to answer, reject the request */
         let user = await User
-            .findOne({ username: userName, role: 'user' }, '_id role questionnairesAnswered')
+            .findOne({ username: req.username, role: 'user' }, '_id role questionnairesAnswered')
             .populate('questionnairesAnswered', 'questionnaireID');
         if (!user || user.role !== 'user') {
             if (!user) console.log('!user');

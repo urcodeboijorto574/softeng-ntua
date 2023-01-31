@@ -4,7 +4,6 @@ const Option = require(`${__dirname}/../models/optionModel.js`);
 const Session = require(`${__dirname}/../models/sessionModel.js`);
 const Answer = require(`${__dirname}/../models/answerModel.js`);
 const User = require(`${__dirname}/../models/userModel.js`);
-const mongoose = require('mongoose');
 const json2csv = require('json2csv');
 
 /**
@@ -15,7 +14,7 @@ const json2csv = require('json2csv');
  * 
  * URL: {baseURL}/questionnaire/getallquestionnaires
  */
-exports.getAllQuestionnaires = async (req, res, next) => { /* PERFECT */
+exports.getAllQuestionnaires = async (req, res, next) => {
     try {
         let questionnaires = await Questionnaire
             .find({}, '-_id')
@@ -35,7 +34,7 @@ exports.getAllQuestionnaires = async (req, res, next) => { /* PERFECT */
 
         const questionnairesFound = questionnaires && questionnaires !== 0;
         return res.status(questionnairesFound ? 200 : 402).json({
-            status: questionnairesFound ? 'success' : 'no data',
+            status: questionnairesFound ? 'OK' : 'no data',
             data: {
                 questionnaires: questionnairesFound ? questionnaires : []
             }
@@ -117,7 +116,6 @@ exports.deleteQuestionnaire = async (req, res, next) => {
 exports.getUserQuestionnaires = async (req, res, next) => { /* OK (NOT TESTED) */
     try {
         const queryObj = req.param;
-        // const queryObj = {username: req.username};
         const user = await User
             .findOne({ username: req.username })
             .populate({
