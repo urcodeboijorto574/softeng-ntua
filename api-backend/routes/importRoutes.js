@@ -1,14 +1,23 @@
 const express = require('express');
 const importController = require(`${__dirname}/../controllers/importController.js`);
+const authController = require('./../controllers/authController.js');
 
 const router = express.Router();
 
 router
     .route('/import')
-    .post(importController.importData);
+    .post(
+        authController.protect,
+        authController.restrictTo('super-admin'),
+        importController.importData
+    );
 
 router
     .route('/delete')
-    .delete(importController.deleteData);
+    .delete(
+        authController.protect,
+        authController.restrictTo('super-admin'),
+        importController.deleteData
+    );
 
 module.exports = router;
