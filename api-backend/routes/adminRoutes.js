@@ -33,7 +33,7 @@ router
     .post(
         authController.protect,
         authController.restrictTo('super-admin'),
-        adminController.resetAlladminController.resetQuestionnaire
+        adminController.resetQuestionnaire
     );
 
 router
