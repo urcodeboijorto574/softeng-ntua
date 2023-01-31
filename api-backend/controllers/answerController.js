@@ -1,5 +1,4 @@
 const Questionnaire = require(`${__dirname}/../models/questionnaireModel.js`);
-const Question = require(`${__dirname}/../models/questionModel.js`);
 const Session = require(`${__dirname}/../models/sessionModel.js`);
 const Answer = require(`${__dirname}/../models/answerModel.js`);
 const User = require(`${__dirname}/../models/userModel.js`);
@@ -13,20 +12,21 @@ const User = require(`${__dirname}/../models/userModel.js`);
  * URL: {baseURL}/doanswer/:questionnaireID/:questionID/:session/:optionID
 */
 exports.doAnswer = async (req, res, next) => { /* OK, NEEDS TESTING... */
-    try {
-        let newAnswerCreated = false, optionUpdated = false, questionUpdated = false;
-        let newAnswer = {
+    let session, option,
+        newAnswer = {
             qID: req.params.questionID,
             optID: req.params.optionID,
             sessionID: req.params.session,
             questionnaireID: req.params.questionnaireID,
             answertext: req.body.answertext ? req.body.answertext : ''
-        };
+        },
+        newAnswerCreated = false, optionUpdated = false, questionUpdated = false;
 
+    try {
         /* 1) CHECK VALIDITY OF PARAMETERS GIVEN */
 
         /* If user is not allowed to answer, reject the request */
-        let user = await User.findOne({ username: req.username, role: 'user' }, 'questionnairesAnswered -__v');
+        let user = await User.findOne({ username: req.params.username /*req.username */, role: 'user' }, 'questionnairesAnswered');
         if (!user) {
             return res.status(400).json({
                 status: 'failed',
@@ -41,12 +41,12 @@ exports.doAnswer = async (req, res, next) => { /* OK, NEEDS TESTING... */
                 path: 'questions',
                 model: 'Question',
                 filter: { qID: req.params.questionID },
-                select: 'qID options -_id',
+                select: 'qID options wasAnsweredBy',
                 populate: {
                     path: 'options',
                     model: 'Option',
                     filter: { optID: req.params.optionID },
-                    select: 'optID',
+                    select: 'optID wasChosenBy _id',
                 }
             });
 
@@ -66,51 +66,57 @@ exports.doAnswer = async (req, res, next) => { /* OK, NEEDS TESTING... */
             });
         }
 
-        let question = questionnaire.questions[0],
-            option = question.options[0];
+        question = questionnaire.questions[0];
+        option = question.options[0];
 
         /* 2) CHECK IF A SESSION ALREADY EXISTS */
 
-        let oldSession = await Session.findOne({ sessionID: req.params.session }, '-__v'),
-            currSession = oldSession;
-        if (oldSession) {
-            const answerExists = oldSession.answers.length;
-            if (answerExists) {
+        session = await Session
+            .findOne({ sessionID: req.params.session })
+            .populate('answers', '_id qID answertext');
+        if (session) {
+            /* Search session.answers[] for an answer._id  */
+            const answersArrayEmpty = session.answers.length == 0;
+            if (!answersArrayEmpty && session.answers.some(ans => ans.qID === req.params.questionID)) {
+                console.log('session.answers:', session.answers);
+                await Answer.deleteMany(session.answers[0].sessionID);
+                await Session.deleteOne(session);
                 return res.status(400).json({
                     status: 'failed',
                     message: 'An answer has already been submitted for this question',
-                    'previous answer': oldSession.answers[0].answertext
+                    'previous answer': session.answers[0].answertext
                 });
             }
         } else {
-            let newSession = await Session.create({
+            session = await Session.create({
                 sessionID: req.params.session,
                 questionnaireID: req.params.questionnaireID,
                 answers: [],
                 submitter: user._id
             });
-            currSession = newSession;
         }
-
 
         /* 3) SUBMIT NEW ANSWER TO DB */
         newAnswer = await Answer.create(newAnswer);
         newAnswerCreated = true;
-        currSession.answers.push(newAnswer._id);
-        currSession = await currSession.save();
-
+        session.answers.push(newAnswer._id);
+        session = await session.save();
 
         /* 4) UPDATE FIELDS IN RELEVANT DOCUMENTS */
-        ++(option.wasChosenBy);
+        option.wasChosenBy = option.wasChosenBy + 1;
+        // ++(option.wasChosenBy);
         option = await option.save();
         optionUpdated = true;
 
-        ++(question.wasAnsweredBy);
+        question.wasAnsweredBy += 1;
         question = await question.save();
         questionUpdated = true;
 
         user.questionnairesAnswered.push(questionnaire._id);
-        user = await user.save();
+        console.log('point 0');
+        // user = await user.save();
+
+        console.log('point 1');
 
         const message = 'Answer submitted!';
         console.log(message);
@@ -120,12 +126,13 @@ exports.doAnswer = async (req, res, next) => { /* OK, NEEDS TESTING... */
             message
         });
     } catch (err) {
-        await Session.findByIdAndDelete(currSession._id);
+        console.log(err);
+        await Session.findByIdAndDelete(session['_id']);
         if (newAnswerCreated) {
             await Answer.findByIdAndDelete(newAnswer._id);
 
             if (optionUpdated) {
-                --(option.wasChosenBy);
+                option.wasChosenBy = option.wasChosenBy - 1;
                 await option.save();
 
                 if (questionUpdated) {
