@@ -38,71 +38,99 @@ class _QuestionnaireListScreenState extends State<QuestionnaireListScreen> {
       GlobalKey<ScaffoldMessengerState>();
 
   String _localhost1() {
-    return 'http://127.0.0.1:3000/intelliq_api/questionnaire/getallquestionnaires';
+    return 'http://127.0.0.1:3000/intelliq_api/questionnaire/usernotquestionnaires';
   }
 
   Future<List> _getRestQuestionnaires() async {
     List<String> titles = [];
-    List allquestionnaires;
-    List answeredquestionnaires;
 
-    final url1 = Uri.parse(_localhost1());
-
+    final url = Uri.parse(_localhost1());
     var jwt = await storage.read(key: "jwt");
     if (jwt == null) throw Exception('Something went wrong!');
 
-    Response response1 = await get(
-      url1,
+    Response response = await get(
+      url,
       headers: <String, String>{'Authorization': 'Bearer $jwt'},
     );
 
-    if (response1.statusCode == 200) {
-      allquestionnaires = jsonDecode(response1.body)['data']['questionnaires'];
-    } else if (response1.statusCode == 402) {
-      throw Exception('No questionnaires yet!');
-    } else if (response1.statusCode == 401) {
-      throw Exception(jsonDecode(response1.body)['message']);
-    } else {
-      throw Exception('Something went wrong!');
-    }
+    if (response.statusCode == 200) {
+      questionnaires = jsonDecode(response.body)['data'];
 
-    final url2 = Uri.parse(_localhost2());
-
-    Response response2 = await get(
-      url2,
-      headers: <String, String>{'Authorization': 'Bearer $jwt'},
-    );
-
-    if (response2.statusCode == 200) {
-      answeredquestionnaires = jsonDecode(response2.body)['data'];
-    } else if (response2.statusCode == 402) {
-      throw Exception('No questionnaires answered yet!');
-    } else if (response2.statusCode == 401) {
-      throw Exception(jsonDecode(response2.body)['message']);
-    } else {
-      throw Exception('Something went wrong!');
-    }
-    int temp = 0;
-    questionnaires = [];
-
-    for (int i = 0; i < answeredquestionnaires.length; i++) {
-      while (allquestionnaires[temp]['questionnaireID'] !=
-          answeredquestionnaires[i]['questionnaireID']) {
-        questionnaires.add(allquestionnaires[temp]);
-        temp++;
+      for (int i = 0; i < questionnaires.length; i++) {
+        titles.add(questionnaires[i]['questionnaireTitle']);
       }
-      temp++;
+      return titles;
+    } else if (response.statusCode == 402) {
+      throw Exception('No questionnaires yet!');
+    } else if (response.statusCode == 401) {
+      throw Exception(jsonDecode(response.body)['message']);
+    } else {
+      throw Exception('Something went wrong!');
     }
-
-    for (int i = temp; i < allquestionnaires.length; i++) {
-      questionnaires.add(allquestionnaires[i]);
-    }
-
-    for (int i = 0; i < questionnaires.length; i++) {
-      titles.add(questionnaires[i]['questionnaireTitle']);
-    }
-    return titles;
   }
+
+  // Future<List> _getRestQuestionnaires() async {
+  //   List<String> titles = [];
+  //   List allquestionnaires;
+  //   List answeredquestionnaires;
+
+  //   final url1 = Uri.parse(_localhost1());
+
+  //   var jwt = await storage.read(key: "jwt");
+  //   if (jwt == null) throw Exception('Something went wrong!');
+
+  //   Response response1 = await get(
+  //     url1,
+  //     headers: <String, String>{'Authorization': 'Bearer $jwt'},
+  //   );
+
+  //   if (response1.statusCode == 200) {
+  //     allquestionnaires = jsonDecode(response1.body)['data']['questionnaires'];
+  //   } else if (response1.statusCode == 402) {
+  //     throw Exception('No questionnaires yet!');
+  //   } else if (response1.statusCode == 401) {
+  //     throw Exception(jsonDecode(response1.body)['message']);
+  //   } else {
+  //     throw Exception('Something went wrong!');
+  //   }
+
+  //   final url2 = Uri.parse(_localhost2());
+
+  //   Response response2 = await get(
+  //     url2,
+  //     headers: <String, String>{'Authorization': 'Bearer $jwt'},
+  //   );
+
+  //   if (response2.statusCode == 200) {
+  //     answeredquestionnaires = jsonDecode(response2.body)['data'];
+  //   } else if (response2.statusCode == 402) {
+  //     throw Exception('No questionnaires answered yet!');
+  //   } else if (response2.statusCode == 401) {
+  //     throw Exception(jsonDecode(response2.body)['message']);
+  //   } else {
+  //     throw Exception('Something went wrong!');
+  //   }
+  //   int temp = 0;
+  //   questionnaires = [];
+
+  //   for (int i = 0; i < answeredquestionnaires.length; i++) {
+  //     while (allquestionnaires[temp]['questionnaireID'] !=
+  //         answeredquestionnaires[i]['questionnaireID']) {
+  //       questionnaires.add(allquestionnaires[temp]);
+  //       temp++;
+  //     }
+  //     temp++;
+  //   }
+
+  //   for (int i = temp; i < allquestionnaires.length; i++) {
+  //     questionnaires.add(allquestionnaires[i]);
+  //   }
+
+  //   for (int i = 0; i < questionnaires.length; i++) {
+  //     titles.add(questionnaires[i]['questionnaireTitle']);
+  //   }
+  //   return titles;
+  // }
 
   String _localhost2() {
     return 'http://127.0.0.1:3000/intelliq_api/questionnaire/userquestionnaires';
@@ -122,6 +150,38 @@ class _QuestionnaireListScreenState extends State<QuestionnaireListScreen> {
 
     if (response.statusCode == 200) {
       questionnaires = jsonDecode(response.body)['data'];
+
+      for (int i = 0; i < questionnaires.length; i++) {
+        titles.add(questionnaires[i]['questionnaireTitle']);
+      }
+      return titles;
+    } else if (response.statusCode == 402) {
+      throw Exception('No questionnaires answered yet!');
+    } else if (response.statusCode == 401) {
+      throw Exception(jsonDecode(response.body)['message']);
+    } else {
+      throw Exception('Something went wrong!');
+    }
+  }
+
+  String _localhost3() {
+    return 'http://127.0.0.1:3000/intelliq_api/questionnaire/getallquestionnaires';
+  }
+
+  Future<List> _getAllQuestionnaires() async {
+    List<String> titles = [];
+
+    final url = Uri.parse(_localhost3());
+    var jwt = await storage.read(key: "jwt");
+    if (jwt == null) throw Exception('Something went wrong!');
+
+    Response response = await get(
+      url,
+      headers: <String, String>{'Authorization': 'Bearer $jwt'},
+    );
+
+    if (response.statusCode == 200) {
+      questionnaires = jsonDecode(response.body)['data']['questionnaires'];
 
       for (int i = 0; i < questionnaires.length; i++) {
         titles.add(questionnaires[i]['questionnaireTitle']);
@@ -182,12 +242,12 @@ class _QuestionnaireListScreenState extends State<QuestionnaireListScreen> {
         (route) => false);
   }
 
-  String _localhost3() {
+  String _localhost4() {
     return 'http://127.0.0.1:3000/intelliq_api/sessions/getsession';
   }
 
   Future<dynamic> getSession(String questionnaireID) async {
-    final url = Uri.parse('${_localhost3()}/$questionnaireID');
+    final url = Uri.parse('${_localhost4()}/$questionnaireID');
     var jwt = await storage.read(key: "jwt");
     if (jwt == null) throw Exception('Something went wrong!');
 
@@ -263,6 +323,9 @@ class _QuestionnaireListScreenState extends State<QuestionnaireListScreen> {
         questionnaireTitles = _getUserQuestionnaires();
       } else if (widget.label == 'answer questionnaire') {
         questionnaireTitles = _getRestQuestionnaires();
+      } else if (widget.label == 'show statistics' ||
+          widget.label == 'view answers') {
+        questionnaireTitles = _getAllQuestionnaires();
       }
     });
   }

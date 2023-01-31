@@ -3,6 +3,7 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
 import 'package:pie_chart/pie_chart.dart';
+import 'package:questionnaires_app/main_screens/admin_questionnaire_list.dart';
 import 'package:questionnaires_app/main_screens/questionnaire_list.dart';
 import 'package:questionnaires_app/widgets/app_bar.dart';
 
@@ -99,7 +100,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) =>
-                                      const QuestionnaireListScreen(
+                                      const AdminQuestionnaireList(
                                           label: 'show statistics'),
                                 ),
                                 (route) => false);

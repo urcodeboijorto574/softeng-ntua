@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:questionnaires_app/main_screens/admin_questionnaire_list.dart';
 import 'package:questionnaires_app/main_screens/answers_overview.dart';
@@ -35,6 +36,8 @@ class _SessionListScreenState extends State<SessionListScreen> {
   late List sessions;
   late Future<List> sessionsTitles;
 
+  final storage = const FlutterSecureStorage();
+
   String _localhost() {
     return 'http://127.0.0.1:3000/intelliq_api/sessions/getallsessions/${widget.questionnaireID}';
   }
@@ -43,7 +46,14 @@ class _SessionListScreenState extends State<SessionListScreen> {
     List<String> titles = [];
 
     final url = Uri.parse(_localhost());
-    Response response = await get(url);
+
+    var jwt = await storage.read(key: "jwt");
+    if (jwt == null) throw Exception('Something went wrong!');
+
+    Response response = await get(
+      url,
+      headers: <String, String>{'Authorization': 'Bearer $jwt'},
+    );
 
     if (response.statusCode == 200) {
       sessions = jsonDecode(response.body)['data'];
@@ -54,8 +64,10 @@ class _SessionListScreenState extends State<SessionListScreen> {
       return titles;
     } else if (response.statusCode == 402) {
       throw Exception('No sessions yet!');
+    } else if (response.statusCode == 401) {
+      throw Exception(jsonDecode(response.body)['message']);
     } else {
-      throw Exception('Failed to load the sessions!');
+      throw Exception('Something went wrong!');
     }
   }
 
@@ -156,7 +168,7 @@ class _SessionListScreenState extends State<SessionListScreen> {
             );
           } else if (snapshot.hasError) {
             return Center(
-              child: Text('${snapshot.error}'),
+              child: Text('${snapshot.error}'.split(':')[1]),
             );
           }
 
