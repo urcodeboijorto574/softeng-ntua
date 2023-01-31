@@ -24,7 +24,6 @@ const userSchema = new mongoose.Schema({
     },
     passwordChangedAt: {
         type: Date,
-        default: Date.now().toString()
     },
     questionnairesAnswered: [
         {
@@ -34,6 +33,9 @@ const userSchema = new mongoose.Schema({
     ],
 });
 
+/*
+ This middleware creates trouble for the doanswer endpoint.
+*/
 // document middleware for password encryption. Runs right before the current document is saved in the database
 userSchema.pre('save', async function (next) {
     this.password = await bcrypt.hash(this.password, 12);

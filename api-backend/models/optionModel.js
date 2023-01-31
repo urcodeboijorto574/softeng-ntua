@@ -15,7 +15,6 @@ const optionSchema = new mongoose.Schema(
         },
         nextqID: {
             type: String,
-            required: [true, 'Option must have a next question ID'],
         },
         questionnaireID: {
             type: String,
