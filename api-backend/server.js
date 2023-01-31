@@ -1,5 +1,10 @@
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
+const https = require('https');
+const fs = require('fs');
+
+const key = fs.readFileSync('./key.pem');
+const cert = fs.readFileSync('./cert.pem');
 
 const app = require('./app');
 
@@ -33,9 +38,14 @@ mongoose
 const port = process.env.PORT || 3000;
 
 // save the server
-const server = app.listen(port, () => {
+/* const server = app.listen(port, () => {
     console.log(`App running on port ${port}...`);
-});
+}); */
+const server = https
+    .createServer({ key: key, cert: cert }, app)
+    .listen(port, () => {
+        console.log(`App running on port ${port}...`);
+    });
 
 // αυτος ο listener χειριζεται τα error Που δεν γινονται, δλδ τα promise rejections.
 process.on('unhandledRejection', (err) => {
