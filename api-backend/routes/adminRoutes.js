@@ -1,31 +1,55 @@
 const express = require('express');
 const adminController = require(`${__dirname}/../controllers/adminController.js`);
-const userController = require(`${__dirname}/../controllers/userController.js`);
+const authController = require('./../controllers/authController.js');
 
 const router = express.Router();
 
 router
     .route('/healthcheck')
-    .get(adminController.getHealthcheck);
+    .get(
+        authController.protect,
+        authController.restrictTo('super-admin'),
+        adminController.getHealthcheck
+    );
 
 router
     .route('/questionnaire_upd')
-    .post(adminController.questionnaireUpdate);
+    .post(
+        authController.protect,
+        authController.restrictTo('admin'),
+        adminController.questionnaireUpdate
+    );
 
 router
     .route('/resetall')
-    .post(adminController.resetAll);
+    .post(
+        authController.protect,
+        authController.restrictTo('super-admin'),
+        adminController.resetAll
+    );
 
 router
     .route('/resetq/:questionnaireID')
-    .post(adminController.resetQuestionnaire);
+    .post(
+        authController.protect,
+        authController.restrictTo('super-admin'),
+        adminController.resetQuestionnaire
+    );
 
 router
-    .route('/usermod/:username/:password')
-    .post(userController.userUpdate);
+    .route('/:usermod/:username/:password')
+    .post(
+        authController.protect,
+        authController.restrictTo('super-admin'),
+        authController.createUser
+    );
 
 router
     .route('/users/:username')
-    .get(userController.getUser);
+    .get(
+        authController.protect,
+        authController.restrictTo('super-admin'),
+        authController.getUser
+    );
 
 module.exports = router;
