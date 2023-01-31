@@ -139,6 +139,10 @@ exports.createUser = async (req, res) => {
     }
 };
 
+exports.logout = async (req, res) => {
+    //TODO...
+};
+
 exports.login = async (req, res, next) => {
     const username = req.body.username;
 
