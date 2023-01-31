@@ -9,12 +9,12 @@ const mongoose = require('mongoose');
 /**
  * Creates and stores an answer object in the database.
  * @param {JSON} req - JSON object of which req.params contains the questionnaireID, questionID, sessionID and optionID, and req.body contains the answer text.
- * @param {JSON} res - JSON object that contains a confirmation or decline of the request.
+ * @param {JSON} res - JSON object that contains a confirmation/rejection of the request.
  * @return {JSON} - The response object created.
  * 
  * URL: {baseURL}/doanswer/:questionnaireID/:questionID/:session/:optionID
 */
-exports.doAnswer = async (req, res, next) => { /* WORKING ON IT... */
+exports.doAnswer = async (req, res, next) => {
     let session, option, question, questionnaire,
         newAnswer = {
             qID: req.params.questionID,
@@ -181,3 +181,23 @@ exports.doAnswer = async (req, res, next) => { /* WORKING ON IT... */
     }
     next();
 };
+
+/**
+ * Returns all the answers of a specified session.
+ * @param {JSON} req - JSON object of which req.params contains the questionnaireID and sessionID.
+ * @param {JSON} res - JSON object that contains the data to send.
+ * @return {JSON} - The response object created.
+ * 
+ * URL: {baseURL}getsessionanswers/:questionnaireID/:session
+ */
+exports.getSessionAnswers = async (req, res, next) => { };
+
+/**
+ * Returns all the answers of a specified question.
+ * @param {JSON} req - JSON object of which req.params contains the qustionnaireID and questionID.
+ * @param {JSON} res - JSON object that contains the data to send.
+ * @return {JSON} - The response object created.
+ * 
+ * URL: {baseURL}/getquestionanswers/:questionnaireID/:questionID
+ */
+exports.getQuestionAnswers = async (req, res, next) => { };

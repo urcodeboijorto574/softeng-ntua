@@ -18,7 +18,11 @@ router
 
 router
     .route('/:questionnaireID')
-    // .get(questionnaireController.getQuestionnaire)
+    .get(questionnaireController.getQuestionnaire)
     .delete(questionnaireController.deleteQuestionnaire);
+
+router
+    .route('/userquestionnaires')
+    .get(questionnaireController.getUserQuestionnaires);
 
 module.exports = router;

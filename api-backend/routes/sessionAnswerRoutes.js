@@ -3,8 +3,8 @@ const answerController = require(`${__dirname}/../controllers/answerController.j
 
 const router = express.Router();
 
-// router
-//     .route('/:questionnaireID/:session')
-//     .get(answerController.getSessionAnswers);
+router
+    .route('/:questionnaireID/:session')
+    .get(answerController.getSessionAnswers);
 
 module.exports = router;

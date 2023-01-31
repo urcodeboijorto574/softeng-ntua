@@ -1,4 +1,3 @@
-/* baseURL = http://localhost:{{port}}/intelliq_api */
 const Questionnaire = require(`${__dirname}/../models/questionnaireModel.js`);
 const Question = require(`${__dirname}/../models/questionModel.js`);
 const Option = require(`${__dirname}/../models/optionModel.js`);
@@ -53,6 +52,28 @@ exports.getAllQuestionnaires = async (req, res, next) => {
     }
     next();
 };
+
+/**
+ * Returns all the questionnaires that a specified user has answered.
+ * @param {JSON} req - JSON object that contains the 
+ * @param {JSON} res - JSON object that contains the 
+ * @param {JSON} next - pointer to the next middleware function
+ * @return {JSON} - The response object.
+ * 
+ * URL: {baseURL}/questionnaire/:questionnaireID
+ */
+exports.getUserQuestionnaires = async (req, res, next) => { };
+
+/**
+ * Returns all the info about a questionnaire (and its qusetions).
+ * @param {JSON} req - JSON object of which req.params contains the questionnaireID.
+ * @param {JSON} res - JSOn object that contains the data to send.
+ * @return {JSON} - The response object created.
+ * 
+ * URL: {baseURL}/questionnaire/:questionnaireID/
+ */
+exports.getQuestionnaire = async (req, res, next) => { };
+
 
 /**
  * Removes a questionnaire and all related entities from the DB.
