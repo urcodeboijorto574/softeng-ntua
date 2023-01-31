@@ -1,5 +1,6 @@
 const Session = require(`${__dirname}/../models/sessionModel`);
 const User = require(`${__dirname}/../models/userModel`);
+const dotenv = require('dotenv');
 
 dotenv.config({ path: `${__dirname}/../config.env` });
 
