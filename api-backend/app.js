@@ -30,7 +30,6 @@ app.use(bp.json());
 app.use(bp.urlencoded({ extended: true }));
 
 // authentication endpoints through adminRouter and loginRouter
-//app.use('/intelliq_api/admin', adminRouter);
 app.use('/intelliq_api', loginRouter);
 
 // Admin endpoints
