@@ -140,7 +140,14 @@ exports.createUser = async (req, res) => {
 };
 
 exports.logout = async (req, res) => {
-    //TODO...
+    res.cookie('jwt', 'loggedout', {
+        expires: new Date(Date.now() + 10 * 1000),
+        httpOnly: true,
+    });
+    res.status(200).json({
+        status: 'OK',
+        message: 'You are successfully loged out.',
+    });
 };
 
 exports.login = async (req, res, next) => {
@@ -174,17 +181,26 @@ exports.login = async (req, res, next) => {
             });
         }
     }
-    /* if (user.role != req.body.usermod) {
-        return res.status(401).json({
-            status: 'fail',
-            message: 'Incorrect username or password',
-        });
-    } */
+    if (req.body.usermod) {
+        if (user.role != req.body.usermod) {
+            return res.status(401).json({
+                status: 'fail',
+                message: 'Incorrect username or password',
+            });
+        }
+    }
 
     // 3) If everything ok, send token to the client
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
         expiresIn: process.env.JWT_EXPIRES_IN,
     });
+    const cookieOptions = {
+        expires: new Date(
+            Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
+        ),
+        httpOnly: true,
+    };
+    res.cookie('jwt', token, cookieOptions);
     res.status(200).json({
         token: token,
     });
