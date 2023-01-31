@@ -53,7 +53,8 @@ class _UserLoginScreenState extends State<UserLoginScreen> {
     if (response.statusCode == 200) {
       _formKey.currentState!.reset();
 
-      storage.write(key: "jwt", value: jsonDecode(response.body)['token']);
+      await storage.write(
+          key: "jwt", value: jsonDecode(response.body)['token']);
 
       Navigator.pushAndRemoveUntil(context,
           MaterialPageRoute(builder: (context) {

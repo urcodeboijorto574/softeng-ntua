@@ -5,6 +5,7 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:questionnaires_app/main_screens/answers_overview.dart';
 import 'package:questionnaires_app/main_screens/questionnaire_list.dart';
+import 'package:questionnaires_app/main_screens/user_homescreen.dart';
 import 'package:questionnaires_app/objects/answer.dart';
 import 'package:questionnaires_app/objects/question.dart';
 import 'package:questionnaires_app/widgets/alert_dialog.dart';
@@ -202,9 +203,7 @@ class _QuestionScreenState extends State<QuestionScreen> {
                                       Navigator.pop(context);
                                       Navigator.pushAndRemoveUntil(context,
                                           MaterialPageRoute(builder: (context) {
-                                        return const QuestionnaireListScreen(
-                                          label: 'answer questionnaire',
-                                        );
+                                        return const UserHomeScreen();
                                       }), (route) => false);
                                     },
                                   );

@@ -51,7 +51,8 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
     if (response.statusCode == 200) {
       _formKey.currentState!.reset();
 
-      storage.write(key: "jwt", value: jsonDecode(response.body)['token']);
+      await storage.write(
+          key: "jwt", value: jsonDecode(response.body)['token']);
 
       Navigator.pushReplacementNamed(context, '/choose_action');
     } else {
