@@ -121,7 +121,7 @@ exports.getUserQuestionnaires = async (req, res, next) => { /* OK (NOT TESTED) *
         const user = await User
             .findOne({ username: req.username })
             .populate({
-                path: 'questionnaires',
+                path: 'questionnairesAnswered',
                 model: 'Questionnaire',
                 select: '-_id',
                 sort: 'questionnaireID',
@@ -141,7 +141,7 @@ exports.getUserQuestionnaires = async (req, res, next) => { /* OK (NOT TESTED) *
 
         return res.status(user && user.questionnaires ? 200 : 402).json({
             status: 'success',
-            data: user.questionnaires
+            data: user.questionnairesAnswered
         });
     } catch (err) {
         return res.status(500).json({
