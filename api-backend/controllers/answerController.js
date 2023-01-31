@@ -142,9 +142,7 @@ exports.doAnswer = async (req, res, next) => { /* WORKING ON IT... */
         questionUpdated = true;
 
         if (!option.nextqID) {
-            user.questionnairesAnswered.push(questionnaire._id);
-            /* This is where the problematic middleware breaks the program. (This is a reference to an issue with a middleware in userModel.js) */
-            user = await user.save();
+            await user.update({ $push: { questionnairesAnswered: questionnaire._id } });
         }
 
 
