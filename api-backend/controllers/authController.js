@@ -41,14 +41,9 @@ exports.signup = async (req, res) => {
             role: req.body.usermod,
             password: req.body.password,
         });
-
-        /* const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
-            expiresIn: process.env.JWT_EXPIRES_IN,
-        }); */
         if (req.query.format === 'json' || !req.query.format) {
             res.status(200).json({
                 status: 'OK',
-                //token: token,
             });
         }
     } catch (err) {
@@ -140,10 +135,8 @@ exports.createUser = async (req, res) => {
 };
 
 exports.logout = async (req, res) => {
-    res.cookie('jwt', 'loggedout', {
-        expires: new Date(Date.now() + 10 * 1000),
-        httpOnly: true,
-    });
+    let token = '';
+    req.headers.authorization = token;
     res.status(200).json({
         status: 'OK',
         message: 'You are successfully loged out.',
@@ -194,13 +187,6 @@ exports.login = async (req, res, next) => {
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
         expiresIn: process.env.JWT_EXPIRES_IN,
     });
-    const cookieOptions = {
-        expires: new Date(
-            Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
-        ),
-        httpOnly: true,
-    };
-    res.cookie('jwt', token, cookieOptions);
     res.status(200).json({
         token: token,
     });
@@ -261,7 +247,8 @@ exports.protect = async (req, res, next) => {
         if (err.name === 'JsonWebTokenError') {
             return res.status(401).json({
                 status: 'fail',
-                message: 'Invalid token. Please log in again.',
+                //message: 'Invalid token. Please log in again.',
+                message: 'Please log in to get access.',
             });
         } else if (err.name === 'TokenExpiredError') {
             return res.status(401).json({

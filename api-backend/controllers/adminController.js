@@ -108,7 +108,7 @@ exports.questionnaireUpdate = async (req, res, next) => {
             questionnaireTitle: req.body.questionnaireTitle,
             keywords: req.body.keywords,
             questions: [],
-            createdBy: req.username,
+            creator: req.username,
         });
     } catch (err) {
         let error = { ...err };
