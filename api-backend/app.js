@@ -4,7 +4,7 @@ const dotenv = require('dotenv');
 const bp = require('body-parser');
 
 const adminRouter = require(`${__dirname}/routes/adminRoutes.js`);
-const loginRouter = require(`${__dirname}/routes/loginRoutes.js`);
+const authRouter = require(`${__dirname}/routes/authRoutes.js`);
 const questionnaireRouter = require(`${__dirname}/routes/questionnaireRoutes.js`);
 const questionRouter = require(`${__dirname}/routes/questionRoutes.js`);
 const answerRouter = require(`${__dirname}/routes/answerRoutes.js`);
@@ -35,7 +35,7 @@ app.use((req, res, next) => {
 });
 
 // Authentication endpoints
-app.use('/intelliq_api', loginRouter);
+app.use('/intelliq_api', authRouter);
 
 // Admin endpoints
 app.use('/intelliq_api/admin', adminRouter);
