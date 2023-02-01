@@ -135,11 +135,13 @@ exports.createUser = async (req, res) => {
 };
 
 exports.logout = async (req, res) => {
-    let token = '';
-    req.headers.authorization = token;
+    res.cookie('jwt', 'loggedout', {
+        expires: new Date(Date.now() + 10 * 1000),
+        httpOnly: true,
+    });
     res.status(200).json({
         status: 'OK',
-        message: 'You are successfully loged out.',
+        message: 'You are successfully logged out.',
     });
 };
 
@@ -187,6 +189,12 @@ exports.login = async (req, res, next) => {
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
         expiresIn: process.env.JWT_EXPIRES_IN,
     });
+    res.cookie('jwt', token, {
+        expires: new Date(
+            Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
+        ),
+        httpOnly: true,
+    });
     res.status(200).json({
         token: token,
     });
@@ -203,10 +211,10 @@ exports.protect = async (req, res, next) => {
             req.headers.authorization.startsWith('Bearer')
         ) {
             token = req.headers.authorization.split(' ')[1];
+        } else if (req.headers.cookie) {
+            token = req.headers.cookie.substring(4);
+            console.log(token);
         }
-        /* if (req.headers('X-AUBSERVATORY-AUTH')) {
-            token = req.headers('X-AUBSERVATORY-AUTH');
-        } */
 
         if (!token) {
             return res.status(401).json({
