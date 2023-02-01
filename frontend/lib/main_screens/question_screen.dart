@@ -161,9 +161,10 @@ class _QuestionScreenState extends State<QuestionScreen> {
         key: _formKey,
         child: Scaffold(
           backgroundColor: const Color.fromARGB(255, 9, 52, 58),
-          appBar: const MyAppBar(
+          appBar: MyAppBar(
             elevation: 0,
             height: 90,
+            scaffoldKey: _scaffoldKey,
           ),
           body: Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -344,7 +345,15 @@ class _QuestionScreenState extends State<QuestionScreen> {
                                       )
                                     : MaterialButton(
                                         onPressed: () {
-                                          _clickNext();
+                                          try {
+                                            _clickNext();
+                                          } catch (e) {
+                                            setState(() {
+                                              processing = false;
+                                            });
+                                            MyMessageHandler.showSnackbar(
+                                                _scaffoldKey, e.toString());
+                                          }
                                         },
                                         child: Column(
                                           mainAxisAlignment:

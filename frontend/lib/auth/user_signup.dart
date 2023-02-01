@@ -295,8 +295,12 @@ class _UserSignupScreenState extends State<UserSignupScreen> {
                                   setState(() {
                                     processing = true;
                                   });
-
-                                  await signUpUser();
+                                  try {
+                                    await signUpUser();
+                                  } catch (e) {
+                                    MyMessageHandler.showSnackbar(
+                                        _scaffoldKey, 'Something went wrong!');
+                                  }
 
                                   setState(() {
                                     processing = false;

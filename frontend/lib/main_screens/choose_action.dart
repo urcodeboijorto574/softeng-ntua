@@ -11,9 +11,13 @@ class ChooseActionScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final GlobalKey<ScaffoldMessengerState> _scaffoldKey =
+        GlobalKey<ScaffoldMessengerState>();
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 127, 156, 160),
-      appBar: const MyAppBar(),
+      appBar: MyAppBar(
+        scaffoldKey: _scaffoldKey,
+      ),
       body: Center(
           child: Row(
         mainAxisAlignment: MainAxisAlignment.center,

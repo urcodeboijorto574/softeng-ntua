@@ -17,6 +17,7 @@ import 'package:questionnaires_app/main_screens/statistics_screen.dart';
 import 'package:questionnaires_app/objects/answer.dart';
 import 'package:questionnaires_app/objects/question.dart';
 import 'package:questionnaires_app/widgets/app_bar.dart';
+import 'package:questionnaires_app/widgets/snackbar.dart';
 
 class SessionListScreen extends StatefulWidget {
   final String questionnaireTitle;
@@ -37,6 +38,9 @@ class _SessionListScreenState extends State<SessionListScreen> {
   late Future<List> sessionsTitles;
 
   final storage = const FlutterSecureStorage();
+
+  final GlobalKey<ScaffoldMessengerState> _scaffoldKey =
+      GlobalKey<ScaffoldMessengerState>();
 
   String _localhost() {
     return 'http://127.0.0.1:3000/intelliq_api/sessions/getallsessions/${widget.questionnaireID}';
@@ -63,11 +67,14 @@ class _SessionListScreenState extends State<SessionListScreen> {
       }
       return titles;
     } else if (response.statusCode == 402) {
-      throw Exception('No sessions yet!');
+      return [];
     } else if (response.statusCode == 401) {
-      throw Exception(jsonDecode(response.body)['message']);
+      MyMessageHandler.showSnackbar(
+          _scaffoldKey, jsonDecode(response.body)['message']);
+      return [];
     } else {
-      throw Exception('Something went wrong!');
+      MyMessageHandler.showSnackbar(_scaffoldKey, 'Something went wrong!');
+      return [];
     }
   }
 
@@ -129,7 +136,9 @@ class _SessionListScreenState extends State<SessionListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 127, 156, 160),
-      appBar: const MyAppBar(),
+      appBar: MyAppBar(
+        scaffoldKey: _scaffoldKey,
+      ),
       body: FutureBuilder<List>(
         future: sessionsTitles,
         builder: (context, snapshot) {

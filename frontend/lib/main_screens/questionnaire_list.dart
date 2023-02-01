@@ -21,7 +21,11 @@ import 'package:questionnaires_app/widgets/snackbar.dart';
 
 class QuestionnaireListScreen extends StatefulWidget {
   final String label;
-  const QuestionnaireListScreen({super.key, required this.label});
+
+  const QuestionnaireListScreen({
+    super.key,
+    required this.label,
+  });
 
   @override
   State<QuestionnaireListScreen> createState() =>
@@ -46,7 +50,10 @@ class _QuestionnaireListScreenState extends State<QuestionnaireListScreen> {
 
     final url = Uri.parse(_localhost1());
     var jwt = await storage.read(key: "jwt");
-    if (jwt == null) throw Exception('Something went wrong!');
+    if (jwt == null) {
+      MyMessageHandler.showSnackbar(_scaffoldKey, 'Something went wrong!');
+      return [];
+    }
 
     Response response = await get(
       url,
@@ -61,76 +68,16 @@ class _QuestionnaireListScreenState extends State<QuestionnaireListScreen> {
       }
       return titles;
     } else if (response.statusCode == 402) {
-      throw Exception('No questionnaires yet!');
+      return [];
     } else if (response.statusCode == 401) {
-      throw Exception(jsonDecode(response.body)['message']);
+      MyMessageHandler.showSnackbar(
+          _scaffoldKey, jsonDecode(response.body)['message']);
+      return [];
     } else {
-      throw Exception('Something went wrong!');
+      MyMessageHandler.showSnackbar(_scaffoldKey, 'Something went wrong!');
+      return [];
     }
   }
-
-  // Future<List> _getRestQuestionnaires() async {
-  //   List<String> titles = [];
-  //   List allquestionnaires;
-  //   List answeredquestionnaires;
-
-  //   final url1 = Uri.parse(_localhost1());
-
-  //   var jwt = await storage.read(key: "jwt");
-  //   if (jwt == null) throw Exception('Something went wrong!');
-
-  //   Response response1 = await get(
-  //     url1,
-  //     headers: <String, String>{'Authorization': 'Bearer $jwt'},
-  //   );
-
-  //   if (response1.statusCode == 200) {
-  //     allquestionnaires = jsonDecode(response1.body)['data']['questionnaires'];
-  //   } else if (response1.statusCode == 402) {
-  //     throw Exception('No questionnaires yet!');
-  //   } else if (response1.statusCode == 401) {
-  //     throw Exception(jsonDecode(response1.body)['message']);
-  //   } else {
-  //     throw Exception('Something went wrong!');
-  //   }
-
-  //   final url2 = Uri.parse(_localhost2());
-
-  //   Response response2 = await get(
-  //     url2,
-  //     headers: <String, String>{'Authorization': 'Bearer $jwt'},
-  //   );
-
-  //   if (response2.statusCode == 200) {
-  //     answeredquestionnaires = jsonDecode(response2.body)['data'];
-  //   } else if (response2.statusCode == 402) {
-  //     throw Exception('No questionnaires answered yet!');
-  //   } else if (response2.statusCode == 401) {
-  //     throw Exception(jsonDecode(response2.body)['message']);
-  //   } else {
-  //     throw Exception('Something went wrong!');
-  //   }
-  //   int temp = 0;
-  //   questionnaires = [];
-
-  //   for (int i = 0; i < answeredquestionnaires.length; i++) {
-  //     while (allquestionnaires[temp]['questionnaireID'] !=
-  //         answeredquestionnaires[i]['questionnaireID']) {
-  //       questionnaires.add(allquestionnaires[temp]);
-  //       temp++;
-  //     }
-  //     temp++;
-  //   }
-
-  //   for (int i = temp; i < allquestionnaires.length; i++) {
-  //     questionnaires.add(allquestionnaires[i]);
-  //   }
-
-  //   for (int i = 0; i < questionnaires.length; i++) {
-  //     titles.add(questionnaires[i]['questionnaireTitle']);
-  //   }
-  //   return titles;
-  // }
 
   String _localhost2() {
     return 'http://127.0.0.1:3000/intelliq_api/questionnaire/userquestionnaires';
@@ -141,7 +88,10 @@ class _QuestionnaireListScreenState extends State<QuestionnaireListScreen> {
 
     final url = Uri.parse(_localhost2());
     var jwt = await storage.read(key: "jwt");
-    if (jwt == null) throw Exception('Something went wrong!');
+    if (jwt == null) {
+      MyMessageHandler.showSnackbar(_scaffoldKey, 'Something went wrong!');
+      return [];
+    }
 
     Response response = await get(
       url,
@@ -156,11 +106,14 @@ class _QuestionnaireListScreenState extends State<QuestionnaireListScreen> {
       }
       return titles;
     } else if (response.statusCode == 402) {
-      throw Exception('No questionnaires answered yet!');
+      return [];
     } else if (response.statusCode == 401) {
-      throw Exception(jsonDecode(response.body)['message']);
+      MyMessageHandler.showSnackbar(
+          _scaffoldKey, jsonDecode(response.body)['message']);
+      return [];
     } else {
-      throw Exception('Something went wrong!');
+      MyMessageHandler.showSnackbar(_scaffoldKey, 'Something went wrong!');
+      return [];
     }
   }
 
@@ -173,7 +126,10 @@ class _QuestionnaireListScreenState extends State<QuestionnaireListScreen> {
 
     final url = Uri.parse(_localhost3());
     var jwt = await storage.read(key: "jwt");
-    if (jwt == null) throw Exception('Something went wrong!');
+    if (jwt == null) {
+      MyMessageHandler.showSnackbar(_scaffoldKey, 'Something went wrong!');
+      return [];
+    }
 
     Response response = await get(
       url,
@@ -188,11 +144,14 @@ class _QuestionnaireListScreenState extends State<QuestionnaireListScreen> {
       }
       return titles;
     } else if (response.statusCode == 402) {
-      throw Exception('No questionnaires answered yet!');
+      return [];
     } else if (response.statusCode == 401) {
-      throw Exception(jsonDecode(response.body)['message']);
+      MyMessageHandler.showSnackbar(
+          _scaffoldKey, jsonDecode(response.body)['message']);
+      return [];
     } else {
-      throw Exception('Something went wrong!');
+      MyMessageHandler.showSnackbar(_scaffoldKey, 'Something went wrong!');
+      return [];
     }
   }
 
@@ -249,7 +208,10 @@ class _QuestionnaireListScreenState extends State<QuestionnaireListScreen> {
   Future<dynamic> getSession(String questionnaireID) async {
     final url = Uri.parse('${_localhost4()}/$questionnaireID');
     var jwt = await storage.read(key: "jwt");
-    if (jwt == null) throw Exception('Something went wrong!');
+    if (jwt == null) {
+      MyMessageHandler.showSnackbar(_scaffoldKey, 'Something went wrong!');
+      return [];
+    }
 
     Response response = await get(
       url,
@@ -261,11 +223,14 @@ class _QuestionnaireListScreenState extends State<QuestionnaireListScreen> {
 
       return session;
     } else if (response.statusCode == 402) {
-      throw Exception('No session found');
+      return null;
     } else if (response.statusCode == 401) {
-      throw Exception(jsonDecode(response.body)['message']);
+      MyMessageHandler.showSnackbar(
+          _scaffoldKey, jsonDecode(response.body)['message']);
+      return [];
     } else {
-      throw Exception('Something went wrong!');
+      MyMessageHandler.showSnackbar(_scaffoldKey, 'Something went wrong!');
+      return [];
     }
   }
 
@@ -318,6 +283,18 @@ class _QuestionnaireListScreenState extends State<QuestionnaireListScreen> {
   @override
   void initState() {
     super.initState();
+    Future(() {
+      if (isSubmitted!) {
+        MyMessageHandler.showSnackbar(
+            _scaffoldKey, 'Your answers were submitted successfully!',
+            color: Colors.green);
+
+        setState(() {
+          isSubmitted = false;
+        });
+      }
+    });
+
     setState(() {
       if (widget.label == 'answered questionnaires') {
         questionnaireTitles = _getUserQuestionnaires();
@@ -345,22 +322,22 @@ class _QuestionnaireListScreenState extends State<QuestionnaireListScreen> {
                 itemBuilder: (context, index) {
                   return InkWell(
                     onTap: () async {
-                      if (widget.label == 'answer questionnaire') {
-                        answerQuestionnaire(index);
-                      } else if (widget.label == 'show statistics') {
-                        showStatistics(index);
-                      } else if (widget.label == 'view answers') {
-                        showSessions(index);
-                      } else if (widget.label == 'answered questionnaires') {
-                        try {
+                      try {
+                        if (widget.label == 'answer questionnaire') {
+                          answerQuestionnaire(index);
+                        } else if (widget.label == 'show statistics') {
+                          showStatistics(index);
+                        } else if (widget.label == 'view answers') {
+                          showSessions(index);
+                        } else if (widget.label == 'answered questionnaires') {
                           dynamic session = await getSession(
                               questionnaires[index]['questionnaireID']);
 
                           showMySession(session, questionnaires[index]);
-                        } on Exception catch (e) {
-                          MyMessageHandler.showSnackbar(
-                              _scaffoldKey, e.toString());
                         }
+                      } catch (e) {
+                        MyMessageHandler.showSnackbar(
+                            _scaffoldKey, 'Something went wrong!');
                       }
                     },
                     child: Card(
@@ -393,7 +370,7 @@ class _QuestionnaireListScreenState extends State<QuestionnaireListScreen> {
               );
             } else if (snapshot.hasError) {
               return Center(
-                child: Text('${snapshot.error}'.split(':')[1]),
+                child: Text('${snapshot.error}'),
               );
             }
 

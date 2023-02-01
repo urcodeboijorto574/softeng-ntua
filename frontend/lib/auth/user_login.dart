@@ -262,8 +262,12 @@ class _UserLoginScreenState extends State<UserLoginScreen> {
                                   setState(() {
                                     processing = true;
                                   });
-
-                                  await logInUser();
+                                  try {
+                                    await logInUser();
+                                  } catch (e) {
+                                    MyMessageHandler.showSnackbar(
+                                        _scaffoldKey, 'Something went wrong!');
+                                  }
 
                                   setState(() {
                                     processing = false;

@@ -18,6 +18,9 @@ class StatisticsScreen extends StatefulWidget {
 }
 
 class _StatisticsScreenState extends State<StatisticsScreen> {
+  final GlobalKey<ScaffoldMessengerState> _scaffoldKey =
+      GlobalKey<ScaffoldMessengerState>();
+
   Map<String, double> dataMap(int index) {
     Map<String, double> temp_map = {};
     Map<String, double> temp = {};
@@ -52,9 +55,10 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 9, 52, 58),
-      appBar: const MyAppBar(
+      appBar: MyAppBar(
         elevation: 0,
         height: 90,
+        scaffoldKey: _scaffoldKey,
       ),
       body: Row(
         mainAxisAlignment: MainAxisAlignment.center,

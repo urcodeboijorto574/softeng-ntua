@@ -14,38 +14,47 @@ class AdminQuestionnaireList extends StatefulWidget {
 }
 
 class _AdminQuestionnaireListState extends State<AdminQuestionnaireList> {
+  final GlobalKey<ScaffoldMessengerState> _scaffoldKey =
+      GlobalKey<ScaffoldMessengerState>();
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 127, 156, 160),
-      appBar: const MyAppBar(),
-      body: QuestionnaireListScreen(label: widget.label),
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.all(40.0),
-        child: FloatingActionButton.extended(
-          onPressed: () {
-            Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => const ChooseActionScreen()),
-                (route) => false);
-          },
-          label: const Padding(
-            padding: EdgeInsets.only(bottom: 10),
-            child: Text(
-              'Back',
-              style: TextStyle(
-                color: Color.fromARGB(255, 9, 52, 58),
-                fontWeight: FontWeight.w600,
-                fontSize: 15,
+    return ScaffoldMessenger(
+      key: _scaffoldKey,
+      child: Scaffold(
+        backgroundColor: const Color.fromARGB(255, 127, 156, 160),
+        appBar: MyAppBar(
+          scaffoldKey: _scaffoldKey,
+        ),
+        body: QuestionnaireListScreen(
+          label: widget.label,
+        ),
+        floatingActionButton: Padding(
+          padding: const EdgeInsets.all(40.0),
+          child: FloatingActionButton.extended(
+            onPressed: () {
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const ChooseActionScreen()),
+                  (route) => false);
+            },
+            label: const Padding(
+              padding: EdgeInsets.only(bottom: 10),
+              child: Text(
+                'Back',
+                style: TextStyle(
+                  color: Color.fromARGB(255, 9, 52, 58),
+                  fontWeight: FontWeight.w600,
+                  fontSize: 15,
+                ),
               ),
             ),
+            icon: const Icon(
+              Icons.arrow_back,
+              color: Color.fromARGB(255, 9, 52, 58),
+            ),
+            backgroundColor: Colors.pink,
           ),
-          icon: const Icon(
-            Icons.arrow_back,
-            color: Color.fromARGB(255, 9, 52, 58),
-          ),
-          backgroundColor: Colors.pink,
         ),
       ),
     );

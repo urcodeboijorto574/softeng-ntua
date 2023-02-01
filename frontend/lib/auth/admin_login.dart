@@ -258,7 +258,12 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
                                     processing = true;
                                   });
 
-                                  await logInAdmin();
+                                  try {
+                                    await logInAdmin();
+                                  } catch (e) {
+                                    MyMessageHandler.showSnackbar(
+                                        _scaffoldKey, 'Something went wrong!');
+                                  }
 
                                   setState(() {
                                     processing = false;

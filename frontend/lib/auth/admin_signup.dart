@@ -295,8 +295,12 @@ class _AdminSignupScreenState extends State<AdminSignupScreen> {
                                   setState(() {
                                     processing = true;
                                   });
-
-                                  await signUpAdmin();
+                                  try {
+                                    await signUpAdmin();
+                                  } catch (e) {
+                                    MyMessageHandler.showSnackbar(
+                                        _scaffoldKey, 'Something went wrong!');
+                                  }
 
                                   setState(() {
                                     processing = false;

@@ -13,6 +13,8 @@ import 'package:questionnaires_app/widgets/alert_dialog.dart';
 import 'package:questionnaires_app/widgets/app_bar.dart';
 import 'package:questionnaires_app/widgets/snackbar.dart';
 
+bool? isSubmitted = false;
+
 String generateRandomString(int len) {
   var r = Random();
   const _chars =
@@ -109,9 +111,10 @@ class _AnswersOverviewScreenState extends State<AnswersOverviewScreen> {
       key: _scaffoldKey,
       child: Scaffold(
         backgroundColor: const Color.fromARGB(255, 9, 52, 58),
-        appBar: const MyAppBar(
+        appBar: MyAppBar(
           elevation: 0,
           height: 90,
+          scaffoldKey: _scaffoldKey,
         ),
         body: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -255,11 +258,13 @@ class _AnswersOverviewScreenState extends State<AnswersOverviewScreen> {
                                             widget.answers[i], sessionID);
                                       }
 
+                                      isSubmitted = true;
+
                                       Navigator.pushAndRemoveUntil(context,
                                           MaterialPageRoute(builder: (context) {
                                         return const UserHomeScreen();
                                       }), (route) => false);
-                                    } on Exception catch (e) {
+                                    } catch (e) {
                                       MyMessageHandler.showSnackbar(
                                           _scaffoldKey, e.toString());
                                     }

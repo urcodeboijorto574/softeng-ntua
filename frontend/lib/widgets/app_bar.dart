@@ -1,15 +1,21 @@
+import 'dart:convert';
 import 'dart:html';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:http/http.dart';
 import 'package:questionnaires_app/widgets/alert_dialog.dart';
+import 'package:questionnaires_app/widgets/snackbar.dart';
 
 class MyAppBar extends StatelessWidget with PreferredSizeWidget {
   final double elevation;
   final double height;
+  final GlobalKey<ScaffoldMessengerState> scaffoldKey;
   const MyAppBar({
     super.key,
     this.elevation = 4,
     this.height = 100,
+    required this.scaffoldKey,
   });
 
   @override
@@ -17,6 +23,40 @@ class MyAppBar extends StatelessWidget with PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    const storage = FlutterSecureStorage();
+
+    String _localhost() {
+      return 'http://127.0.0.1:3000/intelliq_api/logout';
+    }
+
+    Future<void> logOutUser() async {
+      final url = Uri.parse(_localhost());
+
+      var jwt = await storage.read(key: "jwt");
+      if (jwt == null) throw Exception('Something went wrong!');
+
+      Response response = await post(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          "Access-Control-Allow-Origin": "*",
+          'Accept': '*/*',
+          'Allow': '*',
+          'Authorization': 'Bearer $jwt'
+        },
+        body: jsonEncode(<String, String>{}),
+      );
+
+      if (response.statusCode == 200) {
+        Navigator.pop(context);
+        Navigator.pushReplacementNamed(context, '/welcome_screen');
+      } else {
+        Navigator.pop(context);
+        MyMessageHandler.showSnackbar(
+            scaffoldKey, jsonDecode(response.body)['message']);
+      }
+    }
+
     return AppBar(
       elevation: elevation,
       toolbarHeight: height,
