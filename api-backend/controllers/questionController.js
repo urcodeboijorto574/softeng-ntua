@@ -8,4 +8,7 @@ const Question = require(`${__dirname}/../models/questionModel.js`);
  * 
  * URL: {baseURL}/question/:questionnaireID/:questionID
  */
-expotrts.getQuestion = async (req, res, next) => { };
+exports.getQuestion = async (req, res, next) => {
+    /* This line is added only for temporary purposes */
+    return res.status('418').json({ status: 'no operation', message: 'I\'m a teapot' });
+};

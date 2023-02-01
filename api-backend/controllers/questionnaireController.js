@@ -62,7 +62,10 @@ exports.getAllQuestionnaires = async (req, res, next) => {
  * 
  * URL: {baseURL}/questionnaire/:questionnaireID
  */
-exports.getUserQuestionnaires = async (req, res, next) => { };
+exports.getUserQuestionnaires = async (req, res, next) => {
+    /* This line is added only for temporary purposes */
+    return res.status('418').json({ status: 'no operation', message: 'I\'m a teapot' });
+};
 
 /**
  * Returns all the info about a questionnaire (and its qusetions).
@@ -72,25 +75,34 @@ exports.getUserQuestionnaires = async (req, res, next) => { };
  * 
  * URL: {baseURL}/questionnaire/:questionnaireID/
  */
-exports.getQuestionnaire = async (req, res, next) => { };
+exports.getQuestionnaire = async (req, res, next) => {
+    /* This line is added only for temporary purposes */
+    return res.status('418').json({ status: 'no operation', message: 'I\'m a teapot' });
+};
 
 
 /**
  * Removes a questionnaire and all related entities from the DB.
  * @param {JSON} req - JSON object that contains the questionnaireID of the to-be-deleted questionnaire.
- * @param {JSON} res - JSON object taht contains the data to send.
+ * @param {JSON} res - JSON object that contains the data to send.
  * @return {JSON} - The response object created.
  * 
  * URL:  {baseURL}/questionnaire/:questionnaireID
  */
-exports.deleteQuestionnaire = async (req, res, next) => { };
+exports.deleteQuestionnaire = async (req, res, next) => {
+    /* This line is added only for temporary purposes */
+    return res.status('418').json({ status: 'no operation', message: 'I\'m a teapot' });
+};
 
 /**
  * Returns all the questionnaires that a user has answered.
  * @param {JSON} req - JSON object that contains the username of the specified user.
- * @param {JSON} res - JSON object taht contains the data to send.
+ * @param {JSON} res - JSON object that contains the data to send.
  * @return {JSON} - The response object created.
  * 
  * URL: {baseURL}/questionnaire/userquestionnaires/:username
  */
-exports.getUserQuestionnaires = async (req, res, next) => { };
+exports.getUserQuestionnaires = async (req, res, next) => {
+    /* This line is added only for temporary purposes */
+    return res.status('418').json({ status: 'no operation', message: 'I\'m a teapot' });
+};

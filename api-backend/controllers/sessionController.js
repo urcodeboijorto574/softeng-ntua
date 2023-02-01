@@ -12,7 +12,10 @@ dotenv.config({ path: `${__dirname}/../config.env` });
  * 
  * URL: {baseURL}/sessions/getallsessions/:questionnaireID
  */
-exports.getAllSessions = async (req, res, next) => { };
+exports.getAllSessions = async (req, res, next) => {
+    /* This line is added only for temporary purposes */
+    return res.status('418').json({ status: 'no operation', message: 'I\'m a teapot' });
+};
 
 /**
  * Returns every session's ID that exists in the data base.
@@ -22,7 +25,10 @@ exports.getAllSessions = async (req, res, next) => { };
  * 
  * URL: {baseURL}/sessions/sessionids
  */
-exports.getAllSessionsIDs = async (req, res, next) => { };
+exports.getAllSessionsIDs = async (req, res, next) => {
+    /* This line is added only for temporary purposes */
+    return res.status('418').json({ status: 'no operation', message: 'I\'m a teapot' });
+};
 
 /**
  * Returns all the questionnaires answered by a specified user.
@@ -32,4 +38,7 @@ exports.getAllSessionsIDs = async (req, res, next) => { };
  * 
  * URL: {baseURL}/sessions/getsession/:username/:questionnaireID
  */
-exports.getSession = async (req, res, next) => { };
+exports.getSession = async (req, res, next) => {
+    /* This line is added only for temporary purposes */
+    return res.status('418').json({ status: 'no operation', message: 'I\'m a teapot' });
+};

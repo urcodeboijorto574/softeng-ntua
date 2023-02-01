@@ -15,7 +15,10 @@ const Models = [Answer, Session, Option, Question, Questionnaire, User];
  * 
  * URL: {baseURL}/dummy-data/import
  */
-exports.importData = async (req, res, next) => { };
+exports.importData = async (req, res, next) => {
+    /* This line is added only for temporary purposes */
+    return res.status('418').json({ status: 'no operation', message: 'I\'m a teapot' });
+};
 
 /**
  * Deletes all the data from the DB.
@@ -25,4 +28,7 @@ exports.importData = async (req, res, next) => { };
  * 
  * URL: {baseURL}/dummy-data/delete
  */
-exports.deleteData = async (req, res, next) => { };
+exports.deleteData = async (req, res, next) => {
+    /* This line is added only for temporary purposes */
+    return res.status('418').json({ status: 'no operation', message: 'I\'m a teapot' });
+};

@@ -26,17 +26,14 @@ exports.doAnswer = async (req, res, next) => {
         newAnswerCreated = false, optionUpdated = false, questionUpdated = false;
     try {
         /* 1) CHECK VALIDITY OF PARAMETERS GIVEN */
-
         /* If user is not allowed to answer, reject the request */
         let user = await User
             .findOne({ username: req.username, role: 'user' }, '_id role questionnairesAnswered')
             .populate('questionnairesAnswered', 'questionnaireID');
-        if (!user || user.role !== 'user') {
-            if (!user) console.log('!user');
-            else if (user.role !== 'user') console.log('user.role !== \'user\'');
+        if (!user || user.role !== 'user') { /* This check happens in authorization. It unnecessary here. */
             return res.status(400).json({
                 status: 'failed',
-                message: 'User doesn\'t have permissions to answer'
+                message: (!user ? 'User does not exist' : 'User doesn\'t have permissions to answer')
             });
         }
 
@@ -52,7 +49,7 @@ exports.doAnswer = async (req, res, next) => {
                     path: 'options',
                     model: 'Option',
                     match: { optID: req.params.optionID },
-                    select: '_id optID wasChosenBy nextqID',
+                    select: '_id optID wasChosenBy nextqID opttxt',
                 }
             });
 
@@ -77,7 +74,6 @@ exports.doAnswer = async (req, res, next) => {
 
 
         /* 2) CHECK IF A SESSION ALREADY EXISTS */
-
         session = await Session
             .findOne({ sessionID: req.params.session }, '-questionnaireID -__v')
             .populate('answers', '_id qID optID answertext');
@@ -106,8 +102,11 @@ exports.doAnswer = async (req, res, next) => {
                     return res.status(400).json({
                         status: 'failed',
                         message: 'An answer has already been submitted for this question',
-                        'previous option': session.answers[answerIndex].opttxt,
-                        'previous answer': session.answers[answerIndex].answertext,
+                        'previous answer': (
+                            session.answers[answerIndex].answertext !== '' ?
+                                session.answers[answerIndex].answertext :
+                                (await Option.findOne({ optID: session.answers[answerIndex].optID })).opttxt
+                        )
                     });
                 }
             }
@@ -123,7 +122,6 @@ exports.doAnswer = async (req, res, next) => {
 
 
         /* 3) SUBMIT NEW ANSWER TO DB */
-
         newAnswer = await Answer.create(newAnswer);
         newAnswerCreated = true;
         session.answers.push(newAnswer._id);
@@ -132,7 +130,6 @@ exports.doAnswer = async (req, res, next) => {
 
 
         /* 4) UPDATE FIELDS IN RELEVANT DOCUMENTS (questions & options) */
-
         option.wasChosenBy += 1;
         option = await option.save();
         optionUpdated = true;
@@ -141,18 +138,17 @@ exports.doAnswer = async (req, res, next) => {
         question = await question.save();
         questionUpdated = true;
 
-        if (!option.nextqID) {
-            user.questionnairesAnswered.push(questionnaire._id);
-            /* This is where the problematic middleware breaks the program. (This is a reference to an issue with a middleware in userModel.js) */
-            user = await user.save();
+        if (option.nextqID === '-') {
+            const alreadyAnswered = user['questionnairesAnswered'].some(q => q['_id'].toString() === questionnaire._id.toString());
+            if (!alreadyAnswered) {
+                await user.update({ $push: { questionnairesAnswered: questionnaire._id } });
+            }
         }
 
 
         /* 5) SEND RESPONSE */
-
         const message = 'Answer submitted!';
         console.log(message);
-
         return res.status(200).json({
             status: 'OK',
             message
@@ -190,7 +186,10 @@ exports.doAnswer = async (req, res, next) => {
  * 
  * URL: {baseURL}getsessionanswers/:questionnaireID/:session
  */
-exports.getSessionAnswers = async (req, res, next) => { };
+exports.getSessionAnswers = async (req, res, next) => {
+    /* This line is added only for temporary purposes */
+    return res.status('418').json({ status: 'no operation', message: 'I\'m a teapot' });
+};
 
 /**
  * Returns all the answers of a specified question.
@@ -200,4 +199,7 @@ exports.getSessionAnswers = async (req, res, next) => { };
  * 
  * URL: {baseURL}/getquestionanswers/:questionnaireID/:questionID
  */
-exports.getQuestionAnswers = async (req, res, next) => { };
+exports.getQuestionAnswers = async (req, res, next) => {
+    /* This line is added only for temporary purposes */
+    return res.status('418').json({ status: 'no operation', message: 'I\'m a teapot' });
+};
