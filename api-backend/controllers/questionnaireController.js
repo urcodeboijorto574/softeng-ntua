@@ -139,13 +139,12 @@ exports.deleteQuestionnaire = async (req, res, next) => {
  * @param {JSON} res - JSON object that contains the data to send.
  * @return {JSON} - The response object created.
  * 
- * URL: {baseURL}/questionnaire/userquestionnaires/:username
+ * URL: {baseURL}/questionnaire/userquestionnaires
  */
-exports.getUserQuestionnaires = async (req, res, next) => { /* OK (NOT TESTED) */
+exports.getUserAnsweredQuestionnaires = async (req, res, next) => { /* OK (NOT TESTED) */
     try {
-        const queryObj = req.param;
         const user = await User
-            .findOne({ username: req.username })
+            .findOne({ username: req.username }, 'questionnairesAnswered -_id')
             .populate({
                 path: 'questionnairesAnswered',
                 model: 'Questionnaire',
@@ -165,14 +164,55 @@ exports.getUserQuestionnaires = async (req, res, next) => { /* OK (NOT TESTED) *
                 }
             });
 
-        return res.status(user && user.questionnaires ? 200 : 402).json({
+        const questionnaires = user.questionnairesAnswered;
+        const questionnairesFound = questionnaires && questionnaires.length > 0;
+
+        return res.status(questionnairesFound ? 200 : 402).json({
             status: 'success',
-            data: user.questionnairesAnswered
+            data: questionnaires
         });
     } catch (err) {
         return res.status(500).json({
             status: 'fail',
             msg: err
+        });
+    }
+    next();
+};
+
+/**
+ * Return all questionnaires that are created by a specified admin.
+ * @param {JSON} req - JSON object of which req.params contains the questionnaireID.
+ * @param {JSON} res - JSON object that contains the response.
+ * @return {JSON} - The response object.
+ */
+exports.getUserCreatedQuestionnaires = async (req, res, next) => {
+    try {
+        const questionnaires = await Questionnaire
+            .find({ creator: req.username }, '-_id')
+            .sort('questionnaireID')
+            .populate({
+                path: 'questions',
+                model: 'Question',
+                select: '-_id -__v -questionnaireID -wasAnsweredBy',
+                sort: 'qID',
+                populate: {
+                    path: 'options',
+                    model: 'Option',
+                    select: '-_id -__v',
+                    sort: 'optID',
+                },
+            });
+
+        const questionnairesFound = questionnaires && questionnaires.length > 0;
+        return res.status(questionnairesFound ? 200 : 402).json({
+            status: 'OK',
+            data: questionnaires
+        });
+    } catch (err) {
+        return res.status(500).json({
+            status: 'failed',
+            message: err
         });
     }
     next();
