@@ -2,11 +2,12 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const Session = require(`${__dirname}/../models/sessionModel`);
 const User = require(`${__dirname}/../models/userModel`);
+const dotenv = require('dotenv');
 
 dotenv.config({ path: `${__dirname}/../config.env` });
 
 /**
- * Returns every session's ID currently in the data base.
+ * Returns every sessions of a specified questionnaire.
  * @param {JSON} req - JSON object that contains the questionnaireID of the specified questionnaire.
  * @param {JSON} res - JSON object that contains the data to send.
  * @return {JSON} - The response object.

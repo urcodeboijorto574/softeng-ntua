@@ -9,12 +9,12 @@ const mongoose = require('mongoose');
 /**
  * Creates and stores an answer object in the database.
  * @param {JSON} req - JSON object of which req.params contains the questionnaireID, questionID, sessionID and optionID, and req.body contains the answer text.
- * @param {JSON} res - JSON object that contains a confirmation or decline of the request.
+ * @param {JSON} res - JSON object that contains a confirmation/rejection of the request.
  * @return {JSON} - The response object created.
  * 
  * URL: {baseURL}/doanswer/:questionnaireID/:questionID/:session/:optionID
 */
-exports.doAnswer = async (req, res, next) => { /* WORKING ON IT... */
+exports.doAnswer = async (req, res, next) => {
     let session, option, question, questionnaire,
         newAnswer = {
             qID: req.params.questionID,
@@ -26,17 +26,14 @@ exports.doAnswer = async (req, res, next) => { /* WORKING ON IT... */
         newAnswerCreated = false, optionUpdated = false, questionUpdated = false;
     try {
         /* 1) CHECK VALIDITY OF PARAMETERS GIVEN */
-
         /* If user is not allowed to answer, reject the request */
         let user = await User
             .findOne({ username: req.username, role: 'user' }, '_id role questionnairesAnswered')
             .populate('questionnairesAnswered', 'questionnaireID');
-        if (!user || user.role !== 'user') {
-            if (!user) console.log('!user');
-            else if (user.role !== 'user') console.log('user.role !== \'user\'');
+        if (!user || user.role !== 'user') { /* This check happens in authorization. It unnecessary here. */
             return res.status(400).json({
                 status: 'failed',
-                message: 'User doesn\'t have permissions to answer'
+                message: (!user ? 'User does not exist' : 'User doesn\'t have permissions to answer')
             });
         }
 
@@ -52,7 +49,7 @@ exports.doAnswer = async (req, res, next) => { /* WORKING ON IT... */
                     path: 'options',
                     model: 'Option',
                     match: { optID: req.params.optionID },
-                    select: '_id optID wasChosenBy nextqID',
+                    select: '_id optID wasChosenBy nextqID opttxt',
                 }
             });
 
@@ -77,7 +74,6 @@ exports.doAnswer = async (req, res, next) => { /* WORKING ON IT... */
 
 
         /* 2) CHECK IF A SESSION ALREADY EXISTS */
-
         session = await Session
             .findOne({ sessionID: req.params.session }, '-questionnaireID -__v')
             .populate('answers', '_id qID optID answertext');
@@ -106,8 +102,11 @@ exports.doAnswer = async (req, res, next) => { /* WORKING ON IT... */
                     return res.status(400).json({
                         status: 'failed',
                         message: 'An answer has already been submitted for this question',
-                        'previous option': session.answers[answerIndex].opttxt,
-                        'previous answer': session.answers[answerIndex].answertext,
+                        'previous answer': (
+                            session.answers[answerIndex].answertext !== '' ?
+                                session.answers[answerIndex].answertext :
+                                (await Option.findOne({ optID: session.answers[answerIndex].optID })).opttxt
+                        )
                     });
                 }
             }
@@ -123,7 +122,6 @@ exports.doAnswer = async (req, res, next) => { /* WORKING ON IT... */
 
 
         /* 3) SUBMIT NEW ANSWER TO DB */
-
         newAnswer = await Answer.create(newAnswer);
         newAnswerCreated = true;
         session.answers.push(newAnswer._id);
@@ -132,7 +130,6 @@ exports.doAnswer = async (req, res, next) => { /* WORKING ON IT... */
 
 
         /* 4) UPDATE FIELDS IN RELEVANT DOCUMENTS (questions & options) */
-
         option.wasChosenBy += 1;
         option = await option.save();
         optionUpdated = true;
@@ -141,16 +138,17 @@ exports.doAnswer = async (req, res, next) => { /* WORKING ON IT... */
         question = await question.save();
         questionUpdated = true;
 
-        if (!option.nextqID) {
-            await user.update({ $push: { questionnairesAnswered: questionnaire._id } });
+        if (option.nextqID === '-') {
+            const alreadyAnswered = user['questionnairesAnswered'].some(q => q['_id'].toString() === questionnaire._id.toString());
+            if (!alreadyAnswered) {
+                await user.update({ $push: { questionnairesAnswered: questionnaire._id } });
+            }
         }
 
 
         /* 5) SEND RESPONSE */
-
         const message = 'Answer submitted!';
         console.log(message);
-
         return res.status(200).json({
             status: 'OK',
             message
@@ -178,4 +176,30 @@ exports.doAnswer = async (req, res, next) => { /* WORKING ON IT... */
         });
     }
     next();
+};
+
+/**
+ * Returns all the answers of a specified session.
+ * @param {JSON} req - JSON object of which req.params contains the questionnaireID and sessionID.
+ * @param {JSON} res - JSON object that contains the data to send.
+ * @return {JSON} - The response object created.
+ * 
+ * URL: {baseURL}getsessionanswers/:questionnaireID/:session
+ */
+exports.getSessionAnswers = async (req, res, next) => {
+    /* This line is added only for temporary purposes */
+    return res.status('418').json({ status: 'no operation', message: 'I\'m a teapot' });
+};
+
+/**
+ * Returns all the answers of a specified question.
+ * @param {JSON} req - JSON object of which req.params contains the qustionnaireID and questionID.
+ * @param {JSON} res - JSON object that contains the data to send.
+ * @return {JSON} - The response object created.
+ * 
+ * URL: {baseURL}/getquestionanswers/:questionnaireID/:questionID
+ */
+exports.getQuestionAnswers = async (req, res, next) => {
+    /* This line is added only for temporary purposes */
+    return res.status('418').json({ status: 'no operation', message: 'I\'m a teapot' });
 };

@@ -39,7 +39,7 @@ const server = app.listen(port, () => {
 
 // αυτος ο listener χειριζεται τα error Που δεν γινονται, δλδ τα promise rejections.
 process.on('unhandledRejection', (err) => {
-    console.log(err);
+    console.log(err.name, err.message);
     console.log('UNHANDLED REJECTION! Shutting down...');
     server.close(() => {
         process.exit(1);
