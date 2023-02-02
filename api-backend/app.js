@@ -11,6 +11,7 @@ const questionAnswerRouter = require(`${__dirname}/routes/questionAnswerRoutes.j
 const sessionRouter = require(`${__dirname}/routes/sessionRoutes.js`);
 const importRouter = require(`${__dirname}/routes/importRoutes.js`);
 const bp = require('body-parser');
+const cookieParser = require('cookie-parser');
 
 const app = express();
 
@@ -21,6 +22,8 @@ dotenv.config({ path: './config.env' });
 if (process.env.NODE_ENV === 'development') {
     app.use(morgan('dev'));
 }
+
+app.use(cookieParser());
 
 // Global middleware
 // middleware to parse the request object

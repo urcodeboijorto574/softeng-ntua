@@ -4,6 +4,7 @@ const User = require('./../models/userModel');
 const AppError = require('./../utils/appError');
 const converter = require('json-2-csv');
 const csv = require('csv-express');
+const cookieParser = require('cookie-parser');
 
 /* const returnCSV = (jsonData, headers) => {
     let csvData = headers.join(',') + "\r\n"
@@ -138,6 +139,8 @@ exports.logout = async (req, res) => {
     res.cookie('jwt', 'loggedout', {
         expires: new Date(Date.now() + 10 * 1000),
         httpOnly: true,
+        sameSite: 'None',
+        secure: true,
     });
     res.status(200).json({
         status: 'OK',
@@ -190,10 +193,15 @@ exports.login = async (req, res, next) => {
         expiresIn: process.env.JWT_EXPIRES_IN,
     });
     res.cookie('jwt', token, {
-        expires: new Date(
-            Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
+        expires: parseInt(
+            new Date(
+                Date.now() +
+                    process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
+            )
         ),
         httpOnly: true,
+        sameSize: 'None',
+        secure: true,
     });
     res.status(200).json({
         token: token,
@@ -206,7 +214,7 @@ exports.protect = async (req, res, next) => {
     try {
         // 1) Getting token and check if it's there
         let token;
-        if (
+        /* if (
             req.headers.authorization &&
             req.headers.authorization.startsWith('Bearer')
         ) {
@@ -214,6 +222,9 @@ exports.protect = async (req, res, next) => {
         } else if (req.headers.cookie) {
             token = req.headers.cookie.substring(4);
             console.log(token);
+        } */
+        if (req.cookies.jwt) {
+            token = req.cookies.jwt;
         }
 
         if (!token) {
