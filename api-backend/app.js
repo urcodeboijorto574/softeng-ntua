@@ -49,7 +49,7 @@ app.use('/intelliq_api/getquestionanswers', questionAnswerRouter); // e
 
 // Additional endpoints
 app.use('/intelliq_api/sessions', sessionRouter);
-app.use('/dummy-data', importRouter);
+app.use('/intelliq_api/dummy-data', importRouter);
 
 
 module.exports = app;
