@@ -37,10 +37,11 @@ mongoose
 
 const port = process.env.PORT || 3000;
 
-// save the server
+// http server (just for testing)
 /* const server = app.listen(port, () => {
     console.log(`App running on port ${port}...`);
 }); */
+// https server
 const server = https
     .createServer({ key: key, cert: cert }, app)
     .listen(port, () => {
