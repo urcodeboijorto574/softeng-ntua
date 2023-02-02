@@ -7,7 +7,7 @@ const User = require(`${__dirname}/../models/userModel.js`);
 const json2csv = require('json2csv');
 
 /**
- * Returns all the information about every questionnaire in the data base.
+ * Returns all the information about every questionnaire that was created by the logged in admin in the data base.
  * @param {JSON} req - JSON object of which no field is used in the function.
  * @param {JSON} res - JSON object that contains a confirmation or a decline of the request.
  * @return {JSON} - The response object created.
