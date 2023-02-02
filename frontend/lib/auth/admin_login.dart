@@ -36,23 +36,21 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
     Response response = await post(
       url,
       headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        "Access-Control-Allow-Origin": "*",
-        'Accept': '*/*',
-        'Allow': '*'
+        'Content-Type': 'application/x-www-form-urlencoded',
       },
-      body: jsonEncode(<String, String>{
+      encoding: Encoding.getByName('utf-8'),
+      body: {
         'username': username,
         'password': password,
         'usermod': 'admin',
-      }),
+      },
     );
 
     if (response.statusCode == 200) {
       _formKey.currentState!.reset();
 
-      await storage.write(
-          key: "jwt", value: jsonDecode(response.body)['token']);
+      // await storage.write(
+      //     key: "jwt", value: jsonDecode(response.body)['token']);
 
       Navigator.pushReplacementNamed(context, '/choose_action');
     } else {

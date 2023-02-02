@@ -1,6 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:http/http.dart';
 import 'package:questionnaires_app/main_screens/answers_overview.dart';
 import 'package:questionnaires_app/main_screens/questionnaire_list.dart';
 import 'package:questionnaires_app/widgets/app_bar.dart';
@@ -20,6 +24,37 @@ class UserHomeScreen extends StatefulWidget {
 class _UserHomeScreenState extends State<UserHomeScreen> {
   final GlobalKey<ScaffoldMessengerState> _scaffoldKey =
       GlobalKey<ScaffoldMessengerState>();
+
+  final storage = const FlutterSecureStorage();
+
+  String _localhost() {
+    return 'http://127.0.0.1:3000/intelliq_api/logout';
+  }
+
+  Future<void> logOutUser() async {
+    final url = Uri.parse(_localhost());
+
+    // var jwt = await storage.read(key: "jwt");
+    // if (jwt == null) throw Exception('Something went wrong!');
+
+    Response response = await post(
+      url,
+      // headers: <String, String>{'X-OBSERVATORY-AUTH': jwt},
+      body: jsonEncode(<String, String>{}),
+    );
+
+    if (response.statusCode == 200) {
+      await storage.delete(key: "jwt");
+      isLoggedOut = true;
+
+      Navigator.pop(context);
+      Navigator.pushReplacementNamed(context, '/welcome_screen');
+    } else {
+      Navigator.pop(context);
+      MyMessageHandler.showSnackbar(
+          _scaffoldKey, jsonDecode(response.body)['message']);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -88,10 +123,8 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                       tapNo: () {
                         Navigator.pop(context);
                       },
-                      tapYes: () {
-                        Navigator.pop(context);
-                        Navigator.pushReplacementNamed(
-                            context, '/welcome_screen');
+                      tapYes: () async {
+                        await logOutUser();
                       },
                     );
                   },

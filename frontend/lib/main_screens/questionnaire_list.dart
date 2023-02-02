@@ -49,15 +49,15 @@ class _QuestionnaireListScreenState extends State<QuestionnaireListScreen> {
     List<String> titles = [];
 
     final url = Uri.parse(_localhost1());
-    var jwt = await storage.read(key: "jwt");
-    if (jwt == null) {
-      MyMessageHandler.showSnackbar(_scaffoldKey, 'Something went wrong!');
-      return [];
-    }
+    // var jwt = await storage.read(key: "jwt");
+    // if (jwt == null) {
+    //   MyMessageHandler.showSnackbar(_scaffoldKey, 'Something went wrong!');
+    //   return [];
+    // }
 
     Response response = await get(
       url,
-      headers: <String, String>{'Authorization': 'Bearer $jwt'},
+      // headers: <String, String>{'X-OBSERVATORY-AUTH': jwt},
     );
 
     if (response.statusCode == 200) {
@@ -87,15 +87,15 @@ class _QuestionnaireListScreenState extends State<QuestionnaireListScreen> {
     List<String> titles = [];
 
     final url = Uri.parse(_localhost2());
-    var jwt = await storage.read(key: "jwt");
-    if (jwt == null) {
-      MyMessageHandler.showSnackbar(_scaffoldKey, 'Something went wrong!');
-      return [];
-    }
+    // var jwt = await storage.read(key: "jwt");
+    // if (jwt == null) {
+    //   MyMessageHandler.showSnackbar(_scaffoldKey, 'Something went wrong!');
+    //   return [];
+    // }
 
     Response response = await get(
       url,
-      headers: <String, String>{'Authorization': 'Bearer $jwt'},
+      // headers: <String, String>{'X-OBSERVATORY-AUTH': jwt},
     );
 
     if (response.statusCode == 200) {
@@ -121,19 +121,19 @@ class _QuestionnaireListScreenState extends State<QuestionnaireListScreen> {
     return 'http://127.0.0.1:3000/intelliq_api/questionnaire/getallquestionnaires';
   }
 
-  Future<List> _getAllQuestionnaires() async {
+  Future<List> getAllQuestionnaires() async {
     List<String> titles = [];
 
     final url = Uri.parse(_localhost3());
-    var jwt = await storage.read(key: "jwt");
-    if (jwt == null) {
-      MyMessageHandler.showSnackbar(_scaffoldKey, 'Something went wrong!');
-      return [];
-    }
+    // var jwt = await storage.read(key: "jwt");
+    // if (jwt == null) {
+    //   MyMessageHandler.showSnackbar(_scaffoldKey, 'Something went wrong!');
+    //   return [];
+    // }
 
     Response response = await get(
       url,
-      headers: <String, String>{'Authorization': 'Bearer $jwt'},
+      // headers: <String, String>{'X-OBSERVATORY-AUTH': jwt},
     );
 
     if (response.statusCode == 200) {
@@ -207,15 +207,15 @@ class _QuestionnaireListScreenState extends State<QuestionnaireListScreen> {
 
   Future<dynamic> getSession(String questionnaireID) async {
     final url = Uri.parse('${_localhost4()}/$questionnaireID');
-    var jwt = await storage.read(key: "jwt");
-    if (jwt == null) {
-      MyMessageHandler.showSnackbar(_scaffoldKey, 'Something went wrong!');
-      return [];
-    }
+    // var jwt = await storage.read(key: "jwt");
+    // if (jwt == null) {
+    //   MyMessageHandler.showSnackbar(_scaffoldKey, 'Something went wrong!');
+    //   return [];
+    // }
 
     Response response = await get(
       url,
-      headers: <String, String>{'Authorization': 'Bearer $jwt'},
+      // headers: <String, String>{'X-OBSERVATORY-AUTH': jwt},
     );
 
     if (response.statusCode == 200) {
@@ -302,7 +302,7 @@ class _QuestionnaireListScreenState extends State<QuestionnaireListScreen> {
         questionnaireTitles = _getRestQuestionnaires();
       } else if (widget.label == 'show statistics' ||
           widget.label == 'view answers') {
-        questionnaireTitles = _getAllQuestionnaires();
+        questionnaireTitles = getAllQuestionnaires();
       }
     });
   }

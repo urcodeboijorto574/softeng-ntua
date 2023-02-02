@@ -51,12 +51,12 @@ class _SessionListScreenState extends State<SessionListScreen> {
 
     final url = Uri.parse(_localhost());
 
-    var jwt = await storage.read(key: "jwt");
-    if (jwt == null) throw Exception('Something went wrong!');
+    // var jwt = await storage.read(key: "jwt");
+    // if (jwt == null) throw Exception('Something went wrong!');
 
     Response response = await get(
       url,
-      headers: <String, String>{'Authorization': 'Bearer $jwt'},
+      // headers: <String, String>{'X-OBSERVATORY-AUTH': jwt},
     );
 
     if (response.statusCode == 200) {

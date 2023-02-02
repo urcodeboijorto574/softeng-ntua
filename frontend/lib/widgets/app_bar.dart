@@ -7,6 +7,8 @@ import 'package:http/http.dart';
 import 'package:questionnaires_app/widgets/alert_dialog.dart';
 import 'package:questionnaires_app/widgets/snackbar.dart';
 
+bool isLoggedOut = false;
+
 class MyAppBar extends StatelessWidget with PreferredSizeWidget {
   final double elevation;
   final double height;
@@ -32,22 +34,19 @@ class MyAppBar extends StatelessWidget with PreferredSizeWidget {
     Future<void> logOutUser() async {
       final url = Uri.parse(_localhost());
 
-      var jwt = await storage.read(key: "jwt");
-      if (jwt == null) throw Exception('Something went wrong!');
+      // var jwt = await storage.read(key: "jwt");
+      // if (jwt == null) throw Exception('Something went wrong!');
 
       Response response = await post(
         url,
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-          "Access-Control-Allow-Origin": "*",
-          'Accept': '*/*',
-          'Allow': '*',
-          'Authorization': 'Bearer $jwt'
-        },
+        // headers: <String, String>{'X-OBSERVATORY-AUTH': jwt},
         body: jsonEncode(<String, String>{}),
       );
 
       if (response.statusCode == 200) {
+        await storage.delete(key: "jwt");
+        isLoggedOut = true;
+
         Navigator.pop(context);
         Navigator.pushReplacementNamed(context, '/welcome_screen');
       } else {
@@ -90,9 +89,8 @@ class MyAppBar extends StatelessWidget with PreferredSizeWidget {
                 tapNo: () {
                   Navigator.pop(context);
                 },
-                tapYes: () {
-                  Navigator.pop(context);
-                  Navigator.pushReplacementNamed(context, '/welcome_screen');
+                tapYes: () async {
+                  await logOutUser();
                 },
               );
             },

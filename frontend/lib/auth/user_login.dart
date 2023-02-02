@@ -1,9 +1,11 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 import 'package:questionnaires_app/main_screens/questionnaire_list.dart';
 import 'package:questionnaires_app/main_screens/user_homescreen.dart';
@@ -38,23 +40,21 @@ class _UserLoginScreenState extends State<UserLoginScreen> {
     Response response = await post(
       url,
       headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        "Access-Control-Allow-Origin": "*",
-        'Accept': '*/*',
-        'Allow': '*',
+        'Content-Type': 'application/x-www-form-urlencoded',
       },
-      body: jsonEncode(<String, String>{
+      encoding: Encoding.getByName('utf-8'),
+      body: {
         'username': username,
         'password': password,
         'usermod': 'user',
-      }),
+      },
     );
 
     if (response.statusCode == 200) {
       _formKey.currentState!.reset();
 
-      await storage.write(
-          key: "jwt", value: jsonDecode(response.body)['token']);
+      // await storage.write(
+      //     key: "jwt", value: jsonDecode(response.body)['token']);
 
       Navigator.pushAndRemoveUntil(context,
           MaterialPageRoute(builder: (context) {
@@ -266,7 +266,7 @@ class _UserLoginScreenState extends State<UserLoginScreen> {
                                     await logInUser();
                                   } catch (e) {
                                     MyMessageHandler.showSnackbar(
-                                        _scaffoldKey, 'Something went wrong!');
+                                        _scaffoldKey, e.toString());
                                   }
 
                                   setState(() {

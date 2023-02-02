@@ -57,10 +57,14 @@ class _AnswersOverviewScreenState extends State<AnswersOverviewScreen> {
 
     final url = Uri.parse(_localhost2());
 
-    var jwt = await storage.read(key: "jwt");
+    // var jwt = await storage.read(key: "jwt");
+    // if (jwt == null) {
+    //   throw Exception('Something went wrong!');
+    // }
+
     Response response = await get(
       url,
-      headers: <String, String>{'Authorization': 'Bearer ${jwt!}'},
+      // headers: <String, String>{'X-OBSERVATORY-AUTH': jwt},
     );
 
     if (response.statusCode == 200) {
@@ -81,7 +85,11 @@ class _AnswersOverviewScreenState extends State<AnswersOverviewScreen> {
     final url = Uri.parse(
         '${_localhost1()}/${single_answer.questionnaireID}/${single_answer.questionID}/$session/${single_answer.options[single_answer.optionIndex]['optID']}');
 
-    var jwt = await storage.read(key: "jwt");
+    // var jwt = await storage.read(key: "jwt");
+    // if (jwt == null) {
+    //   throw Exception('Something went wrong!');
+    // }
+
     Response response = await post(
       url,
       headers: <String, String>{
@@ -89,7 +97,7 @@ class _AnswersOverviewScreenState extends State<AnswersOverviewScreen> {
         "Access-Control-Allow-Origin": "*",
         'Accept': '*/*',
         'Allow': '*',
-        'Authorization': 'Bearer ${jwt!}'
+        // 'X-OBSERVATORY-AUTH': jwt
       },
       body: jsonEncode(<String, String>{
         'answertext': single_answer.answertxt,
