@@ -88,7 +88,7 @@ def healthcheck(form):
             Else: prints dbconnection
         Else: gives reason"""
     #healthUrl = baseUrl + "admin/healthcheck"
-    healthUrl = "http://127.0.0.1:3000/intelliq_api/admin/healthcheck?format=" + form
+    healthUrl = baseUrl + "admin/healthcheck?format=" + form
     print("Will perform a healthcheck at", healthUrl)
     response = handleGet(healthUrl)
     handleResponse(response, form)
@@ -161,8 +161,6 @@ def doanswer(questionnaire_id, question_id, session_id, option_id, form):
     handleResponse(response, form)
     
     return
-
-
 
 # getsessionanswers: TO DISCUSS & CHECK
 def getsessionanswers(questionnaire_id, session_id, form):
@@ -330,7 +328,7 @@ allowed_commands = ["login", "logout", "healthcheck", "resetall",
                     "getquestionanswers", "admin"]
 
 if args.command not in allowed_commands:
-    print("Wrong scope")
+    print("Invalid scope")
     exit()
 
 if (args.command == "login"):
@@ -375,25 +373,45 @@ elif (args.command == "getquestionanswers"):
 
 elif args.command == "admin":
     print("In admin")
+    if args.usermod and args.username and args.passw and not args.users:
+        print("user modification for username :", args.username, "with password :", args.passw)
+    elif args.username and args.passw and not args.usermod and not args.users:
+        print("username :", args.username, "with password :", args.passw)
+    elif args.passw and not args.usermod and not args.username and not args.users:
+        print("password :", args.passw)
+    elif args.users and args.username and not args.usermod and not args.passw:
+        print("users :", args.users)
+    else:
+        print("Invalid parameters for admin scope")
+
+
+    '''
     if args.usermod:
+        if args.users:
+            print("Invalid parameter. Expected only --username and --passw")
         if args.username and args.passw:
             print("user modification for username :", args.username, "with password :", args.passw)
         else:
             print("usermod requires --username and --passw")
     elif args.username:
+        if args.users:
+            print("Invalid parameter. Expected only --passw")
         if args.passw:
             print("username :", args.username, "with password :", args.passw)
         else:
             print("username requires --passw")
     elif args.passw:
+        if args.users:
+            print("Invalid parameter. Expected no parameters")
         print("password :", args.passw)
     elif args.users:
-        print("users :", args.users)
+        if args.username:
+            print("users :", args.users)
     else:
         print("invalid option")
 else:
     print("Error in scope")
-
+'''
 
 
 
