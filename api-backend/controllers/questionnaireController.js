@@ -134,7 +134,7 @@ exports.deleteQuestionnaire = async (req, res, next) => {
 };
 
 /**
- * Returns all the questionnaires that a user has answered.
+ * Returns all the questionnaires that the logged in user has answered.
  * @param {JSON} req - JSON object that contains the username of the specified user.
  * @param {JSON} res - JSON object that contains the data to send.
  * @return {JSON} - The response object created.
