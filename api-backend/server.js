@@ -3,8 +3,8 @@ const dotenv = require('dotenv');
 const https = require('https');
 const fs = require('fs');
 
-const key = fs.readFileSync('./key.pem');
-const cert = fs.readFileSync('./cert.pem');
+const key = fs.readFileSync('./HTTPS-SSL/key.pem');
+const cert = fs.readFileSync('./HTTPS-SSL/cert.pem');
 
 const app = require('./app');
 
@@ -41,6 +41,9 @@ const port = process.env.PORT || 3000;
 /* const server = app.listen(port, () => {
     console.log(`App running on port ${port}...`);
 }); */
+
+//-----------------------------------------------------------------------//
+
 // https server
 const server = https
     .createServer({ key: key, cert: cert }, app)
