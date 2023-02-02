@@ -3,8 +3,8 @@ const dotenv = require('dotenv');
 const https = require('https');
 const fs = require('fs');
 
-const key = fs.readFileSync('./HTTPS-SSL/key.pem');
-const cert = fs.readFileSync('./HTTPS-SSL/cert.pem');
+const key = fs.readFileSync('./HTTPS-SSL/key.pem').toString();
+const cert = fs.readFileSync('./HTTPS-SSL/cert.pem').toString();
 
 const app = require('./app');
 

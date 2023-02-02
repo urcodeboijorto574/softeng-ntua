@@ -37,8 +37,7 @@ exports.signup = async (req, res) => {
         let error = { ...err };
         if (err.code === 11000) {
             error = handleDuplicateFieldsDB(error);
-        }
-        if (err.name === 'ValidationError') {
+        } else if (err.name === 'ValidationError') {
             error = handleValidationErrorDB(error);
         } else {
             return res.status(500).json({
@@ -122,8 +121,7 @@ exports.createUser = async (req, res) => {
 
         if (err.code === 11000) {
             error = handleDuplicateFieldsDB(error);
-        }
-        if (err.name === 'ValidationError') {
+        } else if (err.name === 'ValidationError') {
             error = handleValidationErrorDB(error);
         } else {
             return res.status(500).json({
