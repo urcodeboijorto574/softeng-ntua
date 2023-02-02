@@ -60,7 +60,7 @@ exports.getAllSessionsIDs = async (req, res, next) => {
 };
 
 /**
- * Returns all the questionnaires answered by a specified user.
+ * Returns the session that the logged in user submitted for the specified questionnaire
  * @param {JSON} req - A request object of which only the field req.params is used.
  * @param {JSON} res - A response object that contains the data to send.
  * @return {JSON} - The response object created.
