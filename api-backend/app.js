@@ -2,6 +2,7 @@ const express = require('express');
 const morgan = require('morgan');
 const dotenv = require('dotenv');
 const bp = require('body-parser');
+const cookieParser = require('cookie-parser');
 
 const adminRouter = require(`${__dirname}/routes/adminRoutes.js`);
 const authRouter = require(`${__dirname}/routes/authRoutes.js`);
@@ -26,6 +27,7 @@ if (process.env.NODE_ENV === 'development') {
 // Global middleware
 app.use(bp.json());
 app.use(bp.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 // Test middleware
 app.use((req, res, next) => {
@@ -50,6 +52,5 @@ app.use('/intelliq_api/getquestionanswers', questionAnswerRouter); // e
 // Additional endpoints
 app.use('/intelliq_api/session', sessionRouter);
 app.use('/intelliq_api/dummy-data', importRouter);
-
 
 module.exports = app;
