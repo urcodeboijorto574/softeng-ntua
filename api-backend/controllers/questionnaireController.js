@@ -1,23 +1,22 @@
 const Questionnaire = require(`${__dirname}/../models/questionnaireModel.js`);
 const Question = require(`${__dirname}/../models/questionModel.js`);
 const Option = require(`${__dirname}/../models/optionModel.js`);
-const Session = require(`${__dirname}/../models/sessionModel.js`);
-const Answer = require(`${__dirname}/../models/answerModel.js`);
 const User = require(`${__dirname}/../models/userModel.js`);
-const json2csv = require('json2csv');
+
 
 /**
- * Returns all the information about every questionnaire that was created by the logged in admin in the data base.
- * @param {JSON} req - JSON object of which no field is used in the function.
- * @param {JSON} res - JSON object that contains a confirmation or a decline of the request.
- * @return {JSON} - The response object created.
+ * Middleware that returns all the questionnaires that have been created by the logged-in admin.
+ * @param {JSON} req - JSON request object containing the username of the logged-in admin (req.username).
+ * @param {JSON} res - JSON response object containing the requested questionnaires (res.data.questionnaires).
+ * @param {function} next - the next middleware in the middleware stack.
+ * @returns {JSON} - The response object res.
  * 
- * URL: {baseURL}/questionnaire/getallquestionnaires
+ * URL: {baseURL}/questionnaire/getadmincreatedquestionnaires
  */
-exports.getAllQuestionnaires = async (req, res, next) => {
+exports.getAdminCreatedQuestionnaires = async (req, res, next) => { /* Inspection finished */
     try {
         let questionnaires = await Questionnaire
-            .find({}, '-_id')
+            .find({ creator: req.username }, '-_id -creator')
             .sort('questionnaireID')
             .populate({
                 path: 'questions',
@@ -32,119 +31,35 @@ exports.getAllQuestionnaires = async (req, res, next) => {
                 },
             });
 
-        const questionnairesFound = questionnaires && questionnaires !== 0;
+        const questionnairesFound = questionnaires && questionnaires.length !== 0;
         return res.status(questionnairesFound ? 200 : 402).json({
             status: questionnairesFound ? 'OK' : 'no data',
             data: {
                 questionnaires: questionnairesFound ? questionnaires : []
             }
         });
-    } catch (err) {
+    } catch (error) {
         return res.status(500).json({
             status: 'failed',
-            message: err
+            message: error
         });
     }
     next();
 };
 
 /**
- * Returns all the questionnaires that a specified user has answered.
- * @param {JSON} req - JSON object that contains the 
- * @param {JSON} res - JSON object that contains the 
- * @param {JSON} next - pointer to the next middleware function
- * @return {JSON} - The response object.
+ * Middleware that returns all the questionnaires that have been answered by the logged-in user.
+ * @param {JSON} req - JSON request object containing the username of the logged-in user (req.username).
+ * @param {JSON} res - JSON response object containing the requested questionnaires (res.data.questionnaires).
+ * @param {function} next - the next middleware in the middleware stack.
+ * @returns {JSON} - The response object res.
  * 
- * URL: {baseURL}/questionnaire/:questionnaireID
+ * URL: {baseURL}/questionnaire/getuseransweredquestionnaires
  */
-exports.getUserQuestionnaires = async (req, res, next) => {
-    /* This line is added only for temporary purposes */
-    return res.status('418').json({ status: 'no operation', message: 'I\'m a teapot' });
-};
-
-/**
- * Returns all the info about a questionnaire (and its qusetions).
- * @param {JSON} req - JSON object of which req.params contains the questionnaireID.
- * @param {JSON} res - JSOn object that contains the data to send.
- * @return {JSON} - The response object created.
- * 
- * URL: {baseURL}/questionnaire/:questionnaireID/
- */
-exports.getQuestionnaire = async (req, res, next) => {
-    /* This line is added only for temporary purposes */
-    return res.status('418').json({ status: 'no operation', message: 'I\'m a teapot' });
-};
-
-
-/**
- * Removes a questionnaire and all related entities from the DB.
- * @param {JSON} req - JSON object that contains the questionnaireID of the to-be-deleted questionnaire.
- * @param {JSON} res - JSON object that contains the data to send.
- * @return {JSON} - The response object created.
- * 
- * URL:  {baseURL}/questionnaire/:questionnaireID
- */
-exports.deleteQuestionnaire = async (req, res, next) => {
+exports.getUserAnsweredQuestionnaires = async (req, res, next) => { /* Inspection finished */
     try {
-        /* Check if given questionnaireID is valid */
-        const theQuestionnaire = await Questionnaire
-            .findOne(req.params, 'questionnaireID _id')
-            .populate({
-                path: 'questions',
-                model: 'Question',
-                select: {
-                    '_id': 1,
-                    'options': 1
-                },
-            });
-        if (!theQuestionnaire) {
-            return res.status(400).json({
-                status: 'failed',
-                message: `No questionnaire found with questionnaireID ${req.params.questionnaireID}`
-            });
-        }
-
-        /* Delete the questionnaire and all related documents */
-        theQuestionnaire.questions.forEach(async question => {
-            question.options.forEach(async option_id => {
-                await Option.findByIdAndRemove(option_id);
-            });
-            await Question.findByIdAndRemove(question['_id']);
-        });
-        await Questionnaire.findByIdAndRemove(theQuestionnaire['_id']);
-        const sessions = await Session.find(req.params, '_id answers');
-        sessions.forEach(async session => {
-            session.answers.forEach(async answer_id => {
-                await Answer.findByIdAndRemove(answer_id);
-            });
-            await Session.findByIdAndRemove(session['_id']);
-        });
-
-        return res.status(402).json({
-            status: 'OK',
-            message: `Everything related with questionnaire ${req.params.questionnaireID} has been deleted`
-        });
-    } catch (err) {
-        return res.status(500).json({
-            status: 'failed',
-            message: err
-        });
-    }
-    next();
-};
-
-/**
- * Returns all the questionnaires that the logged in user has answered.
- * @param {JSON} req - JSON object that contains the username of the specified user.
- * @param {JSON} res - JSON object that contains the data to send.
- * @return {JSON} - The response object created.
- * 
- * URL: {baseURL}/questionnaire/userquestionnaires
- */
-exports.getUserAnsweredQuestionnaires = async (req, res, next) => { /* OK (NOT TESTED) */
-    try {
-        const user = await User
-            .findOne({ username: req.username }, 'questionnairesAnswered -_id')
+        let user = await User
+            .findOne({ username: req.username }, 'questionnairesAnswered')
             .populate({
                 path: 'questionnairesAnswered',
                 model: 'Questionnaire',
@@ -159,37 +74,63 @@ exports.getUserAnsweredQuestionnaires = async (req, res, next) => { /* OK (NOT T
                         path: 'options',
                         model: 'Option',
                         select: '-_id -__v',
-                        sort: 'optID',
+                        sort: 'optID'
                     }
                 }
             });
 
         const questionnaires = user.questionnairesAnswered;
-        const questionnairesFound = questionnaires && questionnaires.length > 0;
+
+        const questionnairesFound = user && questionnaires.length > 0;
 
         return res.status(questionnairesFound ? 200 : 402).json({
-            status: 'success',
-            data: questionnaires
+            status: questionnairesFound ? 'OK' : 'no data',
+            data: {
+                questionnaires: questionnairesFound ? questionnaires : []
+            }
         });
-    } catch (err) {
+    } catch (error) {
         return res.status(500).json({
-            status: 'fail',
-            msg: err
+            status: 'failed',
+            message: error
         });
     }
     next();
 };
 
 /**
- * Return all questionnaires that are created by a specified admin.
- * @param {JSON} req - JSON object of which req.params contains the questionnaireID.
- * @param {JSON} res - JSON object that contains the response.
- * @return {JSON} - The response object.
+ * Middleware that returns all the questionnaires that have not been answered by the logged-in user yet.
+ * @param {JSON} req - JSON request object containing the username of the logged-in user (req.username).
+ * @param {JSON} res - JSON response object containing the requested questionnaires (res.data.questionnaires).
+ * @param {function} next - the next middleware in the middleware stack.
+ * @returns {JSON} - The response object res.
+ * 
+ * URL: {baseURL}/questionnaire/getusernotansweredquestionnaires
  */
-exports.getUserCreatedQuestionnaires = async (req, res, next) => {
-    try {
-        const questionnaires = await Questionnaire
-            .find({ creator: req.username }, '-_id')
+exports.getUserNotAnsweredQuestionnaires = async (req, res, next) => { /* (NOT FINISHED) */
+    try { /* Vassiliki */
+        const queryObj = req.param;
+        // const queryObj = {username: req.username};
+        const user = await User.findOne({ username: req.username }).populate({
+            path: 'questionnairesAnswered',
+            model: 'Questionnaire',
+            select: '-_id',
+            sort: 'questionnaireID',
+            populate: {
+                path: 'questions',
+                model: 'Question',
+                select: '-_id -__v -questionnaireID -wasAnsweredBy',
+                sort: 'qID',
+                populate: {
+                    path: 'options',
+                    model: 'Option',
+                    select: '-_id -__v',
+                    sort: 'optID',
+                },
+            },
+        });
+
+        let questionnaires = await Questionnaire.find({}, '-_id')
             .sort('questionnaireID')
             .populate({
                 path: 'questions',
@@ -204,16 +145,47 @@ exports.getUserCreatedQuestionnaires = async (req, res, next) => {
                 },
             });
 
-        const questionnairesFound = questionnaires && questionnaires.length > 0;
-        return res.status(questionnairesFound ? 200 : 402).json({
-            status: 'OK',
-            data: questionnaires
+        temp = 0;
+        let questionnairesLeft = [];
+
+        for (i = 0; i < user.questionnairesAnswered.length; i++) {
+            while (
+                questionnaires[temp]['questionnaireID'] !=
+                user.questionnairesAnswered[i]['questionnaireID']
+            ) {
+                questionnairesLeft.push(questionnaires[temp]);
+                temp++;
+            }
+            temp++;
+        }
+
+        for (i = temp; i < questionnaires.length; i++) {
+            questionnairesLeft.push(questionnaires[i]);
+        }
+
+        return res.status(questionnairesLeft ? 200 : 402).json({
+            status: 'success',
+            data: questionnairesLeft,
         });
     } catch (err) {
         return res.status(500).json({
-            status: 'failed',
-            message: err
+            status: 'fail',
+            msg: err.message,
         });
     }
     next();
+};
+
+/**
+ * Middleware that returns a particular questionnaire by the logged-in ***.
+ * @param {JSON} req - JSON object of which req.params contains the questionnaireID (req.params.questionnaireID).
+ * @param {JSON} res - JSOn object that contains the data to send.
+ * @param {function} next - the next middleware in the middleware stack.
+ * @returns {JSON} - The response object res.
+ * 
+ * URL: {baseURL}/questionnaire/:questionnaireID/
+ */
+exports.getQuestionnaire = async (req, res, next) => {
+    /* This line is added only for temporary purposes */
+    return res.status('418').json({ status: 'no operation', message: 'I\'m a teapot' });
 };
