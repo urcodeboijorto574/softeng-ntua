@@ -42,7 +42,7 @@ class _QuestionnaireListScreenState extends State<QuestionnaireListScreen> {
       GlobalKey<ScaffoldMessengerState>();
 
   String _localhost1() {
-    return 'http://127.0.0.1:3000/intelliq_api/questionnaire/usernotquestionnaires';
+    return 'https://127.0.0.1:3000/intelliq_api/questionnaire/getusernotansweredquestionnaires';
   }
 
   Future<List> _getRestQuestionnaires() async {
@@ -80,7 +80,7 @@ class _QuestionnaireListScreenState extends State<QuestionnaireListScreen> {
   }
 
   String _localhost2() {
-    return 'http://127.0.0.1:3000/intelliq_api/questionnaire/userquestionnaires';
+    return 'https://127.0.0.1:3000/intelliq_api/questionnaire/getuseransweredquestionnaires';
   }
 
   Future<List> _getUserQuestionnaires() async {
@@ -99,7 +99,7 @@ class _QuestionnaireListScreenState extends State<QuestionnaireListScreen> {
     );
 
     if (response.statusCode == 200) {
-      questionnaires = jsonDecode(response.body)['data'];
+      questionnaires = jsonDecode(response.body)['data']['questionnaires'];
 
       for (int i = 0; i < questionnaires.length; i++) {
         titles.add(questionnaires[i]['questionnaireTitle']);
@@ -118,7 +118,7 @@ class _QuestionnaireListScreenState extends State<QuestionnaireListScreen> {
   }
 
   String _localhost3() {
-    return 'http://127.0.0.1:3000/intelliq_api/questionnaire/getallquestionnaires';
+    return 'https://127.0.0.1:3000/intelliq_api/questionnaire/getadmincreatedquestionnaires';
   }
 
   Future<List> getAllQuestionnaires() async {
@@ -202,7 +202,7 @@ class _QuestionnaireListScreenState extends State<QuestionnaireListScreen> {
   }
 
   String _localhost4() {
-    return 'http://127.0.0.1:3000/intelliq_api/sessions/getsession';
+    return 'https://127.0.0.1:3000/intelliq_api/session/getuserquestionnairesession';
   }
 
   Future<dynamic> getSession(String questionnaireID) async {
@@ -219,11 +219,11 @@ class _QuestionnaireListScreenState extends State<QuestionnaireListScreen> {
     );
 
     if (response.statusCode == 200) {
-      dynamic session = jsonDecode(response.body)['data'];
+      dynamic session = jsonDecode(response.body)['data']['session'];
 
       return session;
     } else if (response.statusCode == 402) {
-      return null;
+      return [];
     } else if (response.statusCode == 401) {
       MyMessageHandler.showSnackbar(
           _scaffoldKey, jsonDecode(response.body)['message']);

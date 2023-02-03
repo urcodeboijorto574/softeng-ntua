@@ -43,7 +43,7 @@ class _SessionListScreenState extends State<SessionListScreen> {
       GlobalKey<ScaffoldMessengerState>();
 
   String _localhost() {
-    return 'http://127.0.0.1:3000/intelliq_api/sessions/getallsessions/${widget.questionnaireID}';
+    return 'https://127.0.0.1:3000/intelliq_api/session/getallquestionnairesessions/${widget.questionnaireID}';
   }
 
   Future<List> _getAllSessions() async {
@@ -60,7 +60,7 @@ class _SessionListScreenState extends State<SessionListScreen> {
     );
 
     if (response.statusCode == 200) {
-      sessions = jsonDecode(response.body)['data'];
+      sessions = jsonDecode(response.body)['data']['sessions'];
 
       for (int i = 0; i < sessions.length; i++) {
         titles.add(sessions[i]['sessionID']);

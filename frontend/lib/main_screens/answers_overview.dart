@@ -45,11 +45,11 @@ class _AnswersOverviewScreenState extends State<AnswersOverviewScreen> {
       GlobalKey<ScaffoldMessengerState>();
 
   String _localhost1() {
-    return 'http://127.0.0.1:3000/intelliq_api/doanswer';
+    return 'https://127.0.0.1:3000/intelliq_api/doanswer';
   }
 
   String _localhost2() {
-    return 'http://127.0.0.1:3000/intelliq_api/sessions/sessionids';
+    return 'https://127.0.0.1:3000/intelliq_api/session/getallsessionsids';
   }
 
   Future<List> _getAllSessionIDs() async {
@@ -68,8 +68,11 @@ class _AnswersOverviewScreenState extends State<AnswersOverviewScreen> {
     );
 
     if (response.statusCode == 200) {
-      for (int i = 0; i < jsonDecode(response.body)['data'].length; i++) {
-        sessions.add(jsonDecode(response.body)['data'][i]['sessionID']);
+      for (int i = 0;
+          i < jsonDecode(response.body)['data']['sessionIDs'].length;
+          i++) {
+        sessions.add(
+            jsonDecode(response.body)['data']['sessionIDs'][i]['sessionID']);
       }
       return sessions;
     } else if (response.statusCode == 402) {

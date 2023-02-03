@@ -28,7 +28,7 @@ class MyAppBar extends StatelessWidget with PreferredSizeWidget {
     const storage = FlutterSecureStorage();
 
     String _localhost() {
-      return 'http://127.0.0.1:3000/intelliq_api/logout';
+      return 'https://127.0.0.1:3000/intelliq_api/logout';
     }
 
     Future<void> logOutUser() async {

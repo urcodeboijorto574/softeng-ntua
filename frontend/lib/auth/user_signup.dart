@@ -26,7 +26,7 @@ class _UserSignupScreenState extends State<UserSignupScreen> {
   bool processing = false;
 
   String _localhost() {
-    return 'http://127.0.0.1:3000/intelliq_api/signup';
+    return 'https://127.0.0.1:3000/intelliq_api/signup';
   }
 
   Future<void> signUpUser() async {
