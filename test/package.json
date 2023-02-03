@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "chai": "^4.3.7",
+    "chai-http": "^4.3.0"
+  },
+  "scripts": {
+    "start": "mocha --timeout 100000"
+  }
+}
