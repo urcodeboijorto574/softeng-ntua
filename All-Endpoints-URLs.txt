@@ -1,0 +1,49 @@
+{port} = 9103 || 3000
+{baseURL} = https://localhost:{port}/intelliq_api
+
+/------------------ Authentication ------------------/
+1) {baseURL}/login  --> Login with a username and password.
+2) {baseURL}/logout --> Logout.
+3) {baseURL}/signup --> Create a new user.
+
+/------------------ Super-admin's and admin's endpoints ------------------/
+4) {baseURL}/admin/healthcheck
+	--> Check if the connection between the server and the data base is on.
+5) {baseURL}/admin/questionnaire_upd
+	--> Create a new questionnaire or update some fields of an existing questionnaire.
+6) {baseURL}/admin/resetall
+	--> Delete every collection from the database.
+7) {baseURL}/resetq/:questionnaireID
+	--> Delete a specific questionnaire's session & answers.
+8) {baseURL}/admin/usermod/:username/:password
+	--> Create user / Update user's password.
+9) {baseURL}/admin/users/:username
+	--> Get user info.
+
+/------------------ User's endpoints ------------------/
+10) {baseURL}/questionnaire/:questionnaireID
+	--> Get questionnaire info & embedded questions.
+11) {baseURL}/question/:questionnaireID/:questionID
+	--> Get question info & embedded options.
+12) {baseURL}/doanswer/:questionnaireID/:questionID/:session/:optionID
+	--> Create an answer for a question (automatically creates session if one does not exist).
+13) {baseURL}/getsessionanswers/:questionnaireID/:session
+	--> Get all the answers of a specific session.
+14) {baseURL}/getquestionanswers/:questionnaireID/:questionID
+	--> Get all the answers of a specific question.
+
+/------------------ Extra questionnaire-returning endpoints ------------------/
+15) {baseURL}/questionnaire/getadmincreatedquestionnaires
+	--> Get all the questionaires created by the logged-in admin.
+16) {baseURL}/questionnaire/getuseransweredquestionnaires
+	--> Get all the questionnaires answered by the logged-in user.
+17) {baseURL}/questionnaire/getusernotansweredquestionnaires
+	--> Get all the questionnaires that haven't been answered by the logged-in user yet.
+
+/------------------ Extra session-returning endpoints ------------------/
+18) {baseURL}/session/getallquestionnairesessions/:questionnaireID
+	--> Get all the sessions of a specific questionnaire.
+19) {baseURL}/sessiongetallsessionsids
+	--> Get all sessions' IDs.
+20) {baseURL}/session/getuserquestionnaresession/:questionnaireID
+	--> Get the session of a specific questionnaire submitted by the logged-in user.
