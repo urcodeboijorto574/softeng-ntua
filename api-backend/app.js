@@ -12,6 +12,7 @@ const sessionRouter = require(`${__dirname}/routes/sessionRoutes.js`);
 const importRouter = require(`${__dirname}/routes/importRoutes.js`);
 const bp = require('body-parser');
 const cookieParser = require('cookie-parser');
+const cors = require('cors');
 
 const app = express();
 
@@ -23,6 +24,7 @@ if (process.env.NODE_ENV === 'development') {
     app.use(morgan('dev'));
 }
 
+app.use(cors());
 app.use(cookieParser());
 
 // Global middleware
