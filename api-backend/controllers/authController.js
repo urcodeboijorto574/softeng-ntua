@@ -176,7 +176,7 @@ exports.logout = async (req, res) => {
             status: 'OK',
             message: 'You are successfully logged out.',
         };
-        handleResponse(req, res, 200, responseMessage);
+        return handleResponse(req, res, 200, responseMessage);
     } catch (err) {
         responseMessage = {
             status: 'failed',
