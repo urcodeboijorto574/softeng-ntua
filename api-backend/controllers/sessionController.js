@@ -82,7 +82,15 @@ exports.getAllSessionsIDs = async (req, res, next) => { /* Inspection finished *
 exports.getUserQuestionnaireSession = async (req, res, next) => { /* Inspection finished */
     try {
         const session = await Session
-            .findOne({ questionnaireID: req.params.questionnaireID, submitter: req.username });
+            .findOne({ questionnaireID: req.params.questionnaireID, submitter: req.username })
+            .populate({
+                path: 'answers',
+                mode: 'Answer',
+                select: '-_id qID optID answertext',
+                sort: 'sessionID'
+            })
+            .populate('answers', '-_id answertext qID optID')
+            .sort('sessionID');
 
         const sessionFound = session;
         return res.status(sessionFound ? 200 : 402).json({
