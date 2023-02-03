@@ -115,7 +115,7 @@ exports.doAnswer = async (req, res, next) => {
                 sessionID: req.params.session,
                 questionnaireID: req.params.questionnaireID,
                 answers: [],
-                submitter: user._id
+                submitter: req.username
             });
         }
 
