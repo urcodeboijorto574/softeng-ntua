@@ -237,7 +237,7 @@ exports.login = async (req, res, next) => {
                 )
             ),
             httpOnly: true,
-            sameSize: 'None',
+            sameSite: 'None',
             secure: true,
         });
         if (req.query.format === 'json' || !req.query.format) {
@@ -293,7 +293,7 @@ exports.protect = async (req, res, next) => {
                 status: 'failed',
                 message: 'User no longer exists.',
             };
-            handleResponse(req, res, 401, handleResponse);
+            return handleResponse(req, res, 401, handleResponse);
         }
 
         // 4) Check if user changed password after token was issued
