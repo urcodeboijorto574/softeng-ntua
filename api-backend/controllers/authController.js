@@ -176,7 +176,7 @@ exports.logout = async (req, res) => {
             status: 'OK',
             message: 'You are successfully logged out.',
         };
-        handleResponse(req, res, 200, responseMessage);
+        return handleResponse(req, res, 200, responseMessage);
     } catch (err) {
         responseMessage = {
             status: 'failed',
@@ -277,7 +277,7 @@ exports.protect = async (req, res, next) => {
                 status: 'failed',
                 message: 'Please log in to get access.',
             };
-            handleResponse(req, res, 401, responseMessage);
+            return handleResponse(req, res, 401, responseMessage);
         }
         // 2) Verification of the token
         const decoded = await promisify(jwt.verify)(
