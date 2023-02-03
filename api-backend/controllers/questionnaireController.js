@@ -164,7 +164,7 @@ exports.getUserNotAnsweredQuestionnaires = async (req, res, next) => { /* (NOT F
         }
 
         return res.status(questionnairesLeft ? 200 : 402).json({
-            status: 'success',
+            status: 'OK',
             data: questionnairesLeft,
         });
     } catch (err) {
