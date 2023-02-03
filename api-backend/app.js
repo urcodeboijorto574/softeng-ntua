@@ -11,7 +11,7 @@ const answerRouter = require(`${__dirname}/routes/answerRoutes.js`);
 const sessionAnswerRouter = require(`${__dirname}/routes/sessionAnswerRoutes.js`);
 const questionAnswerRouter = require(`${__dirname}/routes/questionAnswerRoutes.js`);
 const sessionRouter = require(`${__dirname}/routes/sessionRoutes.js`);
-const importRouter = require(`${__dirname}/routes/importRoutes.js`);
+// const importRouter = require(`${__dirname}/routes/importRoutes.js`);
 
 const app = express();
 
@@ -48,8 +48,8 @@ app.use('/intelliq_api/getsessionanswers', sessionAnswerRouter); // d
 app.use('/intelliq_api/getquestionanswers', questionAnswerRouter); // e
 
 // Additional endpoints
-app.use('/intelliq_api/sessions', sessionRouter);
-app.use('/intelliq_api/dummy-data', importRouter);
+app.use('/intelliq_api/session', sessionRouter);
+// app.use('/intelliq_api/dummy-data', importRouter);
 
 
 module.exports = app;
