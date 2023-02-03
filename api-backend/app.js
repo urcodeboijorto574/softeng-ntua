@@ -48,7 +48,7 @@ app.use('/intelliq_api/getsessionanswers', sessionAnswerRouter); // d
 app.use('/intelliq_api/getquestionanswers', questionAnswerRouter); // e
 
 // Additional endpoints
-app.use('/intelliq_api/sessions', sessionRouter);
+app.use('/intelliq_api/session', sessionRouter);
 app.use('/intelliq_api/dummy-data', importRouter);
 
 

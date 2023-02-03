@@ -19,8 +19,7 @@ const sessionSchema = new mongoose.Schema({
         }
     ],
     submitter: {
-        type: mongoose.Schema.ObjectId,
-        ref: 'User'
+        type: String
     }
 });
 

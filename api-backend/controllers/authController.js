@@ -1,7 +1,7 @@
 const { promisify } = require('util');
 const jwt = require('jsonwebtoken');
-const User = require('./../models/userModel');
-const AppError = require('./../utils/appError');
+const User = require(`${__dirname}/../models/userModel`);
+const AppError = require(`${__dirname}/../utils/appError`);
 const converter = require('json-2-csv');
 const csv = require('csv-express');
 
