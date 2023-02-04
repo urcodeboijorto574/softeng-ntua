@@ -3,9 +3,7 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
 import 'package:pie_chart/pie_chart.dart';
-import 'package:questionnaires_app/main_screens/admin_questionnaire_list.dart';
 import 'package:questionnaires_app/main_screens/questionnaire_list.dart';
-import 'package:questionnaires_app/widgets/app_bar.dart';
 
 class StatisticsScreen extends StatefulWidget {
   final String questionnaireTitle;
@@ -18,9 +16,6 @@ class StatisticsScreen extends StatefulWidget {
 }
 
 class _StatisticsScreenState extends State<StatisticsScreen> {
-  final GlobalKey<ScaffoldMessengerState> _scaffoldKey =
-      GlobalKey<ScaffoldMessengerState>();
-
   Map<String, double> dataMap(int index) {
     Map<String, double> temp_map = {};
     Map<String, double> temp = {};
@@ -55,10 +50,42 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 9, 52, 58),
-      appBar: MyAppBar(
+      appBar: AppBar(
         elevation: 0,
-        height: 90,
-        scaffoldKey: _scaffoldKey,
+        toolbarHeight: 90,
+        backgroundColor: const Color.fromARGB(255, 9, 52, 58),
+        leading: const Icon(
+          Icons.question_mark_outlined,
+          color: Colors.pinkAccent,
+          size: 50,
+        ),
+        title: const Padding(
+          padding: EdgeInsets.only(bottom: 15),
+          child: Text(
+            'IntelliQ',
+            style: TextStyle(
+              color: Colors.pinkAccent,
+              fontWeight: FontWeight.bold,
+              fontSize: 30,
+              letterSpacing: 2,
+            ),
+          ),
+        ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(15),
+            child: IconButton(
+              onPressed: () {
+                Navigator.pushReplacementNamed(context, '/welcome_screen');
+              },
+              icon: const Icon(
+                Icons.logout,
+                color: Colors.pinkAccent,
+                size: 30,
+              ),
+            ),
+          )
+        ],
       ),
       body: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -75,7 +102,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
               itemBuilder: ((context, index) {
                 if (index == 0) {
                   return Padding(
-                    padding: const EdgeInsets.only(top: 50),
+                    padding: const EdgeInsets.only(top: 30),
                     child: Center(
                       child: Text(
                         widget.questionnaireTitle,
@@ -104,7 +131,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) =>
-                                      const AdminQuestionnaireList(
+                                      const QuestionnaireListScreen(
                                           label: 'show statistics'),
                                 ),
                                 (route) => false);
