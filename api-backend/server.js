@@ -6,7 +6,7 @@ const fs = require('fs');
 const key = fs.readFileSync(`${__dirname}/HTTPS-SSL/key.pem`).toString();
 const cert = fs.readFileSync(`${__dirname}/HTTPS-SSL/cert.pem`).toString();
 
-dotenv.config({ path: './config.env' });
+dotenv.config({ path: `${__dirname}/config.env` });
 const app = require('./app');
 
 
