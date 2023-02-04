@@ -4,8 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:questionnaires_app/main_screens/answers_overview.dart';
+import 'package:questionnaires_app/main_screens/questionnaire_list.dart';
+import 'package:questionnaires_app/main_screens/user_homescreen.dart';
 import 'package:questionnaires_app/objects/answer.dart';
 import 'package:questionnaires_app/objects/question.dart';
+import 'package:questionnaires_app/widgets/alert_dialog.dart';
+import 'package:questionnaires_app/widgets/app_bar.dart';
 import 'package:questionnaires_app/widgets/snackbar.dart';
 
 class QuestionScreen extends StatefulWidget {
@@ -157,42 +161,10 @@ class _QuestionScreenState extends State<QuestionScreen> {
         key: _formKey,
         child: Scaffold(
           backgroundColor: const Color.fromARGB(255, 9, 52, 58),
-          appBar: AppBar(
+          appBar: MyAppBar(
             elevation: 0,
-            toolbarHeight: 90,
-            backgroundColor: const Color.fromARGB(255, 9, 52, 58),
-            leading: const Icon(
-              Icons.question_mark_outlined,
-              color: Colors.pinkAccent,
-              size: 50,
-            ),
-            title: const Padding(
-              padding: EdgeInsets.only(bottom: 15),
-              child: Text(
-                'IntelliQ',
-                style: TextStyle(
-                  color: Colors.pinkAccent,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 30,
-                  letterSpacing: 2,
-                ),
-              ),
-            ),
-            actions: [
-              Padding(
-                padding: const EdgeInsets.all(15),
-                child: IconButton(
-                  onPressed: () {
-                    Navigator.pushReplacementNamed(context, '/welcome_screen');
-                  },
-                  icon: const Icon(
-                    Icons.logout,
-                    color: Colors.pinkAccent,
-                    size: 30,
-                  ),
-                ),
-              )
-            ],
+            height: 90,
+            scaffoldKey: _scaffoldKey,
           ),
           body: Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -206,127 +178,203 @@ class _QuestionScreenState extends State<QuestionScreen> {
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.only(top: 60, left: 100),
+                  padding: const EdgeInsets.only(left: 100, top: 10, right: 10),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        '${widget.index}. ${widget.question.qtext}',
-                        style: const TextStyle(
-                          color: Colors.black,
-                          fontSize: 22,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                      (widget.question.options.length == 1 &&
-                              widget.question.options[0]['opttxt'] ==
-                                  '<open string>')
-                          ? Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 20),
-                              child: SizedBox(
-                                width: 500,
-                                child: TextFormField(
-                                  style: const TextStyle(fontSize: 15),
-                                  validator: (value) {
-                                    if (value!.isEmpty) {
-                                      return 'The question is required.';
-                                    } else {
-                                      return null;
-                                    }
-                                  },
-                                  onChanged: (value) {
-                                    answer = value;
-                                  },
-                                  decoration: InputDecoration(
-                                    labelText: 'Write your answer',
-                                    hintText: 'Write your answer',
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(25),
-                                    ),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(25),
-                                      borderSide: const BorderSide(
-                                        color: Color.fromARGB(255, 9, 52, 58),
-                                        width: 2,
-                                      ),
-                                    ),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(25),
-                                      borderSide: const BorderSide(
-                                        color: Colors.pinkAccent,
-                                        width: 2,
-                                      ),
-                                    ),
-                                    floatingLabelBehavior:
-                                        FloatingLabelBehavior.never,
-                                  ),
-                                  cursorColor: Colors.pinkAccent,
-                                ),
-                              ),
-                            )
-                          : Padding(
-                              padding: const EdgeInsets.only(top: 10),
-                              child: ListView.builder(
-                                shrinkWrap: true,
-                                itemCount: optionsLength,
-                                itemBuilder: (context, index) {
-                                  return RadioListTile(
-                                    value: index + 1,
-                                    groupValue: selectedItem,
-                                    onChanged: (int? value) {
-                                      setState(() {
-                                        selectedItem = value!;
-                                      });
+                      SizedBox(
+                        height: 60,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(right: 20),
+                              child: InkWell(
+                                onTap: () async {
+                                  MyAlertDialog.show(
+                                    context: context,
+                                    title: 'Leave Questionnaire',
+                                    content:
+                                        'Are you sure you want to leave the questionnaire? Your progress will be lost!',
+                                    tapNo: () {
+                                      Navigator.pop(context);
                                     },
-                                    title: Text(widget.question.options[index]
-                                        ['opttxt']),
-                                    activeColor:
-                                        const Color.fromARGB(255, 9, 52, 58),
+                                    tapYes: () {
+                                      Navigator.pop(context);
+                                      Navigator.pushAndRemoveUntil(context,
+                                          MaterialPageRoute(builder: (context) {
+                                        return const UserHomeScreen();
+                                      }), (route) => false);
+                                    },
                                   );
                                 },
-                              ),
-                            ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(right: 100),
-                            child: Container(
-                              height: 60,
-                              width: 140,
-                              decoration: BoxDecoration(
-                                color: const Color.fromARGB(255, 9, 52, 58),
-                                borderRadius: BorderRadius.circular(15),
-                              ),
-                              child: processing
-                                  ? const Center(
-                                      child: CircularProgressIndicator(
-                                        color: Colors.pinkAccent,
-                                      ),
-                                    )
-                                  : MaterialButton(
-                                      onPressed: () {
-                                        _clickNext();
-                                      },
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: const [
-                                          Text(
-                                            'Next',
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                              color: Colors.pinkAccent,
-                                              fontSize: 22,
-                                              fontWeight: FontWeight.w500,
-                                            ),
-                                          ),
-                                        ],
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: const [
+                                    Padding(
+                                      padding: EdgeInsets.only(top: 9),
+                                      child: Icon(
+                                        Icons.close,
+                                        color: Colors.pink,
                                       ),
                                     ),
+                                    SizedBox(width: 5),
+                                    Text(
+                                      'Cancel',
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        color: Colors.pink,
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.4,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              '${widget.index}. ${widget.question.qtext}',
+                              style: const TextStyle(
+                                color: Colors.black,
+                                fontSize: 22,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                            (widget.question.options.length == 1 &&
+                                    widget.question.options[0]['opttxt'] ==
+                                        '<open string>')
+                                ? Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 20),
+                                    child: SizedBox(
+                                      width: 500,
+                                      child: TextFormField(
+                                        style: const TextStyle(fontSize: 15),
+                                        validator: (value) {
+                                          if (value!.isEmpty) {
+                                            return 'The question is required.';
+                                          } else {
+                                            return null;
+                                          }
+                                        },
+                                        onChanged: (value) {
+                                          answer = value;
+                                        },
+                                        decoration: InputDecoration(
+                                          labelText: 'Write your answer',
+                                          hintText: 'Write your answer',
+                                          border: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(25),
+                                          ),
+                                          enabledBorder: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(25),
+                                            borderSide: const BorderSide(
+                                              color: Color.fromARGB(
+                                                  255, 9, 52, 58),
+                                              width: 2,
+                                            ),
+                                          ),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(25),
+                                            borderSide: const BorderSide(
+                                              color: Colors.pinkAccent,
+                                              width: 2,
+                                            ),
+                                          ),
+                                          floatingLabelBehavior:
+                                              FloatingLabelBehavior.never,
+                                        ),
+                                        cursorColor: Colors.pinkAccent,
+                                      ),
+                                    ),
+                                  )
+                                : Padding(
+                                    padding: const EdgeInsets.only(top: 10),
+                                    child: ListView.builder(
+                                      shrinkWrap: true,
+                                      itemCount: optionsLength,
+                                      itemBuilder: (context, index) {
+                                        return RadioListTile(
+                                          value: index + 1,
+                                          groupValue: selectedItem,
+                                          onChanged: (int? value) {
+                                            setState(() {
+                                              selectedItem = value!;
+                                            });
+                                          },
+                                          title: Text(widget.question
+                                              .options[index]['opttxt']),
+                                          activeColor: const Color.fromARGB(
+                                              255, 9, 52, 58),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(right: 100),
+                              child: Container(
+                                height: 60,
+                                width: 140,
+                                decoration: BoxDecoration(
+                                  color: const Color.fromARGB(255, 9, 52, 58),
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                child: processing
+                                    ? const Center(
+                                        child: CircularProgressIndicator(
+                                          color: Colors.pinkAccent,
+                                        ),
+                                      )
+                                    : MaterialButton(
+                                        onPressed: () {
+                                          try {
+                                            _clickNext();
+                                          } catch (e) {
+                                            setState(() {
+                                              processing = false;
+                                            });
+                                            MyMessageHandler.showSnackbar(
+                                                _scaffoldKey, e.toString());
+                                          }
+                                        },
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: const [
+                                            Text(
+                                              'Next',
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                color: Colors.pinkAccent,
+                                                fontSize: 22,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                              ),
+                            ),
+                          ],
+                        ),
                       )
                     ],
                   ),
