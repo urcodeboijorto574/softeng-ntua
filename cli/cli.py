@@ -4,10 +4,31 @@ import sys
 import json
 import pandas as pd
 from io import StringIO
+import urllib3
+import csv
 
-baseUrl = "http://localhost:3000/intelliq_api/"
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+requests.packages.urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-loginEndpoint = "http://localhost:8000/endpoint"
+baseUrl = "https://localhost:9103/intelliq_api/"
+
+# writing to a file
+def save_variable_to_file(variable):
+    with open("token.txt", "w") as file:
+        file.write(str(variable))
+    
+    return
+
+# reading from a file
+def load_variable_from_file():
+    with open("token.txt", "r") as file:
+        return str(file.read())
+    
+    return 
+
+def getCookie():
+    return {"jwt" : load_variable_from_file()}
+    # return load_variable_from_file()
 
 def unknownArgsHandler(unknown):
     print("Error: Unrecognized arguments passed.\nGot: ")
@@ -19,21 +40,28 @@ def unknownArgsHandler(unknown):
     print("\nExiting...")
     exit()
 
-def handlePost(url, json_data = {}):
+def handlePost(url, verify, json_data = {}, headers = {}):
     try:
-        if (json_data == {}):
-            response = requests.post(url, timeout=10)
+        if (json_data == {} and headers == {}):
+            response = requests.post(url, verify = False, timeout=10)
+        elif isinstance(json_data, str):
+            response = requests.post(url, data = json_data,
+                                    headers = headers, verify = False,
+                                    timeout=10)
         else:
-            response = requests.post(url, json = json_data, timeout=10)
+            response = requests.post(url, json = json_data,
+                                    headers = headers, verify = False,
+                                    timeout=10)
     except requests.exceptions.ReadTimeout:
         print("Timeout error, the server took more than 10 seconds to respond")
         exit()
 
     return response
 
-def handleGet(url):
+def handleGet(url, vescookie):
     try:
-        response = requests.get(url, timeout=10)
+        print(">>> HERE <<<")
+        response = requests.get(url, cookies=vescookie, verify = False, timeout=10)
     except requests.exceptions.ReadTimeout:
         print("Timeout error, the server took more than 10 seconds to respond")
         exit()
@@ -41,27 +69,47 @@ def handleGet(url):
     return response
 
 def handleResponse(response, form):
+    
     if form == "json":
         print("form:", form)
         json_data = response.json()
         json_formatted_str = json.dumps(json_data, indent=2)
         print(json_formatted_str)
     else:
-        print("form:", form)
-        csv_data = response.content.decode('utf-8')
-        print(csv_data)
-        df = pd.read_csv(StringIO(csv_data))
-        print(df.to_string())
+        print("\n\nform:", form)
+        print("\n")
+        #print(response.content)
+        # csv_data = response.content.decode('utf-8')
+        # reader = csv.reader(csv_data.splitlines())
+        # for row in reader:
+        #     print(row[0].key)
+        #     print(row[0].value)
+        # decoded_content = response.content.decode('utf-8')
+        # reader = csv.reader(decoded_content.splitlines(), delimiter=',')
+        # for row in reader:
+        #     print(row)
+
+        # csv_data = response.content.decode('utf-8')
+        csv_data = response.text
+        parsed_data = json.loads(csv_data)
+        print(parsed_data)
+        # df = pd.read_csv(StringIO(csv_data))
+        # print(df.to_string())
 
     return
 
 # login: NOT DONE
 def login(username, password, form):
     """"""
-    print("Will sent username:", username, "and password:", password)
-    print("Will login")
+    headers = {'Content-Type': 'application/x-www-form-urlencoded'}
+    #json_data = {'username' : username, 'password' : password}
+    data = "username=" + username + "&password=" + password
     loginUrl = baseUrl + "login"    # !!
-    response = handlePost(loginUrl)
+    cert_path = "cert.pem"
+    response = handlePost(loginUrl, verify=cert_path, json_data = data, headers = headers)
+    print(">>> Cookie:", response.cookies["jwt"])
+    jwt = response.cookies["jwt"]
+    save_variable_to_file(jwt)
     handleResponse(response, form)
     
     return response
@@ -73,7 +121,9 @@ def logout(form):
         Else: gives reason"""
     print("Will logout")
     logoutUrl = baseUrl + "logout"
-    response = handlePost(logoutUrl)
+    response = handlePost(logoutUrl, verify = False)
+    jwt = response.cookies["jwt"]
+    save_variable_to_file(jwt)
     handleResponse(response, form)
 
     return
@@ -90,7 +140,11 @@ def healthcheck(form):
     #healthUrl = baseUrl + "admin/healthcheck"
     healthUrl = baseUrl + "admin/healthcheck?format=" + form
     print("Will perform a healthcheck at", healthUrl)
-    response = handleGet(healthUrl)
+
+    vescookie = getCookie()
+    print(vescookie)
+
+    response = handleGet(healthUrl, vescookie)
     handleResponse(response, form)
     
     return
