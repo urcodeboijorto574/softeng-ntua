@@ -5,15 +5,15 @@ const authController = require('./../controllers/authController.js');
 const router = express.Router();
 
 router
-    .route('/getallsessions/:questionnaireID')
+    .route('/getallquestionnairesessions/:questionnaireID')
     .get(
         authController.protect,
         authController.restrictTo('admin'),
-        sessionController.getAllSessions
+        sessionController.getAllQuestionnaireSessions
     );
 
 router
-    .route('/sessionids')
+    .route('/getallsessionsids')
     .get(
         authController.protect,
         authController.restrictTo('user'),
@@ -21,11 +21,11 @@ router
     );
 
 router
-    .route('/getsession/:username/:questionnaireID')
+    .route('/getuserquestionnairesession/:questionnaireID')
     .get(
         authController.protect,
         authController.restrictTo('user'),
-        sessionController.getSession
+        sessionController.getUserQuestionnaireSession
     );
 
 module.exports = router;
