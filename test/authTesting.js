@@ -10,8 +10,7 @@ var token;
 chai.use(chaiHttp);
 
 // We need to delete the user before running
-
-describe("Authorization endpoints", () => {
+describe("Authorization endpoints good scenario, user is signed up, logged in and logged out", () => {
   describe("/signup", () => {
     it("it should create a new user/admin in database", (done) => {
       const newUser = {
@@ -36,7 +35,7 @@ describe("Authorization endpoints", () => {
   describe("/login", () => {
     it("it should login a user/admin with correct username and password", (done) => {
       const user = {
-        username: "test-user",
+        username: "test-user1",
         password: "test1234",
       };
       chai
@@ -65,6 +64,332 @@ describe("Authorization endpoints", () => {
           res.body.status.should.equal("OK");
           res.body.should.have.property("message");
           res.body.message.should.equal("You are successfully logged out.");
+          done();
+        })
+        .timeout(1000000);
+    });
+  });
+  describe("/deleteUser/:username", () => {
+    it("it shoutld delete the current user", (done) => {
+      chai
+        .request(server)
+        .delete("/intelliq_api/deleteUser/test-user1")
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.have.property("status");
+          res.body.status.should.equal("OK");
+          done();
+        })
+        .timeout(1000000);
+    });
+  });
+});
+
+//------------------------------BAD SCENARIO: INPUT ONLY MISSING SOME FIELDS-------------------------------------------//
+//---------------------------------------------------------------------------------------------------------------------//
+
+describe("Authorization endpoints bad scenario 1, user is signed up without username", () => {
+  describe("/signup", () => {
+    it("it should throw an error because username does not exists", (done) => {
+      const newUser = {
+        password: "test1234",
+        usermod: "user",
+      };
+      chai
+        .request(server)
+        .post("/intelliq_api/signup")
+        .send(newUser)
+        .end((err, res) => {
+          res.should.have.status(400);
+          res.body.should.have.property("status");
+          res.body.status.should.equal("failed");
+          res.body.should.have.property("message");
+          res.body.message.should.equal(
+            "Invalid input data. Please provide a username"
+          );
+          done();
+        })
+        .timeout(1000000);
+    });
+  });
+});
+
+describe("Authorization endpoints bad scenario 2, user is signed up without password", () => {
+  describe("/signup", () => {
+    it("it should throw an error because password does not exists", (done) => {
+      const newUser = {
+        username: "test-user1",
+        usermod: "user",
+      };
+      chai
+        .request(server)
+        .post("/intelliq_api/signup")
+        .send(newUser)
+        .end((err, res) => {
+          res.should.have.status(400);
+          res.body.should.have.property("status");
+          res.body.status.should.equal("failed");
+          res.body.should.have.property("message");
+          res.body.message.should.equal(
+            "Invalid input data. Please provide a password"
+          );
+          done();
+        })
+        .timeout(1000000);
+    });
+  });
+});
+
+describe("Authorization endpoints bad scenario 3, user is signed up without a role", () => {
+  describe("/signup", () => {
+    it("it should throw an error because role does not exists", (done) => {
+      const newUser = {
+        username: "test-user1",
+        password: "test1234",
+      };
+      chai
+        .request(server)
+        .post("/intelliq_api/signup")
+        .send(newUser)
+        .end((err, res) => {
+          res.should.have.status(400);
+          res.body.should.have.property("status");
+          res.body.status.should.equal("failed");
+          res.body.should.have.property("message");
+          res.body.message.should.equal(
+            "Invalid input data. A user must have a role"
+          );
+          done();
+        })
+        .timeout(1000000);
+    });
+  });
+});
+
+describe("Authorization endpoints bad scenario 4, user is signed up without a username and password", () => {
+  describe("/signup", () => {
+    it("it should throw an error because username and password does not exist", (done) => {
+      const newUser = {
+        usermod: "user",
+      };
+      chai
+        .request(server)
+        .post("/intelliq_api/signup")
+        .send(newUser)
+        .end((err, res) => {
+          res.should.have.status(400);
+          res.body.should.have.property("status");
+          res.body.status.should.equal("failed");
+          res.body.should.have.property("message");
+          res.body.message.should.equal(
+            "Invalid input data. Please provide a username. Please provide a password"
+          );
+          done();
+        })
+        .timeout(1000000);
+    });
+  });
+});
+
+describe("Authorization endpoints bad scenario 5, user is signed up without a username and role", () => {
+  describe("/signup", () => {
+    it("it should throw an error because username and role does not exist", (done) => {
+      const newUser = {
+        password: "test1234",
+      };
+      chai
+        .request(server)
+        .post("/intelliq_api/signup")
+        .send(newUser)
+        .end((err, res) => {
+          res.should.have.status(400);
+          res.body.should.have.property("status");
+          res.body.status.should.equal("failed");
+          res.body.should.have.property("message");
+          res.body.message.should.equal(
+            "Invalid input data. Please provide a username. A user must have a role"
+          );
+          done();
+        })
+        .timeout(1000000);
+    });
+  });
+});
+
+describe("Authorization endpoints bad scenario 6, user is signed up without a password and role", () => {
+  describe("/signup", () => {
+    it("it should throw an error because password and role does not exists", (done) => {
+      const newUser = {
+        username: "test-user1",
+      };
+      chai
+        .request(server)
+        .post("/intelliq_api/signup")
+        .send(newUser)
+        .end((err, res) => {
+          res.should.have.status(400);
+          res.body.should.have.property("status");
+          res.body.status.should.equal("failed");
+          res.body.should.have.property("message");
+          res.body.message.should.equal(
+            "Invalid input data. A user must have a role. Please provide a password"
+          );
+          done();
+        })
+        .timeout(1000000);
+    });
+  });
+});
+
+describe("Authorization endpoints bad scenario 7, user is signed up without a password a username and a role", () => {
+  describe("/signup", () => {
+    it("it should throw an error because username password and role does not exist", (done) => {
+      const newUser = {};
+      chai
+        .request(server)
+        .post("/intelliq_api/signup")
+        .send(newUser)
+        .end((err, res) => {
+          res.should.have.status(400);
+          res.body.should.have.property("status");
+          res.body.status.should.equal("failed");
+          res.body.should.have.property("message");
+          res.body.message.should.equal(
+            "Invalid input data. Please provide a username. A user must have a role. Please provide a password"
+          );
+          done();
+        })
+        .timeout(1000000);
+    });
+  });
+});
+
+describe("Authorization endpoints bad scenario 7, user is signed up without a password a username and a role", () => {
+  describe("/signup", () => {
+    it("it should throw an error because username password and role does not exist", (done) => {
+      const newUser = {};
+      chai
+        .request(server)
+        .post("/intelliq_api/signup")
+        .send(newUser)
+        .end((err, res) => {
+          res.should.have.status(400);
+          res.body.should.have.property("status");
+          res.body.status.should.equal("failed");
+          res.body.should.have.property("message");
+          res.body.message.should.equal(
+            "Invalid input data. Please provide a username. A user must have a role. Please provide a password"
+          );
+          done();
+        })
+        .timeout(1000000);
+    });
+  });
+});
+
+//------------------------------BAD SCENARIO: INPUT ONLY EVALUATION SOME FIELDS-------------------------------------------//
+//------------------------------------------------------------------------------------------------------------------------//
+describe("Authorization endpoints bad scenario 8, user is signed up with duplicate username", () => {
+  describe("/signup", () => {
+    it("it should throw an error because username is used", (done) => {
+      const newUser = {
+        username: "jimv",
+        password: "test1234",
+        usermod: "user",
+      };
+      chai
+        .request(server)
+        .post("/intelliq_api/signup")
+        .send(newUser)
+        .end((err, res) => {
+          res.should.have.status(400);
+          res.body.should.have.property("status");
+          res.body.status.should.equal("failed");
+          res.body.should.have.property("message");
+          res.body.message.should.equal(
+            "Username taken! Please provide a new username."
+          );
+          done();
+        })
+        .timeout(1000000);
+    });
+  });
+});
+
+describe("Authorization endpoints bad scenario 9, user is signed up with duplicate username", () => {
+  describe("/signup", () => {
+    it("it should throw an error because username is used", (done) => {
+      const newUser = {
+        username: "jimvvvvvvvvvvvvvvvvvvvvvvvvvv",
+        password: "test1234",
+        usermod: "user",
+      };
+      chai
+        .request(server)
+        .post("/intelliq_api/signup")
+        .send(newUser)
+        .end((err, res) => {
+          res.should.have.status(400);
+          res.body.should.have.property("status");
+          res.body.status.should.equal("failed");
+          res.body.should.have.property("message");
+          res.body.message.should.equal(
+            "Invalid input data. A username must have at most 20 characters"
+          );
+          done();
+        })
+        .timeout(1000000);
+    });
+  });
+});
+
+describe("Authorization endpoints bad scenario 10, user is signed up with invalid password", () => {
+  describe("/signup", () => {
+    it("it should throw an error because username is invalid", (done) => {
+      const newUser = {
+        username: "jimv",
+        password: "t",
+        usermod: "user",
+      };
+      chai
+        .request(server)
+        .post("/intelliq_api/signup")
+        .send(newUser)
+        .end((err, res) => {
+          res.should.have.status(400);
+          res.body.should.have.property("status");
+          res.body.status.should.equal("failed");
+          res.body.should.have.property("message");
+          res.body.message.should.equal(
+            "Invalid input data. A password must have at least 8 characters"
+          );
+          done();
+        })
+        .timeout(1000000);
+    });
+  });
+});
+
+describe("Authorization endpoints bad scenario 11, user is signed up with invalid role", () => {
+  describe("/signup", () => {
+    it("it should throw an error because role is invalid", (done) => {
+      const newUser = {
+        username: "jimv",
+        password: "test1234",
+        usermod: "t",
+      };
+      chai
+        .request(server)
+        .post("/intelliq_api/signup")
+        .send(newUser)
+        .end((err, res) => {
+          res.should.have.status(400);
+          res.body.should.have.property("status");
+          res.body.status.should.equal("failed");
+          res.body.should.have.property("message");
+          res.body.message.should.equal(
+            "Invalid input data. Role must be user or admin"
+          );
           done();
         })
         .timeout(1000000);

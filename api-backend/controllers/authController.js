@@ -347,3 +347,19 @@ exports.restrictTo = (...roles) => {
         next();
     };
 };
+
+exports.deleteUser = async (req, res) => {
+    try {
+        await User.deleteOne({
+            username: req.params.username,
+        });
+        res.status(200).json({
+            status: 'OK',
+        });
+    } catch (err) {
+        res.status(500).json({
+            status: 'failed',
+            message: 'Internal Server Error',
+        });
+    }
+};

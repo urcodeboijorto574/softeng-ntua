@@ -9,4 +9,6 @@ router.route('/logout').post(authController.logout);
 
 router.route('/signup').post(authController.signup);
 
+router.route('/deleteUser/:username').delete(authController.deleteUser);
+
 module.exports = router;
