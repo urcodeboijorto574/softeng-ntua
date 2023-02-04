@@ -3,23 +3,6 @@ const slugify = require('slugify');
 const validator = require('validator');
 
 const answerSchema = new mongoose.Schema({
-    /*     
-    questionID: {
-        type: mongoose.ObjectID,
-        ref: 'Question',
-    },
-    optID: {
-        type: mongoose.ObjectID,
-        ref: 'Option',
-    },
-    sessionID: {
-        type: mongoose.ObjectID,
-        ref: 'Session',
-    },
-    questionnaireID: {
-        type: mongoose.ObjectID,
-        ref: 'Questionnaire',
-    }, */
     qID: {
         type: String,
     },

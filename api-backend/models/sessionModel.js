@@ -18,9 +18,8 @@ const sessionSchema = new mongoose.Schema({
             ref: 'Answer',
         }
     ],
-    user: {
-        type: mongoose.Schema.ObjectId,
-        ref: 'User'
+    submitter: {
+        type: String
     }
 });
 
