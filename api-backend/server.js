@@ -22,7 +22,7 @@ mongoose
         useNewUrlParser: true,
         useCreateIndex: true,
         useFindAndModify: false,
-        useUnifiedTopology: true
+        useUnifiedTopology: true,
     })
     .then(() => {
         //console.log(con.connections);
@@ -60,3 +60,5 @@ process.on('unhandledRejection', (err) => {
         process.exit(1);
     });
 });
+
+module.exports = server;
