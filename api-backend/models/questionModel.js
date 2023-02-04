@@ -6,9 +6,8 @@ const questionSchema = new mongoose.Schema({
     qID: {
         type: String,
         required: [true, 'A question must have an id'],
-        //unique: [true, "A question must have it's own unique id"],
+        unique: [true, "A question must have it's own unique id"],
         length: [3, 'A question id must have 3 characters'],
-        /* Με καποιο τροπο πρεπει να εξασφαλισουμε οτι το id θα ειναι της μορφης Q00*/
     },
     qtext: {
         type: String,
@@ -26,8 +25,9 @@ const questionSchema = new mongoose.Schema({
         type: String,
         enum: {
             values: ['question', 'profile'],
-            message: 'A question type is question or profile',
+            message: 'Required is question or profile',
         },
+        required: [true, 'A question must have a type']
     },
     options: [
         {
@@ -40,9 +40,7 @@ const questionSchema = new mongoose.Schema({
         default: 0,
     },
     questionnaireID: {
-        //type: mongoose.Schema.ObjectId,
         type: String,
-        //ref: 'Questionnaire',
     },
 });
 

@@ -2,12 +2,6 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
 const userSchema = new mongoose.Schema({
-    username: {
-        type: String,
-        unique: [true, 'Username taken! Please provide a new username'],
-        required: [true, 'Please provide a username'],
-        maxlength: [20, 'A username must have at most 20 characters'],
-    },
     role: {
         type: String,
         enum: {
@@ -16,15 +10,32 @@ const userSchema = new mongoose.Schema({
         },
         required: [true, 'A user must have a role'],
     },
+    username: {
+        type: String,
+        unique: [true, 'Username taken! Please provide a new username'],
+        required: [true, 'Please provide a username'],
+        maxlength: [20, 'A username must have at most 20 characters'],
+    },
     password: {
         type: String,
         required: [true, 'Please provide a password'],
         minlength: [8, 'A password must have at least 8 characters'],
-        /* select: false, //never show password in query outputs */
+        // select: false, //never show password in query outputs
     },
-    passwordChangedAt: Date,
+    passwordChangedAt: {
+        type: Date,
+    },
+    questionnairesAnswered: [
+        {
+            type: mongoose.Types.ObjectId,
+            ref: 'Questionnaire'
+        }
+    ],
 });
 
+/*
+ This middleware creates trouble for the doanswer endpoint.
+*/
 // document middleware for password encryption. Runs right before the current document is saved in the database
 userSchema.pre('save', async function (next) {
     this.password = await bcrypt.hash(this.password, 12);
