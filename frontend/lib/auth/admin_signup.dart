@@ -26,7 +26,7 @@ class _AdminSignupScreenState extends State<AdminSignupScreen> {
   bool processing = false;
 
   String _localhost() {
-    return 'https://127.0.0.1:3000/intelliq_api/signup';
+    return 'https://127.0.0.1:9103/intelliq_api/signup';
   }
 
   Future<void> signUpAdmin() async {
