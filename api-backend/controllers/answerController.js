@@ -8,9 +8,9 @@ const mongoose = require('mongoose');
 
 /**
  * Creates and stores an answer object in the database.
- * @param {JSON} req - JSON object of which req.params contains the questionnaireID, questionID, sessionID and optionID, and req.body contains the answer text.
- * @param {JSON} res - JSON object that contains a confirmation/rejection of the request.
- * @return {JSON} - The response object created.
+ * @param {JSON} req - JSON request object containing questionnaireID, questionID, sessionID and optionID (req.params), answer text (req.body).
+ * @param {JSON} res - JSON response object containing a confirmation/rejection of the request.
+ * @return {JSON} - The response object.
  * 
  * URL: {baseURL}/doanswer/:questionnaireID/:questionID/:session/:optionID
 */
@@ -115,7 +115,7 @@ exports.doAnswer = async (req, res, next) => {
                 sessionID: req.params.session,
                 questionnaireID: req.params.questionnaireID,
                 answers: [],
-                submitter: user._id
+                submitter: req.username
             });
         }
 
@@ -180,11 +180,11 @@ exports.doAnswer = async (req, res, next) => {
 
 /**
  * Returns all the answers of a specified session.
- * @param {JSON} req - JSON object of which req.params contains the questionnaireID and sessionID.
- * @param {JSON} res - JSON object that contains the data to send.
- * @return {JSON} - The response object created.
+ * @param {JSON} req - JSON object containing questionnaireID and sessionID (req.params).
+ * @param {JSON} res - JSON object containing the data to send.
+ * @return {JSON} - The response object.
  * 
- * URL: {baseURL}getsessionanswers/:questionnaireID/:session
+ * URL: {baseURL}/getsessionanswers/:questionnaireID/:session
  */
 exports.getSessionAnswers = async (req, res, next) => {
     /* This line is added only for temporary purposes */
@@ -193,9 +193,9 @@ exports.getSessionAnswers = async (req, res, next) => {
 
 /**
  * Returns all the answers of a specified question.
- * @param {JSON} req - JSON object of which req.params contains the qustionnaireID and questionID.
- * @param {JSON} res - JSON object that contains the data to send.
- * @return {JSON} - The response object created.
+ * @param {JSON} req - JSON object containing qustionnaireID and questionID (req.params).
+ * @param {JSON} res - JSON object containing the data to send.
+ * @return {JSON} - The response object.
  * 
  * URL: {baseURL}/getquestionanswers/:questionnaireID/:questionID
  */

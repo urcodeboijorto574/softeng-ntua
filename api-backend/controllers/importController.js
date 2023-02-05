@@ -8,7 +8,7 @@ const User = require(`${__dirname}/../models/userModel.js`);
 const Models = [Answer, Session, Option, Question, Questionnaire, User];
 
 /**
- * Imports all the data from the folder data/ to the data base.
+ * Middleware that imports all the data from the folder data/ to the data base.
  * @param {JSON} req - JSON object of which no field is used in the function.
  * @param {JSON} res - JSON object that contains a confirmation/rejection of the request.
  * @return {JSON} - The response object created.
@@ -21,7 +21,7 @@ exports.importData = async (req, res, next) => {
 };
 
 /**
- * Deletes all the data from the DB.
+ * Middleware that deletes all the data from the DB.
  * @param {JSON} req - JSON object of which no field is used in the function.
  * @param {JSON} res - JSON object that contains a confirmation/rejection of the request.
  * @return {JSON} - The response object created.

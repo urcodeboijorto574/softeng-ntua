@@ -52,4 +52,12 @@ router
         authController.getUser
     );
 
+router
+    .route('/users/deleteUser/:username')
+    .delete(
+        authController.protect,
+        authController.restrictTo('super-admin'),
+        adminController.deleteUser
+    );
+
 module.exports = router;
