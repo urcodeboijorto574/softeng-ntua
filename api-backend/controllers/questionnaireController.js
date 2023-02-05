@@ -1,8 +1,10 @@
 const Questionnaire = require(`${__dirname}/../models/questionnaireModel.js`);
 const Question = require(`${__dirname}/../models/questionModel.js`);
 const Option = require(`${__dirname}/../models/optionModel.js`);
+const Session = require(`${__dirname}/../models/sessionModel.js`);
+const Answer = require(`${__dirname}/../models/answerModel.js`);
 const User = require(`${__dirname}/../models/userModel.js`);
-
+const mongoose = require('mongoose');
 
 /**
  * Middleware that returns all the questionnaires that have been created by the logged-in admin.
@@ -156,18 +158,42 @@ exports.getUserNotAnsweredQuestionnaires = async (req, res, next) => { /* (NOT F
  * @param {JSON} res - JSON respnse object containing a confirmation/rejection of the request.
  * @param {*} next - the next middlware in the middleware stack.
  * @returns - The response object res.
+ * 
+ * URL: {baseURL}/questionnaire/deletequestionnaire/:questionnaireID
  */
 exports.deleteQuestionnaire = async (req, res, next) => {
     try {
-        /* This line is added only for temporary purposes */
-        return res.status('418').json({ status: 'no operation', message: 'I\'m a teapot' });
+        const questionnaire = await Questionnaire.findOne(req.params);
+        if (!questionnaire) {
+            return res.status(400).json({
+                status: 'failed',
+                message: 'bad request'
+            });
+        }
+        const retQuestionnaireObj =
+            await Questionnaire.deleteMany(req.params);
+
+        console.log('retQuestionnaireObj:', retQuestionnaireObj);
+
+        if (retQuestionnaireObj.deletedCount == 1) {
+            await Question.deleteMany(req.params);
+            await Option.deleteMany(req.params);
+            await Session.deleteMany(req.params);
+            await Answer.deleteMany(req.params);
+        }
+
+        return res.status(200).json({
+            status: 'OK',
+            message: 'Questionnaire and related documents deleted successfully'
+        });
     } catch (err) {
         return res.status(500).json({
             status: 'failed',
-            msg: err.message,
+            message: err,
         });
     }
-}
+    next();
+};
 
 /**
  * Middleware that returns a particular questionnaire by the logged-in ***.
