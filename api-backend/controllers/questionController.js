@@ -5,7 +5,7 @@ const Question = require(`${__dirname}/../models/questionModel.js`);
  * @param {JSON} req - JSON request object containing the questionnaireID and questionID (req.params).
  * @param {JSON} res - JSOn response object containing the data to send.
  * @return {JSON} - The response object created.
- * 
+ *
  * URL: {baseURL}/question/:questionnaireID/:questionID
  */
 exports.getQuestion = async (req, res, next) => {
@@ -34,7 +34,9 @@ exports.getQuestion = async (req, res, next) => {
             });
         }
         if (!req.username === questionnaire.creator) {
-            return res.status.(401).json({ status: 'Failed', message: 'Access denied' });
+            return res
+                .status(401)
+                .json({ status: 'Failed', message: 'Access denied' });
         }
         return res.status(200).json({ status: 'OK', question: question });
     } catch (err) {
@@ -43,5 +45,7 @@ exports.getQuestion = async (req, res, next) => {
             .status(500)
             .json({ status: 'Failed', message: 'Internal server error' });
     }
-    return res.status('418').json({ status: 'no operation', message: 'I\'m a teapot' });
+    return res
+        .status('418')
+        .json({ status: 'no operation', message: "I'm a teapot" });
 };
