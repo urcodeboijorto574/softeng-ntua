@@ -35,13 +35,13 @@ exports.getQuestion = async (req, res) => {
         if (!req.username === questionnaire.creator) {
             return res
                 .status(401)
-                .json({ status: 'Failed', message: 'Access denied' });
+                .json({ status: 'failed', message: 'Access denied' });
         }
         return res.status(200).json({ status: 'OK', question: question });
     } catch (err) {
         console.log(err);
         return res
             .status(500)
-            .json({ status: 'Failed', message: 'Internal server error' });
+            .json({ status: 'failed', message: 'Internal server error' });
     }
 };
