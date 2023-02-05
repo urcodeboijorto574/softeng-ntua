@@ -10,7 +10,7 @@ router
     .get(
         authController.protect,
         authController.restrictTo('user', 'admin'),
-        questionnaireController.getQuestionnaire
+        questionnaireController.getAllQuestionnaires
     );
 
 router
@@ -18,7 +18,7 @@ router
     .get(
         authController.protect,
         authController.restrictTo('user'),
-        questionnaireController.getUserAnsweredQuestionnaires
+        questionnaireController.getUserQuestionnaires
     );
 
 router
