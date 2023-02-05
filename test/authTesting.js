@@ -511,7 +511,7 @@ describe("Authorization endpoints bad scenario 16, user is logged in without pas
 
 describe("Authorization endpoints bad scenario 17, user is logged in without username or password", () => {
   describe("/login", () => {
-    it("it should throw an error because username does not exist", (done) => {
+    it("it should throw an error because username and password don't not exist", (done) => {
       const newUser = {};
       chai
         .request(server)
