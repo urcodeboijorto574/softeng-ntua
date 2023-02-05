@@ -5,13 +5,11 @@ const authController = require('./../controllers/authController.js');
 
 const router = express.Router();
 
-router
-    .route('/getallquestionnaires')
-    .get(
-        authController.protect,
-        authController.restrictTo('user', 'admin'),
-        questionnaireController.getAllQuestionnaires
-    );
+router.route('/getallquestionnaires').get(
+    //authController.protect,
+    //authController.restrictTo('user', 'admin'),
+    questionnaireController.getAllQuestionnaires
+);
 
 router
     .route('/userquestionnaires/:username')
