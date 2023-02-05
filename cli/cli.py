@@ -60,7 +60,7 @@ def handlePost(url, verify, json_data = {}, headers = {}):
 
 def handleGet(url, vescookie):
     try:
-        print(">>> HERE <<<")
+        # print(">>> HERE <<<")
         response = requests.get(url, cookies=vescookie, verify = False, timeout=10)
     except requests.exceptions.ReadTimeout:
         print("Timeout error, the server took more than 10 seconds to respond")
@@ -69,15 +69,14 @@ def handleGet(url, vescookie):
     return response
 
 def handleResponse(response, form):
-    
     if form == "json":
-        print("form:", form)
+        # print("form:", form)
         json_data = response.json()
         json_formatted_str = json.dumps(json_data, indent=2)
         print(json_formatted_str)
     else:
-        print("\n\nform:", form)
-        print("\n")
+        # print("\n\nform:", form)
+        # print("\n")
         #print(response.content)
         # csv_data = response.content.decode('utf-8')
         # reader = csv.reader(csv_data.splitlines())
@@ -91,8 +90,8 @@ def handleResponse(response, form):
 
         # csv_data = response.content.decode('utf-8')
         csv_data = response.text
-        parsed_data = json.loads(csv_data)
-        print(parsed_data)
+        # parsed_data = json.loads(csv_data)
+        print(csv_data)
         # df = pd.read_csv(StringIO(csv_data))
         # print(df.to_string())
 
@@ -107,7 +106,7 @@ def login(username, password, form):
     loginUrl = baseUrl + "login"    # !!
     cert_path = "cert.pem"
     response = handlePost(loginUrl, verify=cert_path, json_data = data, headers = headers)
-    print(">>> Cookie:", response.cookies["jwt"])
+    # print(">>> Cookie:", response.cookies["jwt"])
     jwt = response.cookies["jwt"]
     save_variable_to_file(jwt)
     handleResponse(response, form)
@@ -142,7 +141,7 @@ def healthcheck(form):
     print("Will perform a healthcheck at", healthUrl)
 
     vescookie = getCookie()
-    print(vescookie)
+    # print(vescookie)
 
     response = handleGet(healthUrl, vescookie)
     handleResponse(response, form)
@@ -361,11 +360,11 @@ try:
 except Exception as e:
     exit()
 
-print(vars(args))
+# print(vars(args))
 
 unknown = [arg for arg in vars(args) if arg not in known]
 
-print(unknown)
+# print(unknown)
 
 if len(unknown) != 0:
     unknownArgsHandler(unknown)
