@@ -4,6 +4,7 @@ const User = require('./../models/userModel');
 const AppError = require('./../utils/appError');
 const converter = require('json-2-csv');
 const csv = require('csv-express');
+const cookieParser = require('cookie-parser');
 
 /* const returnCSV = (jsonData, headers) => {
     let csvData = headers.join(',') + "\r\n"
@@ -135,8 +136,16 @@ exports.createUser = async (req, res) => {
 };
 
 exports.logout = async (req, res) => {
-    /* This line is added only for temporary purposes */
-    return res.status('418').json({ status: 'no operation', message: 'I\'m a teapot' });
+    res.cookie('jwt', 'loggedout', {
+        expires: new Date(Date.now() + 10 * 1000),
+        httpOnly: true,
+        sameSite: 'None',
+        secure: true,
+    });
+    res.status(200).json({
+        status: 'OK',
+        message: 'You are successfully logged out.',
+    });
 };
 
 exports.login = async (req, res, next) => {
@@ -183,6 +192,17 @@ exports.login = async (req, res, next) => {
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
         expiresIn: process.env.JWT_EXPIRES_IN,
     });
+    res.cookie('jwt', token, {
+        expires: parseInt(
+            new Date(
+                Date.now() +
+                    process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
+            )
+        ),
+        httpOnly: true,
+        sameSize: 'None',
+        secure: true,
+    });
     res.status(200).json({
         token: token,
     });
@@ -194,15 +214,18 @@ exports.protect = async (req, res, next) => {
     try {
         // 1) Getting token and check if it's there
         let token;
-        if (
+        /* if (
             req.headers.authorization &&
             req.headers.authorization.startsWith('Bearer')
         ) {
             token = req.headers.authorization.split(' ')[1];
-        }
-        /* if (req.headers('X-AUBSERVATORY-AUTH')) {
-            token = req.headers('X-AUBSERVATORY-AUTH');
+        } else if (req.headers.cookie) {
+            token = req.headers.cookie.substring(4);
+            console.log(token);
         } */
+        if (req.cookies.jwt) {
+            token = req.cookies.jwt;
+        }
 
         if (!token) {
             return res.status(401).json({
