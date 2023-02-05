@@ -24,6 +24,7 @@ exports.getQuestion = async (req, res) => {
                 message: `Question ID ${req.params.qID} not found`,
             });
         }
+
         return res.status(200).json({ status: 'OK', question: question });
     } catch (err) {
         console.log(err);
