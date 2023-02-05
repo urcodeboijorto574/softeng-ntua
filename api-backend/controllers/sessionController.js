@@ -13,7 +13,7 @@ dotenv.config({ path: `${__dirname}/../config.env` });
  * 
  * URL: {baseURL}/session/getallquestionnairesessions/:questionnaireID
  */
-exports.getAllSessions = async (req, res, next) => {
+exports.getAllQuestionnaireSessions = async (req, res, next) => { /* Inspection finished */
     try {
         const sessions = await Session
             .find(req.params, '-_id sessionID answers')
@@ -51,7 +51,7 @@ exports.getAllSessions = async (req, res, next) => {
  * URL: {baseURL}/session/getallsessionsids
 
  */
-exports.getAllSessionsIDs = async (req, res, next) => {
+exports.getAllSessionsIDs = async (req, res, next) => { /* Inspection finished */
     try {
         const sessionIDs = await Session
             .find({}, 'sessionID -_id');
@@ -79,7 +79,7 @@ exports.getAllSessionsIDs = async (req, res, next) => {
  * 
  * URL: {baseURL}/session/getuserquestionnairesession/:questionnaireID
  */
-exports.getUserQuestionnaireSession = async (req, res, next) => {
+exports.getUserQuestionnaireSession = async (req, res, next) => { /* Inspection finished */
     try {
         const session = await Session
             .findOne({ questionnaireID: req.params.questionnaireID, submitter: req.username })
