@@ -3,7 +3,7 @@ process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
 const chai = require('chai');
 const chaiHttp = require('chai-http');
-const server = require('../api-backend/server');
+const server = require(`${__dirname}/../api-backend/server`);
 const should = chai.should();
 let token;
 

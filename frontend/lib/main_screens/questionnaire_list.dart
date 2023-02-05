@@ -5,18 +5,27 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:questionnaires_app/main_screens/answers_overview.dart';
 import 'package:questionnaires_app/main_screens/choose_action.dart';
 import 'package:questionnaires_app/main_screens/question_screen.dart';
 
 import 'package:http/http.dart';
 import 'package:questionnaires_app/main_screens/session_list.dart';
 import 'package:questionnaires_app/main_screens/statistics_screen.dart';
+import 'package:questionnaires_app/objects/answer.dart';
 import 'package:questionnaires_app/objects/question.dart';
+import 'package:questionnaires_app/widgets/app_bar.dart';
+import 'package:questionnaires_app/widgets/snackbar.dart';
 
 class QuestionnaireListScreen extends StatefulWidget {
   final String label;
-  const QuestionnaireListScreen({super.key, required this.label});
+
+  const QuestionnaireListScreen({
+    super.key,
+    required this.label,
+  });
 
   @override
   State<QuestionnaireListScreen> createState() =>
@@ -25,17 +34,69 @@ class QuestionnaireListScreen extends StatefulWidget {
 
 class _QuestionnaireListScreenState extends State<QuestionnaireListScreen> {
   late List questionnaires;
-  late Future<List> questionnaireTitles;
+  late Future<List>? questionnaireTitles;
 
-  String _localhost() {
-    return 'http://127.0.0.1:3000/intelliq_api/questionnaire/getAllQuestionnaires';
+  final storage = const FlutterSecureStorage();
+
+  final GlobalKey<ScaffoldMessengerState> _scaffoldKey =
+      GlobalKey<ScaffoldMessengerState>();
+
+  String _localhost1() {
+    return 'https://127.0.0.1:9103/intelliq_api/questionnaire/getusernotansweredquestionnaires';
   }
 
-  Future<List> _getAllQuestionnaires() async {
+  Future<List> _getRestQuestionnaires() async {
     List<String> titles = [];
 
-    final url = Uri.parse(_localhost());
-    Response response = await get(url);
+    final url = Uri.parse(_localhost1());
+    // var jwt = await storage.read(key: "jwt");
+    // if (jwt == null) {
+    //   MyMessageHandler.showSnackbar(_scaffoldKey, 'Something went wrong!');
+    //   return [];
+    // }
+
+    Response response = await get(
+      url,
+      // headers: <String, String>{'X-OBSERVATORY-AUTH': jwt},
+    );
+
+    if (response.statusCode == 200) {
+      questionnaires = jsonDecode(response.body)['data'];
+
+      for (int i = 0; i < questionnaires.length; i++) {
+        titles.add(questionnaires[i]['questionnaireTitle']);
+      }
+      return titles;
+    } else if (response.statusCode == 402) {
+      return [];
+    } else if (response.statusCode == 401) {
+      MyMessageHandler.showSnackbar(
+          _scaffoldKey, jsonDecode(response.body)['message']);
+      return [];
+    } else {
+      MyMessageHandler.showSnackbar(_scaffoldKey, 'Something went wrong!');
+      return [];
+    }
+  }
+
+  String _localhost2() {
+    return 'https://127.0.0.1:9103/intelliq_api/questionnaire/getuseransweredquestionnaires';
+  }
+
+  Future<List> _getUserQuestionnaires() async {
+    List<String> titles = [];
+
+    final url = Uri.parse(_localhost2());
+    // var jwt = await storage.read(key: "jwt");
+    // if (jwt == null) {
+    //   MyMessageHandler.showSnackbar(_scaffoldKey, 'Something went wrong!');
+    //   return [];
+    // }
+
+    Response response = await get(
+      url,
+      // headers: <String, String>{'X-OBSERVATORY-AUTH': jwt},
+    );
 
     if (response.statusCode == 200) {
       questionnaires = jsonDecode(response.body)['data']['questionnaires'];
@@ -44,8 +105,53 @@ class _QuestionnaireListScreenState extends State<QuestionnaireListScreen> {
         titles.add(questionnaires[i]['questionnaireTitle']);
       }
       return titles;
+    } else if (response.statusCode == 402) {
+      return [];
+    } else if (response.statusCode == 401) {
+      MyMessageHandler.showSnackbar(
+          _scaffoldKey, jsonDecode(response.body)['message']);
+      return [];
     } else {
-      throw Exception('Failed to load the questionnaires');
+      MyMessageHandler.showSnackbar(_scaffoldKey, 'Something went wrong!');
+      return [];
+    }
+  }
+
+  String _localhost3() {
+    return 'https://127.0.0.1:9103/intelliq_api/questionnaire/getadmincreatedquestionnaires';
+  }
+
+  Future<List> getAllQuestionnaires() async {
+    List<String> titles = [];
+
+    final url = Uri.parse(_localhost3());
+    // var jwt = await storage.read(key: "jwt");
+    // if (jwt == null) {
+    //   MyMessageHandler.showSnackbar(_scaffoldKey, 'Something went wrong!');
+    //   return [];
+    // }
+
+    Response response = await get(
+      url,
+      // headers: <String, String>{'X-OBSERVATORY-AUTH': jwt},
+    );
+
+    if (response.statusCode == 200) {
+      questionnaires = jsonDecode(response.body)['data']['questionnaires'];
+
+      for (int i = 0; i < questionnaires.length; i++) {
+        titles.add(questionnaires[i]['questionnaireTitle']);
+      }
+      return titles;
+    } else if (response.statusCode == 402) {
+      return [];
+    } else if (response.statusCode == 401) {
+      MyMessageHandler.showSnackbar(
+          _scaffoldKey, jsonDecode(response.body)['message']);
+      return [];
+    } else {
+      MyMessageHandler.showSnackbar(_scaffoldKey, 'Something went wrong!');
+      return [];
     }
   }
 
@@ -95,135 +201,186 @@ class _QuestionnaireListScreenState extends State<QuestionnaireListScreen> {
         (route) => false);
   }
 
+  String _localhost4() {
+    return 'https://127.0.0.1:9103/intelliq_api/session/getuserquestionnairesession';
+  }
+
+  Future<dynamic> getSession(String questionnaireID) async {
+    final url = Uri.parse('${_localhost4()}/$questionnaireID');
+    // var jwt = await storage.read(key: "jwt");
+    // if (jwt == null) {
+    //   MyMessageHandler.showSnackbar(_scaffoldKey, 'Something went wrong!');
+    //   return [];
+    // }
+
+    Response response = await get(
+      url,
+      // headers: <String, String>{'X-OBSERVATORY-AUTH': jwt},
+    );
+
+    if (response.statusCode == 200) {
+      dynamic session = jsonDecode(response.body)['data']['session'];
+
+      return session;
+    } else if (response.statusCode == 402) {
+      return [];
+    } else if (response.statusCode == 401) {
+      MyMessageHandler.showSnackbar(
+          _scaffoldKey, jsonDecode(response.body)['message']);
+      return [];
+    } else {
+      MyMessageHandler.showSnackbar(_scaffoldKey, 'Something went wrong!');
+      return [];
+    }
+  }
+
+  void showMySession(dynamic mySession, dynamic questionnaire) {
+    List<Answer> answers = [];
+    List<dynamic> questions = [];
+    int optIndex = 0;
+
+    for (int i = 0; i < mySession['answers'].length; i++) {
+      for (int j = 0; j < questionnaire['questions'].length; j++) {
+        if (mySession['answers'][i]['qID'] ==
+            questionnaire['questions'][j]['qID']) {
+          questions.add(questionnaire['questions'][j]);
+          break;
+        }
+      }
+    }
+
+    for (int i = 0; i < mySession['answers'].length; i++) {
+      for (int j = 0; j < questions[i]['options'].length; j++) {
+        if (mySession['answers'][i]['optID'] ==
+            questions[i]['options'][j]['optID']) {
+          optIndex = j;
+
+          answers.add(Answer(
+            questionnaireID: questionnaire['questionnaireID'],
+            questionID: questions[i]['qID'],
+            options: questions[i]['options'],
+            questiontxt: questions[i]['qtext'],
+            optionIndex: optIndex,
+            answertxt: mySession['answers'][i]['answertext'],
+          ));
+          break;
+        }
+      }
+    }
+
+    Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+          builder: (context) => AnswersOverviewScreen(
+            answers: answers,
+            questionnaireTitle: questionnaire['questionnaireTitle'],
+            label: 'view my session',
+          ),
+        ),
+        (route) => true);
+  }
+
   @override
   void initState() {
     super.initState();
+    Future(() {
+      if (isSubmitted!) {
+        MyMessageHandler.showSnackbar(
+            _scaffoldKey, 'Your answers were submitted successfully!',
+            color: Colors.green);
+
+        setState(() {
+          isSubmitted = false;
+        });
+      }
+    });
+
     setState(() {
-      questionnaireTitles = _getAllQuestionnaires();
+      if (widget.label == 'answered questionnaires') {
+        questionnaireTitles = _getUserQuestionnaires();
+      } else if (widget.label == 'answer questionnaire') {
+        questionnaireTitles = _getRestQuestionnaires();
+      } else if (widget.label == 'show statistics' ||
+          widget.label == 'view answers') {
+        questionnaireTitles = getAllQuestionnaires();
+      }
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 127, 156, 160),
-      appBar: AppBar(
-        toolbarHeight: 100,
-        backgroundColor: const Color.fromARGB(255, 9, 52, 58),
-        leading: const Icon(
-          Icons.question_mark_outlined,
-          color: Colors.pinkAccent,
-          size: 50,
-        ),
-        title: const Padding(
-          padding: EdgeInsets.only(bottom: 15),
-          child: Text(
-            'IntelliQ',
-            style: TextStyle(
-              color: Colors.pinkAccent,
-              fontWeight: FontWeight.bold,
-              fontSize: 30,
-              letterSpacing: 2,
-            ),
-          ),
-        ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.all(15),
-            child: IconButton(
-              onPressed: () async {
-                Navigator.pushReplacementNamed(context, '/welcome_screen');
-              },
-              icon: const Icon(
-                Icons.logout,
-                color: Colors.pinkAccent,
-                size: 30,
-              ),
-            ),
-          )
-        ],
-      ),
-      body: FutureBuilder<List>(
-        future: questionnaireTitles,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return ListView.builder(
-              itemCount: snapshot.data!.length,
-              itemBuilder: (context, index) {
-                return InkWell(
-                  onTap: () {
-                    if (widget.label == 'answer questionnaire') {
-                      answerQuestionnaire(index);
-                    } else if (widget.label == 'show statistics') {
-                      showStatistics(index);
-                    } else if (widget.label == 'view answers') {
-                      showSessions(index);
-                    }
-                  },
-                  child: Card(
-                    child: Row(
-                      children: [
-                        const Icon(
-                          FontAwesomeIcons.question,
-                          size: 40,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 10, left: 15),
-                          child: Text(
-                            snapshot.data![index],
-                            style: const TextStyle(
-                              fontSize: 20,
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                );
-              },
-            );
-          } else if (snapshot.hasError) {
-            return Center(
-              child: Text('${snapshot.error}'),
-            );
-          }
+    return ScaffoldMessenger(
+      key: _scaffoldKey,
+      child: Scaffold(
+        backgroundColor: const Color.fromARGB(255, 127, 156, 160),
+        body: FutureBuilder<List<dynamic>>(
+          future: questionnaireTitles,
+          builder: (context, AsyncSnapshot<List> snapshot) {
+            if (snapshot.hasData) {
+              return ListView.builder(
+                itemCount: snapshot.data!.length,
+                itemBuilder: (context, index) {
+                  return InkWell(
+                    onTap: () async {
+                      try {
+                        if (widget.label == 'answer questionnaire') {
+                          answerQuestionnaire(index);
+                        } else if (widget.label == 'show statistics') {
+                          showStatistics(index);
+                        } else if (widget.label == 'view answers') {
+                          showSessions(index);
+                        } else if (widget.label == 'answered questionnaires') {
+                          dynamic session = await getSession(
+                              questionnaires[index]['questionnaireID']);
 
-          return const Center(
-              child: CircularProgressIndicator(
-            color: Colors.pinkAccent,
-          ));
-        },
-      ),
-      floatingActionButton: widget.label != 'answer questionnaire'
-          ? Padding(
-              padding: const EdgeInsets.all(40.0),
-              child: FloatingActionButton.extended(
-                onPressed: () {
-                  Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const ChooseActionScreen()),
-                      (route) => false);
-                },
-                label: const Padding(
-                  padding: EdgeInsets.only(bottom: 10),
-                  child: Text(
-                    'Back',
-                    style: TextStyle(
-                      color: Color.fromARGB(255, 9, 52, 58),
-                      fontWeight: FontWeight.w600,
-                      fontSize: 15,
+                          showMySession(session, questionnaires[index]);
+                        }
+                      } catch (e) {
+                        MyMessageHandler.showSnackbar(
+                            _scaffoldKey, 'Something went wrong!');
+                      }
+                    },
+                    child: Card(
+                      child: Row(
+                        children: [
+                          widget.label == 'answered questionnaires'
+                              ? const Icon(
+                                  Icons.done,
+                                  size: 40,
+                                )
+                              : const Icon(
+                                  FontAwesomeIcons.question,
+                                  size: 40,
+                                ),
+                          Padding(
+                            padding:
+                                const EdgeInsets.only(bottom: 10, left: 15),
+                            child: Text(
+                              snapshot.data![index],
+                              style: const TextStyle(
+                                fontSize: 20,
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
                     ),
-                  ),
-                ),
-                icon: const Icon(
-                  Icons.arrow_back,
-                  color: Color.fromARGB(255, 9, 52, 58),
-                ),
-                backgroundColor: Colors.pink,
-              ),
-            )
-          : const SizedBox(),
+                  );
+                },
+              );
+            } else if (snapshot.hasError) {
+              return Center(
+                child: Text('${snapshot.error}'),
+              );
+            }
+
+            return const Center(
+                child: CircularProgressIndicator(
+              color: Colors.pinkAccent,
+            ));
+          },
+        ),
+      ),
     );
   }
 }
