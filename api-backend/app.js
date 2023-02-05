@@ -29,13 +29,6 @@ app.use(bp.json());
 app.use(bp.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-// Test middleware
-// app.use((req, res, next) => {
-//     req.requestTime = new Date().toISOString();
-//     console.log(req.headers);
-//     next();
-// });
-
 // Authentication endpoints
 app.use('/intelliq_api', authRouter);
 
