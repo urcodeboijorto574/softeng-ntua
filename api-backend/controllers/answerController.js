@@ -211,11 +211,10 @@ exports.doAnswer = async (req, res, next) => {
  */
 exports.getSessionAnswers = async (req, res, next) => {
     try {
-        const sessionanswers = await session
-            .findOne({
-                questionnaireID: req.params.questionnaireID,
-                session: req.params.session,
-            })
+        const sessionanswers = await Session.findOne({
+            questionnaireID: req.params.questionnaireID,
+            session: req.params.session,
+        })
             .select({ _id: 0, __v: 0, submitter: 0 })
             .populate({
                 path: 'answers',
@@ -243,7 +242,7 @@ exports.getSessionAnswers = async (req, res, next) => {
     } catch (err) {
         return res
             .status(500)
-            .json({ status: 'failed', message: 'internal server error' });
+            .json({ status: 'failed', message: 'Internal server error' });
     }
 };
 
