@@ -24,7 +24,8 @@ exports.getQuestionnaire = async (req, res) => {
             });
         }
 
-        if (!req.username = questionnaire.creator){return res.json({status: 'Fail', message: 'Access denied'})}
+        if (!req.username === questionnaire.creator){return res.json({status: 'Fail', message: 'Access denied'})}
+        
         return res
             .status(200)
             .json({ status: 'OK', questionnaire: questionnaire });
