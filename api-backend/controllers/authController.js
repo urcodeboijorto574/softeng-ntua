@@ -74,6 +74,8 @@ exports.getUser = async (req, res) => {
             password: 0,
             _id: 0,
             __v: 0,
+            passwordChangedAt: 0,
+            questionnairesAnswered: 0,
         });
         if (!user) {
             responseMessage = {
@@ -128,9 +130,9 @@ exports.createUser = async (req, res) => {
         // if no user with the same username and usermod exists, then create a new user
         if (!userQuery) {
             const newUser = await User.create({
+                role: req.params.usermod,
                 username: req.params.username,
                 password: req.params.password,
-                role: req.params.usermod,
             });
             responseMessage = { status: 'OK' };
             return handleResponse(req, res, 200, responseMessage);

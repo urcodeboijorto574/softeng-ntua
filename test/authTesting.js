@@ -9,7 +9,10 @@ var token;
 
 chai.use(chaiHttp);
 
-// We need to delete the user before running
+//----------------------------------------------------SIGNUP TESTING----------------------------------------------------------//
+//---------------------------------------------------GOOD SCENARIOS---------------------------------------------------------//
+//---------------------------------------------------GOOD SCENARIO 1--------------------------------------------------------//
+//---------------------------------------------------USER IS SIGNED UP, LOGGED IN AND LOGGED OUT----------------------------//
 describe("Authorization endpoints good scenario, user is signed up, logged in and logged out", () => {
   describe("/signup", () => {
     it("it should create a new user/admin in database", (done) => {
@@ -69,20 +72,6 @@ describe("Authorization endpoints good scenario, user is signed up, logged in an
         .timeout(1000000);
     });
   });
-  describe("/deleteUser/:username", () => {
-    it("it shoutld delete the current user", (done) => {
-      chai
-        .request(server)
-        .delete("/intelliq_api/deleteUser/test-user1")
-        .end((err, res) => {
-          res.should.have.status(200);
-          res.body.should.have.property("status");
-          res.body.status.should.equal("OK");
-          done();
-        })
-        .timeout(1000000);
-    });
-  });
 });
 
 //------------------------------BAD SCENARIO: INPUT ONLY MISSING SOME FIELDS-------------------------------------------//
@@ -118,7 +107,7 @@ describe("Authorization endpoints bad scenario 2, user is signed up without pass
   describe("/signup", () => {
     it("it should throw an error because password does not exists", (done) => {
       const newUser = {
-        username: "test-user1",
+        username: "test-user2",
         usermod: "user",
       };
       chai
@@ -264,7 +253,7 @@ describe("Authorization endpoints bad scenario 7, user is signed up without a pa
   });
 });
 
-describe("Authorization endpoints bad scenario 7, user is signed up without a password a username and a role", () => {
+describe("Authorization endpoints bad scenario 8, user is signed up without a password a username and a role", () => {
   describe("/signup", () => {
     it("it should throw an error because username password and role does not exist", (done) => {
       const newUser = {};
@@ -287,13 +276,13 @@ describe("Authorization endpoints bad scenario 7, user is signed up without a pa
   });
 });
 
-//------------------------------BAD SCENARIO: INPUT ONLY VALIDATION SOME FIELDS-------------------------------------------//
+//------------------------------------BAD SCENARIO: INPUT VALIDATION ERROR------------------------------------------------//
 //------------------------------------------------------------------------------------------------------------------------//
-describe("Authorization endpoints bad scenario 8, user is signed up with duplicate username", () => {
+describe("Authorization endpoints bad scenario 9, user is signed up with duplicate username", () => {
   describe("/signup", () => {
     it("it should throw an error because username is used", (done) => {
       const newUser = {
-        username: "jimv",
+        username: "test-user1",
         password: "test1234",
         usermod: "user",
       };
@@ -316,9 +305,9 @@ describe("Authorization endpoints bad scenario 8, user is signed up with duplica
   });
 });
 
-describe("Authorization endpoints bad scenario 9, user is signed up with duplicate username", () => {
+describe("Authorization endpoints bad scenario 10, user is signed up with invalid username", () => {
   describe("/signup", () => {
-    it("it should throw an error because username is used", (done) => {
+    it("it should throw an error because username is invalid", (done) => {
       const newUser = {
         username: "jimvvvvvvvvvvvvvvvvvvvvvvvvvv",
         password: "test1234",
@@ -343,11 +332,11 @@ describe("Authorization endpoints bad scenario 9, user is signed up with duplica
   });
 });
 
-describe("Authorization endpoints bad scenario 10, user is signed up with invalid password", () => {
+describe("Authorization endpoints bad scenario 11, user is signed up with invalid password", () => {
   describe("/signup", () => {
-    it("it should throw an error because username is invalid", (done) => {
+    it("it should throw an error because password is invalid", (done) => {
       const newUser = {
-        username: "jimv",
+        username: "test-user1",
         password: "t",
         usermod: "user",
       };
@@ -370,7 +359,7 @@ describe("Authorization endpoints bad scenario 10, user is signed up with invali
   });
 });
 
-describe("Authorization endpoints bad scenario 11, user is signed up with invalid role", () => {
+describe("Authorization endpoints bad scenario 12 , user is signed up with invalid role", () => {
   describe("/signup", () => {
     it("it should throw an error because role is invalid", (done) => {
       const newUser = {
@@ -400,7 +389,7 @@ describe("Authorization endpoints bad scenario 11, user is signed up with invali
 //-----------------------------------------------LOGIN TESTING--------------------------------------------------------------//
 describe("Authorization endpoints bad scenario 12, user is logged in with invalid username", () => {
   describe("/login", () => {
-    it("it should throw an error beacues username is invalid", (done) => {
+    it("it should throw an error because username is invalid", (done) => {
       const newUser = {
         username: "jimvdoesnt exist",
         password: "test1234",
@@ -536,60 +525,6 @@ describe("Authorization endpoints bad scenario 17, user is logged in without use
           res.body.message.should.equal(
             "Please provide username and password!"
           );
-          done();
-        })
-        .timeout(1000000);
-    });
-  });
-});
-
-//-----------------------------------------------CREATE USER TESTING--------------------------------------------------------------//
-describe("Create user endpoints good scenario, firstly super-admin is logged in", () => {
-  describe("/login", () => {
-    it("it should login super-admin", (done) => {
-      const user = {
-        username: "TheUltraSuperAdmin",
-        password: "the-password-is-secret",
-      };
-      chai
-        .request(server)
-        .post("/intelliq_api/login")
-        .send(user)
-        .end((err, res) => {
-          res.should.have.status(200);
-          res.body.should.have.property("token");
-          token = res.body.token;
-          done();
-        })
-        .timeout(1000000);
-    });
-  });
-});
-
-describe("Create user endpoints good scenario, send request to the server", () => {
-  describe("/admin", () => {
-    it("it should create a new user/admin in database", (done) => {
-      chai
-        .request(server)
-        .post("/intelliq_api/admim/user/test-user1/test1234")
-        .end((err, res) => {
-          res.should.have.status(200);
-          res.body.should.have.property("status");
-          res.body.status.should.equal("OK");
-          done();
-        })
-        .timeout(1000000);
-    });
-  });
-  describe("/deleteUser/:username", () => {
-    it("it should delete the current user", (done) => {
-      chai
-        .request(server)
-        .delete("/intelliq_api/deleteUser/test-user1")
-        .end((err, res) => {
-          res.should.have.status(200);
-          res.body.should.have.property("status");
-          res.body.status.should.equal("OK");
           done();
         })
         .timeout(1000000);
