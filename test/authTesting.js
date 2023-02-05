@@ -133,7 +133,7 @@ describe("Authorization endpoints bad scenario 3, user is signed up without a ro
   describe("/signup", () => {
     it("it should throw an error because role does not exists", (done) => {
       const newUser = {
-        username: "test-user1",
+        username: "test-user2",
         password: "test1234",
       };
       chai
@@ -209,7 +209,7 @@ describe("Authorization endpoints bad scenario 6, user is signed up without a pa
   describe("/signup", () => {
     it("it should throw an error because password and role does not exists", (done) => {
       const newUser = {
-        username: "test-user1",
+        username: "test-user2",
       };
       chai
         .request(server)
@@ -336,7 +336,7 @@ describe("Authorization endpoints bad scenario 11, user is signed up with invali
   describe("/signup", () => {
     it("it should throw an error because password is invalid", (done) => {
       const newUser = {
-        username: "test-user1",
+        username: "test-user2",
         password: "t",
         usermod: "user",
       };
@@ -363,7 +363,7 @@ describe("Authorization endpoints bad scenario 12 , user is signed up with inval
   describe("/signup", () => {
     it("it should throw an error because role is invalid", (done) => {
       const newUser = {
-        username: "jimv",
+        username: "test-user2",
         password: "test1234",
         usermod: "t",
       };
@@ -415,7 +415,7 @@ describe("Authorization endpoints bad scenario 13, user is logged in with invali
   describe("/login", () => {
     it("it should throw an error because password is invalid", (done) => {
       const newUser = {
-        username: "jimv",
+        username: "test-user1",
         password: "does not exist",
       };
       chai
