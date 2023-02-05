@@ -573,3 +573,41 @@ describe("Get User bad scenario 3, the user that is get does not exist", () => {
     });
   });
 });
+
+//------------------------------------------------------CLEAN THE DATABASE-------------------------------------------------------//
+describe("Delete the test-user1", () => {
+  describe("/login", () => {
+    it("it should login the Super Admin to have access to the rest of the endpoints", (done) => {
+      const user = {
+        username: "TheUltraSuperAdmin",
+        password: "the-password-is-secret",
+      };
+      chai
+        .request(server)
+        .post("/intelliq_api/login")
+        .send(user)
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.have.property("token");
+          token = res.body.token;
+          done();
+        })
+        .timeout(1000000);
+    });
+  });
+  describe("/intelliq_api/admin/users/:username", () => {
+    it("it should delete the test-user1", (done) => {
+      chai
+        .request(server)
+        .delete("/intelliq_api/admin/users/deleteUser/test-user1")
+        .set("Cookie", `jwt=${token}`)
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.have.property("status");
+          res.body.status.should.equal("OK");
+          done();
+        })
+        .timeout(1000000);
+    });
+  });
+});
