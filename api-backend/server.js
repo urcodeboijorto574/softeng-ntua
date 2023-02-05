@@ -4,7 +4,6 @@ const dotenv = require('dotenv');
 dotenv.config({ path: './config.env' });
 const app = require('./app');
 
-
 // DB is the database connection string
 const DB = process.env.DATABASE.replace(
     '<password>',
@@ -17,7 +16,7 @@ mongoose
         useNewUrlParser: true,
         useCreateIndex: true,
         useFindAndModify: false,
-        useUnifiedTopology: true /* Optional - Only for disabling a warning */
+        useUnifiedTopology: true /* Optional - Only for disabling a warning */,
     })
     .then(() => {
         console.log('DB connection succesful!');
