@@ -287,7 +287,7 @@ describe("Authorization endpoints bad scenario 7, user is signed up without a pa
   });
 });
 
-//------------------------------BAD SCENARIO: INPUT ONLY EVALUATION SOME FIELDS-------------------------------------------//
+//------------------------------BAD SCENARIO: INPUT ONLY VALIDATION SOME FIELDS-------------------------------------------//
 //------------------------------------------------------------------------------------------------------------------------//
 describe("Authorization endpoints bad scenario 8, user is signed up with duplicate username", () => {
   describe("/signup", () => {
@@ -390,6 +390,206 @@ describe("Authorization endpoints bad scenario 11, user is signed up with invali
           res.body.message.should.equal(
             "Invalid input data. Role must be user or admin"
           );
+          done();
+        })
+        .timeout(1000000);
+    });
+  });
+});
+
+//-----------------------------------------------LOGIN TESTING--------------------------------------------------------------//
+describe("Authorization endpoints bad scenario 12, user is logged in with invalid username", () => {
+  describe("/login", () => {
+    it("it should throw an error beacues username is invalid", (done) => {
+      const newUser = {
+        username: "jimvdoesnt exist",
+        password: "test1234",
+      };
+      chai
+        .request(server)
+        .post("/intelliq_api/login")
+        .send(newUser)
+        .end((err, res) => {
+          res.should.have.status(401);
+          res.body.should.have.property("status");
+          res.body.status.should.equal("failed");
+          res.body.should.have.property("message");
+          res.body.message.should.equal("Incorrect username or password!");
+          done();
+        })
+        .timeout(1000000);
+    });
+  });
+});
+
+describe("Authorization endpoints bad scenario 13, user is logged in with invalid password", () => {
+  describe("/login", () => {
+    it("it should throw an error because password is invalid", (done) => {
+      const newUser = {
+        username: "jimv",
+        password: "does not exist",
+      };
+      chai
+        .request(server)
+        .post("/intelliq_api/login")
+        .send(newUser)
+        .end((err, res) => {
+          res.should.have.status(401);
+          res.body.should.have.property("status");
+          res.body.status.should.equal("failed");
+          res.body.should.have.property("message");
+          res.body.message.should.equal("Incorrect username or password!");
+          done();
+        })
+        .timeout(1000000);
+    });
+  });
+});
+
+describe("Authorization endpoints bad scenario 14, user is logged in with invalid username and password", () => {
+  describe("/login", () => {
+    it("it should throw an error because username and password are invalid", (done) => {
+      const newUser = {
+        username: "jimvdoesnt exist",
+        password: "does not exist",
+      };
+      chai
+        .request(server)
+        .post("/intelliq_api/login")
+        .send(newUser)
+        .end((err, res) => {
+          res.should.have.status(401);
+          res.body.should.have.property("status");
+          res.body.status.should.equal("failed");
+          res.body.should.have.property("message");
+          res.body.message.should.equal("Incorrect username or password!");
+          done();
+        })
+        .timeout(1000000);
+    });
+  });
+});
+
+describe("Authorization endpoints bad scenario 15, user is logged in without username", () => {
+  describe("/login", () => {
+    it("it should throw an error because username does not exist", (done) => {
+      const newUser = {
+        password: "does not exist",
+      };
+      chai
+        .request(server)
+        .post("/intelliq_api/login")
+        .send(newUser)
+        .end((err, res) => {
+          res.should.have.status(400);
+          res.body.should.have.property("status");
+          res.body.status.should.equal("failed");
+          res.body.should.have.property("message");
+          res.body.message.should.equal(
+            "Please provide username and password!"
+          );
+          done();
+        })
+        .timeout(1000000);
+    });
+  });
+});
+
+describe("Authorization endpoints bad scenario 16, user is logged in without password", () => {
+  describe("/login", () => {
+    it("it should throw an error because username does not exist", (done) => {
+      const newUser = {
+        username: "jimv",
+      };
+      chai
+        .request(server)
+        .post("/intelliq_api/login")
+        .send(newUser)
+        .end((err, res) => {
+          res.should.have.status(400);
+          res.body.should.have.property("status");
+          res.body.status.should.equal("failed");
+          res.body.should.have.property("message");
+          res.body.message.should.equal(
+            "Please provide username and password!"
+          );
+          done();
+        })
+        .timeout(1000000);
+    });
+  });
+});
+
+describe("Authorization endpoints bad scenario 17, user is logged in without username or password", () => {
+  describe("/login", () => {
+    it("it should throw an error because username does not exist", (done) => {
+      const newUser = {};
+      chai
+        .request(server)
+        .post("/intelliq_api/login")
+        .send(newUser)
+        .end((err, res) => {
+          res.should.have.status(400);
+          res.body.should.have.property("status");
+          res.body.status.should.equal("failed");
+          res.body.should.have.property("message");
+          res.body.message.should.equal(
+            "Please provide username and password!"
+          );
+          done();
+        })
+        .timeout(1000000);
+    });
+  });
+});
+
+//-----------------------------------------------CREATE USER TESTING--------------------------------------------------------------//
+describe("Create user endpoints good scenario, firstly super-admin is logged in", () => {
+  describe("/login", () => {
+    it("it should login super-admin", (done) => {
+      const user = {
+        username: "TheUltraSuperAdmin",
+        password: "the-password-is-secret",
+      };
+      chai
+        .request(server)
+        .post("/intelliq_api/login")
+        .send(user)
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.have.property("token");
+          token = res.body.token;
+          done();
+        })
+        .timeout(1000000);
+    });
+  });
+});
+
+describe("Create user endpoints good scenario, send request to the server", () => {
+  describe("/admin", () => {
+    it("it should create a new user/admin in database", (done) => {
+      chai
+        .request(server)
+        .post("/intelliq_api/admim/user/test-user1/test1234")
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.have.property("status");
+          res.body.status.should.equal("OK");
+          done();
+        })
+        .timeout(1000000);
+    });
+  });
+  describe("/deleteUser/:username", () => {
+    it("it should delete the current user", (done) => {
+      chai
+        .request(server)
+        .delete("/intelliq_api/deleteUser/test-user1")
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.have.property("status");
+          res.body.status.should.equal("OK");
           done();
         })
         .timeout(1000000);
