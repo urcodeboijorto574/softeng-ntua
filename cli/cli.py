@@ -40,16 +40,16 @@ def unknownArgsHandler(unknown):
     print("\nExiting...")
     exit()
 
-def handlePost(url, verify, json_data = {}, headers = {}):
+def handlePost(url, verify, vescookie = False, json_data = {}, headers = {}):
     try:
         if (json_data == {} and headers == {}):
-            response = requests.post(url, verify = False, timeout=10)
+            response = requests.post(url, cookies=vescookie, verify = False, timeout=10)
         elif isinstance(json_data, str):
-            response = requests.post(url, data = json_data,
+            response = requests.post(url, cookies=vescookie, data = json_data,
                                     headers = headers, verify = False,
                                     timeout=10)
         else:
-            response = requests.post(url, json = json_data,
+            response = requests.post(url, cookies=vescookie, json = json_data,
                                     headers = headers, verify = False,
                                     timeout=10)
     except requests.exceptions.ReadTimeout:
@@ -118,7 +118,6 @@ def logout(form):
     """ Posts with no body and expect a response.
         If status == 200: success
         Else: gives reason"""
-    print("Will logout")
     logoutUrl = baseUrl + "logout"
     response = handlePost(logoutUrl, verify = False)
     jwt = response.cookies["jwt"]
@@ -138,7 +137,6 @@ def healthcheck(form):
         Else: gives reason"""
     #healthUrl = baseUrl + "admin/healthcheck"
     healthUrl = baseUrl + "admin/healthcheck?format=" + form
-    print("Will perform a healthcheck at", healthUrl)
 
     vescookie = getCookie()
     # print(vescookie)
@@ -152,6 +150,7 @@ def healthcheck(form):
 def resetall(form):
     print("Will resetall")
     resetallUrl = baseUrl + "admin/resetall"
+    vescookie = getCookie()
     response = handlePost(resetallUrl)
     handleResponse(response, form)
     
@@ -161,11 +160,10 @@ def resetall(form):
 def questionnaire_upd(source, form):
     #Just uploads a json, WHY DO WE NEED FORMAT???
     updUrl = baseUrl + "admin/questionnaire_upd"
-    print("Will update at source:", updUrl)
+    vescookie = getCookie()
     with open(source) as json_file:
         json_data = json.load(json_file)
-        print("Will sent:\n", json_data)
-        response = handlePost(updUrl)
+        response = handlePost(updUrl, False, vescookie, json_data)
         handleResponse(response, form)
     
     return
@@ -428,12 +426,16 @@ elif args.command == "admin":
     print("In admin")
     if args.usermod and args.username and args.passw and not args.users:
         print("user modification for username :", args.username, "with password :", args.passw)
+
     elif args.username and args.passw and not args.usermod and not args.users:
         print("username :", args.username, "with password :", args.passw)
+
     elif args.passw and not args.usermod and not args.username and not args.users:
         print("password :", args.passw)
+        
     elif args.users and args.username and not args.usermod and not args.passw:
         print("users :", args.users)
+    
     else:
         print("Invalid parameters for admin scope")
 
