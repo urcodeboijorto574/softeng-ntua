@@ -76,9 +76,10 @@ exports.getUserQuestionnaires = async (req, res, next) => {
  *
  * URL: {baseURL}/questionnaire/:questionnaireID/
  */
-exports.getQuestionnaire = async (req, res, next) => {
+exports.getQuestionnaire = async (req, res) => {
     /* This line is added only for temporary purposes */
     try {
+        console.log('hear');
         const questionnaire = await Questionnaire.findOne({
             questionnaireID: req.params.questionnaireID,
         })
@@ -94,14 +95,15 @@ exports.getQuestionnaire = async (req, res, next) => {
                 },
                 options: { sort: { qID: 1 } },
             });
+
         if (!questionnaire) {
             return res.status(400).json({
-                status: 'fail',
+                status: 'Failed',
                 message: `Questionnaire ID ${req.params.questionnaireID} not found`,
             });
         }
-
-        if (!req.username === questionnaire.creator) {
+        console.log(questionnaire.creator);
+        if (!(req.username === questionnaire.creator)) {
             return res
                 .status(401)
                 .json({ status: 'Failed', message: 'Access denied' });
@@ -111,6 +113,7 @@ exports.getQuestionnaire = async (req, res, next) => {
             .status(200)
             .json({ status: 'OK', questionnaire: questionnaire });
     } catch (err) {
+        console.log(err);
         return res
             .status(500)
             .json({ status: 'Failed', message: 'Internal server error' });
