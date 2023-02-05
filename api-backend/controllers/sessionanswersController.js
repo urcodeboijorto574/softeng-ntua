@@ -27,6 +27,7 @@ exports.getSessionanswers = async (req, res) => {
                     message: `Session ID ${req.params.session} not found`,
                 });
         }
+        if (!req.username === questionnaire.creator){return res.json({status: 'Fail', message: 'Access denied'})}
         return res
             .status(200)
             .json({ status: 'OK', sessionanswers: sessionanswers });
