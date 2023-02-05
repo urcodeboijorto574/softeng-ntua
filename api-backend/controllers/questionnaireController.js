@@ -23,6 +23,8 @@ exports.getQuestionnaire = async (req, res) => {
                 message: `Questionnaire ID ${req.params.questionnaireID} not found`,
             });
         }
+
+        if (!req.username = questionnaire.creator){return res.json({status: 'Fail', message: 'Access denied'})}
         return res
             .status(200)
             .json({ status: 'OK', questionnaire: questionnaire });
