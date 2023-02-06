@@ -32,14 +32,13 @@ exports.getQuestion = async (req, res) => {
                 message: `Question ID ${req.params.qID} not found`,
             });
         }
-        if (!req.username === questionnaire.creator) {
+        if (!(req.username === questionnaire.creator)) {
             return res
                 .status(401)
                 .json({ status: 'failed', message: 'Access denied' });
         }
         return res.status(200).json({ status: 'OK', question: question });
     } catch (err) {
-        console.log(err);
         return res
             .status(500)
             .json({ status: 'failed', message: 'Internal server error' });
