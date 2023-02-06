@@ -213,7 +213,7 @@ exports.getSessionAnswers = async (req, res, next) => {
     try {
         const sessionanswers = await Session.findOne({
             questionnaireID: req.params.questionnaireID,
-            sessionID: req.params.session,
+            session: req.params.sessionID,
         })
             .select({ _id: 0, __v: 0, submitter: 0 })
             .populate({
@@ -233,7 +233,7 @@ exports.getSessionAnswers = async (req, res, next) => {
                 message: `Session ID ${req.params.session} not found`,
             });
         }
-        if (!req.username === questionnaire.creator) {
+        if (!req.username === Questionnaire.creator) {
             return res.json({ status: 'Failed', message: 'Access denied' });
         }
         return res
@@ -255,8 +255,25 @@ exports.getSessionAnswers = async (req, res, next) => {
  * URL: {baseURL}/getquestionanswers/:questionnaireID/:questionID
  */
 exports.getQuestionAnswers = async (req, res, next) => {
-    /* This line is added only for temporary purposes */
-    return res
-        .status('418')
-        .json({ status: 'no operation', message: "I'm a teapot" });
+    try {
+        const getanswers = await Answer.findOne({
+            questionnaireID: req.params.questionnaireID,
+            questionID: req.params.qID,
+        }).select({ _id: 0, __v: 0, optID: 0 });
+
+        if (!getanswers) {
+            return res.status(400).json({
+                status: 'failed',
+                message: `Answers not found`,
+            });
+        }
+        if (!(req.username === Questionnaire.creator)) {
+            return res.json({ status: 'Failed', message: 'Access denied' });
+        }
+        return res.status(200).json({ status: 'OK', getanswers: getanswers });
+    } catch (err) {
+        return res
+            .status(500)
+            .json({ status: 'failed', message: 'Internal server error' });
+    }
 };
