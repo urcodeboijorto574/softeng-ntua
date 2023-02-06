@@ -213,7 +213,7 @@ exports.getSessionAnswers = async (req, res, next) => {
     try {
         const sessionanswers = await Session.findOne({
             questionnaireID: req.params.questionnaireID,
-            session: req.params.session,
+            sessionID: req.params.session,
         })
             .select({ _id: 0, __v: 0, submitter: 0 })
             .populate({
