@@ -11,6 +11,7 @@ chai.use(chaiHttp);
 
 //------------------------------------------QUESTIONNAIRES TESTING-----------------------------------------//
 //-----------------------------------------------GOOD SCENARIO---------------------------------------------//
+
 describe("Questionnaire endpoints good scenario (returning '200 OK' or '402 no data')", () => {
   describe("Accessed by users:", () => {
     describe("/login", () => {
@@ -230,7 +231,7 @@ describe("Questionnaire endpoints bad scenario (no logged in user or admin)", ()
 //-----------------------------------------------BAD SCENARIO----------------------------------------------//
 //------------------------LOGGED IN USER/ADMIN NOT AUTHORIZED FOR THE SPECIFIC ACTION----------------------//
 
-describe("Questionnaire endpoints bad scenario (logged in user/admin not authorized for this action", () => {
+describe("Questionnaire endpoints bad scenario (logged in user/admin not authorized for this action)", () => {
   describe("Accessed by users:", () => {
     describe("/login", () => {
       it("it should login an admin to cause an error", (done) => {
