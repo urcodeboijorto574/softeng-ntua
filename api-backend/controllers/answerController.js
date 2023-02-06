@@ -55,11 +55,11 @@ exports.doAnswer = async (req, res, next) => {
 
         let inputValid = true;
         const questionnaireValid = questionnaire;
-        question = questionnaire.questions[0];
-        option = question.options[0];
         if (questionnaireValid) {
+            question = questionnaire.questions[0];
             const questionValid = questionnaire.questions.length;
             if (questionValid) {
+                option = question.options[0];
                 const optionValid = question.options.length;
                 inputValid = optionValid;
             } else inputValid = false;
@@ -148,7 +148,6 @@ exports.doAnswer = async (req, res, next) => {
 
         /* 5) SEND RESPONSE */
         const message = 'Answer submitted!';
-        console.log(message);
         return res.status(200).json({
             status: 'OK',
             message
