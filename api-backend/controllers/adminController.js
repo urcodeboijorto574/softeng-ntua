@@ -26,7 +26,7 @@ const handleDuplicateFieldsDB = (req, res, err) => {
     }
     return res.status(400).json({
       status: 'failed',
-      message: message,
+      reason: message,
     });
 };
 
@@ -56,35 +56,35 @@ exports.getHealthcheck = async (req, res, next) => {
         const state = mongoose.connection.readyState;
         if (!req.query.format || req.query.format === 'json') {
           if (state === 1) {
-            res.status(200).json({
+            return res.status(200).json({
               status: 'OK',
               dbconnection: DB,
             });
           } else {
-            res.status(500).json({
+            return res.status(500).json({
               status: 'failed',
               dbconnection: DB,
             });
           }
         } else if (req.query.format === 'csv') {
           if (state === 1) {
-            res.status(200).csv([{ status: 'OK', dbconnection: DB }], true);
+            return res.status(200).csv([{ status: 'OK', dbconnection: DB }], true);
           } else {
-            res.status(500).csv([{ status: 'failed', dbconnection: DB }], true);
+            return res.status(500).csv([{ status: 'failed', dbconnection: DB }], true);
           }
         } else {
-          res.status(400).json({
+          return res.status(400).json({
             status: 'failed',
-            message: 'Not valid format',
+            reason: 'Response format is json or csv',
           });
         }
       } catch (err) {
         if (req.query.format === 'csv') {
-          res.status(500).csv([{ status: 'failed', reason: err }], true);
+          return res.status(500).csv([{ status: 'failed', reason: err }], true);
         } else {
-          res.status(500).json({
+          return res.status(500).json({
             status: 'failed',
-            message: err,
+            reason: err,
           });
         }
       }
@@ -107,7 +107,15 @@ exports.questionnaireUpdate = async (req, res, next) => {
           async (err, data) => {
             if (err) {
               console.error(err);
-              return;
+              if (req.query.format === 'csv') {
+                return res
+                  .status(500)
+                  .csv([{ status: 'failed', reason: 'Could not read file' }], true);
+              }
+              return res.status(500).json({
+                status: 'failed',
+                reason: 'Could not read file',
+              });
             }
             try {
               const info = JSON.parse(data);
@@ -161,9 +169,9 @@ exports.questionnaireUpdate = async (req, res, next) => {
                       );
                     }
                     if (req.query.format === 'csv') {
-                      res.status(200).csv([{ status: 'OK' }], true);
+                      return res.status(200).csv([{ status: 'OK' }], true);
                     } else {
-                      res.status(200).json({
+                      return res.status(200).json({
                         status: 'OK',
                       });
                     }
@@ -196,9 +204,9 @@ exports.questionnaireUpdate = async (req, res, next) => {
                     }
                   }
                 } else {
-                  res.status(400).json({
+                  return res.status(400).json({
                     status: 'failed',
-                    reason: 'Not valid format',
+                    reason: 'Response format is json or csv',
                   });
                 }
               } catch (error) {
@@ -222,11 +230,11 @@ exports.questionnaireUpdate = async (req, res, next) => {
               if (req.query.format === 'csv') {
                 return res
                   .status(500)
-                  .csv([{ status: 'failed', reason: err2 }], true);
+                  .csv([{ status: 'failed', reason: 'Invalid file structure' }], true);
               }
               return res.status(500).json({
                 status: 'failed',
-                reason: err2,
+                reason: 'Invalid file structure',
               });
             }
           }
@@ -268,23 +276,23 @@ exports.resetAll = async (req, res, next) => {
             Session.deleteMany(),
           ]);
           if (req.query.format === 'csv') {
-            res.status(200).csv([{ status: 'OK' }], true);
+            return res.status(200).csv([{ status: 'OK' }], true);
           } else {
-            res.status(200).json({
+            return res.status(200).json({
               status: 'OK',
             });
           }
         } else {
-          res.status(400).json({
+          return res.status(400).json({
             status: 'failed',
-            reason: 'Not valid url format',
+            reason: 'Response format is json or csv',
           });
         }
       } catch (err) {
         if (req.query.format === 'csv') {
-          res.status(500).csv([{ status: 'failed', reason: err }], true);
+          return res.status(500).csv([{ status: 'failed', reason: err }], true);
         } else {
-          res.status(500).json({
+          return res.status(500).json({
             status: 'failed',
             reason: err,
           });
@@ -315,13 +323,13 @@ exports.resetQuestionnaire = async (req, res, next) => {
               reason: 'Invalid questionnaireID',
             });
           }
-          if (req.userRole !== 'super-admin' || req.username !== valid.creator) {
+          if (req.userRole !== 'super-admin' && req.username !== valid.creator) {
             if (req.query.format === 'csv') {
-              return res.status(401).csv([{ status: 'failed', message: 'Not authorised' }], true);
+              return res.status(401).csv([{ status: 'failed', reason: 'Not authorised' }], true);
             } else {
-              res.status(401).json({
+              return res.status(401).json({
                 status: 'failed',
-                message: 'Not authorised',
+                reason: 'Not authorised',
               });
           }
         }
@@ -342,23 +350,23 @@ exports.resetQuestionnaire = async (req, res, next) => {
             ),
           ]);
           if (req.query.format === 'csv') {
-            res.status(200).csv([{ status: 'OK' }], true);
+            return res.status(200).csv([{ status: 'OK' }], true);
           } else {
-            res.status(200).json({
+            return res.status(200).json({
               status: 'OK',
             });
           }
         } else {
-          res.status(400).json({
+          return res.status(400).json({
             status: 'failed',
-            reason: 'Not valid format',
+            reason: 'Response format is json or csv',
           });
         }
       } catch (err) {
         if (req.query.format === 'csv') {
-          res.status(500).csv([{ status: 'failed', reason: err }], true);
+          return res.status(500).csv([{ status: 'failed', reason: err }], true);
         } else {
-          res.status(500).json({
+          return res.status(500).json({
             status: 'failed',
             reason: err,
           });
