@@ -30,7 +30,7 @@ exports.doAnswer = async (req, res, next) => {
         let user = await User
             .findOne({ username: req.username, role: 'user' }, '_id role questionnairesAnswered')
             .populate('questionnairesAnswered', 'questionnaireID');
-        if (!user || user.role !== 'user') { /* This check happens in authorization. It unnecessary here. */
+        if (!user || user.role !== 'user') { /* This check happens in authorization. It is unnecessary here. */
             return res.status(400).json({
                 status: 'failed',
                 message: (!user ? 'User does not exist' : 'User doesn\'t have permissions to answer')
@@ -55,11 +55,11 @@ exports.doAnswer = async (req, res, next) => {
 
         let inputValid = true;
         const questionnaireValid = questionnaire;
-        question = questionnaire.questions[0];
-        option = question.options[0];
         if (questionnaireValid) {
+            question = questionnaire.questions[0];
             const questionValid = questionnaire.questions.length;
             if (questionValid) {
+                option = question.options[0];
                 const optionValid = question.options.length;
                 inputValid = optionValid;
             } else inputValid = false;
@@ -148,7 +148,6 @@ exports.doAnswer = async (req, res, next) => {
 
         /* 5) SEND RESPONSE */
         const message = 'Answer submitted!';
-        console.log(message);
         return res.status(200).json({
             status: 'OK',
             message
