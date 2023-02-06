@@ -1,4 +1,5 @@
 const Question = require(`${__dirname}/../models/questionModel.js`);
+const Questionnaire = require(`${__dirname}/../models/questionnaireModel.js`);
 
 /**
  * Returns all the info about a question (and its options).
@@ -29,14 +30,14 @@ exports.getQuestion = async (req, res) => {
         if (!question) {
             return res.status(400).json({
                 status: 'failed',
-                message: `Question ID ${req.params.qID} not found`,
+                message: `Question ID ${req.params.questionID} not found`,
             });
         }
-        if (!(req.username === questionnaire.creator)) {
+        /*if (!(req.username === Questionnaire.creator)) {
             return res
                 .status(401)
                 .json({ status: 'failed', message: 'Access denied' });
-        }
+        }*/
         return res.status(200).json({ status: 'OK', question: question });
     } catch (err) {
         return res
