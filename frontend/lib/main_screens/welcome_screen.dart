@@ -58,10 +58,10 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             Positioned(
               top: MediaQuery.of(context).size.height * (-1.55),
               left: MediaQuery.of(context).size.width * 0.36,
-              child: const Text(
+              child: Text(
                 '?',
                 style: TextStyle(
-                  fontSize: 870,
+                  fontSize: MediaQuery.of(context).size.height * 1.325,
                   color: Colors.pinkAccent,
                 ),
               ),

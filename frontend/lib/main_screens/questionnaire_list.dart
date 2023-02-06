@@ -61,7 +61,8 @@ class _QuestionnaireListScreenState extends State<QuestionnaireListScreen> {
     );
 
     if (response.statusCode == 200) {
-      questionnaires = jsonDecode(response.body)['data'];
+      questionnaires =
+          jsonDecode(response.body)['data']['notAnsweredQuestionnaires'];
 
       for (int i = 0; i < questionnaires.length; i++) {
         titles.add(questionnaires[i]['questionnaireTitle']);
@@ -99,7 +100,8 @@ class _QuestionnaireListScreenState extends State<QuestionnaireListScreen> {
     );
 
     if (response.statusCode == 200) {
-      questionnaires = jsonDecode(response.body)['data']['questionnaires'];
+      questionnaires =
+          jsonDecode(response.body)['data']['answeredQuestionnaires'];
 
       for (int i = 0; i < questionnaires.length; i++) {
         titles.add(questionnaires[i]['questionnaireTitle']);
