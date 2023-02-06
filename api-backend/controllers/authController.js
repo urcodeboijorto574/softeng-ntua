@@ -2,23 +2,11 @@ const { promisify } = require('util');
 const jwt = require('jsonwebtoken');
 const User = require(`${__dirname}/../models/userModel`);
 const AppError = require(`${__dirname}/../utils/appError`);
+const handleResponse =
+    require(`${__dirname}/../utils/handleResponse`).handleResponse;
 const converter = require('json-2-csv');
 const csv = require('csv-express');
 const cookieParser = require('cookie-parser');
-
-// handle responses (send json or csv either)
-const handleResponse = (req, res, statusCode, responseMessage) => {
-    if (req.query.format === 'json' || !req.query.format) {
-        return res.status(statusCode).json(responseMessage);
-    } else if (req.query.format === 'csv') {
-        return res.status(statusCode).csv([responseMessage], true);
-    } else {
-        return res.status(400).json({
-            status: 'failed',
-            message: 'Response format is json or csv!',
-        });
-    }
-};
 
 // error-handling functions
 const handleDuplicateFieldsDB = (err) => {
@@ -92,16 +80,12 @@ exports.getUser = async (req, res) => {
             if (req.query.format === 'json' || !req.query.format) {
                 return res.status(200).json(responseMessage);
             } else if (req.query.format === 'csv') {
-                return res.status(200).csv(
-                    [
-                        {
-                            status: 'OK',
-                            username: user.username,
-                            role: user.role,
-                        },
-                    ],
-                    true
-                );
+                responseMessage = {
+                    status: 'OK',
+                    username: user.username,
+                    role: user.role,
+                };
+                return handleResponse(req, res, 200, responseMessage);
             } else {
                 return res.status(400).json({
                     status: 'failed',
@@ -242,18 +226,8 @@ exports.login = async (req, res, next) => {
             sameSite: 'None',
             secure: true,
         });
-        if (req.query.format === 'json' || !req.query.format) {
-            return res.status(200).json({
-                token: token,
-            });
-        } else if (req.query.format === 'csv') {
-            return res.status(200).csv([{ token: token }], true);
-        } else {
-            return res.status(400).json({
-                status: 'failed',
-                message: 'Response format is json or csv!',
-            });
-        }
+        responseMessage = { token: token };
+        return handleResponse(req, res, 200, responseMessage);
     } catch (err) {
         responseMessage = {
             status: 'failed',
