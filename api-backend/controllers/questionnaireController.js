@@ -81,13 +81,6 @@ exports.getUserAnsweredQuestionnaires = async (req, res, next) => {
                 }
             });
 
-        if (!user) { /* This check happens in authentication process (can't be reached realistically) */
-            return res.status(400).json({
-                status: 'failed',
-                message: 'invalid username'
-            });
-        }
-
         const answeredQuestionnaires = user.questionnairesAnswered;
         const questionnairesFound = answeredQuestionnaires.length > 0;
 
@@ -163,7 +156,7 @@ exports.getUserNotAnsweredQuestionnaires = async (req, res, next) => { /* (NOT F
  */
 exports.deleteQuestionnaire = async (req, res, next) => {
     try {
-        const questionnaire = await Questionnaire.findOne(req.params);
+        const questionnaire = await Questionnaire.findOne(req.params, '_id');
         if (!questionnaire) {
             return res.status(400).json({
                 status: 'failed',

@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
+const Questionnaire = require(`${__dirname}/../models/questionnaireModel`);
 const Session = require(`${__dirname}/../models/sessionModel`);
 
 dotenv.config({ path: `${__dirname}/../config.env` });
@@ -15,6 +16,13 @@ dotenv.config({ path: `${__dirname}/../config.env` });
  */
 exports.getAllQuestionnaireSessions = async (req, res, next) => {
     try {
+        const questionnaire = await Questionnaire.findOne(req.params, '_id');
+        if (!questionnaire) {
+            return res.status(400).json({
+                status: 'failed',
+                message: 'bad request'
+            });
+        }
         const sessions = await Session
             .find(req.params, '-_id sessionID answers')
             .populate({
@@ -53,13 +61,13 @@ exports.getAllQuestionnaireSessions = async (req, res, next) => {
  */
 exports.getAllSessionsIDs = async (req, res, next) => {
     try {
-        const sessionIDs = await Session
+        const sessionsIDs = await Session
             .find({}, 'sessionID -_id');
-        const sessionIDsFound = sessionIDs || sessionIDs.length != 0;
-        return res.status(sessionIDsFound ? 200 : 402).json({
-            status: sessionIDsFound ? 'OK' : 'no data',
+        const sessionsIDsFound = sessionsIDs.length > 0;
+        return res.status(sessionsIDsFound ? 200 : 402).json({
+            status: sessionsIDsFound ? 'OK' : 'no data',
             data: {
-                sessionIDs
+                sessionsIDs
             }
         });
     } catch (error) {
@@ -81,6 +89,13 @@ exports.getAllSessionsIDs = async (req, res, next) => {
  */
 exports.getUserQuestionnaireSession = async (req, res, next) => {
     try {
+        const questionnaire = await Questionnaire.findOne(req.params, '_id');
+        if (!questionnaire) {
+            return res.status(400).json({
+                status: 'failed',
+                message: 'bad request'
+            });
+        }
         const session = await Session
             .findOne({ questionnaireID: req.params.questionnaireID, submitter: req.username })
             .populate({
