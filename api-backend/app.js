@@ -46,4 +46,12 @@ app.use('/intelliq_api/getquestionanswers', questionAnswerRouter); // e
 app.use('/intelliq_api/session', sessionRouter);
 app.use('/intelliq_api/dummy-data', importRouter);
 
+// endpoints that don't exist on the api
+app.all('*', (req, res) => {
+    return res.status(400).json({
+        status: 'failed',
+        message: `Can't find ${req.originalUrl} on this server!`,
+    });
+});
+
 module.exports = app;

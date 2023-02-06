@@ -11,7 +11,7 @@ const handleResponse = (req, res, statusCode, responseMessage) => {
     if (req.query.format === 'json' || !req.query.format) {
         return res.status(statusCode).json(responseMessage);
     } else if (req.query.format === 'csv') {
-        return res.status(statusCode).csv([responseMessage], true);
+        return res.status(statusCode).csv(responseMessage, true);
     } else {
         return res.status(400).json({
             status: 'failed',
@@ -74,6 +74,8 @@ exports.getUser = async (req, res) => {
             password: 0,
             _id: 0,
             __v: 0,
+            passwordChangedAt: 0,
+            questionnairesAnswered: 0,
         });
         if (!user) {
             responseMessage = {
@@ -128,9 +130,9 @@ exports.createUser = async (req, res) => {
         // if no user with the same username and usermod exists, then create a new user
         if (!userQuery) {
             const newUser = await User.create({
+                role: req.params.usermod,
                 username: req.params.username,
                 password: req.params.password,
-                role: req.params.usermod,
             });
             responseMessage = { status: 'OK' };
             return handleResponse(req, res, 200, responseMessage);
@@ -233,7 +235,7 @@ exports.login = async (req, res, next) => {
             expires: parseInt(
                 new Date(
                     Date.now() +
-                    process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
+                        process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
                 )
             ),
             httpOnly: true,
