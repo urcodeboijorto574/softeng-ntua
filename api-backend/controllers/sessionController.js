@@ -13,7 +13,7 @@ dotenv.config({ path: `${__dirname}/../config.env` });
  * 
  * URL: {baseURL}/session/getallquestionnairesessions/:questionnaireID
  */
-exports.getAllQuestionnaireSessions = async (req, res, next) => { /* Inspection finished */
+exports.getAllQuestionnaireSessions = async (req, res, next) => {
     try {
         const sessions = await Session
             .find(req.params, '-_id sessionID answers')
@@ -26,17 +26,17 @@ exports.getAllQuestionnaireSessions = async (req, res, next) => { /* Inspection 
             .populate('answers', '-_id answertext qID optID')
             .sort('sessionID');
 
-        const sessionsFound = sessions || sessions.length != 0;
+        const sessionsFound = sessions.length > 0;
         return res.status(sessionsFound ? 200 : 402).json({
-            status: 'OK',
+            status: sessionsFound ? 'OK' : 'no data',
             data: {
                 sessions
             }
         });
-    } catch (err) {
+    } catch (error) {
         return res.status(500).json({
             status: 'failed',
-            message: err
+            message: error
         });
     }
     next();
@@ -51,21 +51,21 @@ exports.getAllQuestionnaireSessions = async (req, res, next) => { /* Inspection 
  * URL: {baseURL}/session/getallsessionsids
 
  */
-exports.getAllSessionsIDs = async (req, res, next) => { /* Inspection finished */
+exports.getAllSessionsIDs = async (req, res, next) => {
     try {
         const sessionIDs = await Session
             .find({}, 'sessionID -_id');
         const sessionIDsFound = sessionIDs || sessionIDs.length != 0;
         return res.status(sessionIDsFound ? 200 : 402).json({
-            status: 'OK',
+            status: sessionIDsFound ? 'OK' : 'no data',
             data: {
                 sessionIDs
             }
         });
-    } catch (err) {
+    } catch (error) {
         return res.status(500).json({
             status: 'failed',
-            message: err
+            message: error
         });
     }
     next();
@@ -79,7 +79,7 @@ exports.getAllSessionsIDs = async (req, res, next) => { /* Inspection finished *
  * 
  * URL: {baseURL}/session/getuserquestionnairesession/:questionnaireID
  */
-exports.getUserQuestionnaireSession = async (req, res, next) => { /* Inspection finished */
+exports.getUserQuestionnaireSession = async (req, res, next) => {
     try {
         const session = await Session
             .findOne({ questionnaireID: req.params.questionnaireID, submitter: req.username })
@@ -94,15 +94,15 @@ exports.getUserQuestionnaireSession = async (req, res, next) => { /* Inspection 
 
         const sessionFound = session;
         return res.status(sessionFound ? 200 : 402).json({
-            status: 'OK',
+            status: sessionFound ? 'OK' : 'no data',
             data: {
                 session
             }
         });
-    } catch (err) {
+    } catch (error) {
         return res.status(500).json({
             status: 'failed',
-            message: err
+            message: error
         });
     }
     next();

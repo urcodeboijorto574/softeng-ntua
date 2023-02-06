@@ -15,7 +15,7 @@ const mongoose = require('mongoose');
  * 
  * URL: {baseURL}/questionnaire/getadmincreatedquestionnaires
  */
-exports.getAdminCreatedQuestionnaires = async (req, res, next) => { /* Inspection finished */
+exports.getAdminCreatedQuestionnaires = async (req, res, next) => {
     try {
         let questionnaires = await Questionnaire
             .find({ creator: req.username }, '-_id -creator')
@@ -33,11 +33,11 @@ exports.getAdminCreatedQuestionnaires = async (req, res, next) => { /* Inspectio
                 },
             });
 
-        const questionnairesFound = questionnaires && questionnaires.length !== 0;
+        const questionnairesFound = questionnaires.length > 0;
         return res.status(questionnairesFound ? 200 : 402).json({
             status: questionnairesFound ? 'OK' : 'no data',
             data: {
-                questionnaires: questionnairesFound ? questionnaires : []
+                questionnaires: questionnaires
             }
         });
     } catch (error) {
@@ -81,7 +81,7 @@ exports.getUserAnsweredQuestionnaires = async (req, res, next) => {
                 }
             });
 
-        if (!user) {
+        if (!user) { /* This check happens in authentication process (can't be reached realistically) */
             return res.status(400).json({
                 status: 'failed',
                 message: 'invalid username'
@@ -97,10 +97,10 @@ exports.getUserAnsweredQuestionnaires = async (req, res, next) => {
                 answeredQuestionnaires
             }
         });
-    } catch (err) {
+    } catch (error) {
         return res.status(500).json({
             status: 'failed',
-            message: err
+            message: error
         });
     }
     next();
@@ -143,10 +143,10 @@ exports.getUserNotAnsweredQuestionnaires = async (req, res, next) => { /* (NOT F
                 notAnsweredQuestionnaires
             }
         });
-    } catch (err) {
+    } catch (error) {
         return res.status(500).json({
             status: 'failed',
-            message: err
+            message: error
         });
     }
     next();
