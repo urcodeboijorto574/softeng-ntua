@@ -240,28 +240,6 @@ describe('Doanswer endpoint', () => {
                 .timeout(1000000);
         });
     });
-
-    describe('Bad scenario 3: Internal Server Error (triggering: req.params field missing)', () => {
-
-    });
-
-    describe('/logout', () => {
-        it('it should logout the logged in admin', (done) => {
-            chai
-                .request(server)
-                .post('/intelliq_api/logout')
-                .set('Cookie', `jwt=${token}`)
-                .end((err, res) => {
-                    res.should.have.status(200);
-                    res.body.should.have.property('status');
-                    res.body.status.should.equal('OK');
-                    res.body.should.have.property('message');
-                    res.body.message.should.equal('You are successfully logged out.');
-                    done();
-                })
-                .timeout(1000000);
-        });
-    });
 });
 
 describe('Session\'s Answers endpoint', () => { });
