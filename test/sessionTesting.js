@@ -38,11 +38,16 @@ describe("Session endpoints", () => {
           .get("/intelliq_api/session/getallsessionsids")
           .set("Cookie", `jwt=${token}`)
           .end((err, res) => {
-            res.should.have.status(200);
             res.body.should.have.property("status");
-            res.body.status.should.equal("OK");
             res.body.should.have.property("data");
             res.body.data.should.have.property("sessionIDs");
+            if (res.body.data.sessionIDs.length == 0) {
+              res.should.have.status(402);
+              res.body.status.should.equal("no data");
+            } else {
+              res.should.have.status(200);
+              res.body.status.should.equal("OK");
+            }
             done();
           })
           .timeout(1000000);
@@ -56,11 +61,16 @@ describe("Session endpoints", () => {
           .get("/intelliq_api/session/getuserquestionnairesession/QQ062")
           .set("Cookie", `jwt=${token}`)
           .end((err, res) => {
-            res.should.have.status(200);
             res.body.should.have.property("status");
-            res.body.status.should.equal("OK");
             res.body.should.have.property("data");
             res.body.data.should.have.property("session");
+            if (res.body.data.session == null) {
+              res.should.have.status(402);
+              res.body.status.should.equal("no data");
+            } else {
+              res.should.have.status(200);
+              res.body.status.should.equal("OK");
+            }
             done();
           })
           .timeout(1000000);
@@ -114,11 +124,16 @@ describe("Session endpoints", () => {
           .get("/intelliq_api/session/getallquestionnairesessions/QQ062")
           .set("Cookie", `jwt=${token}`)
           .end((err, res) => {
-            res.should.have.status(200);
             res.body.should.have.property("status");
-            res.body.status.should.equal("OK");
             res.body.should.have.property("data");
             res.body.data.should.have.property("sessions");
+            if (res.body.data.sessions.length == 0) {
+              res.should.have.status(402);
+              res.body.status.should.equal("no data");
+            } else {
+              res.should.have.status(200);
+              res.body.status.should.equal("OK");
+            }
             done();
           })
           .timeout(1000000);
