@@ -9,12 +9,14 @@ var token;
 
 chai.use(chaiHttp);
 
-describe("Questionnaire endpoints", () => {
+//------------------------------------------QUESTIONNAIRES TESTING-----------------------------------------//
+//-----------------------------------------------GOOD SCENARIO---------------------------------------------//
+describe("Questionnaire endpoints good scenario (returning '200 OK' or '402 no data')", () => {
   describe("Accessed by users:", () => {
     describe("/login", () => {
       it("it should login a user to have access to the endpoints", (done) => {
         const user = {
-          username: "test-user1",
+          username: "test-user",
           password: "test1234",
         };
         chai
@@ -97,31 +99,10 @@ describe("Questionnaire endpoints", () => {
   });
 
   describe("Accessed by admins:", () => {
-    describe("/signup", () => {
-      it("it should create a new admin to use in the testing", (done) => {
-        const newUser = {
-          username: "test-admin1",
-          password: "test1234",
-          usermod: "admin",
-        };
-        chai
-          .request(server)
-          .post("/intelliq_api/signup")
-          .send(newUser)
-          .end((err, res) => {
-            res.should.have.status(200);
-            res.body.should.have.property("status");
-            res.body.status.should.equal("OK");
-            done();
-          })
-          .timeout(1000000);
-      });
-    });
-
     describe("/login", () => {
       it("it should login an admin to have access to the endpoints", (done) => {
         const user = {
-          username: "test-admin1",
+          username: "test-admin",
           password: "test1234",
         };
         chai
@@ -178,42 +159,208 @@ describe("Questionnaire endpoints", () => {
           .timeout(1000000);
       });
     });
+  });
+});
 
-    describe("Delete the test-user1", () => {
-      describe("/login", () => {
-        it("it should login the Super Admin to have access to the endpoint", (done) => {
-          const user = {
-            username: "TheUltraSuperAdmin",
-            password: "the-password-is-secret",
-          };
-          chai
-            .request(server)
-            .post("/intelliq_api/login")
-            .send(user)
-            .end((err, res) => {
-              res.should.have.status(200);
-              res.body.should.have.property("token");
-              token = res.body.token;
-              done();
-            })
-            .timeout(1000000);
-        });
+//------------------------------------------QUESTIONNAIRES TESTING-----------------------------------------//
+//-----------------------------------------------BAD SCENARIO----------------------------------------------//
+//-----------------------------------------NO LOGGED IN USER OR ADMIN--------------------------------------//
+
+describe("Questionnaire endpoints bad scenario (no logged in user or admin)", () => {
+  describe("Accessed by users:", () => {
+    describe("/questionnaire/getuseransweredquestionnaires", () => {
+      it("it should throw an error because there is no logged in user", (done) => {
+        chai
+          .request(server)
+          .get("/intelliq_api/questionnaire/getuseransweredquestionnaires")
+          .set("Cookie", `jwt=`)
+          .end((err, res) => {
+            res.should.have.status(401);
+            res.body.should.have.property("status");
+            res.body.should.have.property("message");
+            res.body.status.should.equal("failed");
+            res.body.message.should.equal("Please log in to get access.");
+            done();
+          })
+          .timeout(1000000);
       });
+    });
 
-      describe("/intelliq_api/admin/users/:username", () => {
-        it("it should delete the test-user1", (done) => {
-          chai
-            .request(server)
-            .delete("/intelliq_api/admin/users/deleteUser/test-admin1")
-            .set("Cookie", `jwt=${token}`)
-            .end((err, res) => {
-              res.should.have.status(200);
-              res.body.should.have.property("status");
-              res.body.status.should.equal("OK");
-              done();
-            })
-            .timeout(1000000);
-        });
+    describe("/questionnaire/getusernotansweredquestionnaires", () => {
+      it("it should throw an error because there is no logged in user", (done) => {
+        chai
+          .request(server)
+          .get("/intelliq_api/questionnaire/getusernotansweredquestionnaires")
+          .set("Cookie", `jwt=`)
+          .end((err, res) => {
+            res.should.have.status(401);
+            res.body.should.have.property("status");
+            res.body.should.have.property("message");
+            res.body.status.should.equal("failed");
+            res.body.message.should.equal("Please log in to get access.");
+            done();
+          })
+          .timeout(1000000);
+      });
+    });
+  });
+
+  describe("Accessed by admins:", () => {
+    describe("/questionnaire/getadmincreatedquestionnaires", () => {
+      it("it should throw an error because there is no logged in admin", (done) => {
+        chai
+          .request(server)
+          .get("/intelliq_api/questionnaire/getadmincreatedquestionnaires")
+          .set("Cookie", `jwt=`)
+          .end((err, res) => {
+            res.should.have.status(401);
+            res.body.should.have.property("status");
+            res.body.should.have.property("message");
+            res.body.status.should.equal("failed");
+            res.body.message.should.equal("Please log in to get access.");
+            done();
+          })
+          .timeout(1000000);
+      });
+    });
+  });
+});
+
+//------------------------------------------QUESTIONNAIRES TESTING-----------------------------------------//
+//-----------------------------------------------BAD SCENARIO----------------------------------------------//
+//------------------------LOGGED IN USER/ADMIN NOT AUTHORIZED FOR THE SPECIFIC ACTION----------------------//
+
+describe("Questionnaire endpoints bad scenario (logged in user/admin not authorized for this action", () => {
+  describe("Accessed by users:", () => {
+    describe("/login", () => {
+      it("it should login an admin to cause an error", (done) => {
+        const user = {
+          username: "test-admin",
+          password: "test1234",
+        };
+        chai
+          .request(server)
+          .post("/intelliq_api/login")
+          .send(user)
+          .end((err, res) => {
+            res.should.have.status(200);
+            res.body.should.have.property("token");
+            token = res.body.token;
+            done();
+          })
+          .timeout(1000000);
+      });
+    });
+
+    describe("/questionnaire/getuseransweredquestionnaires", () => {
+      it("it should throw an error because an admin is logged in", (done) => {
+        chai
+          .request(server)
+          .get("/intelliq_api/questionnaire/getuseransweredquestionnaires")
+          .set("Cookie", `jwt=${token}`)
+          .end((err, res) => {
+            res.should.have.status(401);
+            res.body.should.have.property("status");
+            res.body.should.have.property("message");
+            res.body.status.should.equal("failed");
+            res.body.message.should.equal("User unauthorized to continue!");
+            done();
+          })
+          .timeout(1000000);
+      });
+    });
+
+    describe("/questionnaire/getusernotansweredquestionnaires", () => {
+      it("it should throw an error because an admin is logged in", (done) => {
+        chai
+          .request(server)
+          .get("/intelliq_api/questionnaire/getusernotansweredquestionnaires")
+          .set("Cookie", `jwt=${token}`)
+          .end((err, res) => {
+            res.should.have.status(401);
+            res.body.should.have.property("status");
+            res.body.should.have.property("message");
+            res.body.status.should.equal("failed");
+            res.body.message.should.equal("User unauthorized to continue!");
+            done();
+          })
+          .timeout(1000000);
+      });
+    });
+
+    describe("/logout", () => {
+      it("it should logout the logged in admin", (done) => {
+        chai
+          .request(server)
+          .post("/intelliq_api/logout")
+          .set("Cookie", `jwt=${token}`)
+          .end((err, res) => {
+            res.should.have.status(200);
+            res.body.should.have.property("status");
+            res.body.status.should.equal("OK");
+            res.body.should.have.property("message");
+            res.body.message.should.equal("You are successfully logged out.");
+            done();
+          })
+          .timeout(1000000);
+      });
+    });
+  });
+
+  describe("Accessed by admins:", () => {
+    describe("/login", () => {
+      it("it should login a user to cause an error", (done) => {
+        const user = {
+          username: "test-user",
+          password: "test1234",
+        };
+        chai
+          .request(server)
+          .post("/intelliq_api/login")
+          .send(user)
+          .end((err, res) => {
+            res.should.have.status(200);
+            res.body.should.have.property("token");
+            token = res.body.token;
+            done();
+          })
+          .timeout(1000000);
+      });
+    });
+
+    describe("/questionnaire/getadmincreatedquestionnaires", () => {
+      it("it should throw an error because a user is logged in", (done) => {
+        chai
+          .request(server)
+          .get("/intelliq_api/questionnaire/getadmincreatedquestionnaires")
+          .set("Cookie", `jwt=${token}`)
+          .end((err, res) => {
+            res.should.have.status(401);
+            res.body.should.have.property("status");
+            res.body.should.have.property("message");
+            res.body.status.should.equal("failed");
+            res.body.message.should.equal("User unauthorized to continue!");
+            done();
+          })
+          .timeout(1000000);
+      });
+    });
+
+    describe("/logout", () => {
+      it("it should logout the logged in user", (done) => {
+        chai
+          .request(server)
+          .post("/intelliq_api/logout")
+          .set("Cookie", `jwt=${token}`)
+          .end((err, res) => {
+            res.should.have.status(200);
+            res.body.should.have.property("status");
+            res.body.status.should.equal("OK");
+            res.body.should.have.property("message");
+            res.body.message.should.equal("You are successfully logged out.");
+            done();
+          })
+          .timeout(1000000);
       });
     });
   });
