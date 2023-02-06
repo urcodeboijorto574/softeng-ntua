@@ -6,7 +6,7 @@ import pandas as pd
 from io import StringIO
 import urllib3
 import csv
-
+# H TEXNOLOGIA LOGISMIKOU EINAI TO KALUTERO MA8HMA !!!11!!1!!1! #not
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 requests.packages.urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
