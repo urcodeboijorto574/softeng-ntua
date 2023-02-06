@@ -256,7 +256,7 @@ exports.getSessionAnswers = async (req, res, next) => {
  */
 exports.getQuestionAnswers = async (req, res, next) => {
     try {
-        const getanswers = await Answer.findOne({
+        const getanswers = await Answer.find({
             questionnaireID: req.params.questionnaireID,
             questionID: req.params.qID,
         }).select({ _id: 0, __v: 0, optID: 0 });
