@@ -103,7 +103,7 @@ def login(username, password, form):
     headers = {'Content-Type': 'application/x-www-form-urlencoded'}
     #json_data = {'username' : username, 'password' : password}
     data = "username=" + username + "&password=" + password
-    loginUrl = baseUrl + "login"    # !!
+    loginUrl = baseUrl + "login" + "?format=" + form
     cert_path = "cert.pem"
     response = handlePost(loginUrl, verify=cert_path, json_data = data, headers = headers)
     # print(">>> Cookie:", response.cookies["jwt"])
@@ -118,7 +118,7 @@ def logout(form):
     """ Posts with no body and expect a response.
         If status == 200: success
         Else: gives reason"""
-    logoutUrl = baseUrl + "logout"
+    logoutUrl = baseUrl + "logout?format=" + form
     response = handlePost(logoutUrl, verify = False)
     jwt = response.cookies["jwt"]
     save_variable_to_file(jwt)
@@ -149,7 +149,7 @@ def healthcheck(form):
 # resetall: TO CHECK
 def resetall(form):
     print("Will resetall")
-    resetallUrl = baseUrl + "admin/resetall"
+    resetallUrl = baseUrl + "admin/resetall" + "?format=" + form
     vescookie = getCookie()
     response = handlePost(resetallUrl)
     handleResponse(response, form)
@@ -159,7 +159,7 @@ def resetall(form):
 # questionnaire_upd: TO CHECK
 def questionnaire_upd(source, form):
     #Just uploads a json, WHY DO WE NEED FORMAT???
-    updUrl = baseUrl + "admin/questionnaire_upd"
+    updUrl = baseUrl + "admin/questionnaire_upd" + "?format=" + form
     vescookie = getCookie()
     with open(source) as json_file:
         json_data = json.load(json_file)
@@ -170,7 +170,7 @@ def questionnaire_upd(source, form):
 
 # resetq: TO CHECK
 def resetq(questionnaire_id, form):
-    resetqUrl = baseUrl + f"admin/resetq/{questionnaire_id}"
+    resetqUrl = baseUrl + f"admin/resetq/{questionnaire_id}" + "?format=" + form
     print("Will reset questionnaire at", resetqUrl)
     response = handlePost(resetqUrl)
     handleResponse(response, form)
@@ -180,7 +180,7 @@ def resetq(questionnaire_id, form):
 # questionnaire: TO CHECK
 def questionnaire(questionnaire_id, form):
     print("Will get questionnaire with id:", questionnaire_id)
-    questionnaireUrl = baseUrl + f"questionnaire/{questionnaire_id}"
+    questionnaireUrl = baseUrl + f"questionnaire/{questionnaire_id}" + "?format=" + form
     response = handleGet(questionnaireUrl)
     handleResponse(response, form)
     
@@ -190,7 +190,7 @@ def questionnaire(questionnaire_id, form):
 def question(questionnaire_id, question_id, form):
     print("Will get from questionnaire with id:", questionnaire_id,
           "question with id:", question_id)
-    questionUrl = baseUrl + f"question/{questionnaire_id}/{question_id}"
+    questionUrl = baseUrl + f"question/{questionnaire_id}/{question_id}" + "?format=" + form
     response = handleGet(questionUrl)
     handleResponse(response, form)
 
@@ -198,10 +198,10 @@ def question(questionnaire_id, question_id, form):
 
 # doanswer: TO DISCUSS & CHECK
 def doanswer(questionnaire_id, question_id, session_id, option_id, form):
-    print("Will answer from questionnaire with id:", questionnaire_id,
-          "question with id:", question_id, "of session with id:", session_id,
-          "and option with id:", option_id)
-    doanswerUrl = baseUrl + f"doanswer/{questionnaire_id}/{question_id}/{session_id}/{option_id}"
+    # print("Will answer from questionnaire with id:", questionnaire_id,
+    #       "question with id:", question_id, "of session with id:", session_id,
+    #       "and option with id:", option_id)
+    doanswerUrl = baseUrl + f"doanswer/{questionnaire_id}/{question_id}/{session_id}/{option_id}"  + "?format=" + form
     json_data = {
         "questionnaireID" : questionnaire_id,
         "questionID" : question_id,
@@ -217,7 +217,7 @@ def doanswer(questionnaire_id, question_id, session_id, option_id, form):
 def getsessionanswers(questionnaire_id, session_id, form):
     print("Will get session answers of questionnaire with id:", questionnaire_id,
           "and session with id:", session_id)
-    getsessionanswersUrl = baseUrl + f"getsessionanswers/{questionnaire_id}/{session_id}"
+    getsessionanswersUrl = baseUrl + f"getsessionanswers/{questionnaire_id}/{session_id}" + "?format=" + form
     response = handleGet(getsessionanswersUrl)
     handleResponse(response, form)
 
@@ -227,7 +227,7 @@ def getsessionanswers(questionnaire_id, session_id, form):
 def getquestionanswers(questionnaire_id, question_id, form):
     print("Will get question answers of questionnaire with id:", questionnaire_id,
           "and question with id:", question_id)
-    getquestionanswers = baseUrl + f"getquestionanswers/{questionnaire_id}/{question_id}"
+    getquestionanswers = baseUrl + f"getquestionanswers/{questionnaire_id}/{question_id}" + "?format=" + form
     response = handleGet(getquestionanswers)
     handleResponse(response, form)
 
