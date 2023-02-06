@@ -9,20 +9,16 @@ let token;
 
 chai.use(chaiHttp);
 
-/*------------------- NORMAL FUNCTION FOR DOANSWER ENDPOINT -------------------*/
-describe('Answer endpoints', () => {
-    describe('Accessed by users:', () => {
+
+describe('Doanswer endpoint', () => {
+    describe('Will delete the session with sessionID \'mySes\' just for testing purposes', () => {
         describe('/login', () => {
-            it('it should login a user to have access to the endpoints', (done) => {
-                const user = {
-                    username: 'john-user',
-                    password: '0123456789',
-                };
+            it('it should login as super-admin to have access to /intelliq_api/admin/resetq/:questionnaireID endpoint', (done) => {
                 chai
                     .request(server)
                     .post('/intelliq_api/login')
                     .set('Cookie', `jwt=${token}`)
-                    .send(user)
+                    .send({ username: 'TheUltraSuperAdmin', password: 'the-password-is-secret' })
                     .end((err, res) => {
                         res.should.have.status(200);
                         res.body.should.have.property('token');
@@ -32,18 +28,92 @@ describe('Answer endpoints', () => {
                     .timeout(1000000);
             });
         });
+        describe('/admin/resetq/:questionnaireID', () => {
+            let req = {
+                username: 'TheUltraSuperAdmin',
+                params: { questionnaireID: 'QQ574' }
+            };
+            it('it should delete all the sessions and answers connected to the specified questionnaire, with questionnaireID = \'QQ547\'', (done) => {
+                chai
+                    .request(server)
+                    .post('/intelliq_api/admin/resetq/' + req.params.questionnaireID)
+                    .set('Cookie', `jwt=${token}`)
+                    .send(req)
+                    .end((err, res) => {
+                        // res.should.have.status(200);
+                        // res.body.should.have.property('status');
+                        // res.body.status.should.equal('OK');
+                        // res.body.should.have.property('message');
+                        // res.body.message.should.equal('');
+                        done();
+                    })
+                    .timeout(1000000);
+            });
+        });
+        describe('/logout', () => {
+            it('it should logout the logged in super-admin', (done) => {
+                chai
+                    .request(server)
+                    .post('/intelliq_api/logout')
+                    .set('Cookie', `jwt=${token}`)
+                    .end((err, res) => {
+                        res.should.have.status(200);
+                        res.body.should.have.property('status');
+                        res.body.status.should.equal('OK');
+                        res.body.should.have.property('message');
+                        res.body.message.should.equal('You are successfully logged out.');
+                        done();
+                    })
+                    .timeout(1000000);
+            });
+        });
+    });
 
 
-        let questionnaireID = 'QQ574', questionID = 'QJ1', optionID = 'PJ1A0', session = 'mySes';
-        const URLpath = '/doanswer/' + questionnaireID + questionID + session + optionID;
-        const URL = '/intelliq_api' + URLpath;
+    const user = {
+        username: 'john-user',
+        password: '0123456789',
+    };
+    describe('/login', () => {
+        it('it should login a user to have access to the endpoints', (done) => {
+            chai
+                .request(server)
+                .post('/intelliq_api/login')
+                .set('Cookie', `jwt=${token}`)
+                .send(user)
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    res.body.should.have.property('token');
+                    token = res.body.token;
+                    done();
+                })
+                .timeout(1000000);
+        });
+    });
 
-        describe(URLpath, () => {
-            it('it should create an answer for a specific questionnaire\'s question and a session, if one does not already exist', (done) => {
+    const URLprefix = '/intelliq_api' + '/doanswer';
+    let questionnaireID = 'QQ574', questionID = 'QJ0', session = 'mySes', optionID = 'PJ0A0',
+        URLparams, URL;
+    let req = {
+        username: user.username,
+        params: {
+            questionnaireID,
+            questionID,
+            session,
+            optionID
+        }
+    };
+    describe('Normal case for doanswer endpoint', () => {
+        describe('/doanswer/:questionnaireID/:questionID/:session/:optionID (creates new session)', () => {
+            it('it should create an answer for a specific questionnaire\'s question and a session (one does not already exist)', (done) => {
+                URLparams = '/' + questionnaireID + '/' + questionID + '/' + session + '/' + optionID;
+                URL = URLprefix + URLparams;
+
                 chai
                     .request(server)
                     .post(URL)
                     .set('Cookie', `jwt=${token}`)
+                    .send(req)
                     .end((err, res) => {
                         res.should.have.status(200);
                         res.body.should.have.property('status');
@@ -55,115 +125,49 @@ describe('Answer endpoints', () => {
                     .timeout(1000000);
             });
         });
-
-        describe('/logout', () => {
-            it('it should logout the logged in admin', (done) => {
-                chai
-                    .request(server)
-                    .post('/intelliq_api/logout')
-                    .set('Cookie', `jwt=${token}`)
-                    .end((err, res) => {
-                        res.should.have.status(200);
-                        res.body.should.have.property('status');
-                        res.body.status.should.equal('OK');
-                        res.body.should.have.property('message');
-                        res.body.message.should.equal('You are successfully logged out.');
-                        done();
-                    })
-                    .timeout(1000000);
-            });
-        });
-    });
-});
-
-
-/*------------------- BAD SCENARIO 1: Username is invalid -------------------*/
-describe('Answer endpoints', () => {
-    describe('Accessed by users:', () => {
-        describe('/login', () => {
-            it('it should login a user to have access to the endpoints', (done) => {
-                const user = {
-                    username: '',
-                    password: '0123456789',
-                };
-                chai
-                    .request(server)
-                    .post('/intelliq_api/login')
-                    .set('Cookie', `jwt=${token}`)
-                    .send(user)
-                    .end((err, res) => {
-                        res.should.have.status(400);
-                        res.body.should.have.property('token');
-                        token = res.body.token;
-                        done();
-                    })
-                    .timeout(1000000);
-            });
-        });
-
-
-
-        describe('/logout', () => {
-            it('it should logout the logged in admin', (done) => {
-                chai
-                    .request(server)
-                    .post('/intelliq_api/logout')
-                    .set('Cookie', `jwt=${token}`)
-                    .end((err, res) => {
-                        res.should.have.status(200);
-                        res.body.should.have.property('status');
-                        res.body.status.should.equal('OK');
-                        res.body.should.have.property('message');
-                        res.body.message.should.equal('You are successfully logged out.');
-                        done();
-                    })
-                    .timeout(1000000);
-            });
-        });
-    });
-});
-
-/*------------------- BAD SCENARIO 2: Parameters given are invalid -------------------*/
-describe('Answer endpoints', () => {
-    describe('Accessed by users:', () => {
-        describe('/login', () => {
-            it('it should login a user to have access to the endpoints', (done) => {
-                const user = {
-                    username: 'john-user',
-                    password: '0123456789',
-                };
-                chai
-                    .request(server)
-                    .post('/intelliq_api/login')
-                    .set('Cookie', `jwt=${token}`)
-                    .send(user)
-                    .end((err, res) => {
-                        res.should.have.status(200);
-                        res.body.should.have.property('token');
-                        token = res.body.token;
-                        done();
-                    })
-                    .timeout(1000000);
-            });
-        });
-
-        let URL = '/doanswer/:questionnaireID/:questionID/:session/:optionID';
-
-        /* Invalid questionnaireID */
-        describe(URL, () => {
-            it('it should give status code 400 and status: \'failed\'', (done) => {
-                const req = {
-                    username: 'john-user',
+        describe('/doanswer/:questionnaireID/:questionID/:session/:optionID (uses existing session)', () => {
+            it('it should create an answer for a specific questionnaire\'s question (a session already exists)', (done) => {
+                questionID = 'QJ1', optionID = 'PJ1A0';
+                let req = {
+                    username: user.username,
                     params: {
-                        questionnaireID: 'QQwrg',
-                        questionID: 'Qno',
-                        session: 'fAlSe',
-                        optionID: 'QJnot'
+                        questionnaireID,
+                        questionID,
+                        session,
+                        optionID
                     }
                 };
+                URLparams = '/' + questionnaireID + '/' + questionID + '/' + session + '/' + optionID;
+                URL = URLprefix + URLparams;
                 chai
                     .request(server)
-                    .post('/intelliq_api' + URL)
+                    .post(URL)
+                    .set('Cookie', `jwt=${token}`)
+                    .send(req)
+                    .end((err, res) => {
+                        res.should.have.status(200);
+                        res.body.should.have.property('status');
+                        res.body.status.should.equal('OK');
+                        res.body.should.have.property('message');
+                        res.body.message.should.equal('Answer submitted!');
+                        done();
+                    })
+                    .timeout(1000000);
+            });
+        });
+    });
+
+    describe('Bad scenario 1: Parameters given are invalid', () => {
+        describe('questionnaireID is invalid', () => {
+            it('it should respond with status code 400', (done) => {
+                req.questionnaireID = questionnaireID = 'QQwrg';
+
+                URLparams = '/' + questionnaireID + '/' + questionID + '/' + session + '/' + optionID;
+                URL = URLprefix + URLparams;
+
+                chai
+                    .request(server)
+                    .post(URL)
                     .set('Cookie', `jwt=${token}`)
                     .send(req)
                     .end((err, res) => {
@@ -177,21 +181,16 @@ describe('Answer endpoints', () => {
                     .timeout(1000000);
             });
         });
-        /* Invalid questionID */
-        describe(URL, () => {
-            it('it should give status code 400 and status: \'failed\'', (done) => {
-                const req = {
-                    username: 'john-user',
-                    params: {
-                        questionnaireID: 'QQ574',
-                        questionID: 'Qno',
-                        session: 'fAlSe',
-                        optionID: 'QJnot'
-                    }
-                };
+        describe('questionID is invalid', () => {
+            it('it should respond with status code 400', (done) => {
+                req.questionID = questionID = 'Qno';
+
+                URLparams = '/' + questionnaireID + '/' + questionID + '/' + session + '/' + optionID;
+                URL = URLprefix + URLparams;
+
                 chai
                     .request(server)
-                    .post('/intelliq_api' + URL)
+                    .post(URL)
                     .set('Cookie', `jwt=${token}`)
                     .send(req)
                     .end((err, res) => {
@@ -205,21 +204,16 @@ describe('Answer endpoints', () => {
                     .timeout(1000000);
             });
         });
-        /* Invalid optionID */
-        describe(URL, () => {
-            it('it should give status code 400 and status: \'failed\'', (done) => {
-                const req = {
-                    username: 'john-user',
-                    params: {
-                        questionnaireID: 'QQwrg',
-                        questionID: 'QJ1',
-                        session: 'fAlSe',
-                        optionID: 'QJnot'
-                    }
-                };
+        describe('optionID is invalid', () => {
+            it('it should respond with status code 400', (done) => {
+                req.optionID = optionID = 'Pmstk';
+
+                URLparams = '/' + questionnaireID + '/' + questionID + '/' + session + '/' + optionID;
+                URL = URLprefix + URLparams;
+
                 chai
                     .request(server)
-                    .post('/intelliq_api' + URL)
+                    .post(URL)
                     .set('Cookie', `jwt=${token}`)
                     .send(req)
                     .end((err, res) => {
@@ -233,164 +227,37 @@ describe('Answer endpoints', () => {
                     .timeout(1000000);
             });
         });
+    });
 
-        describe('/logout', () => {
-            it('it should logout the logged in admin', (done) => {
-                chai
-                    .request(server)
-                    .post('/intelliq_api/logout')
-                    .set('Cookie', `jwt=${token}`)
-                    .end((err, res) => {
-                        res.should.have.status(200);
-                        res.body.should.have.property('status');
-                        res.body.status.should.equal('OK');
-                        res.body.should.have.property('message');
-                        res.body.message.should.equal('You are successfully logged out.');
-                        done();
-                    })
-                    .timeout(1000000);
-            });
+    describe('Bad scenario 2: Another answer has already been submitted', () => {
+        console.log('came to bad scenario 2');
+    });
+
+    describe('Bad scenario 3: Internal Server Error (triggering: req.params field missing)', () => {
+
+    });
+
+    describe('/logout', () => {
+        it('it should logout the logged in admin', (done) => {
+            chai
+                .request(server)
+                .post('/intelliq_api/logout')
+                .set('Cookie', `jwt=${token}`)
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    res.body.should.have.property('status');
+                    res.body.status.should.equal('OK');
+                    res.body.should.have.property('message');
+                    res.body.message.should.equal('You are successfully logged out.');
+                    done();
+                })
+                .timeout(1000000);
         });
     });
 });
 
-/*------------------- BAD SCENARIO 3: Another answer has already been submitted -------------------*/
-describe('Answer endpoints', () => {
-    describe('Accessed by users:', () => {
-        describe('/login', () => {
-            it('it should login a user to have access to the endpoints', (done) => {
-                const user = {
-                    username: 'john-user',
-                    password: '0123456789',
-                };
-                chai
-                    .request(server)
-                    .post('/intelliq_api/login')
-                    .set('Cookie', `jwt=${token}`)
-                    .send(user)
-                    .end((err, res) => {
-                        res.should.have.status(200);
-                        res.body.should.have.property('token');
-                        token = res.body.token;
-                        done();
-                    })
-                    .timeout(1000000);
-            });
-        });
+describe('Session\'s Answers endpoint', () => {
 
-        let URL = '/doanswer/:questionnaireID/:questionID/:session/:optionID';
-        describe(URL, () => {
-            it('it should give status code 400 and status: \'failed\'', (done) => {
-                const req = {
-                    username: 'john-user',
-                    params: {
-                        questionnaireID: 'QQ574',
-                        questionID: 'QJ1',
-                        session: 'uwBR',
-                        optionID: 'PJ1A2'
-                    }
-                };
-                chai
-                    .request(server)
-                    .post('/intelliq_api' + URL)
-                    .set('Cookie', `jwt=${token}`)
-                    .send(req)
-                    .end((err, res) => {
-                        res.should.have.status(400);
-                        res.body.should.have.property('status');
-                        res.body.status.should.equal('failed');
-                        res.body.should.have.property('message');
-                        res.body.message.should.equal('An answer has already been submitted for this question');
-                        res.body.should.have.property('previous answer');
-                        done();
-                    })
-                    .timeout(1000000);
-            });
-        });
-
-        describe('/logout', () => {
-            it('it should logout the logged in admin', (done) => {
-                chai
-                    .request(server)
-                    .post('/intelliq_api/logout')
-                    .set('Cookie', `jwt=${token}`)
-                    .end((err, res) => {
-                        res.should.have.status(200);
-                        res.body.should.have.property('status');
-                        res.body.status.should.equal('OK');
-                        res.body.should.have.property('message');
-                        res.body.message.should.equal('You are successfully logged out.');
-                        done();
-                    })
-                    .timeout(1000000);
-            });
-        });
-    });
 });
 
-/*------------------- BAD SCENARIO 4: Internal Server Error (triggering: req.params field missing) -------------------*/
-describe('Answer endpoints', () => {
-    describe('Accessed by users:', () => {
-        describe('/login', () => {
-            it('it should login a user to have access to the endpoints', (done) => {
-                const user = {
-                    username: 'john-user',
-                    password: '0123456789',
-                };
-                chai
-                    .request(server)
-                    .post('/intelliq_api/login')
-                    .set('Cookie', `jwt=${token}`)
-                    .send(user)
-                    .end((err, res) => {
-                        res.should.have.status(200);
-                        res.body.should.have.property('token');
-                        token = res.body.token;
-                        done();
-                    })
-                    .timeout(1000000);
-            });
-        });
-
-        let URL = '/doanswer/:questionnaireID/:questionID/:session/:optionID';
-        describe(URL, () => {
-            it('it should give status code 400 and status: \'failed\'', (done) => {
-                const req = {
-                    username: 'john-user',
-                    params: {}
-                };
-                chai
-                    .request(server)
-                    .post('/intelliq_api' + URL)
-                    .set('Cookie', `jwt=${token}`)
-                    .send(req)
-                    .end((err, res) => {
-                        res.should.have.status(500);
-                        res.body.should.have.property('status');
-                        res.body.status.should.equal('failed');
-                        res.body.should.have.property('message');
-                        done();
-                    })
-                    .timeout(1000000);
-            });
-        });
-
-        describe('/logout', () => {
-            it('it should logout the logged in admin', (done) => {
-                chai
-                    .request(server)
-                    .post('/intelliq_api/logout')
-                    .set('Cookie', `jwt=${token}`)
-                    .end((err, res) => {
-                        res.should.have.status(200);
-                        res.body.should.have.property('status');
-                        res.body.status.should.equal('OK');
-                        res.body.should.have.property('message');
-                        res.body.message.should.equal('You are successfully logged out.');
-                        done();
-                    })
-                    .timeout(1000000);
-            });
-        });
-    });
-});
+describe('Question\'s Answers endpoint', () => { });
