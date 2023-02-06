@@ -69,10 +69,10 @@ class _AnswersOverviewScreenState extends State<AnswersOverviewScreen> {
 
     if (response.statusCode == 200) {
       for (int i = 0;
-          i < jsonDecode(response.body)['data']['sessionIDs'].length;
+          i < jsonDecode(response.body)['data']['sessionsIDs'].length;
           i++) {
         sessions.add(
-            jsonDecode(response.body)['data']['sessionIDs'][i]['sessionID']);
+            jsonDecode(response.body)['data']['sessionsIDs'][i]['sessionID']);
       }
       return sessions;
     } else if (response.statusCode == 402) {
