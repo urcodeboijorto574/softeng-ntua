@@ -30,7 +30,7 @@ exports.doAnswer = async (req, res, next) => {
         let user = await User
             .findOne({ username: req.username, role: 'user' }, '_id role questionnairesAnswered')
             .populate('questionnairesAnswered', 'questionnaireID');
-        if (!user || user.role !== 'user') { /* This check happens in authorization. It unnecessary here. */
+        if (!user || user.role !== 'user') { /* This check happens in authorization. It is unnecessary here. */
             return res.status(400).json({
                 status: 'failed',
                 message: (!user ? 'User does not exist' : 'User doesn\'t have permissions to answer')
