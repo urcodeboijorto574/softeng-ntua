@@ -258,7 +258,7 @@ exports.getQuestionAnswers = async (req, res, next) => {
     try {
         const getanswers = await Answer.find({
             questionnaireID: req.params.questionnaireID,
-            questionID: req.params.qID,
+            qID: req.params.questionID,
         }).select({ _id: 0, __v: 0, optID: 0 });
 
         if (!getanswers) {
@@ -267,9 +267,11 @@ exports.getQuestionAnswers = async (req, res, next) => {
                 message: `Answers not found`,
             });
         }
-        if (!(req.username === Questionnaire.creator)) {
-            return res.json({ status: 'Failed', message: 'Access denied' });
-        }
+        /* if (!(req.username === Questionnaire.creator)) {
+            return res
+                .status(401)
+                .json({ status: 'failed', message: 'Access denied' });
+        }*/
         return res.status(200).json({ status: 'OK', getanswers: getanswers });
     } catch (err) {
         return res
