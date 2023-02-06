@@ -53,7 +53,7 @@ router
     .route('/resetq/:questionnaireID')
     .post(
         authController.protect,
-        authController.restrictTo('super-admin'),
+        authController.restrictTo('super-admin', 'admin'),
         adminController.resetQuestionnaire
     );
 
