@@ -12,7 +12,7 @@ exports.getQuestion = async (req, res) => {
     try {
         const question = await Question.findOne({
             questionnaireID: req.params.questionnaireID,
-            questionID: req.params.qID,
+            qID: req.params.questionID,
         })
             .select({ _id: 0, __v: 0, wasAnsweredBy: 0 })
             .populate({
