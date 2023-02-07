@@ -1,0 +1,76 @@
+{
+  "questionnaireID": "TEST0",
+  "questionnaireTitle": "An example questionnaire",
+  "keywords": ["keyword1", "keyword2", "keyword3"],
+  "questions": [
+    {
+      "qID": "T00",
+      "qtext": "This is Question 0",
+      "required": "FALSE",
+      "type": "profile",
+      "options": [
+        {
+          "optID": "T00OPT",
+          "opttxt": "<open string>",
+          "nextqID": "T01"
+        }
+      ]
+    },
+    {
+      "qID": "T01",
+      "qtext": "This is Question 1",
+      "required": "TRUE",
+      "type": "profile",
+      "options": [
+        {
+          "optID": "T01A1",
+          "opttxt": "option 1",
+          "nextqID": "T02"
+        },
+        {
+          "optID": "T01A2",
+          "opttxt": "option 2",
+          "nextqID": "T02"
+        },
+        {
+          "optID": "T01A3",
+          "opttxt": "option 3",
+          "nextqID": "-"
+        },
+        {
+          "optID": "T01A4",
+          "opttxt": "option 4",
+          "nextqID": "T02"
+        }
+      ]
+    },
+    {
+      "qID": "T02",
+      "qtext": "This is Question 2",
+      "required": "TRUE",
+      "type": "profile",
+      "options": [
+        {
+          "optID": "T02A1",
+          "opttxt": "option 1",
+          "nextqID": "-"
+        },
+        {
+          "optID": "T02A2",
+          "opttxt": "option 2",
+          "nextqID": "-"
+        },
+        {
+          "optID": "T02A3",
+          "opttxt": "option 3",
+          "nextqID": "-"
+        },
+        {
+          "optID": "T02A4",
+          "opttxt": "option 4",
+          "nextqID": "-"
+        }
+      ]
+    }
+  ]
+}
