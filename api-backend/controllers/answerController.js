@@ -11,47 +11,57 @@ const mongoose = require('mongoose');
  * @param {JSON} req - JSON request object containing questionnaireID, questionID, sessionID and optionID (req.params), answer text (req.body).
  * @param {JSON} res - JSON response object containing a confirmation/rejection of the request.
  * @return {JSON} - The response object.
- * 
+ *
  * URL: {baseURL}/doanswer/:questionnaireID/:questionID/:session/:optionID
-*/
+ */
 exports.doAnswer = async (req, res, next) => {
-    let session, option, question, questionnaire,
+    let session,
+        option,
+        question,
+        questionnaire,
         newAnswer = {
             qID: req.params.questionID,
             optID: req.params.optionID,
             sessionID: req.params.session,
             questionnaireID: req.params.questionnaireID,
-            answertext: req.body.answertext ? req.body.answertext : ''
+            answertext: req.body.answertext ? req.body.answertext : '',
         },
-        newAnswerCreated = false, optionUpdated = false, questionUpdated = false;
+        newAnswerCreated = false,
+        optionUpdated = false,
+        questionUpdated = false;
     try {
         /* 1) CHECK VALIDITY OF PARAMETERS GIVEN */
         /* If user is not allowed to answer, reject the request */
-        let user = await User
-            .findOne({ username: req.username, role: 'user' }, '_id role questionnairesAnswered')
-            .populate('questionnairesAnswered', 'questionnaireID');
-        if (!user || user.role !== 'user') { /* This check happens in authorization. It unnecessary here. */
+        let user = await User.findOne(
+            { username: req.username, role: 'user' },
+            '_id role questionnairesAnswered'
+        ).populate('questionnairesAnswered', 'questionnaireID');
+        if (!user || user.role !== 'user') {
+            /* This check happens in authorization. It unnecessary here. */
             return res.status(400).json({
                 status: 'failed',
-                message: (!user ? 'User does not exist' : 'User doesn\'t have permissions to answer')
+                message: !user
+                    ? 'User does not exist'
+                    : "User doesn't have permissions to answer",
             });
         }
 
         /* If questionnaireID or questionID or optionID is unvalid, reject the request */
-        questionnaire = await Questionnaire
-            .findOne({ questionnaireID: req.params.questionnaireID }, '_id questionnaireID questions')
-            .populate({
-                path: 'questions',
-                model: 'Question',
-                match: { qID: req.params.questionID },
-                select: '_id qID options wasAnsweredBy',
-                populate: {
-                    path: 'options',
-                    model: 'Option',
-                    match: { optID: req.params.optionID },
-                    select: '_id optID wasChosenBy nextqID opttxt',
-                }
-            });
+        questionnaire = await Questionnaire.findOne(
+            { questionnaireID: req.params.questionnaireID },
+            '_id questionnaireID questions'
+        ).populate({
+            path: 'questions',
+            model: 'Question',
+            match: { qID: req.params.questionID },
+            select: '_id qID options wasAnsweredBy',
+            populate: {
+                path: 'options',
+                model: 'Option',
+                match: { optID: req.params.optionID },
+                select: '_id optID wasChosenBy nextqID opttxt',
+            },
+        });
 
         let inputValid = true;
         const questionnaireValid = questionnaire;
@@ -67,29 +77,36 @@ exports.doAnswer = async (req, res, next) => {
         if (!inputValid) {
             return res.status(400).json({
                 status: 'failed',
-                message: 'Arguments provided are invalid'
+                message: 'Arguments provided are invalid',
             });
         }
 
-
-
         /* 2) CHECK IF A SESSION ALREADY EXISTS */
-        session = await Session
-            .findOne({ sessionID: req.params.session }, '-questionnaireID -__v')
-            .populate('answers', '_id qID optID answertext');
+        session = await Session.findOne(
+            { sessionID: req.params.session },
+            '-questionnaireID -__v'
+        ).populate('answers', '_id qID optID answertext');
 
         if (session) {
             /* Search session.answers[] for an answer._id  */
-            const answersArrayEmpty = (session.answers.length === 0);
+            const answersArrayEmpty = session.answers.length === 0;
             if (!answersArrayEmpty) {
-                let answerIndex = session.answers.findIndex(ans => ans.qID === req.params.questionID);
+                let answerIndex = session.answers.findIndex(
+                    (ans) => ans.qID === req.params.questionID
+                );
                 if (answerIndex > -1) {
-                    session.answers.forEach(async ans => {
-                        let ques = await Question.findOne({ qID: ans.qID }, 'wasAnsweredBy');
+                    session.answers.forEach(async (ans) => {
+                        let ques = await Question.findOne(
+                            { qID: ans.qID },
+                            'wasAnsweredBy'
+                        );
                         ques.wasAnsweredBy -= 1;
                         ques = await ques.save();
 
-                        let opt = await Option.findOne({ optID: ans.optID }, 'wasChosenBy');
+                        let opt = await Option.findOne(
+                            { optID: ans.optID },
+                            'wasChosenBy'
+                        );
                         opt.wasChosenBy -= 1;
                         opt = await opt.save();
 
@@ -97,16 +114,23 @@ exports.doAnswer = async (req, res, next) => {
                     });
 
                     await Answer.deleteMany({ sessionID: req.params.session });
-                    await Session.findOneAndRemove({ sessionID: req.params.session });
+                    await Session.findOneAndRemove({
+                        sessionID: req.params.session,
+                    });
 
                     return res.status(400).json({
                         status: 'failed',
-                        message: 'An answer has already been submitted for this question',
-                        'previous answer': (
-                            session.answers[answerIndex].answertext !== '' ?
-                                session.answers[answerIndex].answertext :
-                                (await Option.findOne({ optID: session.answers[answerIndex].optID })).opttxt
-                        )
+                        message:
+                            'An answer has already been submitted for this question',
+                        'previous answer':
+                            session.answers[answerIndex].answertext !== ''
+                                ? session.answers[answerIndex].answertext
+                                : (
+                                      await Option.findOne({
+                                          optID: session.answers[answerIndex]
+                                              .optID,
+                                      })
+                                  ).opttxt,
                     });
                 }
             }
@@ -115,19 +139,15 @@ exports.doAnswer = async (req, res, next) => {
                 sessionID: req.params.session,
                 questionnaireID: req.params.questionnaireID,
                 answers: [],
-                submitter: req.username
+                submitter: req.username,
             });
         }
-
-
 
         /* 3) SUBMIT NEW ANSWER TO DB */
         newAnswer = await Answer.create(newAnswer);
         newAnswerCreated = true;
         session.answers.push(newAnswer._id);
         session = await session.save();
-
-
 
         /* 4) UPDATE FIELDS IN RELEVANT DOCUMENTS (questions & options) */
         option.wasChosenBy += 1;
@@ -139,19 +159,22 @@ exports.doAnswer = async (req, res, next) => {
         questionUpdated = true;
 
         if (option.nextqID === '-') {
-            const alreadyAnswered = user['questionnairesAnswered'].some(q => q['_id'].toString() === questionnaire._id.toString());
+            const alreadyAnswered = user['questionnairesAnswered'].some(
+                (q) => q['_id'].toString() === questionnaire._id.toString()
+            );
             if (!alreadyAnswered) {
-                await user.update({ $push: { questionnairesAnswered: questionnaire._id } });
+                await user.update({
+                    $push: { questionnairesAnswered: questionnaire._id },
+                });
             }
         }
-
 
         /* 5) SEND RESPONSE */
         const message = 'Answer submitted!';
         console.log(message);
         return res.status(200).json({
             status: 'OK',
-            message
+            message,
         });
     } catch (err) {
         console.log(err);
@@ -164,7 +187,7 @@ exports.doAnswer = async (req, res, next) => {
                 await option.save();
 
                 if (questionUpdated) {
-                    --(question.wasAnsweredBy);
+                    --question.wasAnsweredBy;
                     await question.save();
                 }
             }
@@ -172,7 +195,7 @@ exports.doAnswer = async (req, res, next) => {
 
         return res.status(500).json({
             status: 'failed',
-            message: err
+            message: err,
         });
     }
     next();
@@ -183,12 +206,14 @@ exports.doAnswer = async (req, res, next) => {
  * @param {JSON} req - JSON object containing questionnaireID and sessionID (req.params).
  * @param {JSON} res - JSON object containing the data to send.
  * @return {JSON} - The response object.
- * 
+ *
  * URL: {baseURL}/getsessionanswers/:questionnaireID/:session
  */
 exports.getSessionAnswers = async (req, res, next) => {
     /* This line is added only for temporary purposes */
-    return res.status('418').json({ status: 'no operation', message: 'I\'m a teapot' });
+    return res
+        .status('418')
+        .json({ status: 'no operation', message: "I'm a teapot" });
 };
 
 /**
@@ -196,10 +221,31 @@ exports.getSessionAnswers = async (req, res, next) => {
  * @param {JSON} req - JSON object containing qustionnaireID and questionID (req.params).
  * @param {JSON} res - JSON object containing the data to send.
  * @return {JSON} - The response object.
- * 
+ *
  * URL: {baseURL}/getquestionanswers/:questionnaireID/:questionID
  */
 exports.getQuestionAnswers = async (req, res, next) => {
-    /* This line is added only for temporary purposes */
-    return res.status('418').json({ status: 'no operation', message: 'I\'m a teapot' });
+    try {
+        const getanswers = await Answer.find({
+            questionnaireID: req.params.questionnaireID,
+            qID: req.params.questionID,
+        }).select({ _id: 0, __v: 0, optID: 0 });
+
+        if (!getanswers) {
+            return res.status(400).json({
+                status: 'failed',
+                message: `Answers not found`,
+            });
+        }
+        /* if (!(req.username === Questionnaire.creator)) {
+            return res
+                .status(401)
+                .json({ status: 'failed', message: 'Access denied' });
+        }*/
+        return res.status(200).json({ status: 'OK', getanswers: getanswers });
+    } catch (err) {
+        return res
+            .status(500)
+            .json({ status: 'failed', message: 'Internal server error' });
+    }
 };
