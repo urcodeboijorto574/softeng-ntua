@@ -239,7 +239,7 @@ exports.getQuestionnaire = async (req, res) => {
             });
         if (!questionnaire) {
             return res.status(400).json({
-                status: 'fail',
+                status: 'failed',
                 message: `Questionnaire ID ${req.params.questionnaireID} not found`,
             });
         }
@@ -247,7 +247,7 @@ exports.getQuestionnaire = async (req, res) => {
         if (!(req.username === questionnaire.creator)) {
             return res
                 .status(401)
-                .json({ status: 'Failed', message: 'Access denied' });
+                .json({ status: 'failed', message: 'Access denied' });
         }
 
         return res
@@ -256,6 +256,6 @@ exports.getQuestionnaire = async (req, res) => {
     } catch (err) {
         return res
             .status(500)
-            .json({ status: 'Failed', message: 'Internal server error' });
+            .json({ status: 'failed', message: 'Internal server error' });
     }
 };
