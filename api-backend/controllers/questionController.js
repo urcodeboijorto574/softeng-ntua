@@ -1,4 +1,5 @@
 const Question = require(`${__dirname}/../models/questionModel.js`);
+const Questionnaire = require(`${__dirname}/../models/questionnaireModel.js`);
 
 /**
  * Returns all the info about a question (and its options).
@@ -32,12 +33,23 @@ exports.getQuestion = async (req, res) => {
                 message: `Question ID ${req.params.questionID} not found`,
             });
         }
-        /*if (!(req.username === Questionnaire.creator)) {
+
+        const questionnaire = await Questionnaire.findOne({
+            questionnaireID: req.params.questionnaireID,
+        }).select({
+            _id: 0,
+            __v: 0,
+            keywords: 0,
+            questions: 0,
+            questionnaireID: 0,
+            questionnaireTitle: 0,
+        });
+        if (!(req.username === questionnaire.creator)) {
             return res
                 .status(401)
                 .json({ status: 'failed', message: 'Access denied' });
-        }*/
-        return res.status(200).json({ status: 'OK', data: question });
+        }
+        return res.status(200).json({ status: 'OK', question: question });
     } catch (err) {
         return res
             .status(500)
