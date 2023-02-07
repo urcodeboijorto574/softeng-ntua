@@ -249,6 +249,7 @@ exports.getQuestionnaire = async (req, res) => {
                 .status(401)
                 .json({ status: 'failed', message: 'Access denied' });
         }
+        questionnaire.creator = undefined;
 
         return res.status(200).json({ status: 'OK', data: questionnaire });
     } catch (err) {
