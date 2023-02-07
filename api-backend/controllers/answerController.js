@@ -5,6 +5,22 @@ const Session = require(`${__dirname}/../models/sessionModel.js`);
 const Answer = require(`${__dirname}/../models/answerModel.js`);
 const User = require(`${__dirname}/../models/userModel.js`);
 const mongoose = require('mongoose');
+const converter = require('json-2-csv');
+const csv = require('csv-express');
+
+const handleResponse = (req, res, statusCode, responseMessage) => {
+    if (req.query.format === 'json' || !req.query.format) {
+        return res.status(statusCode).json(responseMessage);
+    } else if (req.query.format === 'csv') {
+        res['Content-Type'] = 'text/csv';
+        return res.status(statusCode).csv(responseMessage, true, {}, statusCode);
+    } else {
+        return res.status(400).json({
+            status: 'failed',
+            message: 'Response format must be either json or csv!',
+        });
+    }
+};
 
 /**
  * Creates and stores an answer object in the database.
@@ -30,12 +46,6 @@ exports.doAnswer = async (req, res, next) => {
         let user = await User
             .findOne({ username: req.username, role: 'user' }, '_id role questionnairesAnswered')
             .populate('questionnairesAnswered', 'questionnaireID');
-        if (!user || user.role !== 'user') { /* This check happens in authorization. It is unnecessary here. */
-            return res.status(400).json({
-                status: 'failed',
-                message: (!user ? 'User does not exist' : 'User doesn\'t have permissions to answer')
-            });
-        }
 
         /* If questionnaireID or questionID or optionID is unvalid, reject the request */
         questionnaire = await Questionnaire
@@ -65,10 +75,10 @@ exports.doAnswer = async (req, res, next) => {
             } else inputValid = false;
         } else inputValid = false;
         if (!inputValid) {
-            return res.status(400).json({
+            return handleResponse(req, res, 400, [{
                 status: 'failed',
                 message: 'Arguments provided are invalid'
-            });
+            }]);
         }
 
 
@@ -99,7 +109,7 @@ exports.doAnswer = async (req, res, next) => {
                     await Answer.deleteMany({ sessionID: req.params.session });
                     await Session.findOneAndRemove({ sessionID: req.params.session });
 
-                    return res.status(400).json({
+                    const responseMessage = [{
                         status: 'failed',
                         message: 'An answer has already been submitted for this question',
                         'previous answer': (
@@ -107,7 +117,8 @@ exports.doAnswer = async (req, res, next) => {
                                 session.answers[answerIndex].answertext :
                                 (await Option.findOne({ optID: session.answers[answerIndex].optID })).opttxt
                         )
-                    });
+                    }];
+                    return handleResponse(req, res, 400, responseMessage);
                 }
             }
         } else {
@@ -133,7 +144,6 @@ exports.doAnswer = async (req, res, next) => {
         option.wasChosenBy += 1;
         option = await option.save();
         optionUpdated = true;
-
         question.wasAnsweredBy += 1;
         question = await question.save();
         questionUpdated = true;
@@ -141,19 +151,18 @@ exports.doAnswer = async (req, res, next) => {
         if (option.nextqID === '-') {
             const alreadyAnswered = user['questionnairesAnswered'].some(q => q['_id'].toString() === questionnaire._id.toString());
             if (!alreadyAnswered) {
-                await user.update({ $push: { questionnairesAnswered: questionnaire._id } });
+                await user.updateOne({ $push: { questionnairesAnswered: questionnaire._id } });
             }
         }
 
 
         /* 5) SEND RESPONSE */
-        const message = 'Answer submitted!';
-        return res.status(200).json({
+        return handleResponse(req, res, 200, [{
             status: 'OK',
-            message
-        });
-    } catch (err) {
-        console.log(err);
+            message: 'Answer submitted!'
+        }]);
+    } catch (error) {
+        console.log(error);
         await Session.findByIdAndDelete(session['_id']);
         if (newAnswerCreated) {
             await Answer.findByIdAndDelete(newAnswer._id);
@@ -169,10 +178,10 @@ exports.doAnswer = async (req, res, next) => {
             }
         }
 
-        return res.status(500).json({
+        return handleResponse(req, res, 500, [{
             status: 'failed',
-            message: err
-        });
+            message: error
+        }]);
     }
     next();
 };
