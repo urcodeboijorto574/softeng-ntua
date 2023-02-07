@@ -28,10 +28,7 @@ exports.getAllQuestionnaireSessions = async (req, res, next) => {
             });
         }
 
-        if (
-            req.userRole !== 'super-admin' &&
-            req.username !== questionnaire.creator
-        ) {
+        if (req.username !== questionnaire.creator) {
             return res.status(401).json({
                 status: 'failed',
                 reason: 'Not authorised',
