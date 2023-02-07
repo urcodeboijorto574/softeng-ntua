@@ -223,7 +223,7 @@ exports.login = async (req, res, next) => {
             expires: parseInt(
                 new Date(
                     Date.now() +
-                        process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
+                    process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
                 )
             ),
             httpOnly: true,

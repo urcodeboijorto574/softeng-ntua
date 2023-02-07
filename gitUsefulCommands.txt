@@ -31,6 +31,9 @@ git checkout *branch* -- *file* = copy one file's changes from one branch to HEA
 	(this command is very useful when you want specific changes of one branch to another.)
 	(example: git switch main; git checkout someones-branch -- api-backend/controller/) (take all changes of controller/ directory)
 	(example: git switch someones-branch; git checkout main -- api-backend/app.js) (take all changes of app.js file)
+git stash = store temporary
+	philosophy of stashing: (https://youtu.be/Ie1EXmd9k0s)
+	stashing example: (https://youtu.be/DeU6opFU_zw)
 
 
 *NOTE*: HEAD~ means one commit right before the most recent. HEAD~2 means two commits before the most recent, and so on...
