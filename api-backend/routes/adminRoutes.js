@@ -1,8 +1,28 @@
 const express = require('express');
+const multer = require('multer');
 const adminController = require(`${__dirname}/../controllers/adminController.js`);
 const authController = require('./../controllers/authController.js');
 
 const router = express.Router();
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(
+        null,
+        './'
+      ); //you tell where to upload the files,
+    },
+    filename: function (req, file, cb) {
+      cb(null, file.originalname);
+    },
+  });
+
+const upload = multer({
+    storage: storage,
+    onFileUploadStart: function (file) {
+      console.log(file.originalname + ' is starting ...');
+    },
+  });
 
 router
     .route('/healthcheck')
@@ -17,6 +37,7 @@ router
     .post(
         authController.protect,
         authController.restrictTo('admin'),
+        upload.single('file'),
         adminController.questionnaireUpdate
     );
 
@@ -32,7 +53,7 @@ router
     .route('/resetq/:questionnaireID')
     .post(
         authController.protect,
-        authController.restrictTo('super-admin'),
+        authController.restrictTo('super-admin', 'admin'),
         adminController.resetQuestionnaire
     );
 
