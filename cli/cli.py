@@ -237,6 +237,14 @@ def getquestionanswers(questionnaire_id, question_id, form):
 
     return
 
+def usermodReq(usermod, username, passw, form):
+    usermodUrl = baseUrl + f"admin/{usermod}/{username}/{passw}" + "?format=" + form
+    vescookie = getCookie()
+    response = handlePost(usermodUrl, verify = False, vescookie=vescookie)
+    handleResponse(response, form)
+
+    return
+
 # admin: NOT DONE
 def admin(args):
     print("HERE")
@@ -338,7 +346,7 @@ getquestionanswers_parser.add_argument("--format", nargs = 1)
 
 ### ADMIN PARSER ###
 admin_parser = subparser.add_parser("admin", help = "admin")
-admin_parser.add_argument("--usermod", help="modify user", action="store_true")
+admin_parser.add_argument("--usermod", help="modify user")#, action="store_true")
 admin_parser.add_argument("--username", help="username")
 admin_parser.add_argument("--passw", help="password")
 admin_parser.add_argument("--users", help="list of users")
@@ -360,6 +368,7 @@ try:
     if '--format' not in sys.argv:
         parser.error("Incorrect format, it should be --format json")
 except Exception as e:
+    print("Exception!")
     exit()
 
 # print(vars(args))
@@ -427,10 +436,10 @@ elif (args.command == "getquestionanswers"):
         print("getquestionanswers requires --questionnaire_id and --question_id and --format")
 
 elif args.command == "admin":
-    print("In admin")
+    # print("In admin")
     if args.usermod and args.username and args.passw and not args.users:
-        print("user modification for username :", args.username, "with password :", args.passw)
-
+        # print("user modification for username :", args.username, "with password :", args.passw)
+        usermodReq(args.usermod, args.username, args.passw, args.format[0])
     elif args.username and args.passw and not args.usermod and not args.users:
         print("username :", args.username, "with password :", args.passw)
 
