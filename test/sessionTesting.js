@@ -1,0 +1,489 @@
+process.env.NODE_ENV = "test";
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+
+let chai = require("chai");
+let chaiHttp = require("chai-http");
+let server = require("../api-backend/server");
+let should = chai.should();
+var token;
+
+chai.use(chaiHttp);
+
+//----------------------------------------------SESSIONS TESTING-------------------------------------------//
+//-----------------------------------------------GOOD SCENARIO---------------------------------------------//
+describe("Session endpoints good scenario (returning '200 OK' or '402 no data')", () => {
+  describe("Accessed by users:", () => {
+    describe("/login", () => {
+      it("it should login a user to have access to the endpoints", (done) => {
+        const user = {
+          username: "test-user",
+          password: "test1234",
+        };
+        chai
+          .request(server)
+          .post("/intelliq_api/login")
+          .send(user)
+          .end((err, res) => {
+            res.should.have.status(200);
+            res.body.should.have.property("token");
+            token = res.body.token;
+            done();
+          })
+          .timeout(1000000);
+      });
+    });
+
+    describe("/session/getallsessionsids", () => {
+      it("it should return all session IDs in the database", (done) => {
+        chai
+          .request(server)
+          .get("/intelliq_api/session/getallsessionsids")
+          .set("Cookie", `jwt=${token}`)
+          .end((err, res) => {
+            res.body.should.have.property("status");
+            res.body.should.have.property("data");
+            res.body.data.should.have.property("sessionsIDs");
+            if (res.body.data.sessionsIDs.length == 0) {
+              res.should.have.status(402);
+              res.body.status.should.equal("no data");
+            } else {
+              res.should.have.status(200);
+              res.body.status.should.equal("OK");
+            }
+            done();
+          })
+          .timeout(1000000);
+      });
+    });
+
+    describe("/session/getuserquestionnairesession/:questionnaireID", () => {
+      it("it should return the session that the logged in user submitted to the questionnaire with the specified questionnaireID", (done) => {
+        chai
+          .request(server)
+          .get("/intelliq_api/session/getuserquestionnairesession/QQ062")
+          .set("Cookie", `jwt=${token}`)
+          .end((err, res) => {
+            res.body.should.have.property("status");
+            res.body.should.have.property("data");
+            res.body.data.should.have.property("session");
+            if (res.body.data.session == null) {
+              res.should.have.status(402);
+              res.body.status.should.equal("no data");
+            } else {
+              res.should.have.status(200);
+              res.body.status.should.equal("OK");
+            }
+            done();
+          })
+          .timeout(1000000);
+      });
+    });
+
+    describe("/logout", () => {
+      it("it should logout the logged in user", (done) => {
+        chai
+          .request(server)
+          .post("/intelliq_api/logout")
+          .set("Cookie", `jwt=${token}`)
+          .end((err, res) => {
+            res.should.have.status(200);
+            res.body.should.have.property("status");
+            res.body.status.should.equal("OK");
+            res.body.should.have.property("message");
+            res.body.message.should.equal("You are successfully logged out.");
+            done();
+          })
+          .timeout(1000000);
+      });
+    });
+  });
+
+  describe("Accessed by admins:", () => {
+    describe("/login", () => {
+      it("it should login an admin to have access to the endpoints", (done) => {
+        const user = {
+          username: "test-admin",
+          password: "test1234",
+        };
+        chai
+          .request(server)
+          .post("/intelliq_api/login")
+          .send(user)
+          .end((err, res) => {
+            res.should.have.status(200);
+            res.body.should.have.property("token");
+            token = res.body.token;
+            done();
+          })
+          .timeout(1000000);
+      });
+    });
+
+    describe("/session/getallquestionnairesessions/:questionnaireID", () => {
+      it("it should return all the sessions of the questionnaire with the specified questionnaireID", (done) => {
+        chai
+          .request(server)
+          .get("/intelliq_api/session/getallquestionnairesessions/QQ062")
+          .set("Cookie", `jwt=${token}`)
+          .end((err, res) => {
+            res.body.should.have.property("status");
+            res.body.should.have.property("data");
+            res.body.data.should.have.property("sessions");
+            if (res.body.data.sessions.length == 0) {
+              res.should.have.status(402);
+              res.body.status.should.equal("no data");
+            } else {
+              res.should.have.status(200);
+              res.body.status.should.equal("OK");
+            }
+            done();
+          })
+          .timeout(1000000);
+      });
+    });
+
+    describe("/logout", () => {
+      it("it should logout the logged in admin", (done) => {
+        chai
+          .request(server)
+          .post("/intelliq_api/logout")
+          .set("Cookie", `jwt=${token}`)
+          .end((err, res) => {
+            res.should.have.status(200);
+            res.body.should.have.property("status");
+            res.body.status.should.equal("OK");
+            res.body.should.have.property("message");
+            res.body.message.should.equal("You are successfully logged out.");
+            done();
+          })
+          .timeout(1000000);
+      });
+    });
+  });
+});
+
+//----------------------------------------------SESSIONS TESTING-------------------------------------------//
+//-----------------------------------------------BAD SCENARIO----------------------------------------------//
+//-----------------------------------------NO LOGGED IN USER OR ADMIN--------------------------------------//
+
+describe("Session endpoints bad scenario (no logged in user or admin)", () => {
+  describe("Accessed by users:", () => {
+    describe("/session/getallsessionsids", () => {
+      it("it should throw an error because there is no logged in user", (done) => {
+        chai
+          .request(server)
+          .get("/intelliq_api/session/getallsessionsids")
+          .set("Cookie", `jwt=`)
+          .end((err, res) => {
+            res.should.have.status(401);
+            res.body.should.have.property("status");
+            res.body.should.have.property("message");
+            res.body.status.should.equal("failed");
+            res.body.message.should.equal("Please log in to get access.");
+            done();
+          })
+          .timeout(1000000);
+      });
+    });
+
+    describe("/session/getuserquestionnairesession/:questionnaireID", () => {
+      it("it should throw an error because there is no logged in user", (done) => {
+        chai
+          .request(server)
+          .get("/intelliq_api/session/getuserquestionnairesession/QQ062")
+          .set("Cookie", `jwt=`)
+          .end((err, res) => {
+            res.should.have.status(401);
+            res.body.should.have.property("status");
+            res.body.should.have.property("message");
+            res.body.status.should.equal("failed");
+            res.body.message.should.equal("Please log in to get access.");
+            done();
+          })
+          .timeout(1000000);
+      });
+    });
+  });
+
+  describe("Accessed by admins:", () => {
+    describe("/session/getallquestionnairesessions/:questionnaireID", () => {
+      it("it should throw an error because there is no logged in admin", (done) => {
+        chai
+          .request(server)
+          .get("/intelliq_api/session/getallquestionnairesessions/QQ062")
+          .set("Cookie", `jwt=`)
+          .end((err, res) => {
+            res.should.have.status(401);
+            res.body.should.have.property("status");
+            res.body.should.have.property("message");
+            res.body.status.should.equal("failed");
+            res.body.message.should.equal("Please log in to get access.");
+            done();
+          })
+          .timeout(1000000);
+      });
+    });
+  });
+});
+
+//----------------------------------------------SESSIONS TESTING-------------------------------------------//
+//-----------------------------------------------BAD SCENARIO----------------------------------------------//
+//------------------------LOGGED IN USER/ADMIN NOT AUTHORIZED FOR THE SPECIFIC ACTION----------------------//
+
+describe("Session endpoints bad scenario (logged in user/admin not authorized for this action)", () => {
+  describe("Accessed by users:", () => {
+    describe("/login", () => {
+      it("it should login an admin to cause an error", (done) => {
+        const user = {
+          username: "test-admin",
+          password: "test1234",
+        };
+        chai
+          .request(server)
+          .post("/intelliq_api/login")
+          .send(user)
+          .end((err, res) => {
+            res.should.have.status(200);
+            res.body.should.have.property("token");
+            token = res.body.token;
+            done();
+          })
+          .timeout(1000000);
+      });
+    });
+
+    describe("/session/getallsessionsids", () => {
+      it("it should throw an error because an admin is logged in", (done) => {
+        chai
+          .request(server)
+          .get("/intelliq_api/session/getallsessionsids")
+          .set("Cookie", `jwt=${token}`)
+          .end((err, res) => {
+            res.should.have.status(401);
+            res.body.should.have.property("status");
+            res.body.should.have.property("message");
+            res.body.status.should.equal("failed");
+            res.body.message.should.equal("User unauthorized to continue!");
+            done();
+          })
+          .timeout(1000000);
+      });
+    });
+
+    describe("/session/getuserquestionnairesession/:questionnaireID", () => {
+      it("it should throw an error because an admin is logged in", (done) => {
+        chai
+          .request(server)
+          .get("/intelliq_api/session/getuserquestionnairesession/QQ062")
+          .set("Cookie", `jwt=${token}`)
+          .end((err, res) => {
+            res.should.have.status(401);
+            res.body.should.have.property("status");
+            res.body.should.have.property("message");
+            res.body.status.should.equal("failed");
+            res.body.message.should.equal("User unauthorized to continue!");
+            done();
+          })
+          .timeout(1000000);
+      });
+    });
+
+    describe("/logout", () => {
+      it("it should logout the logged in admin", (done) => {
+        chai
+          .request(server)
+          .post("/intelliq_api/logout")
+          .set("Cookie", `jwt=${token}`)
+          .end((err, res) => {
+            res.should.have.status(200);
+            res.body.should.have.property("status");
+            res.body.status.should.equal("OK");
+            res.body.should.have.property("message");
+            res.body.message.should.equal("You are successfully logged out.");
+            done();
+          })
+          .timeout(1000000);
+      });
+    });
+  });
+
+  describe("Accessed by admins:", () => {
+    describe("/login", () => {
+      it("it should login a user to cause an error", (done) => {
+        const user = {
+          username: "test-user",
+          password: "test1234",
+        };
+        chai
+          .request(server)
+          .post("/intelliq_api/login")
+          .send(user)
+          .end((err, res) => {
+            res.should.have.status(200);
+            res.body.should.have.property("token");
+            token = res.body.token;
+            done();
+          })
+          .timeout(1000000);
+      });
+    });
+
+    describe("/session/getallquestionnairesessions/:questionnaireID", () => {
+      it("it should throw an error because a user is logged in", (done) => {
+        chai
+          .request(server)
+          .get("/intelliq_api/session/getallquestionnairesessions/QQ062")
+          .set("Cookie", `jwt=${token}`)
+          .end((err, res) => {
+            res.should.have.status(401);
+            res.body.should.have.property("status");
+            res.body.should.have.property("message");
+            res.body.status.should.equal("failed");
+            res.body.message.should.equal("User unauthorized to continue!");
+            done();
+          })
+          .timeout(1000000);
+      });
+    });
+
+    describe("/logout", () => {
+      it("it should logout the logged in user", (done) => {
+        chai
+          .request(server)
+          .post("/intelliq_api/logout")
+          .set("Cookie", `jwt=${token}`)
+          .end((err, res) => {
+            res.should.have.status(200);
+            res.body.should.have.property("status");
+            res.body.status.should.equal("OK");
+            res.body.should.have.property("message");
+            res.body.message.should.equal("You are successfully logged out.");
+            done();
+          })
+          .timeout(1000000);
+      });
+    });
+  });
+});
+
+//----------------------------------------------SESSIONS TESTING-------------------------------------------//
+//-----------------------------------------------BAD SCENARIO----------------------------------------------//
+//--------------------------------INVALID PARAMETER / WRONG QUESTIONNAIRE ID-------------------------------//
+
+describe("Session endpoints bad scenario (the specified questionnaire ID does not match any questionnaire in the database)", () => {
+  describe("Accessed by users:", () => {
+    describe("/login", () => {
+      it("it should login a user to have acces to the endpoint", (done) => {
+        const user = {
+          username: "test-user",
+          password: "test1234",
+        };
+        chai
+          .request(server)
+          .post("/intelliq_api/login")
+          .send(user)
+          .end((err, res) => {
+            res.should.have.status(200);
+            res.body.should.have.property("token");
+            token = res.body.token;
+            done();
+          })
+          .timeout(1000000);
+      });
+    });
+
+    describe("/session/getuserquestionnairesession/:questionnaireID", () => {
+      it("it should throw an error because the specified questionnaire ID does not match any questionnaire in the database", (done) => {
+        chai
+          .request(server)
+          .get("/intelliq_api/session/getuserquestionnairesession/QQ06")
+          .set("Cookie", `jwt=${token}`)
+          .end((err, res) => {
+            res.should.have.status(400);
+            res.body.should.have.property("status");
+            res.body.should.have.property("message");
+            res.body.status.should.equal("failed");
+            res.body.message.should.equal("bad request");
+            done();
+          })
+          .timeout(1000000);
+      });
+    });
+
+    describe("/logout", () => {
+      it("it should logout the logged in user", (done) => {
+        chai
+          .request(server)
+          .post("/intelliq_api/logout")
+          .set("Cookie", `jwt=${token}`)
+          .end((err, res) => {
+            res.should.have.status(200);
+            res.body.should.have.property("status");
+            res.body.status.should.equal("OK");
+            res.body.should.have.property("message");
+            res.body.message.should.equal("You are successfully logged out.");
+            done();
+          })
+          .timeout(1000000);
+      });
+    });
+  });
+
+  describe("Accessed by admins:", () => {
+    describe("/login", () => {
+      it("it should login an admin to have access to the endpoint", (done) => {
+        const user = {
+          username: "test-admin",
+          password: "test1234",
+        };
+        chai
+          .request(server)
+          .post("/intelliq_api/login")
+          .send(user)
+          .end((err, res) => {
+            res.should.have.status(200);
+            res.body.should.have.property("token");
+            token = res.body.token;
+            done();
+          })
+          .timeout(1000000);
+      });
+    });
+
+    describe("/session/getallquestionnairesessions/:questionnaireID", () => {
+      it("it should throw an error because the specified questionnaire ID does not match any questionnaire in the database", (done) => {
+        chai
+          .request(server)
+          .get("/intelliq_api/session/getallquestionnairesessions/QQ06")
+          .set("Cookie", `jwt=${token}`)
+          .end((err, res) => {
+            res.should.have.status(400);
+            res.body.should.have.property("status");
+            res.body.should.have.property("message");
+            res.body.status.should.equal("failed");
+            res.body.message.should.equal("bad request");
+            done();
+          })
+          .timeout(1000000);
+      });
+    });
+
+    describe("/logout", () => {
+      it("it should logout the logged in admin", (done) => {
+        chai
+          .request(server)
+          .post("/intelliq_api/logout")
+          .set("Cookie", `jwt=${token}`)
+          .end((err, res) => {
+            res.should.have.status(200);
+            res.body.should.have.property("status");
+            res.body.status.should.equal("OK");
+            res.body.should.have.property("message");
+            res.body.message.should.equal("You are successfully logged out.");
+            done();
+          })
+          .timeout(1000000);
+      });
+    });
+  });
+});
