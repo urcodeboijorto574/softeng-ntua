@@ -12,7 +12,7 @@ def load_variable_from_file():
         return str(file.read())
 
 def run_login(username, password, form, output = True):
-    result = subprocess.run(['python', 'cli0502.py', 'login', '--username', username, '--passw', password, '--format', form], capture_output=True)
+    result = subprocess.run(['python', 'cli.py', 'login', '--username', username, '--passw', password, '--format', form], capture_output=True)
     # response = json.loads(result.stdout)
     # print(result.stdout.decode('utf-8')+"\n====================")
     # print(">>> HERE <<<")
@@ -48,7 +48,7 @@ def run_login(username, password, form, output = True):
 
 def run_logout(username, password, form):
     run_login(username, password, form, False)
-    result = subprocess.run(['python', 'cli0502.py', 'logout', '--format', form], capture_output=True)
+    result = subprocess.run(['python', 'cli.py', 'logout', '--format', form], capture_output=True)
     # print(">>> HERE <<<")
     # print(result.stdout.decode())
     # response = json.loads(result.stdout)
@@ -82,7 +82,7 @@ def run_logout(username, password, form):
 
 def run_healthcheck(username, password, form):
     run_login(username, password, form, False)
-    result = subprocess.run(['python', 'cli0502.py', 'healthcheck', '--format', form], capture_output=True)
+    result = subprocess.run(['python', 'cli.py', 'healthcheck', '--format', form], capture_output=True)
     # response = json.loads(result.stdout)
     # print("=====")
     # print(list(result.stdout.decode()))
@@ -175,7 +175,7 @@ def run_resetall():
 
 def run_questionnaire_upd(username, password, source, form):
     run_login(username, password, form, False)
-    result = subprocess.run(['python', 'cli0502.py', 'questionnaire_upd', '--source', source, '--format', form], capture_output=True)
+    result = subprocess.run(['python', 'cli.py', 'questionnaire_upd', '--source', source, '--format', form], capture_output=True)
 
     if result.returncode != 0:
         raise Exception('Questionnaire_upd failed with return code {}'.format(result.returncode))
@@ -228,7 +228,7 @@ def run_questionnaire_upd(username, password, source, form):
 
 def run_doanswer(questionnaire_id, question_id, session_id, option_id, username, password, form):
     run_login(username, password, form, False)
-    result = subprocess.run(['python', 'cli0502.py', 'doanswer', '--questionnaire_id', questionnaire_id, '--question_id', question_id,
+    result = subprocess.run(['python', 'cli.py', 'doanswer', '--questionnaire_id', questionnaire_id, '--question_id', question_id,
                              '--session_id', session_id, '--option_id', option_id, '--format', form], capture_output=True)
     # response = json.loads(result.stdout)
     # print("=====")
@@ -298,23 +298,23 @@ if __name__ == '__main__':
     sources = ['jtest.json']
     forms = ['json', 'csv']
     
-    # for i in range(len(usernames)):
-    #     for form in forms:
-    #         print('Login test ' + str(i + 1) + " (format = " + form + ")", end = ":\t\t\t")
-    #         run_login(usernames[i], passwords[i], form, True)
-    # print('=============== Login Testing completed! ===============')
+    for i in range(len(usernames)):
+        for form in forms:
+            print('Login test ' + str(i + 1) + " (format = " + form + ")", end = ":\t\t\t")
+            run_login(usernames[i], passwords[i], form, True)
+    print('=============== Login Testing completed! ===============')
 
-    # for i in range(len(usernames)):
-    #     for form in forms:
-    #         print('Logout test ' + str(i + 1) + " (format = " + form + ")", end = ":\t\t\t")
-    #         run_logout(usernames[i], passwords[i], form)
-    # print('=============== Logout Testing completed! ==============')
+    for i in range(len(usernames)):
+        for form in forms:
+            print('Logout test ' + str(i + 1) + " (format = " + form + ")", end = ":\t\t\t")
+            run_logout(usernames[i], passwords[i], form)
+    print('=============== Logout Testing completed! ==============')
 
-    # for i in range(len(usernames)):
-    #     for form in forms:
-    #         print('Healthcheck test ' + str(i + 1) + " (format = " + form + ")", end = ":\t\t")
-    #         run_healthcheck(usernames[i], passwords[i], form)
-    # print('============ Healthcheck Testing completed! ============')
+    for i in range(len(usernames)):
+        for form in forms:
+            print('Healthcheck test ' + str(i + 1) + " (format = " + form + ")", end = ":\t\t")
+            run_healthcheck(usernames[i], passwords[i], form)
+    print('============ Healthcheck Testing completed! ============')
     
     # for i in range(len(usernames)):
     #     for j in range(len(sources)):

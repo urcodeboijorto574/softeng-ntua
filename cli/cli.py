@@ -7,8 +7,6 @@ from io import StringIO
 import urllib3
 import csv
 
-# H TEXNOLOGIA LOGISMIKOU EINAI TO KALUTERO MA8HMA !!!11!!1!!1! #not
-
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 requests.packages.urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
@@ -121,7 +119,11 @@ def logout(form):
         If status == 200: success
         Else: gives reason"""
     logoutUrl = baseUrl + "logout?format=" + form
-    response = handlePost(logoutUrl, verify = False)
+    vescookie = getCookie()
+    if vescookie["jwt"] in ["loggedout", ""]:
+        print("The user is not signed in!")
+        exit()
+    response = handlePost(logoutUrl, verify = False, vescookie = vescookie)
     jwt = response.cookies["jwt"]
     save_variable_to_file(jwt)
     handleResponse(response, form)
