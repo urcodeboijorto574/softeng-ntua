@@ -210,10 +210,40 @@ exports.doAnswer = async (req, res, next) => {
  * URL: {baseURL}/getsessionanswers/:questionnaireID/:session
  */
 exports.getSessionAnswers = async (req, res, next) => {
-    /* This line is added only for temporary purposes */
-    return res
-        .status('418')
-        .json({ status: 'no operation', message: "I'm a teapot" });
+    try {
+        const sessionanswers = await Session.findOne({
+            questionnaireID: req.params.questionnaireID,
+            sessionID: req.params.session,
+        })
+            .select({ _id: 0, __v: 0, submitter: 0 })
+            .populate({
+                path: 'answers',
+                select: {
+                    _id: 0,
+                    optID: 0,
+                    sessionID: 0,
+                    questionnaireID: 0,
+                    __v: 0,
+                },
+                options: { sort: { qID: 1 } },
+            });
+        if (!sessionanswers) {
+            return res.status(400).json({
+                status: 'failed',
+                message: `Session ID ${req.params.session} not found`,
+            });
+        }
+        if (!req.username === Questionnaire.creator) {
+            return res.json({ status: 'Failed', message: 'Access denied' });
+        }
+        return res
+            .status(200)
+            .json({ status: 'OK', sessionanswers: sessionanswers });
+    } catch (err) {
+        return res
+            .status(500)
+            .json({ status: 'failed', message: 'Internal server error' });
+    }
 };
 
 /**
