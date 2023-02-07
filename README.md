@@ -54,10 +54,11 @@ Endpoint to logout a user.
 | ------ | ----- |
 | format | json  |
 
-### 🔑 Authentication noauth
+### 🔑 Authentication jwt via cookie
 
-| Param | value | Type |
-| ----- | ----- | ---- |
+| Param  | value | Type |
+| ------ | ----- | ---- |
+| Cookie |       | ---- |
 
 ### Response: 200
 
