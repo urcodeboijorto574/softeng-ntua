@@ -5,8 +5,20 @@ const Session = require(`${__dirname}/../models/sessionModel.js`);
 const Answer = require(`${__dirname}/../models/answerModel.js`);
 const User = require(`${__dirname}/../models/userModel.js`);
 const mongoose = require('mongoose');
-const handleResponse =
-    require(`${__dirname}/../utils/handleResponse.js`).handleResponse;
+const handleResponse = require(`${__dirname}/../utils/handleResponse.js`).handleResponse;
+
+const handleResponsePrevAns = (req, res, statusCode, messageResponse) => {
+    if (!req.query.format || req.query.format == 'json') {
+        return res.status(statusCode).json(messageResponse);
+    } else if (req.query.format == 'csv') {
+        return res.csv([messageResponse], true, {}, statusCode);
+    } else {
+        return res.status(400).json({
+            status: 'failed',
+            message: 'Response format must be either json or csv!'
+        });
+    }
+};
 
 /**
  * Creates and stores an answer object in the database.
@@ -17,10 +29,7 @@ const handleResponse =
  * URL: {baseURL}/doanswer/:questionnaireID/:questionID/:session/:optionID
  */
 exports.doAnswer = async (req, res, next) => {
-    let session,
-        option,
-        question,
-        questionnaire,
+    let session, option, question, questionnaire,
         newAnswer = {
             qID: req.params.questionID,
             optID: req.params.optionID,
@@ -28,28 +37,25 @@ exports.doAnswer = async (req, res, next) => {
             questionnaireID: req.params.questionnaireID,
             answertext: req.body.answertext ? req.body.answertext : '',
         },
-        newAnswerCreated = false,
-        optionUpdated = false,
-        questionUpdated = false;
+        newAnswerCreated = false, optionUpdated = false, questionUpdated = false;
     try {
         /* 1) CHECK VALIDITY OF PARAMETERS GIVEN */
 
         /* If at least one of questionnaireID, questionID, optionID is unvalid, reject the request */
-        questionnaire = await Questionnaire.findOne(
-            { questionnaireID: req.params.questionnaireID },
-            '_id questionnaireID questions'
-        ).populate({
-            path: 'questions',
-            model: 'Question',
-            match: { qID: req.params.questionID },
-            select: '_id qID options wasAnsweredBy',
-            populate: {
-                path: 'options',
-                model: 'Option',
-                match: { optID: req.params.optionID },
-                select: '_id optID wasChosenBy nextqID opttxt',
-            },
-        });
+        questionnaire = await Questionnaire
+            .findOne({ questionnaireID: req.params.questionnaireID }, '_id questionnaireID questions')
+            .populate({
+                path: 'questions',
+                model: 'Question',
+                match: { qID: req.params.questionID },
+                select: '_id qID options wasAnsweredBy',
+                populate: {
+                    path: 'options',
+                    model: 'Option',
+                    match: { optID: req.params.optionID },
+                    select: '_id optID wasChosenBy nextqID opttxt',
+                },
+            });
 
         let inputValid = true;
         const questionnaireValid = questionnaire;
@@ -70,47 +76,31 @@ exports.doAnswer = async (req, res, next) => {
         }
 
         /* If the user has already answered the questionnaire, reject the request */
-        let user = await User.findOne(
-            { username: req.username, role: 'user' },
-            'questionnairesAnswered'
-        ).populate('questionnairesAnswered', '_id questionnaireID');
-        if (
-            user.questionnairesAnswered.find(
-                (q_id) => q_id == questionnaire._id
-            )
-        ) {
+        let user = await User
+            .findOne({ username: req.username, role: 'user' }, 'questionnairesAnswered');
+        if (user.questionnairesAnswered.find(q_id => q_id.toString() == questionnaire._id.toString())) {
             return handleResponse(req, res, 400, {
                 status: 'failed',
-                message:
-                    'You have already submitted a session for this questionnaire',
+                message: 'You have already submitted a session for this questionnaire',
             });
         }
 
         /* 2) CHECK IF THE NEW SESSION IS ALREADY CREATED */
-        session = await Session.findOne(
-            { sessionID: req.params.session },
-            '-questionnaireID -__v'
-        ).populate('answers', '_id qID optID answertext');
+        session = await Session
+            .findOne({ sessionID: req.params.session }, '-questionnaireID -__v')
+            .populate('answers', '_id qID optID answertext');
 
         if (session) {
             /* Check if the question has already been answered */
-            const answerIndex = session.answers.findIndex(
-                (ans) => ans.qID === req.params.questionID
-            );
+            const answerIndex = session.answers.findIndex((ans) => ans.qID === req.params.questionID);
             const questionAlreadyAnswered = answerIndex > -1;
             if (questionAlreadyAnswered) {
                 session.answers.forEach(async (ans) => {
-                    let ques = await Question.findOne(
-                        { qID: ans.qID },
-                        'wasAnsweredBy'
-                    );
+                    let ques = await Question.findOne({ qID: ans.qID }, 'wasAnsweredBy');
                     ques.wasAnsweredBy -= 1;
                     ques = await ques.save();
 
-                    let opt = await Option.findOne(
-                        { optID: ans.optID },
-                        'wasChosenBy'
-                    );
+                    let opt = await Option.findOne({ optID: ans.optID }, 'wasChosenBy');
                     opt.wasChosenBy -= 1;
                     opt = await opt.save();
 
@@ -122,18 +112,13 @@ exports.doAnswer = async (req, res, next) => {
                     sessionID: req.params.session,
                 });
 
-                return handleResponse(req, res, 400, {
+                return handleResponsePrevAns(req, res, 400, {
                     status: 'failed',
-                    message:
-                        'An answer has already been submitted for this question',
+                    message: 'An answer has already been submitted for this question',
                     'previous answer':
-                        session.answers[answerIndex].answertext !== ''
+                        (session.answers[answerIndex].answertext !== '')
                             ? session.answers[answerIndex].answertext
-                            : (
-                                  await Option.findOne({
-                                      optID: session.answers[answerIndex].optID,
-                                  })
-                              ).opttxt,
+                            : (await Option.findOne({ optID: session.answers[answerIndex].optID }, '-_id opttxt')).opttxt
                 });
             }
         } else {
@@ -159,8 +144,8 @@ exports.doAnswer = async (req, res, next) => {
         questionUpdated = true;
 
         if (option.nextqID === '-') {
-            const alreadyAnswered = user.questionnairesAnswered.some(
-                (q) => q['_id'].toString() === questionnaire._id.toString()
+            const alreadyAnswered = user.questionnairesAnswered.some(q =>
+                q['_id'].toString() === questionnaire._id.toString()
             );
             if (!alreadyAnswered) {
                 await user.updateOne({
@@ -181,7 +166,7 @@ exports.doAnswer = async (req, res, next) => {
             await Answer.findByIdAndDelete(newAnswer._id);
 
             if (optionUpdated) {
-                option.wasChosenBy = option.wasChosenBy - 1;
+                --option.wasChosenBy;
                 await option.save();
 
                 if (questionUpdated) {
@@ -193,7 +178,7 @@ exports.doAnswer = async (req, res, next) => {
 
         return handleResponse(req, res, 500, {
             status: 'failed',
-            message: error.name + error.message,
+            message: error
         });
     }
     next();
