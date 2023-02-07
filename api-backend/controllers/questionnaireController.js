@@ -12,13 +12,15 @@ const mongoose = require('mongoose');
  * @param {JSON} res - JSON response object containing the requested questionnaires (res.data.questionnaires).
  * @param {function} next - the next middleware in the middleware stack.
  * @returns {JSON} - The response object res.
- * 
+ *
  * URL: {baseURL}/questionnaire/getadmincreatedquestionnaires
  */
 exports.getAdminCreatedQuestionnaires = async (req, res, next) => {
     try {
-        let questionnaires = await Questionnaire
-            .find({ creator: req.username }, '-_id -creator')
+        let questionnaires = await Questionnaire.find(
+            { creator: req.username },
+            '-_id -creator'
+        )
             .sort('questionnaireID')
             .populate({
                 path: 'questions',
@@ -37,13 +39,13 @@ exports.getAdminCreatedQuestionnaires = async (req, res, next) => {
         return res.status(questionnairesFound ? 200 : 402).json({
             status: questionnairesFound ? 'OK' : 'no data',
             data: {
-                questionnaires: questionnaires
-            }
+                questionnaires: questionnaires,
+            },
         });
     } catch (error) {
         return res.status(500).json({
             status: 'failed',
-            message: error
+            message: error,
         });
     }
     next();
@@ -55,31 +57,32 @@ exports.getAdminCreatedQuestionnaires = async (req, res, next) => {
  * @param {JSON} res - JSON response object containing the requested questionnaires (res.data.questionnaires).
  * @param {function} next - the next middleware in the middleware stack.
  * @returns {JSON} - The response object res.
- * 
+ *
  * URL: {baseURL}/questionnaire/getuseransweredquestionnaires
  */
 exports.getUserAnsweredQuestionnaires = async (req, res, next) => {
     try {
-        let user = await User
-            .findOne({ username: req.username }, 'questionnairesAnswered')
-            .populate({
-                path: 'questionnairesAnswered',
-                model: 'Questionnaire',
-                select: '-_id',
-                sort: 'questionnaireID',
+        let user = await User.findOne(
+            { username: req.username },
+            'questionnairesAnswered'
+        ).populate({
+            path: 'questionnairesAnswered',
+            model: 'Questionnaire',
+            select: '-_id',
+            sort: 'questionnaireID',
+            populate: {
+                path: 'questions',
+                model: 'Question',
+                select: '-_id -__v -questionnaireID -wasAnsweredBy',
+                sort: 'qID',
                 populate: {
-                    path: 'questions',
-                    model: 'Question',
-                    select: '-_id -__v -questionnaireID -wasAnsweredBy',
-                    sort: 'qID',
-                    populate: {
-                        path: 'options',
-                        model: 'Option',
-                        select: '-_id -__v',
-                        sort: 'optID'
-                    }
-                }
-            });
+                    path: 'options',
+                    model: 'Option',
+                    select: '-_id -__v',
+                    sort: 'optID',
+                },
+            },
+        });
 
         const answeredQuestionnaires = user.questionnairesAnswered;
         const questionnairesFound = answeredQuestionnaires.length > 0;
@@ -87,13 +90,13 @@ exports.getUserAnsweredQuestionnaires = async (req, res, next) => {
         return res.status(questionnairesFound ? 200 : 402).json({
             status: questionnairesFound ? 'OK' : 'no data',
             data: {
-                answeredQuestionnaires
-            }
+                answeredQuestionnaires,
+            },
         });
     } catch (error) {
         return res.status(500).json({
             status: 'failed',
-            message: error
+            message: error,
         });
     }
     next();
@@ -105,17 +108,24 @@ exports.getUserAnsweredQuestionnaires = async (req, res, next) => {
  * @param {JSON} res - JSON response object containing the requested questionnaires (res.data.questionnaires).
  * @param {function} next - the next middleware in the middleware stack.
  * @returns {JSON} - The response object res.
- * 
+ *
  * URL: {baseURL}/questionnaire/getusernotansweredquestionnaires
  */
-exports.getUserNotAnsweredQuestionnaires = async (req, res, next) => { /* (NOT FINISHED) */
+exports.getUserNotAnsweredQuestionnaires = async (req, res, next) => {
+    /* (NOT FINISHED) */
     try {
-        const user = await User.findOne({ username: req.username }, 'questionnairesAnswered');
+        const user = await User.findOne(
+            { username: req.username },
+            'questionnairesAnswered'
+        );
 
-        const notAnsweredQuestionnaires = await Questionnaire
-            .find({}, '_id keywords questions questionnaireID questionnaireTitle')
+        const notAnsweredQuestionnaires = await Questionnaire.find(
+            {},
+            '_id keywords questions questionnaireID questionnaireTitle'
+        )
             .sort('_id')
-            .where('_id').nin(user.questionnairesAnswered)
+            .where('_id')
+            .nin(user.questionnairesAnswered)
             .populate({
                 path: 'questions',
                 model: 'Question',
@@ -125,21 +135,21 @@ exports.getUserNotAnsweredQuestionnaires = async (req, res, next) => { /* (NOT F
                     path: 'options',
                     model: 'Option',
                     select: '-_id optID opttxt nextqID wasChosenBy',
-                    sort: 'optID'
-                }
+                    sort: 'optID',
+                },
             });
 
         const questionnairesFound = notAnsweredQuestionnaires.length > 0;
         return res.status(questionnairesFound ? 200 : 402).json({
             status: questionnairesFound ? 'OK' : 'no data ',
             data: {
-                notAnsweredQuestionnaires
-            }
+                notAnsweredQuestionnaires,
+            },
         });
     } catch (error) {
         return res.status(500).json({
             status: 'failed',
-            message: error
+            message: error,
         });
     }
     next();
@@ -151,20 +161,33 @@ exports.getUserNotAnsweredQuestionnaires = async (req, res, next) => { /* (NOT F
  * @param {JSON} res - JSON respnse object containing a confirmation/rejection of the request.
  * @param {*} next - the next middlware in the middleware stack.
  * @returns - The response object res.
- * 
+ *
  * URL: {baseURL}/questionnaire/deletequestionnaire/:questionnaireID
  */
 exports.deleteQuestionnaire = async (req, res, next) => {
     try {
-        const questionnaire = await Questionnaire.findOne(req.params, '_id');
+        const questionnaire = await Questionnaire.findOne(
+            req.params,
+            '_id'
+        ).select('creator');
+
         if (!questionnaire) {
             return res.status(400).json({
                 status: 'failed',
-                message: 'bad request'
+                message: 'bad request',
             });
         }
-        const retQuestionnaireObj =
-            await Questionnaire.deleteMany(req.params);
+        if (
+            req.userRole !== 'super-admin' &&
+            req.username !== questionnaire.creator
+        ) {
+            return res.status(401).json({
+                status: 'failed',
+                reason: 'Not authorised',
+            });
+        }
+
+        const retQuestionnaireObj = await Questionnaire.deleteMany(req.params);
 
         console.log('retQuestionnaireObj:', retQuestionnaireObj);
 
@@ -177,7 +200,7 @@ exports.deleteQuestionnaire = async (req, res, next) => {
 
         return res.status(200).json({
             status: 'OK',
-            message: 'Questionnaire and related documents deleted successfully'
+            message: 'Questionnaire and related documents deleted successfully',
         });
     } catch (err) {
         return res.status(500).json({
@@ -194,10 +217,44 @@ exports.deleteQuestionnaire = async (req, res, next) => {
  * @param {JSON} res - JSOn object that contains the data to send.
  * @param {function} next - the next middleware in the middleware stack.
  * @returns {JSON} - The response object res.
- * 
+ *
  * URL: {baseURL}/questionnaire/:questionnaireID/
  */
-exports.getQuestionnaire = async (req, res, next) => {
-    /* This line is added only for temporary purposes */
-    return res.status('418').json({ status: 'no operation', message: 'I\'m a teapot' });
+exports.getQuestionnaire = async (req, res) => {
+    try {
+        const questionnaire = await Questionnaire.findOne({
+            questionnaireID: req.params.questionnaireID,
+        })
+            .select({ _id: 0, __v: 0, creator: 0 })
+            .populate({
+                path: 'questions',
+                select: {
+                    _id: 0,
+                    __v: 0,
+                    wasAnsweredBy: 0,
+                    options: 0,
+                    questionnaireID: 0,
+                },
+                options: { sort: { qID: 1 } },
+            });
+        if (!questionnaire) {
+            return res.status(400).json({
+                status: 'failed',
+                message: `Questionnaire ID ${req.params.questionnaireID} not found`,
+            });
+        }
+
+        if (!(req.username === questionnaire.creator)) {
+            return res
+                .status(401)
+                .json({ status: 'failed', message: 'Access denied' });
+        }
+        questionnaire.creator = undefined;
+
+        return res.status(200).json({ status: 'OK', data: questionnaire });
+    } catch (err) {
+        return res
+            .status(500)
+            .json({ status: 'failed', message: 'Internal server error' });
+    }
 };
