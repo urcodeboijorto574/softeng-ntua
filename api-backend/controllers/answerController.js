@@ -10,9 +10,8 @@ const csv = require('csv-express');
 
 const handleResponse = (req, res, statusCode, responseMessage) => {
     if (req.query.format === 'json' || !req.query.format) {
-        return res.status(statusCode).json(responseMessage);
+        return res.status(statusCode).json(...responseMessage);
     } else if (req.query.format === 'csv') {
-        res['Content-Type'] = 'text/csv';
         return res.status(statusCode).csv(responseMessage, true, {}, statusCode);
     } else {
         return res.status(400).json({
@@ -180,7 +179,7 @@ exports.doAnswer = async (req, res, next) => {
 
         return handleResponse(req, res, 500, [{
             status: 'failed',
-            message: error
+            message: error.name + error.message
         }]);
     }
     next();
