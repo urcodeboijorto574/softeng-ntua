@@ -234,9 +234,7 @@ exports.getSessionAnswers = async (req, res, next) => {
         if (!req.username === Questionnaire.creator) {
             return res.json({ status: 'failed', message: 'Access denied' });
         }
-        return res
-            .status(200)
-            .json({ status: 'OK', sessionanswers: sessionanswers });
+        return res.status(200).json({ status: 'OK', data: sessionanswers });
     } catch (err) {
         return res
             .status(500)
@@ -270,7 +268,7 @@ exports.getQuestionAnswers = async (req, res, next) => {
                 .status(401)
                 .json({ status: 'failed', message: 'Access denied' });
         }*/
-        return res.status(200).json({ status: 'OK', getanswers: getanswers });
+        return res.status(200).json({ status: 'OK', data: getanswers });
     } catch (err) {
         return res
             .status(500)

@@ -250,9 +250,7 @@ exports.getQuestionnaire = async (req, res) => {
                 .json({ status: 'failed', message: 'Access denied' });
         }
 
-        return res
-            .status(200)
-            .json({ status: 'OK', questionnaire: questionnaire });
+        return res.status(200).json({ status: 'OK', data: questionnaire });
     } catch (err) {
         return res
             .status(500)
