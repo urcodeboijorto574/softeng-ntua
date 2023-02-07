@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
+const Questionnaire = require(`${__dirname}/../models/questionnaireModel`);
 const Session = require(`${__dirname}/../models/sessionModel`);
 
 dotenv.config({ path: `${__dirname}/../config.env` });
@@ -10,33 +11,42 @@ dotenv.config({ path: `${__dirname}/../config.env` });
  * @param {JSON} res - JSON response object containing the requested sessions (req.data.sessions).
  * @param {function} next - the next middlware in the middleware stack.
  * @returns {JSON} - The response object res.
- * 
+ *
  * URL: {baseURL}/session/getallquestionnairesessions/:questionnaireID
  */
-exports.getAllQuestionnaireSessions = async (req, res, next) => { /* Inspection finished */
+exports.getAllQuestionnaireSessions = async (req, res, next) => {
     try {
-        const sessions = await Session
-            .find(req.params, '-_id sessionID answers')
+        const questionnaire = await Questionnaire.findOne(req.params, '_id');
+        if (!questionnaire) {
+            return res.status(400).json({
+                status: 'failed',
+                message: 'bad request',
+            });
+        }
+        const sessions = await Session.find(
+            req.params,
+            '-_id sessionID answers'
+        )
             .populate({
                 path: 'answers',
                 mode: 'Answer',
                 select: '-_id qID optID answertext',
-                sort: 'sessionID'
+                sort: 'sessionID',
             })
             .populate('answers', '-_id answertext qID optID')
             .sort('sessionID');
 
-        const sessionsFound = sessions || sessions.length != 0;
+        const sessionsFound = sessions.length > 0;
         return res.status(sessionsFound ? 200 : 402).json({
-            status: 'OK',
+            status: sessionsFound ? 'OK' : 'no data',
             data: {
-                sessions
-            }
+                sessions,
+            },
         });
-    } catch (err) {
+    } catch (error) {
         return res.status(500).json({
             status: 'failed',
-            message: err
+            message: error,
         });
     }
     next();
@@ -51,21 +61,20 @@ exports.getAllQuestionnaireSessions = async (req, res, next) => { /* Inspection 
  * URL: {baseURL}/session/getallsessionsids
 
  */
-exports.getAllSessionsIDs = async (req, res, next) => { /* Inspection finished */
+exports.getAllSessionsIDs = async (req, res, next) => {
     try {
-        const sessionIDs = await Session
-            .find({}, 'sessionID -_id');
-        const sessionIDsFound = sessionIDs || sessionIDs.length != 0;
-        return res.status(sessionIDsFound ? 200 : 402).json({
-            status: 'OK',
+        const sessionsIDs = await Session.find({}, 'sessionID -_id');
+        const sessionsIDsFound = sessionsIDs.length > 0;
+        return res.status(sessionsIDsFound ? 200 : 402).json({
+            status: sessionsIDsFound ? 'OK' : 'no data',
             data: {
-                sessionIDs
-            }
+                sessionsIDs,
+            },
         });
-    } catch (err) {
+    } catch (error) {
         return res.status(500).json({
             status: 'failed',
-            message: err
+            message: error,
         });
     }
     next();
@@ -76,33 +85,42 @@ exports.getAllSessionsIDs = async (req, res, next) => { /* Inspection finished *
  * @param {JSON} req - JSON request object containing the questionnaireID (req.params.questionnaireID) and the user's username (req.usrename).
  * @param {JSON} res - JSON response object containing the requested session (req.data.session).
  * @return {JSON} - The response object.
- * 
+ *
  * URL: {baseURL}/session/getuserquestionnairesession/:questionnaireID
  */
-exports.getUserQuestionnaireSession = async (req, res, next) => { /* Inspection finished */
+exports.getUserQuestionnaireSession = async (req, res, next) => {
     try {
-        const session = await Session
-            .findOne({ questionnaireID: req.params.questionnaireID, submitter: req.username })
+        const questionnaire = await Questionnaire.findOne(req.params, '_id');
+        if (!questionnaire) {
+            return res.status(400).json({
+                status: 'failed',
+                message: 'bad request',
+            });
+        }
+        const session = await Session.findOne({
+            questionnaireID: req.params.questionnaireID,
+            submitter: req.username,
+        })
             .populate({
                 path: 'answers',
                 mode: 'Answer',
                 select: '-_id qID optID answertext',
-                sort: 'sessionID'
+                sort: 'sessionID',
             })
             .populate('answers', '-_id answertext qID optID')
             .sort('sessionID');
 
         const sessionFound = session;
         return res.status(sessionFound ? 200 : 402).json({
-            status: 'OK',
+            status: sessionFound ? 'OK' : 'no data',
             data: {
-                session
-            }
+                session,
+            },
         });
-    } catch (err) {
+    } catch (error) {
         return res.status(500).json({
             status: 'failed',
-            message: err
+            message: error,
         });
     }
     next();
