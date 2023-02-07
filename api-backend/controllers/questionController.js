@@ -36,6 +36,13 @@ exports.getQuestion = async (req, res) => {
 
         const questionnaire = await Questionnaire.findOne({
             questionnaireID: req.params.questionnaireID,
+        }).select({
+            _id: 0,
+            __v: 0,
+            keywords: 0,
+            questions: 0,
+            questionnaireID: 0,
+            questionnaireTitle: 0,
         });
         if (!(req.username === questionnaire.creator)) {
             return res
