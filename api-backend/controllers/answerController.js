@@ -12,19 +12,24 @@ const handleResponse = require(`${__dirname}/../utils/handleResponse.js`).handle
  * @param {JSON} req - JSON request object containing questionnaireID, questionID, sessionID and optionID (req.params), answer text (req.body).
  * @param {JSON} res - JSON response object containing a confirmation/rejection of the request.
  * @return {JSON} - The response object.
- * 
+ *
  * URL: {baseURL}/doanswer/:questionnaireID/:questionID/:session/:optionID
-*/
+ */
 exports.doAnswer = async (req, res, next) => {
-    let session, option, question, questionnaire,
+    let session,
+        option,
+        question,
+        questionnaire,
         newAnswer = {
             qID: req.params.questionID,
             optID: req.params.optionID,
             sessionID: req.params.session,
             questionnaireID: req.params.questionnaireID,
-            answertext: req.body.answertext ? req.body.answertext : ''
+            answertext: req.body.answertext ? req.body.answertext : '',
         },
-        newAnswerCreated = false, optionUpdated = false, questionUpdated = false;
+        newAnswerCreated = false,
+        optionUpdated = false,
+        questionUpdated = false;
     try {
         /* 1) CHECK VALIDITY OF PARAMETERS GIVEN */
 
@@ -58,7 +63,7 @@ exports.doAnswer = async (req, res, next) => {
         if (!inputValid) {
             return handleResponse(req, res, 400, {
                 status: 'failed',
-                message: 'Arguments provided are invalid'
+                message: 'Arguments provided are invalid',
             });
         }
 
@@ -115,7 +120,7 @@ exports.doAnswer = async (req, res, next) => {
                 sessionID: req.params.session,
                 questionnaireID: req.params.questionnaireID,
                 answers: [],
-                submitter: req.username
+                submitter: req.username,
             });
         }
 
@@ -158,7 +163,7 @@ exports.doAnswer = async (req, res, next) => {
                 await option.save();
 
                 if (questionUpdated) {
-                    --(question.wasAnsweredBy);
+                    --question.wasAnsweredBy;
                     await question.save();
                 }
             }
@@ -177,12 +182,44 @@ exports.doAnswer = async (req, res, next) => {
  * @param {JSON} req - JSON object containing questionnaireID and sessionID (req.params).
  * @param {JSON} res - JSON object containing the data to send.
  * @return {JSON} - The response object.
- * 
+ *
  * URL: {baseURL}/getsessionanswers/:questionnaireID/:session
  */
 exports.getSessionAnswers = async (req, res, next) => {
-    /* This line is added only for temporary purposes */
-    return res.status('418').json({ status: 'no operation', message: 'I\'m a teapot' });
+    try {
+        const sessionanswers = await Session.findOne({
+            questionnaireID: req.params.questionnaireID,
+            sessionID: req.params.session,
+        })
+            .select({ _id: 0, __v: 0, submitter: 0 })
+            .populate({
+                path: 'answers',
+                select: {
+                    _id: 0,
+                    optID: 0,
+                    sessionID: 0,
+                    questionnaireID: 0,
+                    __v: 0,
+                },
+                options: { sort: { qID: 1 } },
+            });
+        if (!sessionanswers) {
+            return res.status(400).json({
+                status: 'failed',
+                message: `Session ID ${req.params.session} not found`,
+            });
+        }
+        if (!req.username === Questionnaire.creator) {
+            return res.json({ status: 'Failed', message: 'Access denied' });
+        }
+        return res
+            .status(200)
+            .json({ status: 'OK', sessionanswers: sessionanswers });
+    } catch (err) {
+        return res
+            .status(500)
+            .json({ status: 'failed', message: 'Internal server error' });
+    }
 };
 
 /**
@@ -190,10 +227,31 @@ exports.getSessionAnswers = async (req, res, next) => {
  * @param {JSON} req - JSON object containing qustionnaireID and questionID (req.params).
  * @param {JSON} res - JSON object containing the data to send.
  * @return {JSON} - The response object.
- * 
+ *
  * URL: {baseURL}/getquestionanswers/:questionnaireID/:questionID
  */
 exports.getQuestionAnswers = async (req, res, next) => {
-    /* This line is added only for temporary purposes */
-    return res.status('418').json({ status: 'no operation', message: 'I\'m a teapot' });
+    try {
+        const getanswers = await Answer.find({
+            questionnaireID: req.params.questionnaireID,
+            qID: req.params.questionID,
+        }).select({ _id: 0, __v: 0, optID: 0 });
+
+        if (!getanswers) {
+            return res.status(400).json({
+                status: 'failed',
+                message: `Answers not found`,
+            });
+        }
+        /* if (!(req.username === Questionnaire.creator)) {
+            return res
+                .status(401)
+                .json({ status: 'failed', message: 'Access denied' });
+        }*/
+        return res.status(200).json({ status: 'OK', getanswers: getanswers });
+    } catch (err) {
+        return res
+            .status(500)
+            .json({ status: 'failed', message: 'Internal server error' });
+    }
 };
