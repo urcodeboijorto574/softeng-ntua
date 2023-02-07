@@ -1,3 +1,5 @@
+# REST-API DOCUMENTATION
+
 # Project: IntelliQ
 
 IntelliQ is a web application that is created by 4th-year students of the department of Electrical And Computer Engineering, NTUA, Athens. This application is used for the creation, submission and management of "smart" questionnaires. A questionnaire is considered "smart" when the next provided question depends on the answer of the previous one. In this documentation, the provided services of the REST API are explained so that the user can send requests with the appropriate parameters.
@@ -18,10 +20,7 @@ Endpoint to signup a user.
 | ------ | ----- |
 | format | json  |
 
-### 🔑 Authentication noauth
-
-| Param | value | Type |
-| ----- | ----- | ---- |
+### 🔑 Authentication no auth
 
 ### Response: 200
 
@@ -51,9 +50,9 @@ Endpoint to logout a user.
 
 ### 🔑 Authentication jwt with cookie
 
-| Header | value                                                                                                                                                                            |
-| ------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Cookie | jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9. eyJpZCI6IjYzZTIyNjIwYmM3NWI4YjMwY2QzZTA4NSIsImlhdCI6MTY3NTgwODgzNCwiZXhwIjoxNjgzNTg0ODM0fQ.IL419-q6V4QJB0glIwGxW08X32PLTnUGyC9KCLbZY64 |
+| Param  | value       | type           |
+| ------ | ----------- | -------------- |
+| Cookie | jwt=eyJh... | JSON web token |
 
 ### Response: 200
 
@@ -82,10 +81,7 @@ Endpoint to login a user.
 | ------ | ----- |
 | format | json  |
 
-### 🔑 Authentication noauth
-
-| Param | value | Type |
-| ----- | ----- | ---- |
+### 🔑 Authentication no auth
 
 ### Response: 200
 
@@ -119,10 +115,11 @@ Endpoint to create a questionnaire. Admin provides the questionnaire as a json f
 | ------ | ----- |
 | format | json  |
 
-### 🔑 Authentication noauth
+### 🔑 Authentication jwt with cookie
 
-| Param | value | Type |
-| ----- | ----- | ---- |
+| Param  | value       | type           |
+| ------ | ----------- | -------------- |
+| Cookie | jwt=eyJh... | JSON web token |
 
 ### Response: 200
 
@@ -150,10 +147,11 @@ Endpoint to reset all the answers of a certain questionnaire, based on it's ID. 
 | ------ | ----- |
 | format | json  |
 
-### 🔑 Authentication noauth
+### 🔑 Authentication jwt with cookie
 
-| Param | value | Type |
-| ----- | ----- | ---- |
+| Param  | value       | type           |
+| ------ | ----------- | -------------- |
+| Cookie | jwt=eyJh... | JSON web token |
 
 ### Response: 200
 
@@ -181,10 +179,11 @@ Endpoint that returns an object that contains general information and the questi
 | ------ | ----- |
 | format | json  |
 
-### 🔑 Authentication noauth
+### 🔑 Authentication jwt with cookie
 
-| Param | value | Type |
-| ----- | ----- | ---- |
+| Param  | value       | type           |
+| ------ | ----------- | -------------- |
+| Cookie | jwt=eyJh... | JSON web token |
 
 ### Response: 200
 
@@ -237,10 +236,11 @@ Returns an object that contains all the information of a certain question belong
 | ------ | ----- |
 | format | json  |
 
-### 🔑 Authentication noauth
+### 🔑 Authentication jwt with cookie
 
-| Param | value | Type |
-| ----- | ----- | ---- |
+| Param  | value       | type           |
+| ------ | ----------- | -------------- |
+| Cookie | jwt=eyJh... | JSON web token |
 
 ### Response: 200
 
@@ -305,10 +305,11 @@ Endpoint that submits the option that was given on a question of a certain quest
 | ------ | ----- |
 | format | json  |
 
-### 🔑 Authentication noauth
+### 🔑 Authentication jwt with cookie
 
-| Param | value | Type |
-| ----- | ----- | ---- |
+| Param  | value       | type           |
+| ------ | ----------- | -------------- |
+| Cookie | jwt=eyJh... | JSON web token |
 
 ### Response: 200
 
@@ -337,10 +338,11 @@ Endpoint that returns an object with the answers that were given to all the ques
 | ------ | ----- |
 | format | json  |
 
-### 🔑 Authentication noauth
+### 🔑 Authentication jwt with cookie
 
-| Param | value | Type |
-| ----- | ----- | ---- |
+| Param  | value       | type           |
+| ------ | ----------- | -------------- |
+| Cookie | jwt=eyJh... | JSON web token |
 
 ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃
 
@@ -360,10 +362,11 @@ Endpoint that returns an object with all the answers that were given in a certai
 | ------ | ----- |
 | format | json  |
 
-### 🔑 Authentication noauth
+### 🔑 Authentication jwt with cookie
 
-| Param | value | Type |
-| ----- | ----- | ---- |
+| Param  | value       | type           |
+| ------ | ----------- | -------------- |
+| Cookie | jwt=eyJh... | JSON web token |
 
 ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃
 
@@ -377,10 +380,11 @@ Endpoint that returns all the questionnaires created by the logged in admin. Thi
 > /questionnaire/getadmincreatedquestionnaires
 > ```
 
-### 🔑 Authentication noauth
+### 🔑 Authentication jwt with cookie
 
-| Param | value | Type |
-| ----- | ----- | ---- |
+| Param  | value       | type           |
+| ------ | ----------- | -------------- |
+| Cookie | jwt=eyJh... | JSON web token |
 
 ### Response: 200
 
@@ -1547,10 +1551,11 @@ Endpoint that deletes a certain questionnaire and all it's related data (questio
 > /questionnaire/deletequestionnaire/:questionnaireID
 > ```
 
-### 🔑 Authentication noauth
+### 🔑 Authentication jwt with cookie
 
-| Param | value | Type |
-| ----- | ----- | ---- |
+| Param  | value       | type           |
+| ------ | ----------- | -------------- |
+| Cookie | jwt=eyJh... | JSON web token |
 
 ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃
 
@@ -1564,10 +1569,11 @@ Endpoint that returns all the sessions of a certain questionnaire. This endpoint
 > /session/getallquestionnairesessions/:questionnaireID
 > ```
 
-### 🔑 Authentication noauth
+### 🔑 Authentication jwt with cookie
 
-| Param | value | Type |
-| ----- | ----- | ---- |
+| Param  | value       | type           |
+| ------ | ----------- | -------------- |
+| Cookie | jwt=eyJh... | JSON web token |
 
 ### Response: 200
 
@@ -1613,10 +1619,11 @@ Endpoint that returns all the session IDs currently stored in the database. This
 > /session/getallsessionsids
 > ```
 
-### 🔑 Authentication noauth
+### 🔑 Authentication jwt with cookie
 
-| Param | value | Type |
-| ----- | ----- | ---- |
+| Param  | value       | type           |
+| ------ | ----------- | -------------- |
+| Cookie | jwt=eyJh... | JSON web token |
 
 ### Response: 200
 
@@ -1712,10 +1719,11 @@ Endpoint that confirms the connection of the server with the database.
 | ------ | ----- |
 | format | json  |
 
-### 🔑 Authentication noauth
+### 🔑 Authentication jwt with cookie
 
-| Param | value | Type |
-| ----- | ----- | ---- |
+| Param  | value       | type           |
+| ------ | ----------- | -------------- |
+| Cookie | jwt=eyJh... | JSON web token |
 
 ### Response: 200
 
@@ -1749,10 +1757,11 @@ Endpoint that resets all the data stored in the database.
 | ------ | ----- |
 | format | json  |
 
-### 🔑 Authentication noauth
+### 🔑 Authentication jwt with cookie
 
-| Param | value | Type |
-| ----- | ----- | ---- |
+| Param  | value       | type           |
+| ------ | ----------- | -------------- |
+| Cookie | jwt=eyJh... | JSON web token |
 
 ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃
 
@@ -1772,10 +1781,11 @@ Endpoint that creates a new user with the given role, username and password.
 | ------ | ----- |
 | format | json  |
 
-### 🔑 Authentication noauth
+### 🔑 Authentication jwt with cookie
 
-| Param | value | Type |
-| ----- | ----- | ---- |
+| Param  | value       | type           |
+| ------ | ----------- | -------------- |
+| Cookie | jwt=eyJh... | JSON web token |
 
 ### Response: 200
 
@@ -1803,10 +1813,11 @@ Endpoint that returns an object with information about a certain user.
 | ------ | ----- |
 | format | json  |
 
-### 🔑 Authentication noauth
+### 🔑 Authentication jwt with cookie
 
-| Param | value | Type |
-| ----- | ----- | ---- |
+| Param  | value       | type           |
+| ------ | ----------- | -------------- |
+| Cookie | jwt=eyJh... | JSON web token |
 
 ### Response: 200
 
@@ -1834,9 +1845,9 @@ Endpoint that deletes a certain user.
 
 ### Query Params
 
-| Param  | value |
-| ------ | ----- |
-| format | json  |
+| Param  | value       | type           |
+| ------ | ----------- | -------------- |
+| Cookie | jwt=eyJh... | JSON web token |
 
 ### Response: 200
 
@@ -1858,10 +1869,11 @@ Endpoint to import data in the database.
 > /dummy-data/import
 > ```
 
-### 🔑 Authentication noauth
+### 🔑 Authentication jwt with cookie
 
-| Param | value | Type |
-| ----- | ----- | ---- |
+| Param  | value       | type           |
+| ------ | ----------- | -------------- |
+| Cookie | jwt=eyJh... | JSON web token |
 
 ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃
 
@@ -1875,11 +1887,10 @@ Endpoint to delete data from the database.
 > /dummy-data/delete
 > ```
 
-### 🔑 Authentication noauth
+### 🔑 Authentication jwt with cookie
 
-| Param | value | Type |
-| ----- | ----- | ---- |
+| Param  | value       | type           |
+| ------ | ----------- | -------------- |
+| Cookie | jwt=eyJh... | JSON web token |
 
 ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃
-
-(your README.md content goes here)
