@@ -33,11 +33,15 @@ exports.getQuestion = async (req, res) => {
                 message: `Question ID ${req.params.questionID} not found`,
             });
         }
-        /*if (!(req.username === Questionnaire.creator)) {
+
+        const questionnaire = await Questionnaire.findOne({
+            questionnaireID: req.params.questionnaireID,
+        });
+        if (!(req.username === questionnaire.creator)) {
             return res
                 .status(401)
                 .json({ status: 'failed', message: 'Access denied' });
-        }*/
+        }
         return res.status(200).json({ status: 'OK', question: question });
     } catch (err) {
         return res
