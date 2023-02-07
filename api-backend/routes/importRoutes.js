@@ -13,11 +13,11 @@ router
     );
 
 router
-    .route('/delete')
+    .route('/export')
     .delete(
         authController.protect,
         authController.restrictTo('super-admin'),
-        importController.deleteData
+        importController.exportData
     );
 
 module.exports = router;
