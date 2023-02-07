@@ -7,6 +7,19 @@ const User = require(`${__dirname}/../models/userModel.js`);
 const mongoose = require('mongoose');
 const handleResponse = require(`${__dirname}/../utils/handleResponse.js`).handleResponse;
 
+const handleResponsePrevAns = (req, res, statusCode, messageResponse) => {
+    if (!req.query.format || req.query.format == 'json') {
+        return res.status(statusCode).json(messageResponse);
+    } else if (req.query.format == 'csv') {
+        return res.csv([messageResponse], true, {}, statusCode);
+    } else {
+        return res.status(400).json({
+            status: 'failed',
+            message: 'Response format must be either json or csv!'
+        });
+    }
+};
+
 /**
  * Creates and stores an answer object in the database.
  * @param {JSON} req - JSON request object containing questionnaireID, questionID, sessionID and optionID (req.params), answer text (req.body).
@@ -64,9 +77,8 @@ exports.doAnswer = async (req, res, next) => {
 
         /* If the user has already answered the questionnaire, reject the request */
         let user = await User
-            .findOne({ username: req.username, role: 'user' }, 'questionnairesAnswered')
-            .populate('questionnairesAnswered', '_id questionnaireID');
-        if (user.questionnairesAnswered.find(q_id => q_id == questionnaire._id)) {
+            .findOne({ username: req.username, role: 'user' }, 'questionnairesAnswered');
+        if (user.questionnairesAnswered.find(q_id => q_id.toString() == questionnaire._id.toString())) {
             return handleResponse(req, res, 400, {
                 status: 'failed',
                 message: 'You have already submitted a session for this questionnaire'
@@ -100,7 +112,7 @@ exports.doAnswer = async (req, res, next) => {
                 await Answer.deleteMany({ sessionID: req.params.session });
                 await Session.findOneAndRemove({ sessionID: req.params.session });
 
-                return handleResponse(req, res, 400, {
+                return handleResponsePrevAns(req, res, 400, {
                     status: 'failed',
                     message: 'An answer has already been submitted for this question',
                     'previous answer': (
