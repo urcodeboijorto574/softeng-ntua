@@ -22,11 +22,11 @@ const DB = process.env.DATABASE.replace(
 const handleDuplicateFieldsDB = (req, res, err) => {
     const message = 'All IDs must be unique';
     if (req.query.format === 'csv') {
-      return res.status(400).csv([{ status: 'failed', reason: message }], true);
+      return res.status(400).csv([{ status: 'failed', message: message }], true);
     }
     return res.status(400).json({
       status: 'failed',
-      reason: message,
+      message: message,
     });
 };
 
@@ -35,11 +35,11 @@ const handleValidationErrorDB = (req, res, err) => {
   
     const message = `Invalid input data. ${errors.join('. ')}`;
     if (req.query.format === 'csv') {
-      return res.status(400).csv([{ status: 'failed', reason: message }], true);
+      return res.status(400).csv([{ status: 'failed', message: message }], true);
     }
     return res.status(400).json({
       status: 'failed',
-      reason: message,
+      message: message,
     });
 };
 
@@ -75,16 +75,16 @@ exports.getHealthcheck = async (req, res, next) => {
         } else {
           return res.status(400).json({
             status: 'failed',
-            reason: 'Response format is json or csv',
+            message: 'Response format is json or csv',
           });
         }
       } catch (err) {
         if (req.query.format === 'csv') {
-          return res.status(500).csv([{ status: 'failed', reason: err }], true);
+          return res.status(500).csv([{ status: 'failed', message: err }], true);
         } else {
           return res.status(500).json({
             status: 'failed',
-            reason: err,
+            message: err,
           });
         }
       }
@@ -110,11 +110,11 @@ exports.questionnaireUpdate = async (req, res, next) => {
               if (req.query.format === 'csv') {
                 return res
                   .status(500)
-                  .csv([{ status: 'failed', reason: 'Could not read file' }], true);
+                  .csv([{ status: 'failed', message: 'Could not read file' }], true);
               }
               return res.status(500).json({
                 status: 'failed',
-                reason: 'Could not read file',
+                message: 'Could not read file',
               });
             }
             try {
@@ -195,18 +195,18 @@ exports.questionnaireUpdate = async (req, res, next) => {
                       if (req.query.format === 'csv') {
                         return res
                           .status(500)
-                          .csv([{ status: 'failed', reason: err }], true);
+                          .csv([{ status: 'failed', message: err }], true);
                       }
                       return res.status(500).json({
                         status: 'failed',
-                        reason: err,
+                        message: err,
                       });
                     }
                   }
                 } else {
                   return res.status(400).json({
                     status: 'failed',
-                    reason: 'Response format is json or csv',
+                    message: 'Response format is json or csv',
                   });
                 }
               } catch (error) {
@@ -218,11 +218,11 @@ exports.questionnaireUpdate = async (req, res, next) => {
                   if (req.query.format === 'csv') {
                     return res
                       .status(500)
-                      .csv([{ status: 'failed', reason: err }], true);
+                      .csv([{ status: 'failed', message: err }], true);
                   }
                   return res.status(500).json({
                     status: 'failed',
-                    reason: err,
+                    message: err,
                   });
                 }
               }
@@ -230,11 +230,11 @@ exports.questionnaireUpdate = async (req, res, next) => {
               if (req.query.format === 'csv') {
                 return res
                   .status(500)
-                  .csv([{ status: 'failed', reason: 'Invalid file structure' }], true);
+                  .csv([{ status: 'failed', message: 'Invalid file structure' }], true);
               }
               return res.status(500).json({
                 status: 'failed',
-                reason: 'Invalid file structure',
+                message: 'Invalid file structure',
               });
             }
           }
@@ -243,11 +243,11 @@ exports.questionnaireUpdate = async (req, res, next) => {
         if (req.query.format === 'csv') {
           return res
             .status(500)
-            .csv([{ status: 'failed', reason: 'Could not read file' }], true);
+            .csv([{ status: 'failed', message: 'Could not read file' }], true);
         }
         return res.status(500).json({
           status: 'failed',
-          reason: 'Could not read file',
+          message: 'Could not read file',
         });
       }
 };
@@ -316,7 +316,7 @@ exports.resetQuestionnaire = async (req, res, next) => {
           req.query.format === 'csv'
         ) {
           const ID = req.params.questionnaireID;
-          const valid = await Questionnaire.findOne({ questionnaireID: ID });
+          const valid = await Questionnaire.findOne({ questionnaireID: ID }).select('creator');
           if (!valid) {
             return res.status(400).json({
               status: 'failed',
