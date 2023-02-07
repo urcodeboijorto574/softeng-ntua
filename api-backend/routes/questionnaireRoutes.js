@@ -30,6 +30,14 @@ router
     );
 
 router
+    .route('/deletequestionnaire/:questionnaireID')
+    .delete(
+        authController.protect,
+        authController.restrictTo('admin', 'super-admin'),
+        questionnaireController.deleteQuestionnaire
+    );
+
+router
     .route('/:questionnaireID')
     .get(
         authController.protect,

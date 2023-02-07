@@ -7,7 +7,8 @@ const sessionSchema = new mongoose.Schema({
         type: String,
         required: [true, 'A session must have an id'],
         unique: [true, 'A session must have a unique id'],
-        length: [4, 'A session id must have 5 characters'],
+        maxlength: [4, 'A session id must have 5 characters'],
+        minlength: [4, 'A session id must have 5 characters'],
     },
     questionnaireID: {
         type: String,

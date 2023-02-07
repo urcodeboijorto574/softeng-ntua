@@ -16,13 +16,25 @@ dotenv.config({ path: `${__dirname}/../config.env` });
  */
 exports.getAllQuestionnaireSessions = async (req, res, next) => {
     try {
-        const questionnaire = await Questionnaire.findOne(req.params, '_id');
+        const questionnaire = await Questionnaire.findOne(
+            req.params,
+            '_id'
+        ).select('creator');
+
         if (!questionnaire) {
             return res.status(400).json({
                 status: 'failed',
                 message: 'bad request',
             });
         }
+
+        if (req.username !== questionnaire.creator) {
+            return res.status(401).json({
+                status: 'failed',
+                reason: 'Not authorised',
+            });
+        }
+
         const sessions = await Session.find(
             req.params,
             '-_id sessionID answers'
@@ -97,6 +109,7 @@ exports.getUserQuestionnaireSession = async (req, res, next) => {
                 message: 'bad request',
             });
         }
+
         const session = await Session.findOne({
             questionnaireID: req.params.questionnaireID,
             submitter: req.username,

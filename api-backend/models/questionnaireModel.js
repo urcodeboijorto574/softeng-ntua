@@ -7,7 +7,8 @@ const questionnaireSchema = new mongoose.Schema({
         type: String,
         required: [true, 'A questionnaire must have an id'],
         unique: [true, "A questionnaire must have it's own unique id"],
-        length: [5, 'A questionnaire id must have 5 characters'],
+        maxlength: [5, 'A questionnaire id must have 5 characters'],
+        minlength: [5, 'A questionnaire id must have 5 characters'],
         /* Με καποιο τροπο πρεπει να εξασφαλισουμε οτι το id θα ειναι της μορφης QQ000*/
     },
     questionnaireTitle: {

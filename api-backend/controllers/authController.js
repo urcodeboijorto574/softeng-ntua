@@ -2,11 +2,11 @@ const { promisify } = require('util');
 const jwt = require('jsonwebtoken');
 const User = require(`${__dirname}/../models/userModel`);
 const AppError = require(`${__dirname}/../utils/appError`);
-const handleResponse =
-    require(`${__dirname}/../utils/handleResponse`).handleResponse;
 const converter = require('json-2-csv');
 const csv = require('csv-express');
 const cookieParser = require('cookie-parser');
+const handleResponse =
+    require(`${__dirname}/../utils/handleResponse`).handleResponse;
 
 // error-handling functions
 const handleDuplicateFieldsDB = (err) => {
@@ -80,12 +80,16 @@ exports.getUser = async (req, res) => {
             if (req.query.format === 'json' || !req.query.format) {
                 return res.status(200).json(responseMessage);
             } else if (req.query.format === 'csv') {
-                responseMessage = {
-                    status: 'OK',
-                    username: user.username,
-                    role: user.role,
-                };
-                return handleResponse(req, res, 200, responseMessage);
+                return res.status(200).csv(
+                    [
+                        {
+                            status: 'OK',
+                            username: user.username,
+                            role: user.role,
+                        },
+                    ],
+                    true
+                );
             } else {
                 return res.status(400).json({
                     status: 'failed',
@@ -219,15 +223,25 @@ exports.login = async (req, res, next) => {
             expires: parseInt(
                 new Date(
                     Date.now() +
-                        process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
+                    process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
                 )
             ),
             httpOnly: true,
             sameSite: 'None',
             secure: true,
         });
-        responseMessage = { token: token };
-        return handleResponse(req, res, 200, responseMessage);
+        if (req.query.format === 'json' || !req.query.format) {
+            return res.status(200).json({
+                token: token,
+            });
+        } else if (req.query.format === 'csv') {
+            return res.status(200).csv([{ token: token }], true);
+        } else {
+            return res.status(400).json({
+                status: 'failed',
+                message: 'Response format is json or csv!',
+            });
+        }
     } catch (err) {
         responseMessage = {
             status: 'failed',
@@ -322,20 +336,4 @@ exports.restrictTo = (...roles) => {
         }
         next();
     };
-};
-
-exports.deleteUser = async (req, res) => {
-    try {
-        await User.deleteOne({
-            username: req.params.username,
-        });
-        res.status(200).json({
-            status: 'OK',
-        });
-    } catch (err) {
-        res.status(500).json({
-            status: 'failed',
-            message: 'Internal Server Error',
-        });
-    }
 };

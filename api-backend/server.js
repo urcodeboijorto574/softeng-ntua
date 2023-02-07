@@ -6,9 +6,9 @@ const fs = require('fs');
 const key = fs.readFileSync(`${__dirname}/HTTPS-SSL/key.pem`).toString();
 const cert = fs.readFileSync(`${__dirname}/HTTPS-SSL/cert.pem`).toString();
 
-const app = require('./app');
+dotenv.config({ path: `${__dirname}/config.env` });
+const app = require(`${__dirname}/app`);
 
-dotenv.config({ path: './config.env' });
 
 // DB is the database connection string
 const DB = process.env.DATABASE.replace(
@@ -25,7 +25,6 @@ mongoose
         useUnifiedTopology: true,
     })
     .then(() => {
-        //console.log(con.connections);
         console.log('DB connection succesful!');
     })
     .catch((err) => {
