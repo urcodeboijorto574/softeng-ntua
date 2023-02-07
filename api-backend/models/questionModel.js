@@ -7,7 +7,8 @@ const questionSchema = new mongoose.Schema({
         type: String,
         required: [true, 'A question must have an id'],
         unique: [true, "A question must have it's own unique id"],
-        length: [3, 'A question id must have 3 characters'],
+        maxlength: [3, 'A question id must have 3 characters'],
+        minlength: [3, 'A question id must have 3 characters'],
     },
     qtext: {
         type: String,
