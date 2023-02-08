@@ -1557,6 +1557,14 @@ Endpoint that deletes a certain questionnaire and all it's related data (questio
 | ------ | ----------- | -------------- |
 | Cookie | jwt=eyJh... | JSON web token |
 
+### Response: 200
+
+```json
+{
+    "status": "OK"
+}
+```
+
 ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃
 
 ## End-point: Get All Questionnaire's Sessions
@@ -1762,6 +1770,14 @@ Endpoint that resets all the data stored in the database.
 | Param  | value       | type           |
 | ------ | ----------- | -------------- |
 | Cookie | jwt=eyJh... | JSON web token |
+
+### Response: 200
+
+```json
+{
+    "status": "OK"
+}
+```
 
 ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃
 

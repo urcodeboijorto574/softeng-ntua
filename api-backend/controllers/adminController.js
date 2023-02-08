@@ -253,3 +253,28 @@ exports.resetQuestionnaire = async (req, res, next) => {
     }
     next();
 };
+
+exports.deleteUser = async (req, res) => {
+    try {
+        let user = await User.findOne({
+            username: req.params.username,
+        });
+        if (!user) {
+            return res.status(400).json({
+                status: 'failed',
+                message: 'No user found with the given username.',
+            });
+        }
+        await User.deleteOne({
+            username: req.params.username,
+        });
+        return res.status(200).json({
+            status: 'OK',
+        });
+    } catch (err) {
+        res.status(500).json({
+            status: 'failed',
+            message: 'Internal Server Error',
+        });
+    }
+};
