@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const fs = require('fs');
 const Questionnaire = require(`${__dirname}/../models/questionnaireModel.js`);
 const Question = require(`${__dirname}/../models/questionModel.js`);
@@ -24,7 +25,7 @@ exports.importData = async (req, res, next) => {
     const sessionsInDataFolder = JSON.parse(fs.readFileSync(`${__dirname}/../../data/sessions.json`, 'utf-8'));
     const answersInDataFolder = JSON.parse(fs.readFileSync(`${__dirname}/../../data/answers.json`, 'utf-8'));
     const usersInDataFolder = JSON.parse(fs.readFileSync(`${__dirname}/../../data/users.json`, 'utf-8'));
-    const dataFiles = [
+    const collectionsFiles = [
         answersInDataFolder,
         sessionsInDataFolder,
         optionsInDataFolder,
@@ -35,7 +36,7 @@ exports.importData = async (req, res, next) => {
 
     /* Check if there are questionnaires to import */
     for (let i = 2; i < 5; ++i) {
-        if (!dataFiles[i] || dataFiles[i].length === 0)
+        if (!collectionsFiles[i] || collectionsFiles[i].length === 0)
             return res.status(402).json({
                 status: 'failed',
                 message: 'no data to import'
@@ -43,8 +44,8 @@ exports.importData = async (req, res, next) => {
     }
 
     /* (Optional) Change the prefix of the _id */
-    const prefix_id = '';
-    dataFiles.forEach(collection => {
+    const prefix_id = '00';
+    collectionsFiles.forEach(collection => {
         collection.forEach(doc => {
             doc['_id'] = prefix_id.concat(doc['_id'].slice(prefix_id.length));
             let docArray;
@@ -59,15 +60,15 @@ exports.importData = async (req, res, next) => {
     });
 
     console.log('Data to import:');
-    dataFiles.forEach(collection => {
+    collectionsFiles.forEach(collection => {
         let doctype;
         if (collection[0]) {
             switch (collection[0]) {
-                case dataFiles[0]: doctype = '--------------------------------------------------Answers--------------------------------------------------'; break;
-                case dataFiles[1]: doctype = '--------------------------------------------------Sessions--------------------------------------------------'; break;
-                case dataFiles[2]: doctype = '--------------------------------------------------Options--------------------------------------------------'; break;
-                case dataFiles[3]: doctype = '--------------------------------------------------Questions--------------------------------------------------'; break;
-                case dataFiles[4]: doctype = '--------------------------------------------------Questionnaires--------------------------------------------------'; break;
+                case collectionsFiles[0]: doctype = '--------------------------------------------------Answers--------------------------------------------------'; break;
+                case collectionsFiles[1]: doctype = '--------------------------------------------------Sessions--------------------------------------------------'; break;
+                case collectionsFiles[2]: doctype = '--------------------------------------------------Options--------------------------------------------------'; break;
+                case collectionsFiles[3]: doctype = '--------------------------------------------------Questions--------------------------------------------------'; break;
+                case collectionsFiles[4]: doctype = '--------------------------------------------------Questionnaires--------------------------------------------------'; break;
                 default: doctype = '--------------------------------------------------Users--------------------------------------------------'; break;
             }
             console.log(doctype); console.log(collection);
@@ -78,7 +79,7 @@ exports.importData = async (req, res, next) => {
         process.stdout.write('Start importing data');
         const limit = Models.length;
         for (let i = 0; i < limit; ++i) {
-            await Models[i].create(dataFiles[i]);
+            await Models[i].create(collectionsFiles[i]);
             process.stdout.write(`...${i + 1}/${limit}${i == limit - 1 ? '\n' : ''}`);
         }
         const message = 'Data successfully imported!';
@@ -108,23 +109,61 @@ exports.importData = async (req, res, next) => {
  */
 exports.exportData = async (req, res, next) => {
     try {
-        console.log('Start exporting data');
+        let message = '',
+            questionnairesInDB, questionsInDB, optionsInDB, sessionsInDB, answersInDB, usersInDB;
 
-        for (let i = 0, limit = Models.length; i < limit; ++i) {
-            const dataDeleted = await Models[i]
-                .deleteMany()
-                .where('_id')
-                .gte('                        '); // this string must have length 24 (if for _id)
-            console.log('Deleted data:', dataDeleted);
-            process.stdout.write(`...${i + 1}/${limit}${i == limit - 1 ? '\n' : ''}`);
+        /* Read data from DB */
+        questionnairesInDB = await Questionnaire.find();
+        const questionnairesFound = questionnairesInDB != 0;
+        questionsInDB = questionnairesFound ? await Question.find() : [];
+        optionsInDB = questionsInDB != 0 ? await Option.find() : [];
+        sessionsInDB = questionnairesFound ? await Session.find() : [];
+        answersInDB = sessionsInDB != 0 ? await Answer.find() : [];
+        usersInDB = await User.find();
+        let collectionsDB = [answersInDB, sessionsInDB, optionsInDB, questionsInDB, questionnairesInDB, usersInDB];
+
+        /* (Optional) Change the prefix of the _id */
+        const prefix_id = '00574';
+        collectionsDB.forEach(collection => {
+            collection.forEach(doc => {
+                doc._id = mongoose.Types.ObjectId(prefix_id.concat(doc._id.toString().slice(prefix_id.length)));
+                if (doc.questions != undefined) {
+                    doc.questions = doc.questions.map(el => mongoose.Types.ObjectId(prefix_id.concat(el.toString().slice(prefix_id.length))));
+                } else if (doc.options != undefined) {
+                    doc.options = doc.options.map(el => mongoose.Types.ObjectId(prefix_id.concat(el.toString().slice(prefix_id.length))));
+                } else if (doc.answers != undefined) {
+                    doc.answers = doc.answers.map(el => mongoose.Types.ObjectId(prefix_id.concat(el.toString().slice(prefix_id.length))));
+                } else if (doc.questionnairesAnswered != undefined) {
+                    doc.questionnairesAnswered = doc.questionnairesAnswered.map(el => mongoose.Types.ObjectId(prefix_id.concat(el.toString().slice(prefix_id.length))));
+                }
+            });
+        });
+
+
+        let prefix = `${__dirname}/../../data/test/`, postfix = '.json';
+        const targetFiles = ['answers', 'sessions', 'options', 'questions', 'questionnaires', 'users'].map(str => prefix + str + postfix);
+        let dataExported = [false, false, false, false, false, false];
+
+        for (let i = 0; i < collectionsDB.length; ++i) {
+            try {
+                fs.writeFileSync(targetFiles[i], JSON.stringify(collectionsDB[i]));
+                dataExported[i] = true;
+                console.log('The file ' + targetFiles[i].slice(prefix.length) + ' was successfully saved.');
+            } catch {
+                return res.status(500).json({
+                    status: 'failed',
+                    message: 'error in writing files'
+                });
+            }
         }
 
-        const message = 'Data successfully deleted!';
-        console.log(message);
-
-        return res.status(402).json({
-            status: 'OK',
-            message
+        let success = true;
+        for (let i = 0; i < collectionsDB.length; ++i) {
+            success &= dataExported[i];
+        }
+        return res.status(success ? 200 : 400).json({
+            status: success ? 'OK' : 'failed',
+            message: success ? message : 'failed to save collections'
         });
     } catch (error) {
         return res.status(500).json({
