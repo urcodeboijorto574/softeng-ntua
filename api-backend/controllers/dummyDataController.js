@@ -109,9 +109,8 @@ exports.importData = async (req, res, next) => {
  */
 exports.exportData = async (req, res, next) => {
     try {
-        let questionnairesInDB, questionsInDB, optionsInDB, sessionsInDB, answersInDB, usersInDB;
-
         /* Read data from DB */
+        let questionnairesInDB, questionsInDB, optionsInDB, sessionsInDB, answersInDB, usersInDB;
         questionnairesInDB = await Questionnaire.find();
         const questionnairesFound = questionnairesInDB != 0;
         questionsInDB = questionnairesFound ? await Question.find() : [];
@@ -122,7 +121,7 @@ exports.exportData = async (req, res, next) => {
         let collectionsDB = [answersInDB, sessionsInDB, optionsInDB, questionsInDB, questionnairesInDB, usersInDB];
 
         /* (Optional) Change the prefixes of the '_id's of all the documents in DB */
-        const prefix_id = '';
+        const prefix_id = (req.body && req.body.prefix_id != undefined ? req.body.prefix_id : '');
         if (prefix_id !== '') {
             collectionsDB.forEach(collection => {
                 collection.forEach(doc => {
@@ -148,10 +147,9 @@ exports.exportData = async (req, res, next) => {
         let accMsg = '';
         try {
             for (let i = 0, preLen = prefix.length; i < collectionsDB.length; ++i) {
-                if (i > 0) accMsg += (i == 1 ? '' : ', ') + targetFiles[i - 1].slice(preLen);
                 fs.writeFileSync(targetFiles[i], JSON.stringify(collectionsDB[i]));
                 dataExported[i] = true;
-                if (i == targetFiles.length - 1) accMsg += ', ' + targetFiles[targetFiles.length - 1].slice(preLen);
+                accMsg += (!i ? '' : ', ') + targetFiles[i].slice(preLen);
             }
         } catch (error) {
             console.log((accMsg === '' ? 'No' : accMsg) + ' files saved successfully. The rest didn\'t.');
