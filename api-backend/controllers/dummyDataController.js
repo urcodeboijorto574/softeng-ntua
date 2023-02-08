@@ -7,6 +7,7 @@ const Session = require(`${__dirname}/../models/sessionModel.js`);
 const Answer = require(`${__dirname}/../models/answerModel.js`);
 const User = require(`${__dirname}/../models/userModel.js`);
 const Models = [Answer, Session, Option, Question, Questionnaire, User];
+const handleResponse = require(`${__dirname}/../utils/handleResponse.js`).handleResponse;
 
 /**
  * Middleware that imports all the data from the folder data/ to the data base.
@@ -31,7 +32,7 @@ exports.importData = async (req, res, next) => {
         collectionsFiles = [answersInFiles, sessionsInFiles, optionsInFiles, questionsInFiles, questionnairesInFiles, usersInFiles];
     } catch (error) {
         console.log('Error while reading files');
-        return res.status(500).json({
+        return handleResponse(req, res, 500, {
             status: 'failed',
             message: error
         });
@@ -67,7 +68,7 @@ exports.importData = async (req, res, next) => {
         /* Return response */
         const message = 'Documents imported successfully!';
         console.log(message);
-        return res.status(200).json({
+        return handleResponse(req, res, 200, {
             status: 'OK',
             message,
             // data: {
@@ -80,7 +81,7 @@ exports.importData = async (req, res, next) => {
             // }
         });
     } catch (error) {
-        return res.status(500).json({
+        return handleResponse(req, res, 500, {
             status: 'failed',
             message: error
         });
@@ -143,7 +144,7 @@ exports.exportData = async (req, res, next) => {
             }
         } catch (error) {
             console.log((accMsg === '' ? 'No' : accMsg) + ' files saved successfully. The rest didn\'t.');
-            return res.status(500).json({
+            return handleResponse(req, res, 500, {
                 status: 'failed',
                 message: 'error in writing files'
             });
@@ -153,12 +154,12 @@ exports.exportData = async (req, res, next) => {
         console.log(accMsg + ' files saved successfully.');
         const success = dataExported.reduce((prev, curr) => prev & curr, true);
         let message = success ? 'Documents exported successfully.' : 'Export failed.';
-        return res.status(success ? 200 : 400).json({
+        return handleResponse(req, res, success ? 200 : 400, {
             status: success ? 'OK' : 'failed',
             message
         });
     } catch (error) {
-        return res.status(500).json({
+        return handleResponse(req, res, 500, {
             status: 'failed',
             message: error
         });
