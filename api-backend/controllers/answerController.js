@@ -8,6 +8,19 @@ const mongoose = require('mongoose');
 const handleResponse =
     require(`${__dirname}/../utils/handleResponse.js`).handleResponse;
 
+const handleResponsePrevAns = (req, res, statusCode, messageResponse) => {
+    if (!req.query.format || req.query.format == 'json') {
+        return res.status(statusCode).json(messageResponse);
+    } else if (req.query.format == 'csv') {
+        return res.csv([messageResponse], true, {}, statusCode);
+    } else {
+        return res.status(400).json({
+            status: 'failed',
+            message: 'Response format must be either json or csv!',
+        });
+    }
+};
+
 /**
  * Creates and stores an answer object in the database.
  * @param {JSON} req - JSON request object containing questionnaireID, questionID, sessionID and optionID (req.params), answer text (req.body).
@@ -73,10 +86,10 @@ exports.doAnswer = async (req, res, next) => {
         let user = await User.findOne(
             { username: req.username, role: 'user' },
             'questionnairesAnswered'
-        ).populate('questionnairesAnswered', '_id questionnaireID');
+        );
         if (
             user.questionnairesAnswered.find(
-                (q_id) => q_id == questionnaire._id
+                (q_id) => q_id.toString() == questionnaire._id.toString()
             )
         ) {
             return handleResponse(req, res, 400, {
@@ -122,7 +135,7 @@ exports.doAnswer = async (req, res, next) => {
                     sessionID: req.params.session,
                 });
 
-                return handleResponse(req, res, 400, {
+                return handleResponsePrevAns(req, res, 400, {
                     status: 'failed',
                     message:
                         'An answer has already been submitted for this question',
@@ -130,9 +143,13 @@ exports.doAnswer = async (req, res, next) => {
                         session.answers[answerIndex].answertext !== ''
                             ? session.answers[answerIndex].answertext
                             : (
-                                  await Option.findOne({
-                                      optID: session.answers[answerIndex].optID,
-                                  })
+                                  await Option.findOne(
+                                      {
+                                          optID: session.answers[answerIndex]
+                                              .optID,
+                                      },
+                                      '-_id opttxt'
+                                  )
                               ).opttxt,
                 });
             }
@@ -181,7 +198,7 @@ exports.doAnswer = async (req, res, next) => {
             await Answer.findByIdAndDelete(newAnswer._id);
 
             if (optionUpdated) {
-                option.wasChosenBy = option.wasChosenBy - 1;
+                --option.wasChosenBy;
                 await option.save();
 
                 if (questionUpdated) {
@@ -193,7 +210,7 @@ exports.doAnswer = async (req, res, next) => {
 
         return handleResponse(req, res, 500, {
             status: 'failed',
-            message: error.name + error.message,
+            message: error,
         });
     }
     next();
@@ -218,7 +235,7 @@ exports.getSessionAnswers = async (req, res, next) => {
                 path: 'answers',
                 select: {
                     _id: 0,
-                    optID: 0,
+                    answertext: 0,
                     sessionID: 0,
                     questionnaireID: 0,
                     __v: 0,

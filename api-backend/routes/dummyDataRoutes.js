@@ -1,6 +1,6 @@
 const express = require('express');
-const importController = require(`${__dirname}/../controllers/importController.js`);
-const authController = require('./../controllers/authController.js');
+const dummyDataController = require(`${__dirname}/../controllers/dummyDataController.js`);
+const authController = require(`${__dirname}/../controllers/authController.js`);
 
 const router = express.Router();
 
@@ -9,15 +9,15 @@ router
     .post(
         authController.protect,
         authController.restrictTo('super-admin'),
-        importController.importData
+        dummyDataController.importData
     );
 
 router
-    .route('/delete')
-    .delete(
+    .route('/export')
+    .get(
         authController.protect,
         authController.restrictTo('super-admin'),
-        importController.deleteData
+        dummyDataController.exportData
     );
 
 module.exports = router;
