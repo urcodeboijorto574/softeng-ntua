@@ -1,5 +1,3 @@
-api-backend/node_modules/
-import-data.js
-data/
 node_modules/
-.gitignore
+test/node_modules
+api-backend/exampleQuestionnaire.txt

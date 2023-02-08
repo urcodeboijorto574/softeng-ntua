@@ -225,7 +225,7 @@ exports.getQuestionnaire = async (req, res) => {
         const questionnaire = await Questionnaire.findOne({
             questionnaireID: req.params.questionnaireID,
         })
-            .select({ _id: 0, __v: 0, creator: 0 })
+            .select({ _id: 0, __v: 0 })
             .populate({
                 path: 'questions',
                 select: {

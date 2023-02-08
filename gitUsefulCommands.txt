@@ -1,0 +1,93 @@
+You are strongly advised to checkout https://www.freecodecamp.org/ for any help you need with any of the commands below! 
+
+---BASIC COMMANDS---
+git init = initialize project to use git
+git add . = add all changes to be saved
+git add *filename* = add single file to be saved
+git commit -m 'message' = save changes with message
+git push origin *branch* = push changes to github branch from HEAD
+git pull origin master = pull changes from github branch to HEAD
+git switch *branch* = switch to branch
+git checkout -b *new-branch* = create new branch and switch to it
+git status = check status of changes (staged-unstaged changes)
+git log = see all previous saved changes on current branch
+git log --all --graph = see all previous saved changes in all branches with a graph on the left (very nice)
+
+---BEGINNER COMMANDS---
+git checkout *commit hash* = travel back to old commit
+git checkout = check out if your local branch is synced up with the remote one
+git branch = see all branches (an '*' will appear in the currently active (HEAD) branch)
+git ls-files = see all the files in the git index (not in working-tree)
+git ls-tree --full-tree --name-only main = see the files/directories in main branch of local repository
+git rm --cache *filename* = deletes one file from the git index (not from working-tree) (basically un-tracks a file)
+	(if the file still exists in your working tree, then if you hit 'git status' you will this file in your unsaved changes)
+
+---INTERMEDIATE COMMANDS---
+git reset --mixed HEAD~ = undo the commit you just committed, while you keep your working directory as it is (so you don't lose your changes)
+	(https://www.freecodecamp.org/news/save-the-day-with-git-reset/)
+git cherry-pick *branch* = apply the last commit on a branch to HEAD (last commit of *branch* --> HEAD)
+	and remove it from *branch*. (This is useful when you commit changes to the wrong branch)
+git checkout *branch* -- *file* = copy one file's changes from one branch to HEAD/index
+	(this command is very useful when you want specific changes of one branch to another.)
+	(example: git switch main; git checkout someones-branch -- api-backend/controller/) (take all changes of controller/ directory)
+	(example: git switch someones-branch; git checkout main -- api-backend/app.js) (take all changes of app.js file)
+git stash = store temporary
+	philosophy of stashing: (https://youtu.be/Ie1EXmd9k0s)
+	stashing example: (https://youtu.be/DeU6opFU_zw)
+
+
+*NOTE*: HEAD~ means one commit right before the most recent. HEAD~2 means two commits before the most recent, and so on...
+		So if you want to check your code in a particular moment in time, you can 'git checkout HEAD~x', see your changes,
+		and then 'git checkout HEAD' to rebase your head to the top.
+
+---USEFUL COMMENTS---
+	·What is git?
+https://youtu.be/mJ-qvsxPHpY :)
+Git is a program that operates in your comoputer to help you manage all the changes and different versions of your files.
+(You will firstly need to know how git works, so you can understand how github works on its part).
+
+	·How to start using git?
+Let's say you start a new project in a new directory 'my-project'. If you want to use git for this project, you have to initialize
+git inside the 'my-project' folder. This way, everything that you write will be tracked (and your career as a developer will begin :)).
+
+	·How to track my progress?
+Your folder in this stage will have only the file .git that is created when you initialize git. Then you make whatever changes you want,
+i.e. you create files/folders, make changes, delete stuff etc. Every time you make changes, they are unstaged, so they are not in the staging area.
+The two fundamental steps you take at this point are:
+1) move the changes you make to the staging area (git add),
+2) commit the staged changes to your work (git commit).
+(You can only include the staged changes to one commit. This is why the staging area exists. Once you commit the changes,
+the staging area will be empty, so that you can stage other changes to another commit.)
+
+	·What should I track?
+Every commit you make is a step of progress of your code. A useful advice is to not commit changes that do nothing, like if you've only
+corrected typos, or changed the name of a local variable... you get the point.
+
+	·What are branches?
+https://youtu.be/Q1kHG842HoI
+
+	·What is HEAD?
+Head is a pointer pointing at a branch that you are currently working in. Every commit you make will be added to this branch.
+
+	·Soo.. what is github?
+GitHub on the other hand, is a website that you can publish your projects and view the code that other people write. It is basically
+the link between you and your co-workers.
+
+	·But how github actually works?
+https://www.freecodecamp.org/news/save-the-day-with-git-reset/
+When you use git, you basically create a git repository in your computer, so a local repository. But when you work with other people and want to
+work on the same project, you can have a repository on github and write your code there! (well.. not actually, but stick with me!)..
+
+Let me explain the workflow that you follow when you use github:
+First you create a local repository in your computer, and then you connect it with the github repository that your team will work on.
+Then, you write your code on your computer and commit any changes you make to your local repository.
+Lastly, you 'push' (= publish) the state of your local repository to the github repository, that synchronizes the two.
+
+(One idea is for each person to have their own branch, and commit their work there, so they don't commit the changes in the master branch,
+that usually has the checked and ready-to-work stuff.
+Another idea is to create branches based on the functionality that needs to be create.
+For example, there could be login-branch, adminEndpoints-branch etc in which we do
+one thing only. Also, i.e. the branch adminEndpoints-branch could be also broken into different branches like healthcheck-branch...).
+
+	·What is origin?
+https://youtu.be/LIHIRBz5ZXk

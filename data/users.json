@@ -1,0 +1,193 @@
+[
+    {
+        "questionnairesAnswered": [],
+        "_id": "01d53eb0c1a54d629cc7bec9",
+        "username": "jimv",
+        "password": "$2a$12$085ruvNd75os.h4a8ADynudZgi2teOQcpjLUDsVxGZhgtUApvojJO",
+        "role": "admin",
+        "__v": 1,
+        "passwordChangedAt": "2023-02-03T15:32:48.919Z"
+    },
+    {
+        "questionnairesAnswered": [],
+        "_id": "01d69d5b9d16c863f46de17c",
+        "username": "TheUltraSuperAdmin",
+        "role": "super-admin",
+        "password": "$2a$12$S3EJe8hrH5l.0qPEgx7N4OqRe8YcY1Ofb2/4V/W7RVyoR4cP6jZQa",
+        "__v": 0
+    },
+    {
+        "questionnairesAnswered": [],
+        "_id": "01d712c33a4eb713e46a87f4",
+        "username": "admin-vass",
+        "role": "admin",
+        "password": "$2a$12$r8CAm7RvTVQPGjZsOPs8Yuey2yc580FUqz/fI.YszKAdZ4cC8uOee",
+        "__v": 0
+    },
+    {
+        "questionnairesAnswered": [
+            "01bc110ded7ab64f38d39687"
+        ],
+        "_id": "01d712fb3a4eb713e46a87f9",
+        "username": "user-vass",
+        "role": "user",
+        "password": "$2a$12$nbqrOPQ1DDYdaPhlrryMdOr9Ahx/pMhz8klXZVyPMXotzczNat3qG",
+        "__v": 0
+    },
+    {
+        "questionnairesAnswered": [
+            "01de937145d41ef8a4e65827"
+        ],
+        "_id": "01e043e1a689e5428c83ff08",
+        "username": "john-user",
+        "role": "user",
+        "password": "$2a$12$7tmQju.7X.46FwU4ALrlCuyCvNL37S1xUJjBk8zQOolD6aKh.ZCDK",
+        "__v": 0
+    },
+    {
+        "questionnairesAnswered": [
+            "01bc110ded7ab64f38d39687"
+        ],
+        "_id": "01e132a554ece24524dfa7d0",
+        "username": "user-vass2",
+        "role": "user",
+        "password": "$2a$12$DFBS7vDbH/6nmHQGp6CkZu0526IlBvgxTElcnQ4vEO9zx8oR/snce",
+        "__v": 0
+    },
+    {
+        "questionnairesAnswered": [],
+        "_id": "01e137e65b0caa2d74c4618f",
+        "username": "test-user",
+        "role": "user",
+        "password": "$2a$12$zFgLiLQwzoMeESZGKld/LOV61KvUkL.82BFYKoZtiXc2a9MJuFiq6",
+        "__v": 0
+    },
+    {
+        "questionnairesAnswered": [],
+        "_id": "01e13a655b8e68a058a2498f",
+        "username": "john-use1234",
+        "role": "user",
+        "password": "$2a$12$2CGYoHas1ZOgUJQiF9CnBub3gZPLjw.QP4CQAT6/.mO.VaHHPV3pe",
+        "__v": 0
+    },
+    {
+        "questionnairesAnswered": [],
+        "_id": "01e13f9452cdfe20b43a3e67",
+        "username": "test-admin",
+        "role": "admin",
+        "password": "$2a$12$.29rxiJSmRgAW9eY2x0HUOsQoyea614L4/ha4WY09T6GlKoJVsUFW",
+        "__v": 0
+    },
+    {
+        "questionnairesAnswered": [],
+        "_id": "01e161cf8e1d787894b213ce",
+        "username": "john",
+        "role": "user",
+        "password": "$2a$12$ceWVEPpfImqUhKQbh.8MweqXr1WkDYWHHon76BxAcIisZVrXaSOzu",
+        "__v": 0
+    },
+    {
+        "questionnairesAnswered": [],
+        "_id": "01e20766cb915a1db8c75b1b",
+        "username": "john-admin",
+        "role": "admin",
+        "password": "$2a$12$vYiu/DGQLmf3Gss/RIIVFuzNrsALYWniOssntPWd64emUd/0Vdc/.",
+        "__v": 0
+    },
+    {
+        "questionnairesAnswered": [],
+        "_id": "01e214eda9e75215105a489b",
+        "role": "user",
+        "username": "steli",
+        "password": "$2a$12$oB/vUim4vT4IQ4v2VJYxwOtlrNjYeWBnioadp5N6DpgFlSgwXkwzC",
+        "__v": 0
+    },
+    {
+        "questionnairesAnswered": [],
+        "_id": "01e218aba9e75215105a48a6",
+        "role": "admin",
+        "username": "existingAdminTest",
+        "password": "$2a$12$JEnM993RaMHSrO2NXVQVG.PHE3c5D3xsD44A2mNzaEiBh4sdsSw4.",
+        "__v": 0,
+        "passwordChangedAt": "2023-02-08T08:42:23.173Z"
+    },
+    {
+        "questionnairesAnswered": [],
+        "_id": "01e21919a9e75215105a48ae",
+        "role": "user",
+        "username": "existingUserTest",
+        "password": "$2a$12$r0RW31y20osdTFdJmpKJ6uEMxMt1/4B2x5t8oxpm1LBrUTsVIdl9G",
+        "__v": 0,
+        "passwordChangedAt": "2023-02-07T16:09:38.643Z"
+    },
+    {
+        "questionnairesAnswered": [],
+        "_id": "01e293ce3fd32738bc6b343f",
+        "role": "admin",
+        "username": "existingAdminTest2",
+        "password": "$2a$12$ukymiuDtgbbKUZ76tkFEyu1IZcNcoNct8CC0QkBDyL/4Hk9qLaej2",
+        "__v": 0,
+        "passwordChangedAt": "2023-02-07T18:09:45.773Z"
+    },
+    {
+        "questionnairesAnswered": [],
+        "_id": "01e2cb3d6913537448f2cefb",
+        "username": "test-user2",
+        "role": "user",
+        "password": "$2a$12$cdTqhxiQilsblUF3Hwrym.cGruqBx8ItdS84fhpoj8uD9pvKbvzau",
+        "__v": 0
+    },
+    {
+        "questionnairesAnswered": [],
+        "_id": "01e362389697c715247aa3c6",
+        "role": "admin",
+        "username": "adminTest",
+        "password": "$2a$12$XsS0g5MbT1wC0EegaJUI.OK6cFPWP.4/CbLTMQnmVlIlgZvCRILLu",
+        "__v": 0,
+        "passwordChangedAt": "2023-02-08T08:59:31.764Z"
+    },
+    {
+        "questionnairesAnswered": [],
+        "_id": "01e364749697c715247aa3cd",
+        "role": "user",
+        "username": "userTest",
+        "password": "$2a$12$XkiLNrBz3es3KrconcfcP.IB8jZlmxapeZwbr9EovUF/N.5CUPgkC",
+        "__v": 0
+    },
+    {
+        "questionnairesAnswered": [],
+        "_id": "01e368319697c715247aa3d1",
+        "role": "admin",
+        "username": "adminTestJson",
+        "password": "$2a$12$EnwhwFQkVkcUhp67qpHOR.7uw2d690UpWpKJ.5QziiQDNVHd.nI86",
+        "__v": 0,
+        "passwordChangedAt": "2023-02-08T16:03:18.784Z"
+    },
+    {
+        "questionnairesAnswered": [],
+        "_id": "01e368329697c715247aa3d5",
+        "role": "admin",
+        "username": "adminTestCsv",
+        "password": "$2a$12$9bDx45nl.m6JFJfHSLUH9OObJv9g482eqpp1tCqWQR2QYm2/cW5v2",
+        "__v": 0,
+        "passwordChangedAt": "2023-02-08T16:03:19.842Z"
+    },
+    {
+        "questionnairesAnswered": [],
+        "_id": "01e368339697c715247aa3d9",
+        "role": "user",
+        "username": "userTestJson",
+        "password": "$2a$12$W/TAwDUK3AbuTFkc9gcf8exQGKJE9KJAiIsS5WRD0MgQR3wHkcK2S",
+        "__v": 0,
+        "passwordChangedAt": "2023-02-08T16:03:20.881Z"
+    },
+    {
+        "questionnairesAnswered": [],
+        "_id": "01e368349697c715247aa3dd",
+        "role": "user",
+        "username": "userTestCsv",
+        "password": "$2a$12$zs5BQ6okir/fo5OTKF/Ba.QAq1D6b7IJVEVIy4iPrtPp.PrEwqtvW",
+        "__v": 0,
+        "passwordChangedAt": "2023-02-08T16:03:21.895Z"
+    }
+]

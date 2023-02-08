@@ -5,7 +5,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:questionnaires_app/main_screens/admin_questionnaire_list.dart';
 import 'package:questionnaires_app/main_screens/answers_overview.dart';
 import 'package:questionnaires_app/main_screens/question_screen.dart';
 
@@ -14,6 +16,8 @@ import 'package:questionnaires_app/main_screens/questionnaire_list.dart';
 import 'package:questionnaires_app/main_screens/statistics_screen.dart';
 import 'package:questionnaires_app/objects/answer.dart';
 import 'package:questionnaires_app/objects/question.dart';
+import 'package:questionnaires_app/widgets/app_bar.dart';
+import 'package:questionnaires_app/widgets/snackbar.dart';
 
 class SessionListScreen extends StatefulWidget {
   final String questionnaireTitle;
@@ -33,15 +37,27 @@ class _SessionListScreenState extends State<SessionListScreen> {
   late List sessions;
   late Future<List> sessionsTitles;
 
+  final storage = const FlutterSecureStorage();
+
+  final GlobalKey<ScaffoldMessengerState> _scaffoldKey =
+      GlobalKey<ScaffoldMessengerState>();
+
   String _localhost() {
-    return 'http://127.0.0.1:3000/intelliq_api/session/${widget.questionnaireID}';
+    return 'https://127.0.0.1:9103/intelliq_api/session/getallquestionnairesessions/${widget.questionnaireID}';
   }
 
   Future<List> _getAllSessions() async {
     List<String> titles = [];
 
     final url = Uri.parse(_localhost());
-    Response response = await get(url);
+
+    // var jwt = await storage.read(key: "jwt");
+    // if (jwt == null) throw Exception('Something went wrong!');
+
+    Response response = await get(
+      url,
+      // headers: <String, String>{'X-OBSERVATORY-AUTH': jwt},
+    );
 
     if (response.statusCode == 200) {
       sessions = jsonDecode(response.body)['data']['sessions'];
@@ -50,8 +66,15 @@ class _SessionListScreenState extends State<SessionListScreen> {
         titles.add(sessions[i]['sessionID']);
       }
       return titles;
+    } else if (response.statusCode == 402) {
+      return [];
+    } else if (response.statusCode == 401) {
+      MyMessageHandler.showSnackbar(
+          _scaffoldKey, jsonDecode(response.body)['message']);
+      return [];
     } else {
-      throw Exception('Failed to load the sessions');
+      MyMessageHandler.showSnackbar(_scaffoldKey, 'Something went wrong!');
+      return [];
     }
   }
 
@@ -82,7 +105,7 @@ class _SessionListScreenState extends State<SessionListScreen> {
             options: questions[i]['options'],
             questiontxt: questions[i]['qtext'],
             optionIndex: optIndex,
-            answertxt: sessions[index]['answers'][i]['answertxt'],
+            answertxt: sessions[index]['answers'][i]['answertext'],
           ));
           break;
         }
@@ -113,41 +136,8 @@ class _SessionListScreenState extends State<SessionListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 127, 156, 160),
-      appBar: AppBar(
-        toolbarHeight: 100,
-        backgroundColor: const Color.fromARGB(255, 9, 52, 58),
-        leading: const Icon(
-          Icons.question_mark_outlined,
-          color: Colors.pinkAccent,
-          size: 50,
-        ),
-        title: const Padding(
-          padding: EdgeInsets.only(bottom: 15),
-          child: Text(
-            'IntelliQ',
-            style: TextStyle(
-              color: Colors.pinkAccent,
-              fontWeight: FontWeight.bold,
-              fontSize: 30,
-              letterSpacing: 2,
-            ),
-          ),
-        ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.all(15),
-            child: IconButton(
-              onPressed: () async {
-                Navigator.pushReplacementNamed(context, '/welcome_screen');
-              },
-              icon: const Icon(
-                Icons.logout,
-                color: Colors.pinkAccent,
-                size: 30,
-              ),
-            ),
-          )
-        ],
+      appBar: MyAppBar(
+        scaffoldKey: _scaffoldKey,
       ),
       body: FutureBuilder<List>(
         future: sessionsTitles,
@@ -187,7 +177,7 @@ class _SessionListScreenState extends State<SessionListScreen> {
             );
           } else if (snapshot.hasError) {
             return Center(
-              child: Text('${snapshot.error}'),
+              child: Text('${snapshot.error}'.split(':')[1]),
             );
           }
 
@@ -203,7 +193,7 @@ class _SessionListScreenState extends State<SessionListScreen> {
           onPressed: () {
             Navigator.pushAndRemoveUntil(context,
                 MaterialPageRoute(builder: (context) {
-              return const QuestionnaireListScreen(
+              return const AdminQuestionnaireList(
                 label: 'view answers',
               );
             }), (route) => false);
