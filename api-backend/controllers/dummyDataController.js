@@ -109,61 +109,65 @@ exports.importData = async (req, res, next) => {
  */
 exports.exportData = async (req, res, next) => {
     try {
-        let message = '',
-            questionnairesInDB, questionsInDB, optionsInDB, sessionsInDB, answersInDB, usersInDB;
+        let questionnairesInDB, questionsInDB, optionsInDB, sessionsInDB, answersInDB, usersInDB;
 
         /* Read data from DB */
         questionnairesInDB = await Questionnaire.find();
         const questionnairesFound = questionnairesInDB != 0;
         questionsInDB = questionnairesFound ? await Question.find() : [];
-        optionsInDB = questionsInDB != 0 ? await Option.find() : [];
+        optionsInDB = questionnairesFound ? await Option.find() : [];
         sessionsInDB = questionnairesFound ? await Session.find() : [];
         answersInDB = sessionsInDB != 0 ? await Answer.find() : [];
         usersInDB = await User.find();
         let collectionsDB = [answersInDB, sessionsInDB, optionsInDB, questionsInDB, questionnairesInDB, usersInDB];
 
-        /* (Optional) Change the prefix of the _id */
-        const prefix_id = '00574';
-        collectionsDB.forEach(collection => {
-            collection.forEach(doc => {
-                doc._id = mongoose.Types.ObjectId(prefix_id.concat(doc._id.toString().slice(prefix_id.length)));
-                if (doc.questions != undefined) {
-                    doc.questions = doc.questions.map(el => mongoose.Types.ObjectId(prefix_id.concat(el.toString().slice(prefix_id.length))));
-                } else if (doc.options != undefined) {
-                    doc.options = doc.options.map(el => mongoose.Types.ObjectId(prefix_id.concat(el.toString().slice(prefix_id.length))));
-                } else if (doc.answers != undefined) {
-                    doc.answers = doc.answers.map(el => mongoose.Types.ObjectId(prefix_id.concat(el.toString().slice(prefix_id.length))));
-                } else if (doc.questionnairesAnswered != undefined) {
-                    doc.questionnairesAnswered = doc.questionnairesAnswered.map(el => mongoose.Types.ObjectId(prefix_id.concat(el.toString().slice(prefix_id.length))));
-                }
+        /* (Optional) Change the prefixes of the '_id's of all the documents in DB */
+        const prefix_id = '';
+        if (prefix_id !== '') {
+            collectionsDB.forEach(collection => {
+                collection.forEach(doc => {
+                    doc._id = mongoose.Types.ObjectId(prefix_id.concat(doc._id.toString().slice(prefix_id.length)));
+                    if (doc.questions != undefined) {
+                        doc.questions = doc.questions.map(el => mongoose.Types.ObjectId(prefix_id.concat(el.toString().slice(prefix_id.length))));
+                    } else if (doc.options != undefined) {
+                        doc.options = doc.options.map(el => mongoose.Types.ObjectId(prefix_id.concat(el.toString().slice(prefix_id.length))));
+                    } else if (doc.answers != undefined) {
+                        doc.answers = doc.answers.map(el => mongoose.Types.ObjectId(prefix_id.concat(el.toString().slice(prefix_id.length))));
+                    } else if (doc.questionnairesAnswered != undefined) {
+                        doc.questionnairesAnswered = doc.questionnairesAnswered.map(el => mongoose.Types.ObjectId(prefix_id.concat(el.toString().slice(prefix_id.length))));
+                    }
+                });
             });
-        });
+        }
 
-
-        let prefix = `${__dirname}/../../data/test/`, postfix = '.json';
+        /* Write the data into the files */
+        let prefix = `${__dirname}/../../data/test/`, postfix = '.json'; // this can't change for the time being
         const targetFiles = ['answers', 'sessions', 'options', 'questions', 'questionnaires', 'users'].map(str => prefix + str + postfix);
         let dataExported = [false, false, false, false, false, false];
 
-        for (let i = 0; i < collectionsDB.length; ++i) {
-            try {
+        let accMsg = '';
+        try {
+            for (let i = 0, preLen = prefix.length; i < collectionsDB.length; ++i) {
+                if (i > 0) accMsg += (i == 1 ? '' : ', ') + targetFiles[i - 1].slice(preLen);
                 fs.writeFileSync(targetFiles[i], JSON.stringify(collectionsDB[i]));
                 dataExported[i] = true;
-                console.log('The file ' + targetFiles[i].slice(prefix.length) + ' was successfully saved.');
-            } catch {
-                return res.status(500).json({
-                    status: 'failed',
-                    message: 'error in writing files'
-                });
+                if (i == targetFiles.length - 1) accMsg += ', ' + targetFiles[targetFiles.length - 1].slice(preLen);
             }
+        } catch (error) {
+            console.log((accMsg === '' ? 'No' : accMsg) + ' files saved successfully. The rest didn\'t.');
+            return res.status(500).json({
+                status: 'failed',
+                message: 'error in writing files'
+            });
         }
 
-        let success = true;
-        for (let i = 0; i < collectionsDB.length; ++i) {
-            success &= dataExported[i];
-        }
+        /* Return response */
+        console.log(accMsg + ' files saved successfully.');
+        const success = dataExported.reduce((prev, curr) => prev & curr, true);
+        let message = success ? 'Documents exported successfully.' : 'Export failed.';
         return res.status(success ? 200 : 400).json({
             status: success ? 'OK' : 'failed',
-            message: success ? message : 'failed to save collections'
+            message
         });
     } catch (error) {
         return res.status(500).json({
