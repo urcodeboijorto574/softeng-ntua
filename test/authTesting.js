@@ -67,6 +67,7 @@ describe("Authorization endpoints good scenario, user is signed up, logged in an
           res.body.status.should.equal("OK");
           res.body.should.have.property("message");
           res.body.message.should.equal("You are successfully logged out.");
+          token = " ";
           done();
         })
         .timeout(1000000);
