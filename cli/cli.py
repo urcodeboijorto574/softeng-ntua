@@ -185,7 +185,8 @@ def resetq(questionnaire_id, form):
 def questionnaire(questionnaire_id, form):
     print("Will get questionnaire with id:", questionnaire_id)
     questionnaireUrl = baseUrl + f"questionnaire/{questionnaire_id}" + "?format=" + form
-    response = handleGet(questionnaireUrl)
+    vescookie = getCookie()
+    response = handleGet(questionnaireUrl, vescookie = vescookie)
     handleResponse(response, form)
     
     return
