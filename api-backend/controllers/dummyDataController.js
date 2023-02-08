@@ -18,85 +18,84 @@ const Models = [Answer, Session, Option, Question, Questionnaire, User];
  * URL: {baseURL}/dummy-data/import
  */
 exports.importData = async (req, res, next) => {
-    return res.status(418).json({ status: 'no operation' });
-    // /* Read JSON files */
-    // const questionnairesInDataFolder = JSON.parse(fs.readFileSync(`${__dirname}/../../data/questionnaires.json`, 'utf-8'));
-    // const questionsInDataFolder = JSON.parse(fs.readFileSync(`${__dirname}/../../data/questions.json`, 'utf-8'));
-    // const optionsInDataFolder = JSON.parse(fs.readFileSync(`${__dirname}/../../data/options.json`, 'utf-8'));
-    // const sessionsInDataFolder = JSON.parse(fs.readFileSync(`${__dirname}/../../data/sessions.json`, 'utf-8'));
-    // const answersInDataFolder = JSON.parse(fs.readFileSync(`${__dirname}/../../data/answers.json`, 'utf-8'));
-    // const usersInDataFolder = JSON.parse(fs.readFileSync(`${__dirname}/../../data/users.json`, 'utf-8'));
-    // const collectionsFiles = [
-    //     answersInDataFolder,
-    //     sessionsInDataFolder,
-    //     optionsInDataFolder,
-    //     questionsInDataFolder,
-    //     questionnairesInDataFolder,
-    //     usersInDataFolder
-    // ];
+    /* Read JSON files */
+    const questionnairesInDataFolder = JSON.parse(fs.readFileSync(`${__dirname}/../../data/questionnaires.json`, 'utf-8'));
+    const questionsInDataFolder = JSON.parse(fs.readFileSync(`${__dirname}/../../data/questions.json`, 'utf-8'));
+    const optionsInDataFolder = JSON.parse(fs.readFileSync(`${__dirname}/../../data/options.json`, 'utf-8'));
+    const sessionsInDataFolder = JSON.parse(fs.readFileSync(`${__dirname}/../../data/sessions.json`, 'utf-8'));
+    const answersInDataFolder = JSON.parse(fs.readFileSync(`${__dirname}/../../data/answers.json`, 'utf-8'));
+    const usersInDataFolder = JSON.parse(fs.readFileSync(`${__dirname}/../../data/users.json`, 'utf-8'));
+    const collectionsFiles = [
+        answersInDataFolder,
+        sessionsInDataFolder,
+        optionsInDataFolder,
+        questionsInDataFolder,
+        questionnairesInDataFolder,
+        usersInDataFolder
+    ];
 
-    // /* Check if there are questionnaires to import */
-    // for (let i = 2; i < 5; ++i) {
-    //     if (!collectionsFiles[i] || collectionsFiles[i].length === 0)
-    //         return res.status(402).json({
-    //             status: 'failed',
-    //             message: 'no data to import'
-    //         });
-    // }
+    /* Check if there are questionnaires to import */
+    for (let i = 2; i < 5; ++i) {
+        if (!collectionsFiles[i] || collectionsFiles[i].length === 0)
+            return res.status(402).json({
+                status: 'failed',
+                message: 'no data to import'
+            });
+    }
 
-    // /* (Optional) Change the prefix of the _id */
-    // const prefix_id = '00';
-    // collectionsFiles.forEach(collection => {
-    //     collection.forEach(doc => {
-    //         doc['_id'] = prefix_id.concat(doc['_id'].slice(prefix_id.length));
-    //         let docArray;
-    //         if (doc['questions']) docArray = doc['questions'];
-    //         else if (doc['options']) docArray = doc['options'];
-    //         else if (doc['answers']) docArray = doc['answers'];
-    //         if (docArray)
-    //             docArray.forEach(el => {
-    //                 el['_id'] = prefix_id.concat(el['_id'].slice(prefix_id.length));
-    //             });
-    //     });
-    // });
+    /* (Optional) Change the prefix of the _id */
+    const prefix_id = '00';
+    collectionsFiles.forEach(collection => {
+        collection.forEach(doc => {
+            doc['_id'] = prefix_id.concat(doc['_id'].slice(prefix_id.length));
+            let docArray;
+            if (doc['questions']) docArray = doc['questions'];
+            else if (doc['options']) docArray = doc['options'];
+            else if (doc['answers']) docArray = doc['answers'];
+            if (docArray)
+                docArray.forEach(el => {
+                    el['_id'] = prefix_id.concat(el['_id'].slice(prefix_id.length));
+                });
+        });
+    });
 
-    // console.log('Data to import:');
-    // collectionsFiles.forEach(collection => {
-    //     let doctype;
-    //     if (collection[0]) {
-    //         switch (collection[0]) {
-    //             case collectionsFiles[0]: doctype = '--------------------------------------------------Answers--------------------------------------------------'; break;
-    //             case collectionsFiles[1]: doctype = '--------------------------------------------------Sessions--------------------------------------------------'; break;
-    //             case collectionsFiles[2]: doctype = '--------------------------------------------------Options--------------------------------------------------'; break;
-    //             case collectionsFiles[3]: doctype = '--------------------------------------------------Questions--------------------------------------------------'; break;
-    //             case collectionsFiles[4]: doctype = '--------------------------------------------------Questionnaires--------------------------------------------------'; break;
-    //             default: doctype = '--------------------------------------------------Users--------------------------------------------------'; break;
-    //         }
-    //         console.log(doctype); console.log(collection);
-    //     }
-    // });
+    console.log('Data to import:');
+    collectionsFiles.forEach(collection => {
+        let doctype;
+        if (collection[0]) {
+            switch (collection[0]) {
+                case collectionsFiles[0]: doctype = '--------------------------------------------------Answers--------------------------------------------------'; break;
+                case collectionsFiles[1]: doctype = '--------------------------------------------------Sessions--------------------------------------------------'; break;
+                case collectionsFiles[2]: doctype = '--------------------------------------------------Options--------------------------------------------------'; break;
+                case collectionsFiles[3]: doctype = '--------------------------------------------------Questions--------------------------------------------------'; break;
+                case collectionsFiles[4]: doctype = '--------------------------------------------------Questionnaires--------------------------------------------------'; break;
+                default: doctype = '--------------------------------------------------Users--------------------------------------------------'; break;
+            }
+            console.log(doctype); console.log(collection);
+        }
+    });
 
-    // try {
-    //     process.stdout.write('Start importing data');
-    //     const limit = Models.length;
-    //     for (let i = 0; i < limit; ++i) {
-    //         await Models[i].create(collectionsFiles[i]);
-    //         process.stdout.write(`...${i + 1}/${limit}${i == limit - 1 ? '\n' : ''}`);
-    //     }
-    //     const message = 'Data successfully imported!';
-    //     console.log(message);
+    try {
+        process.stdout.write('Start importing data');
+        const limit = Models.length;
+        for (let i = 0; i < limit; ++i) {
+            await Models[i].create(collectionsFiles[i]);
+            process.stdout.write(`...${i + 1}/${limit}${i == limit - 1 ? '\n' : ''}`);
+        }
+        const message = 'Data successfully imported!';
+        console.log(message);
 
-    //     return res.status(200).json({
-    //         status: 'OK',
-    //         message
-    //     });
-    // } catch (err) {
-    //     return res.status(500).json({
-    //         status: 'failed',
-    //         message: err
-    //     });
-    // }
-    // next();
+        return res.status(200).json({
+            status: 'OK',
+            message
+        });
+    } catch (err) {
+        return res.status(500).json({
+            status: 'failed',
+            message: err
+        });
+    }
+    next();
 };
 
 /**
