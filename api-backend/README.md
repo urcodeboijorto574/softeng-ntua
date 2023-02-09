@@ -344,6 +344,32 @@ Endpoint that returns an object with the answers that were given to all the ques
 | ------ | ----------- | -------------- |
 | Cookie | jwt=eyJh... | JSON web token |
 
+### Response: 200
+
+```json
+{
+    "status": "OK",
+    "data": {
+        "answers": [
+            {
+                "qID": "T00",
+                "ans": "My answertext"
+            },
+            {
+                "qID": "T01",
+                "ans": "T01A1"
+            },
+            {
+                "qID": "T02",
+                "ans": "T02A1"
+            }
+        ],
+        "sessionID": "TST0",
+        "questionnaireID": "TEST0"
+    }
+}
+```
+
 ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃
 
 ## End-point: Get Question's Answers
