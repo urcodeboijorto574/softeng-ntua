@@ -23,12 +23,13 @@ exports.importData = async (req, res, next) => {
     let questionnairesInFiles, questionsInFiles, optionsInFiles, sessionsInFiles, answersInFiles, usersInFiles,
         collectionsFiles;
     try {
-        questionnairesInFiles = JSON.parse(fs.readFileSync(`${__dirname}/../../data/questionnaires.json`, 'utf-8'));
-        questionsInFiles = JSON.parse(fs.readFileSync(`${__dirname}/../../data/questions.json`, 'utf-8'));
-        optionsInFiles = JSON.parse(fs.readFileSync(`${__dirname}/../../data/options.json`, 'utf-8'));
-        sessionsInFiles = JSON.parse(fs.readFileSync(`${__dirname}/../../data/sessions.json`, 'utf-8'));
-        answersInFiles = JSON.parse(fs.readFileSync(`${__dirname}/../../data/answers.json`, 'utf-8'));
-        usersInFiles = JSON.parse(fs.readFileSync(`${__dirname}/../../data/users.json`, 'utf-8'));
+        const prefix = `${__dirname}/../../data/import/`;
+        questionnairesInFiles = JSON.parse(fs.readFileSync(prefix + 'questionnaires.json', 'utf-8'));
+        questionsInFiles = JSON.parse(fs.readFileSync(prefix + 'questions.json', 'utf-8'));
+        optionsInFiles = JSON.parse(fs.readFileSync(prefix + 'options.json', 'utf-8'));
+        sessionsInFiles = JSON.parse(fs.readFileSync(prefix + 'sessions.json', 'utf-8'));
+        answersInFiles = JSON.parse(fs.readFileSync(prefix + 'answers.json', 'utf-8'));
+        usersInFiles = JSON.parse(fs.readFileSync(prefix + 'users.json', 'utf-8'));
         collectionsFiles = [answersInFiles, sessionsInFiles, optionsInFiles, questionsInFiles, questionnairesInFiles, usersInFiles];
     } catch (error) {
         console.log('Error while reading files');
@@ -131,7 +132,7 @@ exports.exportData = async (req, res, next) => {
         }
 
         /* Write the data into the files */
-        let prefix = `${__dirname}/../../data/`, postfix = '.json'; // this can't change for the time being
+        let prefix = `${__dirname}/../../data/export/`, postfix = '.json'; // this can't change for the time being
         const targetFiles = ['answers', 'sessions', 'options', 'questions', 'questionnaires', 'users'].map(str => prefix + str + postfix);
         let dataExported = [false, false, false, false, false, false];
 
