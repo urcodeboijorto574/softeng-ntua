@@ -49,7 +49,7 @@ exports.getQuestion = async (req, res) => {
                 .status(401)
                 .json({ status: 'failed', message: 'Access denied' });
         }
-        return res.status(200).json({ status: 'OK', question: question });
+        return res.status(200).json({ status: 'OK', data: question });
     } catch (err) {
         return res
             .status(500)
