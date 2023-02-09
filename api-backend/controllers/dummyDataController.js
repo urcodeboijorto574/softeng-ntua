@@ -23,7 +23,7 @@ exports.importData = async (req, res, next) => {
     let questionnairesInFiles, questionsInFiles, optionsInFiles, sessionsInFiles, answersInFiles, usersInFiles,
         collectionsFiles;
     try {
-        const prefix = `${__dirname}/../../data/import/`;
+        const prefix = `${__dirname}\\..\\..\\data\\test\\import\\`;
         questionnairesInFiles = JSON.parse(fs.readFileSync(prefix + 'questionnaires.json', 'utf-8'));
         questionsInFiles = JSON.parse(fs.readFileSync(prefix + 'questions.json', 'utf-8'));
         optionsInFiles = JSON.parse(fs.readFileSync(prefix + 'options.json', 'utf-8'));
@@ -67,7 +67,7 @@ exports.importData = async (req, res, next) => {
         }
 
         /* Return response */
-        const message = 'Documents imported successfully!';
+        const message = 'Documents imported successfully.';
         console.log(message);
         return handleResponse(req, res, 200, {
             status: 'OK',
@@ -139,7 +139,7 @@ exports.exportData = async (req, res, next) => {
         let accMsg = '';
         try {
             for (let i = 0, preLen = prefix.length; i < collectionsDB.length; ++i) {
-                fs.writeFileSync(targetFiles[i], JSON.stringify(collectionsDB[i]));
+                fs.writeFileSync(targetFiles[i], JSON.stringify(collectionsDB[i]), { flag: 'w' });
                 dataExported[i] = true;
                 accMsg += (!i ? '' : ', ') + targetFiles[i].slice(preLen);
             }
