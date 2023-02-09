@@ -30,7 +30,7 @@ exports.getQuestion = async (req, res) => {
         if (!question) {
             return res.status(400).json({
                 status: 'failed',
-                message: `Question ID ${req.params.questionID} not found`,
+                message: `Question not found`,
             });
         }
 
