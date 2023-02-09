@@ -1,0 +1,433 @@
+[
+    {
+        "options": [
+            "01b57c15edfc7d4fccdb9a2f",
+            "01b57c15edfc7d4fccdb9a31",
+            "01b57c15edfc7d4fccdb9a33"
+        ],
+        "wasAnsweredBy": 2,
+        "_id": "01b57c15edfc7d4fccdb9a43",
+        "qID": "Q01",
+        "qtext": "Poio einai to agaphmeno sas xroma;",
+        "required": "TRUE",
+        "type": "question",
+        "questionnaireID": "QQ001",
+        "__v": 0
+    },
+    {
+        "options": [
+            "01b57c15edfc7d4fccdb9a35",
+            "01b57c15edfc7d4fccdb9a37"
+        ],
+        "wasAnsweredBy": 0,
+        "_id": "01b57c16edfc7d4fccdb9a45",
+        "qID": "Q02",
+        "qtext": "Asxoleiste me to podosfairo;",
+        "required": "TRUE",
+        "type": "question",
+        "questionnaireID": "QQ001",
+        "__v": 0
+    },
+    {
+        "options": [
+            "01b57c15edfc7d4fccdb9a39",
+            "01b57c15edfc7d4fccdb9a3b",
+            "01b57c15edfc7d4fccdb9a3d"
+        ],
+        "wasAnsweredBy": 11,
+        "_id": "01b57c16edfc7d4fccdb9a47",
+        "qID": "Q03",
+        "qtext": "Ti omada eiste;",
+        "required": "TRUE",
+        "type": "question",
+        "questionnaireID": "QQ001",
+        "__v": 0
+    },
+    {
+        "options": [
+            "01b57c15edfc7d4fccdb9a3f",
+            "01b57c15edfc7d4fccdb9a41"
+        ],
+        "wasAnsweredBy": 0,
+        "_id": "01b57c16edfc7d4fccdb9a49",
+        "qID": "Q04",
+        "qtext": "Exete zhsei se nhsi;",
+        "required": "TRUE",
+        "type": "question",
+        "questionnaireID": "QQ001",
+        "__v": 0
+    },
+    {
+        "options": [
+            "01b6f8cc945aba5410493f66",
+            "01b6f8cc945aba5410493f68",
+            "01b6f8cc945aba5410493f6a"
+        ],
+        "wasAnsweredBy": 0,
+        "_id": "01b6f8cc945aba5410493f7a",
+        "qID": "Q11",
+        "qtext": "Poio einai to agaphmeno sas xroma;",
+        "required": "TRUE",
+        "type": "question",
+        "questionnaireID": "QQ042",
+        "__v": 0
+    },
+    {
+        "options": [
+            "01b6f8cc945aba5410493f6c",
+            "01b6f8cc945aba5410493f6e"
+        ],
+        "wasAnsweredBy": 0,
+        "_id": "01b6f8cd945aba5410493f7c",
+        "qID": "Q12",
+        "qtext": "Asxoleiste me to podosfairo;",
+        "required": "TRUE",
+        "type": "question",
+        "questionnaireID": "QQ042",
+        "__v": 0
+    },
+    {
+        "options": [
+            "01b6f8cc945aba5410493f70",
+            "01b6f8cc945aba5410493f72",
+            "01b6f8cc945aba5410493f74"
+        ],
+        "wasAnsweredBy": 0,
+        "_id": "01b6f8cd945aba5410493f7e",
+        "qID": "Q13",
+        "qtext": "Ti omada eiste;",
+        "required": "TRUE",
+        "type": "question",
+        "questionnaireID": "QQ042",
+        "__v": 0
+    },
+    {
+        "options": [
+            "01b6f8cc945aba5410493f76",
+            "01b6f8cc945aba5410493f78"
+        ],
+        "wasAnsweredBy": 0,
+        "_id": "01b6f8cd945aba5410493f80",
+        "qID": "Q14",
+        "qtext": "Exete zhsei se nhsi;",
+        "required": "TRUE",
+        "type": "question",
+        "questionnaireID": "QQ042",
+        "__v": 0
+    },
+    {
+        "options": [
+            "01bc110ced7ab64f38d39667"
+        ],
+        "wasAnsweredBy": 0,
+        "_id": "01bc110ded7ab64f38d3967d",
+        "qID": "P20",
+        "qtext": "Poio einai to email sas?",
+        "required": "FALSE",
+        "type": "profile",
+        "questionnaireID": "QQ052",
+        "__v": 0
+    },
+    {
+        "options": [
+            "01bc110ced7ab64f38d39669",
+            "01bc110ced7ab64f38d3966b",
+            "01bc110ced7ab64f38d3966d"
+        ],
+        "wasAnsweredBy": 3,
+        "_id": "01bc110ded7ab64f38d3967f",
+        "qID": "Q21",
+        "qtext": "Poio einai to agaphmeno sas xroma;",
+        "required": "TRUE",
+        "type": "question",
+        "questionnaireID": "QQ052",
+        "__v": 0
+    },
+    {
+        "options": [
+            "01bc110ced7ab64f38d3966f",
+            "01bc110ced7ab64f38d39671"
+        ],
+        "wasAnsweredBy": 3,
+        "_id": "01bc110ded7ab64f38d39681",
+        "qID": "Q22",
+        "qtext": "Asxoleiste me to podosfairo;",
+        "required": "TRUE",
+        "type": "question",
+        "questionnaireID": "QQ052",
+        "__v": 0
+    },
+    {
+        "options": [
+            "01bc110ced7ab64f38d39673",
+            "01bc110ced7ab64f38d39675",
+            "01bc110ced7ab64f38d39677"
+        ],
+        "wasAnsweredBy": 2,
+        "_id": "01bc110ded7ab64f38d39683",
+        "qID": "Q23",
+        "qtext": "Ti omada eiste;",
+        "required": "TRUE",
+        "type": "question",
+        "questionnaireID": "QQ052",
+        "__v": 0
+    },
+    {
+        "options": [
+            "01bc110ded7ab64f38d39679",
+            "01bc110ded7ab64f38d3967b"
+        ],
+        "wasAnsweredBy": 3,
+        "_id": "01bc110ded7ab64f38d39685",
+        "qID": "Q24",
+        "qtext": "Exete zhsei se nhsi;",
+        "required": "TRUE",
+        "type": "question",
+        "questionnaireID": "QQ052",
+        "__v": 0
+    },
+    {
+        "options": [
+            "01bd62905397442ec4c12420"
+        ],
+        "wasAnsweredBy": 0,
+        "_id": "01bd62915397442ec4c12436",
+        "qID": "P30",
+        "qtext": "Poio einai to email sas?",
+        "required": "FALSE",
+        "type": "profile",
+        "questionnaireID": "QQ062",
+        "__v": 0
+    },
+    {
+        "options": [
+            "01bd62905397442ec4c12422",
+            "01bd62905397442ec4c12424",
+            "01bd62905397442ec4c12426"
+        ],
+        "wasAnsweredBy": 0,
+        "_id": "01bd62915397442ec4c12438",
+        "qID": "Q31",
+        "qtext": "Poio einai to agaphmeno sas xroma;",
+        "required": "TRUE",
+        "type": "question",
+        "questionnaireID": "QQ062",
+        "__v": 0
+    },
+    {
+        "options": [
+            "01bd62905397442ec4c12428",
+            "01bd62905397442ec4c1242a"
+        ],
+        "wasAnsweredBy": 0,
+        "_id": "01bd62915397442ec4c1243a",
+        "qID": "Q32",
+        "qtext": "Asxoleiste me to podosfairo;",
+        "required": "TRUE",
+        "type": "question",
+        "questionnaireID": "QQ062",
+        "__v": 0
+    },
+    {
+        "options": [
+            "01bd62915397442ec4c1242c",
+            "01bd62915397442ec4c1242e",
+            "01bd62915397442ec4c12430"
+        ],
+        "wasAnsweredBy": 0,
+        "_id": "01bd62925397442ec4c1243c",
+        "qID": "Q33",
+        "qtext": "Ti omada eiste;",
+        "required": "TRUE",
+        "type": "question",
+        "questionnaireID": "QQ062",
+        "__v": 0
+    },
+    {
+        "options": [
+            "01bd62915397442ec4c12432",
+            "01bd62915397442ec4c12434"
+        ],
+        "wasAnsweredBy": 0,
+        "_id": "01bd62925397442ec4c1243e",
+        "qID": "Q34",
+        "qtext": "Exete zhsei se nhsi;",
+        "required": "TRUE",
+        "type": "question",
+        "questionnaireID": "QQ062",
+        "__v": 0
+    },
+    {
+        "options": [
+            "01cc68e3759bff09749fe4c9",
+            "01cc68e3759bff09749fe4cc",
+            "01cc68e4759bff09749fe4cf"
+        ],
+        "wasAnsweredBy": 0,
+        "_id": "01cc68e3759bff09749fe4c7",
+        "qID": "F01",
+        "qtext": "Poio einai to agaphmeno sas xroma;",
+        "required": "TRUE",
+        "type": "question",
+        "questionnaireID": "QQ119",
+        "__v": 0
+    },
+    {
+        "options": [
+            "01cc68e4759bff09749fe4d5",
+            "01cc68e4759bff09749fe4d8"
+        ],
+        "wasAnsweredBy": 0,
+        "_id": "01cc68e4759bff09749fe4d3",
+        "qID": "F02",
+        "qtext": "Asxoleiste me to podosfairo;",
+        "required": "TRUE",
+        "type": "question",
+        "questionnaireID": "QQ119",
+        "__v": 0
+    },
+    {
+        "options": [
+            "01cc68e4759bff09749fe4de",
+            "01cc68e4759bff09749fe4e1",
+            "01cc68e4759bff09749fe4e4"
+        ],
+        "wasAnsweredBy": 0,
+        "_id": "01cc68e4759bff09749fe4dc",
+        "qID": "F03",
+        "qtext": "Ti omada eiste;",
+        "required": "TRUE",
+        "type": "question",
+        "questionnaireID": "QQ119",
+        "__v": 0
+    },
+    {
+        "options": [
+            "01d7a0d352683873aca8bd09"
+        ],
+        "wasAnsweredBy": 0,
+        "_id": "01d7a0d352683873aca8bd07",
+        "qID": "M00",
+        "qtext": "erothsh1?",
+        "required": "FALSE",
+        "type": "profile",
+        "questionnaireID": "QQ129",
+        "__v": 0
+    },
+    {
+        "options": [
+            "01d7a0d452683873aca8bd0f",
+            "01d7a0d452683873aca8bd12"
+        ],
+        "wasAnsweredBy": 0,
+        "_id": "01d7a0d352683873aca8bd0d",
+        "qID": "M01",
+        "qtext": "erothsh2?",
+        "required": "TRUE",
+        "type": "profile",
+        "questionnaireID": "QQ129",
+        "__v": 0
+    },
+    {
+        "options": [
+            "01d989469f6e9e2ff013f9ca"
+        ],
+        "wasAnsweredBy": 1,
+        "_id": "01d989469f6e9e2ff013f9c8",
+        "qID": "M014",
+        "qtext": "erothsh1?",
+        "required": "FALSE",
+        "type": "profile",
+        "questionnaireID": "QQ130",
+        "__v": 0
+    },
+    {
+        "options": [
+            "01d989469f6e9e2ff013f9d0",
+            "01d989469f6e9e2ff013f9d3"
+        ],
+        "wasAnsweredBy": 1,
+        "_id": "01d989469f6e9e2ff013f9ce",
+        "qID": "M015",
+        "qtext": "erothsh2?",
+        "required": "TRUE",
+        "type": "profile",
+        "questionnaireID": "QQ130",
+        "__v": 0
+    },
+    {
+        "options": [
+            "01de966845d41ef8a4e6582e",
+            "01de97ab45d41ef8a4e6583a",
+            "01de97fa45d41ef8a4e6583b",
+            "01de986f45d41ef8a4e6583d"
+        ],
+        "wasAnsweredBy": 1,
+        "_id": "01de955645d41ef8a4e65829",
+        "qID": "QJ1",
+        "qtext": "What if you could live as a goat?",
+        "required": "FALSE",
+        "type": "question",
+        "questionnaireID": "QQ574"
+    },
+    {
+        "options": [
+            "01e10ced2444d9d1cdd51807",
+            "01e10d552444d9d1cdd51808",
+            "01e10dae2444d9d1cdd51809",
+            "01e10e222444d9d1cdd5180a"
+        ],
+        "wasAnsweredBy": 1,
+        "_id": "01e10ab62444d9d1cdd51806",
+        "qID": "QJ0",
+        "qtext": "What if your wardrobe could talk?",
+        "required": "FALSE",
+        "type": "question",
+        "questionnaireID": "QQ574"
+    },
+    {
+        "options": [
+            "01e243cba9bca93a346fff0c"
+        ],
+        "wasAnsweredBy": 1,
+        "_id": "01e243cba9bca93a346fff0a",
+        "qID": "T00",
+        "qtext": "This is Question 0",
+        "required": "FALSE",
+        "type": "profile",
+        "questionnaireID": "TEST0",
+        "__v": 0
+    },
+    {
+        "options": [
+            "01e243cba9bca93a346fff12",
+            "01e243cba9bca93a346fff15",
+            "01e243cba9bca93a346fff18",
+            "01e243cba9bca93a346fff1b"
+        ],
+        "wasAnsweredBy": 1,
+        "_id": "01e243cba9bca93a346fff10",
+        "qID": "T01",
+        "qtext": "This is Question 1",
+        "required": "TRUE",
+        "type": "profile",
+        "questionnaireID": "TEST0",
+        "__v": 0
+    },
+    {
+        "options": [
+            "01e243cca9bca93a346fff21",
+            "01e243cca9bca93a346fff24",
+            "01e243cca9bca93a346fff27",
+            "01e243cca9bca93a346fff2a"
+        ],
+        "wasAnsweredBy": 1,
+        "_id": "01e243cca9bca93a346fff1f",
+        "qID": "T02",
+        "qtext": "This is Question 2",
+        "required": "TRUE",
+        "type": "profile",
+        "questionnaireID": "TEST0",
+        "__v": 0
+    }
+]
