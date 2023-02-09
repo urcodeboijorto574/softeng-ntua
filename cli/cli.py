@@ -7,8 +7,6 @@ from io import StringIO
 import urllib3
 import csv
 
-# H TEXNOLOGIA LOGISMIKOU EINAI TO KALUTERO MA8HMA !!!11!!1!!1! #not
-
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 requests.packages.urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
@@ -121,7 +119,11 @@ def logout(form):
         If status == 200: success
         Else: gives reason"""
     logoutUrl = baseUrl + "logout?format=" + form
-    response = handlePost(logoutUrl, verify = False)
+    vescookie = getCookie()
+    if vescookie["jwt"] in ["loggedout", ""]:
+        print("The user is not signed in!")
+        exit()
+    response = handlePost(logoutUrl, verify = False, vescookie = vescookie)
     jwt = response.cookies["jwt"]
     save_variable_to_file(jwt)
     handleResponse(response, form)
@@ -158,15 +160,22 @@ def resetall(form):
     
     return
 
-# questionnaire_upd: TO CHECK
+# questionnaire_upd: NOT GOOD
 def questionnaire_upd(source, form):
     #Just uploads a json, WHY DO WE NEED FORMAT???
     updUrl = baseUrl + "admin/questionnaire_upd" + "?format=" + form
     vescookie = getCookie()
-    with open(source) as json_file:
-        json_data = json.load(json_file)
-        response = handlePost(updUrl, False, vescookie, json_data)
-        handleResponse(response, form)
+    headers={'Content-Type': 'multipart/form-data'}
+    file = {'file': (source, open(source, 'rb'), 'application/json')}
+    try:
+        response = requests.post(updUrl, cookies=vescookie, files = file, headers = headers, verify = False, timeout=10)
+    except requests.exceptions.ReadTimeout:
+        print("Timeout error, the server took more than 10 seconds to respond")
+        exit()
+
+    print(response)
+    # response = handlePost(updUrl, False, vescookie, json_data, headers={'Content-Type': 'multipart/form-data'})
+    handleResponse(response, form)
     
     return
 
@@ -181,9 +190,10 @@ def resetq(questionnaire_id, form):
 
 # questionnaire: TO CHECK
 def questionnaire(questionnaire_id, form):
-    print("Will get questionnaire with id:", questionnaire_id)
+    # print("Will get questionnaire with id:", questionnaire_id)
     questionnaireUrl = baseUrl + f"questionnaire/{questionnaire_id}" + "?format=" + form
-    response = handleGet(questionnaireUrl)
+    vescookie = getCookie()
+    response = handleGet(questionnaireUrl, vescookie = vescookie)
     handleResponse(response, form)
     
     return
@@ -231,6 +241,14 @@ def getquestionanswers(questionnaire_id, question_id, form):
           "and question with id:", question_id)
     getquestionanswers = baseUrl + f"getquestionanswers/{questionnaire_id}/{question_id}" + "?format=" + form
     response = handleGet(getquestionanswers)
+    handleResponse(response, form)
+
+    return
+
+def usermodReq(usermod, username, passw, form):
+    usermodUrl = baseUrl + f"admin/{usermod}/{username}/{passw}" + "?format=" + form
+    vescookie = getCookie()
+    response = handlePost(usermodUrl, verify = False, vescookie=vescookie)
     handleResponse(response, form)
 
     return
@@ -336,7 +354,7 @@ getquestionanswers_parser.add_argument("--format", nargs = 1)
 
 ### ADMIN PARSER ###
 admin_parser = subparser.add_parser("admin", help = "admin")
-admin_parser.add_argument("--usermod", help="modify user", action="store_true")
+admin_parser.add_argument("--usermod", help="modify user")#, action="store_true")
 admin_parser.add_argument("--username", help="username")
 admin_parser.add_argument("--passw", help="password")
 admin_parser.add_argument("--users", help="list of users")
@@ -358,6 +376,7 @@ try:
     if '--format' not in sys.argv:
         parser.error("Incorrect format, it should be --format json")
 except Exception as e:
+    print("Exception!")
     exit()
 
 # print(vars(args))
@@ -425,10 +444,10 @@ elif (args.command == "getquestionanswers"):
         print("getquestionanswers requires --questionnaire_id and --question_id and --format")
 
 elif args.command == "admin":
-    print("In admin")
+    # print("In admin")
     if args.usermod and args.username and args.passw and not args.users:
-        print("user modification for username :", args.username, "with password :", args.passw)
-
+        # print("user modification for username :", args.username, "with password :", args.passw)
+        usermodReq(args.usermod, args.username, args.passw, args.format[0])
     elif args.username and args.passw and not args.usermod and not args.users:
         print("username :", args.username, "with password :", args.passw)
 

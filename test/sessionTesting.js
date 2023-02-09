@@ -116,6 +116,7 @@ describe("Session endpoints good scenario (returning '200 OK' or '402 no data')"
             res.body.status.should.equal("OK");
             res.body.should.have.property("message");
             res.body.message.should.equal("You are successfully logged out.");
+            token = " ";
             done();
           })
           .timeout(1000000);
@@ -191,6 +192,7 @@ describe("Session endpoints good scenario (returning '200 OK' or '402 no data')"
             res.body.status.should.equal("OK");
             res.body.should.have.property("message");
             res.body.message.should.equal("You are successfully logged out.");
+            token = " ";
             done();
           })
           .timeout(1000000);
@@ -212,7 +214,7 @@ describe("Session endpoints bad scenario (no logged in user or admin)", () => {
         chai
           .request(server)
           .get("/intelliq_api/session/getallsessionsids")
-          .set("Cookie", `jwt=`)
+          .set("Cookie", `jwt=${token}`)
           .end((err, res) => {
             res.should.have.status(401);
             res.body.should.have.property("status");
@@ -230,7 +232,7 @@ describe("Session endpoints bad scenario (no logged in user or admin)", () => {
         chai
           .request(server)
           .get("/intelliq_api/session/getuserquestionnairesession/QQ062")
-          .set("Cookie", `jwt=`)
+          .set("Cookie", `jwt=${token}`)
           .end((err, res) => {
             res.should.have.status(401);
             res.body.should.have.property("status");
@@ -250,7 +252,7 @@ describe("Session endpoints bad scenario (no logged in user or admin)", () => {
         chai
           .request(server)
           .get("/intelliq_api/session/getallquestionnairesessions/QQ062")
-          .set("Cookie", `jwt=`)
+          .set("Cookie", `jwt=${token}`)
           .end((err, res) => {
             res.should.have.status(401);
             res.body.should.have.property("status");
@@ -339,6 +341,7 @@ describe("Session endpoints bad scenario (logged in user/admin not authorized fo
             res.body.status.should.equal("OK");
             res.body.should.have.property("message");
             res.body.message.should.equal("You are successfully logged out.");
+            token = " ";
             done();
           })
           .timeout(1000000);
@@ -397,6 +400,7 @@ describe("Session endpoints bad scenario (logged in user/admin not authorized fo
             res.body.status.should.equal("OK");
             res.body.should.have.property("message");
             res.body.message.should.equal("You are successfully logged out.");
+            token = " ";
             done();
           })
           .timeout(1000000);
@@ -461,6 +465,7 @@ describe("Session endpoints bad scenario (the specified questionnaire ID does no
             res.body.status.should.equal("OK");
             res.body.should.have.property("message");
             res.body.message.should.equal("You are successfully logged out.");
+            token = " ";
             done();
           })
           .timeout(1000000);
@@ -519,6 +524,7 @@ describe("Session endpoints bad scenario (the specified questionnaire ID does no
             res.body.status.should.equal("OK");
             res.body.should.have.property("message");
             res.body.message.should.equal("You are successfully logged out.");
+            token = " ";
             done();
           })
           .timeout(1000000);
@@ -604,6 +610,7 @@ describe("Session endpoints bad scenario (the logged in admin is not the creator
             res.body.status.should.equal("OK");
             res.body.should.have.property("message");
             res.body.message.should.equal("You are successfully logged out.");
+            token = " ";
             done();
           })
           .timeout(1000000);

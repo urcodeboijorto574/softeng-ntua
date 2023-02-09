@@ -19,7 +19,11 @@ const answerSchema = new mongoose.Schema({
     answertext: {
         type: String,
         default: '',
-    }
+    },
+    submittedAt: {
+        type: Date,
+        default: Date.now(),
+    },
 });
 
 const Answer = mongoose.model('Answer', answerSchema);
