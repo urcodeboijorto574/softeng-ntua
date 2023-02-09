@@ -160,15 +160,22 @@ def resetall(form):
     
     return
 
-# questionnaire_upd: TO CHECK
+# questionnaire_upd: NOT GOOD
 def questionnaire_upd(source, form):
     #Just uploads a json, WHY DO WE NEED FORMAT???
     updUrl = baseUrl + "admin/questionnaire_upd" + "?format=" + form
     vescookie = getCookie()
-    with open(source) as json_file:
-        json_data = json.load(json_file)
-        response = handlePost(updUrl, False, vescookie, json_data)
-        handleResponse(response, form)
+    headers={'Content-Type': 'multipart/form-data'}
+    file = {'file': (source, open(source, 'rb'), 'application/json')}
+    try:
+        response = requests.post(updUrl, cookies=vescookie, files = file, headers = headers, verify = False, timeout=10)
+    except requests.exceptions.ReadTimeout:
+        print("Timeout error, the server took more than 10 seconds to respond")
+        exit()
+
+    print(response)
+    # response = handlePost(updUrl, False, vescookie, json_data, headers={'Content-Type': 'multipart/form-data'})
+    handleResponse(response, form)
     
     return
 
@@ -183,7 +190,7 @@ def resetq(questionnaire_id, form):
 
 # questionnaire: TO CHECK
 def questionnaire(questionnaire_id, form):
-    print("Will get questionnaire with id:", questionnaire_id)
+    # print("Will get questionnaire with id:", questionnaire_id)
     questionnaireUrl = baseUrl + f"questionnaire/{questionnaire_id}" + "?format=" + form
     vescookie = getCookie()
     response = handleGet(questionnaireUrl, vescookie = vescookie)
