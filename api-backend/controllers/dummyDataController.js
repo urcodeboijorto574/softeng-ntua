@@ -23,7 +23,7 @@ exports.importData = async (req, res, next) => {
     let questionnairesInFiles, questionsInFiles, optionsInFiles, sessionsInFiles, answersInFiles, usersInFiles,
         collectionsFiles;
     try {
-        const prefix = `${__dirname}/../../data/import/`;
+        const prefix = `${__dirname}\\..\\..\\data\\test\\import\\`;
         questionnairesInFiles = JSON.parse(fs.readFileSync(prefix + 'questionnaires.json', 'utf-8'));
         questionsInFiles = JSON.parse(fs.readFileSync(prefix + 'questions.json', 'utf-8'));
         optionsInFiles = JSON.parse(fs.readFileSync(prefix + 'options.json', 'utf-8'));
@@ -67,7 +67,7 @@ exports.importData = async (req, res, next) => {
         }
 
         /* Return response */
-        const message = 'Documents imported successfully!';
+        const message = 'Documents imported successfully.';
         console.log(message);
         return handleResponse(req, res, 200, {
             status: 'OK',
@@ -91,8 +91,9 @@ exports.importData = async (req, res, next) => {
 };
 
 /**
- * Middleware that exports all the data from the DB.
- * @param {JSON} req - JSON request object which is not used in this function.
+ * Middleware that exports all the data from the DB. A prefixId can be given in req.body,
+ * which will be the prefix of the _id of every document saved in the file system. Also, the postfix of the name of the file will be this prefixId.
+ * @param {JSON} req - JSON request object containing a prefixId in req.body.
  * @param {JSON} res - JSON response object containing a confirmation/rejection of the request.
  * @param {JSON} next - the next function in the middleware stack.
  * @return {JSON} - The response object.
@@ -113,56 +114,57 @@ exports.exportData = async (req, res, next) => {
         let collectionsDB = [answersInDB, sessionsInDB, optionsInDB, questionsInDB, questionnairesInDB, usersInDB];
 
         /* (Optional) Change the prefixes of the '_id's of all the documents in DB */
-        const prefix_id = (req.body && req.body.prefix_id != undefined ? req.body.prefix_id : '');
-        if (prefix_id !== '') {
+        let prefixId = ((req.body != undefined) && (req.body.prefixId != undefined)) ? req.body.prefixId : '';
+
+        const prefixId_tooLong = prefixId.length > 23;
+        if (prefixId_tooLong)
+            throw { myMessage: 'prefixId can\'t be more than 23 characters long' };
+
+        const is_NaN = prefixId.split('').some(digit => {
+            let charCode = digit.charCodeAt(0);
+            let inRange = (l, h) => ((charCode >= l.charCodeAt(0)) && (charCode <= h.charCodeAt(0)));
+            return !(inRange('0', '9') || inRange('a', 'f') || inRange('A', 'F'));
+        });
+        if (is_NaN)
+            throw { myMessage: 'prefixId must be a hexademical number' };
+
+        if (prefixId !== '') {
             collectionsDB.forEach(collection => {
                 collection.forEach(doc => {
-                    doc._id = mongoose.Types.ObjectId(prefix_id.concat(doc._id.toString().slice(prefix_id.length)));
+                    doc._id = mongoose.Types.ObjectId(prefixId.concat(doc._id.toString().slice(prefixId.length)));
                     if (doc.questions != undefined) {
-                        doc.questions = doc.questions.map(el => mongoose.Types.ObjectId(prefix_id.concat(el.toString().slice(prefix_id.length))));
+                        doc.questions = doc.questions.map(el => mongoose.Types.ObjectId(prefixId.concat(el.toString().slice(prefixId.length))));
                     } else if (doc.options != undefined) {
-                        doc.options = doc.options.map(el => mongoose.Types.ObjectId(prefix_id.concat(el.toString().slice(prefix_id.length))));
+                        doc.options = doc.options.map(el => mongoose.Types.ObjectId(prefixId.concat(el.toString().slice(prefixId.length))));
                     } else if (doc.answers != undefined) {
-                        doc.answers = doc.answers.map(el => mongoose.Types.ObjectId(prefix_id.concat(el.toString().slice(prefix_id.length))));
+                        doc.answers = doc.answers.map(el => mongoose.Types.ObjectId(prefixId.concat(el.toString().slice(prefixId.length))));
                     } else if (doc.questionnairesAnswered != undefined) {
-                        doc.questionnairesAnswered = doc.questionnairesAnswered.map(el => mongoose.Types.ObjectId(prefix_id.concat(el.toString().slice(prefix_id.length))));
+                        doc.questionnairesAnswered = doc.questionnairesAnswered.map(el => mongoose.Types.ObjectId(prefixId.concat(el.toString().slice(prefixId.length))));
                     }
                 });
             });
         }
 
+
         /* Write the data into the files */
-        let prefix = `${__dirname}/../../data/export/`, postfix = '.json'; // this can't change for the time being
+        let prefix = `${__dirname}\\..\\..\\data\\test\\export\\`, postfix = prefixId + '.json'; // fifle type can't change for the time being
         const targetFiles = ['answers', 'sessions', 'options', 'questions', 'questionnaires', 'users'].map(str => prefix + str + postfix);
         let dataExported = [false, false, false, false, false, false];
 
-        let accMsg = '';
-        try {
-            for (let i = 0, preLen = prefix.length; i < collectionsDB.length; ++i) {
-                fs.writeFileSync(targetFiles[i], JSON.stringify(collectionsDB[i]));
-                dataExported[i] = true;
-                accMsg += (!i ? '' : ', ') + targetFiles[i].slice(preLen);
-            }
-        } catch (error) {
-            console.log((accMsg === '' ? 'No' : accMsg) + ' files saved successfully. The rest didn\'t.');
-            return handleResponse(req, res, 500, {
-                status: 'failed',
-                message: 'error in writing files'
-            });
+        for (let i = 0, preLen = prefix.length; i < collectionsDB.length; ++i) {
+            fs.writeFileSync(targetFiles[i], JSON.stringify(collectionsDB[i]), { flag: 'w' });
         }
 
         /* Return response */
-        console.log(accMsg + ' files saved successfully.');
-        const success = dataExported.reduce((prev, curr) => prev & curr, true);
-        let message = success ? 'Documents exported successfully.' : 'Export failed.';
-        return handleResponse(req, res, success ? 200 : 400, {
-            status: success ? 'OK' : 'failed',
-            message
+        return handleResponse(req, res, 200, {
+            status: 'OK',
+            message: 'Documents exported successfully.'
         });
     } catch (error) {
+        const myMessageExists = error.myMessage != undefined;
         return handleResponse(req, res, 500, {
             status: 'failed',
-            message: error
+            message: myMessageExists ? error.myMessage : error
         });
     }
     next();
