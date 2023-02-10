@@ -1,0 +1,76 @@
+{
+    "questionnaireID": "TEST1",
+    "questionnaireTitle": "Another example questionnaire",
+    "keywords": ["keyword1", "keyword2", "keyword3"],
+    "questions": [
+        {
+            "qID": "V00",
+            "qtext": "This is Question 0",
+            "required": "FALSE",
+            "type": "profile",
+            "options": [
+                {
+                    "optID": "V00TXT",
+                    "opttxt": "<open string>",
+                    "nextqID": "V01"
+                }
+            ]
+        },
+        {
+            "qID": "V01",
+            "qtext": "This is Question 1",
+            "required": "TRUE",
+            "type": "profile",
+            "options": [
+                {
+                    "optID": "V01A1",
+                    "opttxt": "option 1",
+                    "nextqID": "V02"
+                },
+                {
+                    "optID": "V01A2",
+                    "opttxt": "option 2",
+                    "nextqID": "V02"
+                },
+                {
+                    "optID": "V01A3",
+                    "opttxt": "option 3",
+                    "nextqID": "-"
+                },
+                {
+                    "optID": "V01A4",
+                    "opttxt": "option 4",
+                    "nextqID": "V02"
+                }
+            ]
+        },
+        {
+            "qID": "V02",
+            "qtext": "This is Question 2",
+            "required": "TRUE",
+            "type": "profile",
+            "options": [
+                {
+                    "optID": "V02A1",
+                    "opttxt": "option 1",
+                    "nextqID": "-"
+                },
+                {
+                    "optID": "V02A2",
+                    "opttxt": "option 2",
+                    "nextqID": "-"
+                },
+                {
+                    "optID": "V02A3",
+                    "opttxt": "option 3",
+                    "nextqID": "-"
+                },
+                {
+                    "optID": "V02A4",
+                    "opttxt": "option 4",
+                    "nextqID": "-"
+                }
+            ]
+        }
+    ]
+}

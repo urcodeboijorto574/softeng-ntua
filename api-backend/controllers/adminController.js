@@ -1,6 +1,9 @@
 const mongoose = require('mongoose');
 const fs = require('fs');
 const dotenv = require('dotenv');
+const AppError = require(`${__dirname}/../utils/appError.js`);
+const handleResponse =
+    require(`${__dirname}/../utils/handleResponse`).handleResponse;
 const User = require(`${__dirname}/../models/userModel.js`);
 
 dotenv.config({ path: `${__dirname}/../config.env` });
@@ -154,6 +157,14 @@ exports.questionnaireUpdate = async (req, res, next) => {
                           qID: info.questions[i].qID,
                           wasChosenBy: 0,
                         });
+                        // check if a question with one option is open-type (optID should end with 'TXT')
+                        if (len1 == 1 && !info.questions[i].options[j].optID.endsWith('TXT')) {
+                            throw new AppError(`Question ${newQuestion.qID}, Option ${newOption.optID}: Questions with only one option are open-type questions so optID should end with 'TXT'`, 400);
+                        }
+                        // check if a question with more than one options is closed-type (all optIDs shouldn't end with 'TXT')
+                        else if (len1 > 1 && info.questions[i].options[j].optID.endsWith('TXT')) {
+                            throw new AppError(`Question ${newQuestion.qID}, Option ${newOption.optID}: Questions with more than one options are close-type questions so optID shouldn't end with 'TXT'`, 400);
+                        }
     
                         // eslint-disable-next-line no-await-in-loop
                         let addOption = await Question.updateOne(
@@ -191,7 +202,12 @@ exports.questionnaireUpdate = async (req, res, next) => {
                       error = handleDuplicateFieldsDB(req, res, error);
                     } else if (error.name === 'ValidationError') {
                       error = handleValidationErrorDB(req, res, error);
-                    } else {
+                    }
+                    // handle error related to open-close type questions 
+                    else if (error.message.endsWith("'TXT'")) {
+                        return handleResponse(req, res, error.statusCode, {status: error.status, message: error.message});
+                    } 
+                    else {
                       if (req.query.format === 'csv') {
                         return res
                           .status(500)
