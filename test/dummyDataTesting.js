@@ -21,12 +21,12 @@ describe('Import/Export dummy-data endpoints', () => {
     describe('Test for exportData function', () => {
         describe('Login as super-admin to have access to these endpoints', () => {
             it('it should login as super-admin', (done) => {
-                const req = supAdmin;
+                const body = supAdmin;
                 chai
                     .request(server)
                     .post('/intelliq_api/login')
                     .set('Cookie', `jwt=${token}`)
-                    .send(req)
+                    .send(body)
                     .end((err, res) => {
                         res.should.have.status(200);
                         res.body.should.have.property('token');
@@ -37,14 +37,15 @@ describe('Import/Export dummy-data endpoints', () => {
             });
         });
 
-        describe('Export data to the database', () => {
-            it(`it should export the documents from the database to ${__dirname}\\..\\data\\test\\export\\`, (done) => {
-                const req = { username: supAdmin.username, body: { prefix_id: '' } };
-                console.log('req:', req);
+
+        describe('--- Normal case', () => {
+            it(`it should respond with status code 200 and a message \'Documents exported successfully.\'`, (done) => {
+                const body = { prefixId: '00' };
                 chai
                     .request(server)
                     .get('/intelliq_api/dummy-data/export')
                     .set('Cookie', `jwt=${token}`)
+                    .send(body)
                     .end((err, res) => {
                         res.should.have.status(200);
                         res.body.should.have.property('status');
@@ -56,6 +57,49 @@ describe('Import/Export dummy-data endpoints', () => {
                     .timeout(1000000);
             });
         });
+
+        describe('--- Error in given prefixId', () => {
+            describe('prefixId is longer than 23 characters', () => {
+                it('it should respond with code 500 and an error message \'prefixId can\'t be more than 23 characters long\'', (done) => {
+                    const body = { prefixId: '123456789012345678901234' };
+                    chai
+                        .request(server)
+                        .get('/intelliq_api/dummy-data/export')
+                        .set('Cookie', `jwt=${token}`)
+                        .send(body)
+                        .end((err, res) => {
+                            res.should.have.status(500);
+                            res.body.should.have.property('status');
+                            res.body.status.should.equal('failed');
+                            res.body.should.have.property('message');
+                            res.body.message.should.equal('prefixId can\'t be more than 23 characters long');
+                            done();
+                        })
+                        .timeout(1000000);
+                });
+            });
+
+            describe('prefixId is not a hexademical number', () => {
+                it('it should respond with code 500 and an error message \'prefixId must be a hexademical number\'', (done) => {
+                    let body = { prefixId: 'my_prefixId_is_NaN' };
+                    chai
+                        .request(server)
+                        .get('/intelliq_api/dummy-data/export')
+                        .set('Cookie', `jwt=${token}`)
+                        .send(body)
+                        .end((err, res) => {
+                            res.should.have.status(500);
+                            res.body.should.have.property('status');
+                            res.body.status.should.equal('failed');
+                            res.body.should.have.property('message');
+                            res.body.message.should.equal('prefixId must be a hexademical number');
+                            done();
+                        })
+                        .timeout(1000000);
+                });
+            });
+        });
+
 
         describe('Logout', () => {
             it('it should logout the currently logged-in super-admin', (done) => {
