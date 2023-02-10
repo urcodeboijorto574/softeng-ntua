@@ -211,7 +211,13 @@ exports.doAnswer = async (req, res, next) => {
  */
 exports.getSessionAnswers = async (req, res, next) => {
     try {
-        const sessionanswers = await Session.findOne({
+        let questionnaireCreator = await Questionnaire.findOne({
+            questionnaireID: req.params.questionnaireID,
+        }).select({ creator: 1, _id: 0 });
+        if (!(req.username === questionnaireCreator.creator)) {
+            return res.json({ status: 'failed', message: 'Access denied' });
+        }
+        let sessionanswers = await Session.findOne({
             questionnaireID: req.params.questionnaireID,
             sessionID: req.params.session,
         })
@@ -220,30 +226,41 @@ exports.getSessionAnswers = async (req, res, next) => {
                 path: 'answers',
                 select: {
                     _id: 0,
-                    optID: 0,
                     sessionID: 0,
                     questionnaireID: 0,
                     __v: 0,
                 },
                 options: { sort: { qID: 1 } },
-            });
+            })
+            .lean(true);
         if (!sessionanswers) {
             return res.status(400).json({
                 status: 'failed',
                 message: `Session ID ${req.params.session} not found`,
             });
         }
-        if (!req.username === Questionnaire.creator) {
-            return res.json({ status: 'Failed', message: 'Access denied' });
-        }
 
-        return res
-            .status(200)
-            .json({ status: 'OK', sessionanswers: sessionanswers });
+        for (let i = 0; i < sessionanswers.answers.length; i++) {
+            // questions with type question
+            if (sessionanswers.answers[i].answertext === '') {
+                sessionanswers.answers[i].answertext = undefined;
+                sessionanswers.answers[i].ans = sessionanswers.answers[i].optID;
+                delete sessionanswers.answers[i].optID;
+            }
+            // questions with type profile
+            else {
+                sessionanswers.answers[i].optID = undefined;
+                sessionanswers.answers[i].ans =
+                    sessionanswers.answers[i].answertext;
+                delete sessionanswers.answers[i].answertext;
+            }
+        }
+        return res.status(200).json({ status: 'OK', data: sessionanswers });
     } catch (err) {
-        return res
-            .status(500)
-            .json({ status: 'failed', message: 'Internal server error' });
+        return res.status(500).json({
+            status: 'failed',
+            message: 'Internal server error'
+        });
     }
 };
 
@@ -257,6 +274,12 @@ exports.getSessionAnswers = async (req, res, next) => {
  */
 exports.getQuestionAnswers = async (req, res, next) => {
     try {
+        let questionnaireCreator = await Questionnaire.findOne({
+            questionnaireID: req.params.questionnaireID,
+        }).select({ creator: 1, _id: 0 });
+        if (!(req.username === questionnaireCreator.creator)) {
+            return res.json({ status: 'failed', message: 'Access denied' });
+        }
         const getanswers = await Answer.find({
             questionnaireID: req.params.questionnaireID,
             qID: req.params.questionID,
