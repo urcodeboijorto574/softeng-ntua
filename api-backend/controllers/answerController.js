@@ -239,7 +239,8 @@ exports.getSessionAnswers = async (req, res, next) => {
                 message: `Session ID ${req.params.session} not found`,
             });
         }
-
+        sessionanswers.session = sessionanswers.sessionID;
+        delete sessionanswers.sessionID;
         for (let i = 0; i < sessionanswers.answers.length; i++) {
             // questions with type question
             if (sessionanswers.answers[i].answertext === '') {
@@ -283,15 +284,22 @@ exports.getQuestionAnswers = async (req, res, next) => {
         let questionanswers = await Answer.find({
             questionnaireID: req.params.questionnaireID,
             qID: req.params.questionID,
-        }).select({ _id: 0, __v: 0, answertext: 0, optID: 1,}).sort({ submittedAt: 1 });
-
+        }).select({ _id: 0,   submittedAt: 1,  sessionID: 1, optID: 1}).sort( {submittedAt: 1}).lean(true);
+        for( let i = 0; i < questionanswers.length; i++){
+            questionanswers[i].submittedAt=undefined;
+            questionanswers[i].ans = questionanswers[i].optID;
+            delete questionanswers[i].optID;
+            questionanswers[i].session = questionanswers[i].sessionID;
+            delete questionanswers[i].sessionID;
+        }
         if (!questionanswers) {
             return res.status(400).json({
                 status: 'failed',
                 message: `Answers not found`,
             });        }
-        return res.status(200).json({ status: 'OK', data: questionanswers });
-    } catch (err) {
+        data={questionnnaireID: req.params.questionnaireID, questionID: req.params.questionID, answers: questionanswers} ;   
+        return res.status(200).json({ status: 'OK', data: data });
+    } catch (err) { console.log(err);
         return res.status(500).json({ status: 'failed', message: 'Internal server error' });
     }
 };
