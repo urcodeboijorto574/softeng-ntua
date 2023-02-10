@@ -236,6 +236,7 @@ exports.getSessionAnswers = async (req, res, next) => {
         if (!req.username === Questionnaire.creator) {
             return res.json({ status: 'Failed', message: 'Access denied' });
         }
+
         return res
             .status(200)
             .json({ status: 'OK', sessionanswers: sessionanswers });
@@ -265,8 +266,7 @@ exports.getQuestionAnswers = async (req, res, next) => {
             return res.status(400).json({
                 status: 'failed',
                 message: `Answers not found`,
-            });
-        }
+            });        }
         /* if (!(req.username === Questionnaire.creator)) {
             return res
                 .status(401)
@@ -274,8 +274,6 @@ exports.getQuestionAnswers = async (req, res, next) => {
         }*/
         return res.status(200).json({ status: 'OK', getanswers: getanswers });
     } catch (err) {
-        return res
-            .status(500)
-            .json({ status: 'failed', message: 'Internal server error' });
+        return res.status(500).json({ status: 'failed', message: 'Internal server error' });
     }
 };
