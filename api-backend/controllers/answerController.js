@@ -280,22 +280,17 @@ exports.getQuestionAnswers = async (req, res, next) => {
         if (!(req.username === questionnaireCreator.creator)) {
             return res.json({ status: 'failed', message: 'Access denied' });
         }
-        const getanswers = await Answer.find({
+        let questionanswers = await Answer.find({
             questionnaireID: req.params.questionnaireID,
             qID: req.params.questionID,
-        }).select({ _id: 0, __v: 0, optID: 0 });
+        }).select({ _id: 0, __v: 0, answertext: 0, optID: 1,}).sort({ submittedAt: 1 });
 
-        if (!getanswers) {
+        if (!questionanswers) {
             return res.status(400).json({
                 status: 'failed',
                 message: `Answers not found`,
             });        }
-        /* if (!(req.username === Questionnaire.creator)) {
-            return res
-                .status(401)
-                .json({ status: 'failed', message: 'Access denied' });
-        }*/
-        return res.status(200).json({ status: 'OK', getanswers: getanswers });
+        return res.status(200).json({ status: 'OK', data: questionanswers });
     } catch (err) {
         return res.status(500).json({ status: 'failed', message: 'Internal server error' });
     }
