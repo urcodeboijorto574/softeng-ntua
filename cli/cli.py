@@ -162,7 +162,6 @@ def resetall(form):
 
 # questionnaire_upd: NOT GOOD
 def questionnaire_upd(source, form):
-    #Just uploads a json, WHY DO WE NEED FORMAT???
     updUrl = baseUrl + "admin/questionnaire_upd" + "?format=" + form
     vescookie = getCookie()
     headers={'Content-Type': 'multipart/form-data'}
@@ -188,7 +187,7 @@ def resetq(questionnaire_id, form):
     
     return
 
-# questionnaire: TO CHECK
+# questionnaire: DONE
 def questionnaire(questionnaire_id, form):
     # print("Will get questionnaire with id:", questionnaire_id)
     questionnaireUrl = baseUrl + f"questionnaire/{questionnaire_id}" + "?format=" + form
@@ -198,17 +197,17 @@ def questionnaire(questionnaire_id, form):
     
     return
 
-# question: TO DISCUSS & CHECK
+# question: DONE
 def question(questionnaire_id, question_id, form):
-    print("Will get from questionnaire with id:", questionnaire_id,
-          "question with id:", question_id)
+    # print("Will get from questionnaire with id:", questionnaire_id, "question with id:", question_id)
     questionUrl = baseUrl + f"question/{questionnaire_id}/{question_id}" + "?format=" + form
-    response = handleGet(questionUrl)
+    vescookie = getCookie()
+    response = handleGet(questionUrl, vescookie = vescookie)
     handleResponse(response, form)
 
     return
 
-# doanswer: TO DISCUSS & CHECK
+# doanswer: TO CHECK (almost checked)
 def doanswer(questionnaire_id, question_id, session_id, option_id, form):
     # print("Will answer from questionnaire with id:", questionnaire_id,
     #       "question with id:", question_id, "of session with id:", session_id,
@@ -216,57 +215,71 @@ def doanswer(questionnaire_id, question_id, session_id, option_id, form):
     doanswerUrl = baseUrl + f"doanswer/{questionnaire_id}/{question_id}/{session_id}/{option_id}"  + "?format=" + form
     json_data = {
         "questionnaireID" : questionnaire_id,
-        "questionID" : question_id,
-        "session" : session_id,
-        "optionID" : option_id
+        "questionID"      : question_id,
+        "session"         : session_id,
+        "optionID"        : option_id
     }
-    response = handlePost(doanswerUrl, json_data)
+    answerJson = {}
+    if option_id[-3:] == "TXT":
+        answerText = input("Give your answer: ")
+        answerJson = {"answertext" : answerText}
+    vescookie = getCookie()
+    response = handlePost(doanswerUrl, json_data, vescookie = vescookie, json_data = answerJson)
     handleResponse(response, form)
     
     return
 
-# getsessionanswers: TO DISCUSS & CHECK
+# getsessionanswers: TO CHECK (need an admin!)
 def getsessionanswers(questionnaire_id, session_id, form):
-    print("Will get session answers of questionnaire with id:", questionnaire_id,
-          "and session with id:", session_id)
+    # print("Will get session answers of questionnaire with id:", questionnaire_id, "and session with id:", session_id)
     getsessionanswersUrl = baseUrl + f"getsessionanswers/{questionnaire_id}/{session_id}" + "?format=" + form
-    response = handleGet(getsessionanswersUrl)
+    vescookie = getCookie()
+    response = handleGet(getsessionanswersUrl, vescookie = vescookie)
     handleResponse(response, form)
 
     return
 
-# getquestionanswers: TO DISCUSS & CHECK
+# getquestionanswers: TO CHECK (need an admin!)
 def getquestionanswers(questionnaire_id, question_id, form):
-    print("Will get question answers of questionnaire with id:", questionnaire_id,
-          "and question with id:", question_id)
+    # print("Will get question answers of questionnaire with id:", questionnaire_id, "and question with id:", question_id)
     getquestionanswers = baseUrl + f"getquestionanswers/{questionnaire_id}/{question_id}" + "?format=" + form
-    response = handleGet(getquestionanswers)
+    vescookie = getCookie()
+    response = handleGet(getquestionanswers, vescookie = vescookie)
     handleResponse(response, form)
 
     return
 
+# usermodReq: DONE
 def usermodReq(usermod, username, passw, form):
     usermodUrl = baseUrl + f"admin/{usermod}/{username}/{passw}" + "?format=" + form
     vescookie = getCookie()
-    response = handlePost(usermodUrl, verify = False, vescookie=vescookie)
+    response = handlePost(usermodUrl, verify = False, vescookie = vescookie)
     handleResponse(response, form)
 
     return
 
-# admin: NOT DONE
-def admin(args):
-    print("HERE")
-    # print("Will sent username:", username, "and password:", password)
-    if args.usermod:
-        print("user modification")
-    if args.username:
-        print("username :", args.username)
-    if args.passw:
-        print("password :", args.passw)
-    if args.users:
-        print("users :", args.users)
+# usersReq: DONE
+def usersReq(username, form):
+    usermodUrl = baseUrl + f"admin/users/{username}" + "?format=" + form
+    vescookie = getCookie()
+    response = handleGet(usermodUrl, vescookie = vescookie)
+    handleResponse(response, form)
 
     return
+
+# def admin(args):
+#     print("HERE")
+#     # print("Will sent username:", username, "and password:", password)
+#     if args.usermod:
+#         print("user modification")
+#     if args.username:
+#         print("username :", args.username)
+#     if args.passw:
+#         print("password :", args.passw)
+#     if args.users:
+#         print("users :", args.users)
+
+#     return
 
 parser = argparse.ArgumentParser()#add_help=False)
 
@@ -361,9 +374,6 @@ admin_parser.add_argument("--users", help="list of users")
 admin_parser.add_argument("--format", nargs = 1)
 ####################
 
-
-
-
 known = ["command", "usermod", "username", "passw",
          "source", "questionnaire_id", "question_id",
          "session_id", "option_id", "users", "format"]
@@ -448,106 +458,14 @@ elif args.command == "admin":
     if args.usermod and args.username and args.passw and not args.users:
         # print("user modification for username :", args.username, "with password :", args.passw)
         usermodReq(args.usermod, args.username, args.passw, args.format[0])
-    elif args.username and args.passw and not args.usermod and not args.users:
-        print("username :", args.username, "with password :", args.passw)
+    # elif args.username and args.passw and not args.usermod and not args.users:
+    #     print("username :", args.username, "with password :", args.passw)
 
-    elif args.passw and not args.usermod and not args.username and not args.users:
-        print("password :", args.passw)
+    # elif args.passw and not args.usermod and not args.username and not args.users:
+    #     print("password :", args.passw)
         
-    elif args.users and args.username and not args.usermod and not args.passw:
-        print("users :", args.users)
-    
+    elif args.users and not args.username and not args.usermod and not args.passw:
+        # print("users :", args.users)
+        usersReq(args.users, args.format[0])
     else:
         print("Invalid parameters for admin scope")
-
-
-    '''
-    if args.usermod:
-        if args.users:
-            print("Invalid parameter. Expected only --username and --passw")
-        if args.username and args.passw:
-            print("user modification for username :", args.username, "with password :", args.passw)
-        else:
-            print("usermod requires --username and --passw")
-    elif args.username:
-        if args.users:
-            print("Invalid parameter. Expected only --passw")
-        if args.passw:
-            print("username :", args.username, "with password :", args.passw)
-        else:
-            print("username requires --passw")
-    elif args.passw:
-        if args.users:
-            print("Invalid parameter. Expected no parameters")
-        print("password :", args.passw)
-    elif args.users:
-        if args.username:
-            print("users :", args.users)
-    else:
-        print("invalid option")
-else:
-    print("Error in scope")
-'''
-
-
-
-
-
-'''
-#admin_parser = subparser.add_parser("admin", help = "admin")
-#admin_subparsers = admin_parser.add_subparsers(dest = "command")
-
-
-admin_parser = subparser.add_parser("admin", help = "admin")
-#admin_parser.add_argument("--usermod", help="modify user", action="store_true")
-
-admin_subparsers = admin_parser.add_subparsers(dest = "subcommand")
-
-adminUserMod_parser = admin_subparsers.add_parser("--usermod", help = "adminUserMod")
-#adminUserMod_parser.add_argument("--usermod", help="modify user", action="store_true")
-adminUserMod_parser.add_argument("--username", help="username")
-adminUserMod_parser.add_argument("--passw", help="password")
-adminUserMod_parser.add_argument("--users", help="list of users")
-
-
-usermod_parser = admin_subparsers.add_parser("usermod", help="modify user")
-usermod_parser.add_argument("--username", help="username")
-usermod_parser.add_argument("--passw", help="password")
-
-users_parser = admin_subparsers.add_parser("users", help="list of users")
-users_parser.add_argument("--users", help="list of users")
-'''
-####################
-'''
-####################
-#adminUpd_parser = admin_subparsers.add_parser("questionnaire_upd", help = "questionnaire_upd")
-#adminUpd_parser.add_argument("--source", nargs = 1)
-#adminUpd_parser.add_argument("--format", nargs = 1) 
-
-####################
-'''
-'''
-### ADMINUSERMOD PARSER ###
-adminUserMod_parser = admin_subparsers.add_parser("--usermod", help = "adminUserMod", dest = "adminUserMod")
-#adminUserMod_parser.add_argument("--usermod", nargs = 0)
-adminUserMod_parser.add_argument("--username", nargs = 1)
-adminUserMod_parser.add_argument("--passw", nargs = 1)
-adminUserMod_parser.add_argument("--format", nargs = 1)
-###########################
-
-### ADMINUSERNAME PARSER ###
-adminUsername_parser = admin_subparsers.add_parser("--username", help = "adminUsername")
-adminUsername_parser.add_argument("--username", nargs = 1)
-adminUsername_parser.add_argument("--format", nargs = 1)
-############################
-
-### ADMINPASSWORD PARSER ###
-adminPassword_parser = admin_subparsers.add_parser("--passw", help = "adminPassword")
-adminPassword_parser.add_argument("--format", nargs = 1)
-############################
-
-### ADMINUSERS PARSER ###
-adminUsers_parser = admin_subparsers.add_parser("--users", help = "adminUsers")
-adminUsers_parser.add_argument("--format", nargs = 1)
-#########################
-'''
