@@ -92,7 +92,7 @@ describe('Doanswer endpoint', () => {
     });
 
     const URLprefix = '/intelliq_api' + '/doanswer';
-    let questionnaireID = 'QQ574', questionID = 'QJ0', session = 'mySes', optionID = 'PJ0A0',
+    let questionnaireID = 'QQ574', questionID = 'QJ0', session = 'tstg', optionID = 'PJ0A0',
         URLparams, URL;
     let req = {
         username: user.username,
@@ -224,7 +224,7 @@ describe('Doanswer endpoint', () => {
         it('it should respond with status code 400', (done) => {
             const URLparams = '/' + questionnaireID + '/' + questionID + '/' + session + '/' + optionID;
             const URL = URLprefix + URLparams;
-            req.session = 'testO';
+            req.session = 'tstL';
             chai
                 .request(server)
                 .post(URL)
@@ -260,7 +260,7 @@ describe('Doanswer endpoint', () => {
         });
     });
 
-    describe('Bad scenario 3: Another answer has already been submitted', () => {
+    describe('Bad scenario 3: Another answer has already been submitted in current session', () => {
         describe('First, this questionnaire\'s previously submitted session will be deleted', () => {
             const super_admin = {
                 username: 'TheUltraSuperAdmin',
@@ -272,7 +272,7 @@ describe('Doanswer endpoint', () => {
                 params: {
                     questionnaireID: 'QQ574',
                     questionID: 'QJ0',
-                    session: 'testI',
+                    session: 'tstI',
                     optionID: 'PJ0A2'
                 },
                 body: {
