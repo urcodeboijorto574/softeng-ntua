@@ -31,65 +31,54 @@ exports.importData = async (req, res, next) => {
         /* (Optional) Change the prefixes of the '_id's of all the documents read from the file system */
         const prefixId = ((req.body != undefined) && (req.body.prefixId != undefined)) ? req.body.prefixId : '';
         const prefixId_tooLong = prefixId.length > 24;
-        if (prefixId_tooLong) throw { myMessage: 'prefixId can\'t be more than 24 characters long' };
+        if (prefixId_tooLong)
+            throw { myMessage: 'prefixId can\'t be more than 24 characters long' };
         const is_NaN16 = prefixId.split('').some(digit => {
             let charCode = digit.charCodeAt(0);
             let inRange = (l, h) => ((charCode >= l.charCodeAt(0)) && (charCode <= h.charCodeAt(0)));
             return !(inRange('0', '9') || inRange('a', 'f') || inRange('A', 'F'));
         });
-        if (is_NaN16) throw { myMessage: 'prefixId must be a hexademical number' };
+        if (is_NaN16)
+            throw { myMessage: 'prefixId must be a hexademical number' };
 
         if (prefixId !== '') {
             for (let i = 0; i < collectionsFiles.length; ++i) {
                 for (let j = 0; j < collectionsFiles[i].length; ++j) {
                     collectionsFiles[i][j]._id = { $oid: prefixId.concat(collectionsFiles[i][j]._id.slice(prefixId.length)) };
+
                     if (collectionsFiles[i][j].questions != undefined) {
-                        for (let k = 0; k < collectionsFiles[i][j].questions.length; ++k) {
-                            collectionsFiles[i][j].questions.splice(k, 1, { $oid: mongoose.Types.ObjectId(prefixId.concat(collectionsFiles[i][j].questions[k].slice(prefixId.length))) });
-                        }
+                        for (let k = 0; k < collectionsFiles[i][j].questions.length; ++k)
+                            collectionsFiles[i][j].questions.splice(k, 1,
+                                { $oid: mongoose.Types.ObjectId(prefixId.concat(collectionsFiles[i][j].questions[k].slice(prefixId.length))) }
+                            );
                     } else if (collectionsFiles[i][j].options != undefined) {
-                        for (let k = 0; k < collectionsFiles[i][j].options.length; ++k) {
-                            collectionsFiles[i][j].options.splice(k, 1, { $oid: mongoose.Types.ObjectId(prefixId.concat(collectionsFiles[i][j].options[k].slice(prefixId.length))) });
-                        }
+                        for (let k = 0; k < collectionsFiles[i][j].options.length; ++k)
+                            collectionsFiles[i][j].options.splice(k, 1,
+                                { $oid: mongoose.Types.ObjectId(prefixId.concat(collectionsFiles[i][j].options[k].slice(prefixId.length))) }
+                            );
                     } else if (collectionsFiles[i][j].answers != undefined) {
-                        for (let k = 0; k < collectionsFiles[i][j].answers.length; ++k) {
-                            collectionsFiles[i][j].answers.splice(k, 1, { $oid: mongoose.Types.ObjectId(prefixId.concat(collectionsFiles[i][j].answers[k].slice(prefixId.length))) });
-                        }
+                        for (let k = 0; k < collectionsFiles[i][j].answers.length; ++k)
+                            collectionsFiles[i][j].answers.splice(k, 1,
+                                { $oid: mongoose.Types.ObjectId(prefixId.concat(collectionsFiles[i][j].answers[k].slice(prefixId.length))) }
+                            );
                     } else if (collectionsFiles[i][j].questionnairesAnswered != undefined) {
-                        for (let k = 0; k < collectionsFiles[i][j].questionnairesAnswered.length; ++k) {
-                            collectionsFiles[i][j].questionnairesAnswered.splice(k, 1, { $oid: mongoose.Types.ObjectId(prefixId.concat(collectionsFiles[i][j].questionnairesAnswered[k].slice(prefixId.length))) });
-                        }
+                        for (let k = 0; k < collectionsFiles[i][j].questionnairesAnswered.length; ++k)
+                            collectionsFiles[i][j].questionnairesAnswered.splice(k, 1,
+                                { $oid: mongoose.Types.ObjectId(prefixId.concat(collectionsFiles[i][j].questionnairesAnswered[k].slice(prefixId.length))) }
+                            );
                     }
                 }
             }
         }
 
         /* Create the documents in the DB */
-        // for (let i = 0, limit = collectionsFiles.length; i < limit; ++i) {
-        //     if (i == 0) {
-        //         console.log(collectionsFiles[i][0]);
-        //         collectionsFiles[i][0].optionID
-        //         const [result] = await Promise.allSettled([Models[i].create(collectionsFiles[i][0])]);
-        //         if (result.status === 'rejected') {
-        //             console.log(result);
-        //             return handleResponse(req, res, 400, {
-        //                 status: 'failed',
-        //                 message: 'Assertion error caught'
-        //             });
-        //         }
-        //     }
-        // }
-        collectionsFiles[4][0].sessionID = 'impT';
-        collectionsFiles[4][0].answers = [];
-        collectionsFiles[4][0].submitter = 'john-user';
         let resultArr = await Promise.allSettled([
-            Session.create(collectionsFiles[4][0])
-            // Models[0].create(collectionsFiles[0]),
-            // Models[1].create(collectionsFiles[1]),
-            // Models[2].create(collectionsFiles[2]),
-            // Models[3].create(collectionsFiles[3]),
-            // Models[4].create(collectionsFiles[4]),
-            // Models[5].create(collectionsFiles[5])
+            Models[0].create(collectionsFiles[0]),
+            Models[1].create(collectionsFiles[1]),
+            Models[2].create(collectionsFiles[2]),
+            Models[3].create(collectionsFiles[3]),
+            Models[4].create(collectionsFiles[4]),
+            Models[5].create(collectionsFiles[5])
         ]);
         for (let i = 0; i < resultArr.length; ++i) {
             if (resultArr[i].status === 'rejected') {
