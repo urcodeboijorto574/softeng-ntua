@@ -4,7 +4,6 @@ import csv
 import io
 import pandas as pd
 
-
 check_mark = "\u2713".encode("utf-8")
 
 def load_variable_from_file():
@@ -30,19 +29,24 @@ def run_login(username, password, form, output = True):
         if next(iter(res)) == "token":
             if (output):
                 print("PASSED", check_mark.decode("utf-8"))
+                return
         else:
             if (output):
                 print("FAILED, wrong response data")
+                return
     elif str(type(res)) == "<class '_csv.reader'>":
         if next(res)[0] == "token":
             if (output):
                 print("PASSED", check_mark.decode("utf-8"))
+                return
         else:
             if (output):
                 print("FAILED, wrong response data")
+                return
     else:
         if (output):
             print("FAILED, wrong response type (expected 'dict', got '" + type(res)[8:-2] + "')")
+            return
 
     return
 
@@ -67,16 +71,21 @@ def run_logout(form): # (username, password, form):
         if list(res.keys()) == ["status", "message"]:
             if (res["status"] == "OK" and res["message"] == "You are successfully logged out."):    # !! Already logged out
                 print("PASSED", check_mark.decode("utf-8"))
+                return
         else:
             print("FAILED, wrong response data")
+            return
     elif str(type(res)) == "<class '_csv.reader'>":
         firstRow = next(res)
         if firstRow[0] == "status" and firstRow[1] == "message":
             print("PASSED", check_mark.decode("utf-8"))
+            return
         else:
             print("FAILED, wrong response data")
+            return
     else:
         print("FAILED, wrong response type (expected 'dict', got '" + type(res)[8:-2] + "')")
+        return
 
     return
 
@@ -117,37 +126,49 @@ def run_healthcheck(username, form): # (username, password, form):
             # print(res)
             if res["status"] == "OK" and res["dbconnection"] == "mongodb+srv://jimv:<password>@cluster0.oav8j31.mongodb.net/?retryWrites=true&w=majority" and username == "TheUltraSuperAdmin":
                 print("PASSED", check_mark.decode("utf-8"))
+                return
             else:
                 print("FAILED, wrong response data")
+                return
         elif list(res.keys()) == ["status", "message"]:
             if res["status"] == "failed" and res["message"] == "User unauthorized to continue!" and (username == "adminTestJson" or username == "adminTestCsv" or username == "userTestJson" or username == "userTestCsv"):
                 print("PASSED", check_mark.decode("utf-8"))
+                return
             else:
                 print("FAILED, wrong response data")
+                return
         else:
             print("FAILED, wrong response data")
+            return
     elif isinstance(res, list) or len(res) == 4:
         if res[0][0] == "status" and res[0][1] == "dbconnection":
             if res[1][0] == "OK" and res[1][1] == "mongodb+srv://jimv:<password>@cluster0.oav8j31.mongodb.net/?retryWrites=true&w=majority":
                 if username == "TheUltraSuperAdmin":
                     print("PASSED", check_mark.decode("utf-8"))
+                    return
                 else:
                     print("FAILED, wrong response data")
+                    return
         elif res[0][0] == "status" and res[0][1] == "message":
             if res[1][0] == "failed" and res[1][1] == "User unauthorized to continue!":
                 if username == "adminTestJson" or username == "adminTestCsv" or username == "userTestJson" or username == "userTestCsv":
                     print("PASSED", check_mark.decode("utf-8"))
+                    return
                 else:
                     print("FAILED, wrong response data")
+                    return
         else:
             print("FAILED, wrong response data")
+            return
     else:
         print("FAILED, wrong response type (expected 'dict', got '" + type(res)[8:-2] + "')")
+        return
 
     return
 
 # NOT DONE!!!
 def run_resetall():
+    return
     # result = subprocess.run(['python', 'cli.py', 'resetall', '--format', 'json'], capture_output=True)
     # # response = json.loads(result.stdout)
     # print("=====")
@@ -204,43 +225,50 @@ def run_questionnaire_upd(username, source, form): #(username, password, source,
         if list(res.keys()) == ["status", "dbconnection"]:
             if res["status"] == "OK" and (username == "adminTestJson" or username == "adminTestCsv"):
                 print("PASSED", check_mark.decode("utf-8"))
+                return
             else:
                 print("FAILED, wrong response data")
+                return
         elif list(res.keys()) == ["status", "message"]:
             if res["status"] == "failed" and res["message"] == "User unauthorized to continue!" and (username == "TheUltraSuperAdmin" or username == "userTestJson" or username == "userTestCsv"):
                 print("PASSED", check_mark.decode("utf-8"))
+                return
             else:
                 print("FAILED, wrong response data")
+                return
         else:
             print("FAILED, wrong response data")
+            return
     elif isinstance(res, list) or len(res) == 4:
         if res[0][0] == "status" and res[0][1] == "dbconnection":
             if res[1][0] == "OK" and res[1][1] == "mongodb+srv://jimv:<password>@cluster0.oav8j31.mongodb.net/?retryWrites=true&w=majority":
                 if username == "adminTestJson" or username == "adminTestCsv":
                     print("PASSED", check_mark.decode("utf-8"))
+                    return
                 else:
                     print("FAILED, wrong response data")
+                    return
         elif res[0][0] == "status" and res[0][1] == "message":
             if res[1][0] == "failed" and res[1][1] == "User unauthorized to continue!":
                 if username == "TheUltraSuperAdmin" or username == "userTestJson" or username == "userTestCsv":
                     print("PASSED", check_mark.decode("utf-8"))
+                    return
                 else:
                     print("FAILED, wrong response data")
+                    return
         else:
             print("FAILED, wrong response data")
+            return
     else:
         print("FAILED, wrong response type (expected 'dict', got '" + type(res)[8:-2] + "')")
+        return
 
     return
 
-def run_doanswer(questionnaire_id, question_id, session_id, option_id, username, password, form):
-    run_login(username, password, form, False)
-    result = subprocess.run(['python', 'cli.py', 'doanswer', '--questionnaire_id', questionnaire_id, '--question_id', question_id,
-                             '--session_id', session_id, '--option_id', option_id, '--format', form], capture_output=True)
-    # response = json.loads(result.stdout)
-    # print("=====")
-    # print(list(result.stdout.decode()))
-    # print("=====")
+# PROBLEM WITH CSV
+def run_questionnaire(userConnected, questionnaire_id, form):
+    # run_login(username, password, form, False)
+    result = subprocess.run(['python', 'cli.py', 'questionnaire', '--questionnaire_id', questionnaire_id, '--format', form], capture_output=True)
 
     if result.returncode != 0:
         raise Exception('Healthcheck failed with return code {}'.format(result.returncode))
@@ -248,54 +276,308 @@ def run_doanswer(questionnaire_id, question_id, session_id, option_id, username,
     if form == "json":
         res = json.loads(result.stdout.decode('utf-8'))
     else:
-        # res = csv.reader(result.stdout.decode()) # TEMPORARY UNTIL CSV BUG FIXED
-        # res = pd.read_csv(result.stdout.decode('utf-8'), sep=",", header=None)
-        # print(res)
-
-        # csv_reader = csv.reader(result.stdout.decode('utf-8').splitlines()) 
-        # for row in csv_reader:
-        #     print(row)
         csv_string = result.stdout.decode('utf-8')
         lines = csv_string.splitlines(False)
         reader = csv.reader(lines)
         res = list(reader)
         res = [x for x in res if x]
-        # print("RES:\n", res)
-        # print("CSV CONVERTED")
+
+    # NOT READY YET
+    if isinstance(res, dict) and len(res) == 2:
+        if list(res.keys()) == ["status", "data"]:
+            if res["status"] == "OK" and isinstance(res["data"], dict) and userConnected in ["adminTestJson", "adminTestCsv"]:
+                print("PASSED", check_mark.decode("utf-8"))
+                return
+            else:
+                print("FAILED, wrong response data")
+                return
+        elif list(res.keys()) == ["status", "message"]:
+            if res["status"] == "failed" and res["message"] == "User unauthorized to continue!" and userConnected not in ["adminTestJson", "adminTestCsv"]:
+                print("PASSED", check_mark.decode("utf-8"))
+                return
+            else:
+                print("FAILED, wrong response data")
+                return
+        else:
+            print("FAILED, wrong response data")
+            return
+        
+    # NOT READY YET. WAIT FOR QUESTIONNAIRE
+    elif isinstance(res, list) or len(res) == 4:
+        print("RES:", res)
+        if res[0][0] == "status" and res[0][1] == "dbconnection":
+            if res[1][0] == "OK" and res[1][1] == "mongodb+srv://jimv:<password>@cluster0.oav8j31.mongodb.net/?retryWrites=true&w=majority":
+                if userConnected == "TheUltraSuperAdmin":
+                    print("PASSED", check_mark.decode("utf-8"))
+                    return
+                else:
+                    print("FAILED, wrong response data")
+                    return
+        elif res[0][0] == "status" and res[0][1] == "message":
+            if res[1][0] == "failed" and res[1][1] == "User unauthorized to continue!":
+                if userConnected == "jimv":
+                    print("PASSED", check_mark.decode("utf-8"))
+                    return
+                else:
+                    print("FAILED, wrong response data")
+                    return
+        else:
+            print("FAILED, wrong response data")
+            return
+    else:
+        print("FAILED, wrong response type (expected 'dict', got '" + type(res)[8:-2] + "')")
+        return
+
+    return
+
+# PROBLEM WITH CSV
+def run_question(userConnected, questionnaire_id, question_id, form):
+    # run_login(username, password, form, False)
+    result = subprocess.run(['python', 'cli.py', 'question', '--questionnaire_id', questionnaire_id, '--question_id', question_id, '--format', form], capture_output=True)
+
+    if result.returncode != 0:
+        raise Exception('Question failed with return code {}'.format(result.returncode))
+
+    if form == "json":
+        res = json.loads(result.stdout.decode('utf-8'))
+    else:
+        csv_string = result.stdout.decode('utf-8')
+        lines = csv_string.splitlines(False)
+        reader = csv.reader(lines)
+        res = list(reader)
+        res = [x for x in res if x]
+
+    # NOT READY YET
+    if isinstance(res, dict) and len(res) == 2:
+        if list(res.keys()) == ["status", "data"]:
+            if res["status"] == "OK" and isinstance(res["data"], dict) and userConnected in ["adminTestJson", "adminTestCsv"]:
+                print("PASSED", check_mark.decode("utf-8"))
+                return
+            else:
+                print("FAILED, wrong response data")
+                return
+        elif list(res.keys()) == ["status", "message"]:
+            if res["status"] == "failed" and res["message"] == "Access denied" and userConnected not in ["adminTestJson", "adminTestCsv"]:
+                print("PASSED", check_mark.decode("utf-8"))
+                return
+            else:
+                print("FAILED, wrong response data")
+                return
+        else:
+            print("FAILED, wrong response data")
+            return
+        
+    # NOT READY YET. WAIT FOR QUESTIONNAIRE
+    elif isinstance(res, list) or len(res) == 4:
+        print("RES:", res)
+        if res[0][0] == "status" and res[0][1] == "dbconnection":
+            if res[1][0] == "OK" and res[1][1] == "mongodb+srv://jimv:<password>@cluster0.oav8j31.mongodb.net/?retryWrites=true&w=majority":
+                if userConnected == "TheUltraSuperAdmin":
+                    print("PASSED", check_mark.decode("utf-8"))
+                    return
+                else:
+                    print("FAILED, wrong response data")
+                    return
+        elif res[0][0] == "status" and res[0][1] == "message":
+            if res[1][0] == "failed" and res[1][1] == "User unauthorized to continue!":
+                if userConnected == "jimv":
+                    print("PASSED", check_mark.decode("utf-8"))
+                    return
+                else:
+                    print("FAILED, wrong response data")
+                    return
+        else:
+            print("FAILED, wrong response data")
+            return
+    else:
+        print("FAILED, wrong response type (expected 'dict', got '" + type(res)[8:-2] + "')")
+        return
+
+    return
+
+def run_doanswer(questionnaire_id, question_id, session_id, option_id, username, form):
+    # run_login(username, password, form, False)
+    result = subprocess.run(['python', 'cli.py', 'doanswer', '--questionnaire_id', questionnaire_id, '--question_id', question_id,
+                             '--session_id', session_id, '--option_id', option_id, '--format', form], capture_output=True)
+
+    if result.returncode != 0:
+        raise Exception('Healthcheck failed with return code {}'.format(result.returncode))
+
+    if form == "json":
+        res = json.loads(result.stdout.decode('utf-8'))
+    else:
+        csv_string = result.stdout.decode('utf-8')
+        lines = csv_string.splitlines(False)
+        reader = csv.reader(lines)
+        res = list(reader)
+        res = [x for x in res if x]
 
     # NOT READY YET
     if isinstance(res, dict) and len(res) == 2:
         if list(res.keys()) == ["status", "dbconnection"]:
-            if res["status"] == "OK" and res["dbconnection"] == "mongodb+srv://jimv:<password>@cluster0.oav8j31.mongodb.net/?retryWrites=true&w=majority" and username == "TheUltraSuperAdmin":
+            if res["status"] == "OK" and res["message"] == "Answer submitted!" and username in ["userTestJson", "userTestCsv"]:
                 print("PASSED", check_mark.decode("utf-8"))
+                return
             else:
                 print("FAILED, wrong response data")
+                return
         elif list(res.keys()) == ["status", "message"]:
-            if res["status"] == "failed" and res["message"] == "User unauthorized to continue!" and username == "jimv":
+            if res["status"] == "failed" and username not in ["userTestJson", "userTestCsv"]:
                 print("PASSED", check_mark.decode("utf-8"))
+                return
             else:
                 print("FAILED, wrong response data")
+                return
         else:
             print("FAILED, wrong response data")
+            return
     elif isinstance(res, list) or len(res) == 4:
         if res[0][0] == "status" and res[0][1] == "dbconnection":
             if res[1][0] == "OK" and res[1][1] == "mongodb+srv://jimv:<password>@cluster0.oav8j31.mongodb.net/?retryWrites=true&w=majority":
                 if username == "TheUltraSuperAdmin":
                     print("PASSED", check_mark.decode("utf-8"))
+                    return
                 else:
                     print("FAILED, wrong response data")
+                    return
         elif res[0][0] == "status" and res[0][1] == "message":
             if res[1][0] == "failed" and res[1][1] == "User unauthorized to continue!":
                 if username == "jimv":
                     print("PASSED", check_mark.decode("utf-8"))
+                    return
                 else:
                     print("FAILED, wrong response data")
+                    return
         else:
             print("FAILED, wrong response data")
+            return
     else:
         print("FAILED, wrong response type (expected 'dict', got '" + type(res)[8:-2] + "')")
+        return
 
     return
+
+# PROBLEM WITH CSV
+def run_getsessionanswers(userConnected, questionnaire_id, session_id, form):
+    result = subprocess.run(['python', 'cli.py', 'getsessionanswers', '--questionnaire_id', questionnaire_id, '--session_id', session_id, '--format', form], capture_output=True)
+
+    if result.returncode != 0:
+        raise Exception('Getsessionanswers failed with return code {}'.format(result.returncode))
+
+    if form == "json":
+        res = json.loads(result.stdout.decode('utf-8'))
+    else:
+        csv_string = result.stdout.decode('utf-8')
+        lines = csv_string.splitlines(False)
+        reader = csv.reader(lines)
+        res = list(reader)
+        res = [x for x in res if x]
+
+    # NOT READY YET
+    if isinstance(res, dict) and len(res) == 2:
+        if list(res.keys()) == ["status", "data"]:
+            if res["status"] == "OK" and isinstance(res["data"], dict) and userConnected in ["adminTestJson", "adminTestCsv"]:
+                print("PASSED", check_mark.decode("utf-8"))
+                return
+            else:
+                print("FAILED, wrong response data")
+                return
+        elif list(res.keys()) == ["status", "message"]:
+            if res["status"] == "failed" and res["message"] == "Access denied" and userConnected not in ["adminTestJson", "adminTestCsv"]:
+                print("PASSED", check_mark.decode("utf-8"))
+                return
+            else:
+                print("FAILED, wrong response data")
+                return
+        else:
+            print("FAILED, wrong response data")
+            return
+    elif isinstance(res, list) or len(res) == 4:
+        if res[0][0] == "status" and res[0][1] == "dbconnection":
+            if res[1][0] == "OK" and res[1][1] == "mongodb+srv://jimv:<password>@cluster0.oav8j31.mongodb.net/?retryWrites=true&w=majority":
+                if userConnected == "TheUltraSuperAdmin":
+                    print("PASSED", check_mark.decode("utf-8"))
+                    return
+                else:
+                    print("FAILED, wrong response data")
+                    return
+        elif res[0][0] == "status" and res[0][1] == "message":
+            if res[1][0] == "failed" and res[1][1] == "User unauthorized to continue!":
+                if userConnected == "jimv":
+                    print("PASSED", check_mark.decode("utf-8"))
+                    return
+                else:
+                    print("FAILED, wrong response data")
+                    return
+        else:
+            print("FAILED, wrong response data")
+            return
+    else:
+        print("FAILED, wrong response type (expected 'dict', got '" + type(res)[8:-2] + "')")
+        return
+
+    return
+
+def run_getquestionanswers(userConnected, questionnaire_id, question_id, form):
+    result = subprocess.run(['python', 'cli.py', 'getsessionanswers', '--questionnaire_id', questionnaire_id, '--question_id', question_id, '--format', form], capture_output=True)
+
+    if result.returncode != 0:
+        raise Exception('Getsessionanswers failed with return code {}'.format(result.returncode))
+
+    if form == "json":
+        res = json.loads(result.stdout.decode('utf-8'))
+    else:
+        csv_string = result.stdout.decode('utf-8')
+        lines = csv_string.splitlines(False)
+        reader = csv.reader(lines)
+        res = list(reader)
+        res = [x for x in res if x]
+
+    # NOT READY YET
+    if isinstance(res, dict) and len(res) == 2:
+        if list(res.keys()) == ["status"]:
+            if res["status"] == "OK" and isinstance(res["data"], list) and userConnected in ["adminTestJson", "adminTestCsv"]:
+                print("PASSED", check_mark.decode("utf-8"))
+                return
+            else:
+                print("FAILED, wrong response data")
+                return
+        elif list(res.keys()) == ["status", "message"]:
+            if res["status"] == "failed" and res["message"] == "Access denied" and userConnected not in ["adminTestJson", "adminTestCsv"]:
+                print("PASSED", check_mark.decode("utf-8"))
+                return
+            else:
+                print("FAILED, wrong response data")
+                return
+        else:
+            print("FAILED, wrong response data")
+            return
+    elif isinstance(res, list) or len(res) == 4:
+        if res[0][0] == "status" and res[0][1] == "dbconnection":
+            if res[1][0] == "OK" and res[1][1] == "mongodb+srv://jimv:<password>@cluster0.oav8j31.mongodb.net/?retryWrites=true&w=majority":
+                if userConnected == "TheUltraSuperAdmin":
+                    print("PASSED", check_mark.decode("utf-8"))
+                    return
+                else:
+                    print("FAILED, wrong response data")
+                    return
+        elif res[0][0] == "status" and res[0][1] == "message":
+            if res[1][0] == "failed" and res[1][1] == "User unauthorized to continue!":
+                if userConnected == "jimv":
+                    print("PASSED", check_mark.decode("utf-8"))
+                    return
+                else:
+                    print("FAILED, wrong response data")
+                    return
+        else:
+            print("FAILED, wrong response data")
+            return
+    else:
+        print("FAILED, wrong response type (expected 'dict', got '" + type(res)[8:-2] + "')")
+        return
+
+    return
+
 
 def run_usermod(role, username, password, form):
     result = subprocess.run(['python', 'cli.py', 'admin', '--usermod', role, '--username', username, '--passw', password, '--format', form], capture_output=True)
@@ -314,17 +596,23 @@ def run_usermod(role, username, password, form):
         if keys == ["status"]:
             if res["status"] == "OK" and (username == "adminTestJson" or username == "userTestJson"):
                 print("PASSED", check_mark.decode("utf-8"))
+                return
             else:
                 print("FAILED, wrong response data")
+                return
         elif keys == ["status", "message"]:
             if res["status"] == "failed" and res["message"] == "Username taken! Please provide a new username." and (username == "existingAdminTest" or username == "existingUserTest"):
                 print("PASSED", check_mark.decode("utf-8"))
+                return
             elif res["status"] == "failed" and res["message"] == "Invalid input data. A password must have at least 8 characters" and len(password):
                 print("PASSED", check_mark.decode("utf-8"))
+                return
             else:
                 print("FAILED, wrong response data")
+                return
         else:
             print("FAILED, wrong response data")
+            return
 
     elif form == "csv":
         csv_string = result.stdout.decode('utf-8')
@@ -336,17 +624,23 @@ def run_usermod(role, username, password, form):
         if len(res) == 2:
             if res[0][0] == "status" and res[1][0] == "OK" and (username == "adminTestCsv" or username == "userTestCsv"):
                 print("PASSED", check_mark.decode("utf-8"))
+                return
             else:
                 print("FAILED, wrong response data")
+                return
         elif len(res) == 4:
             if res[0][0] == "status" and res[1][0] == "failed" and res[1][0] == "message" and res[1][1] == "Username taken! Please provide a new username." and (username == "existingAdminTest" or username == "existingUserTest"):
                 print("PASSED", check_mark.decode("utf-8"))
+                return
             else:
                 print("FAILED, wrong response data")
+                return
         else:
             print("FAILED, wrong response data")
+            return
     else:
         print("FAILED, wrong input data")
+        return
     
     # print("TYPE =", type(res))
     # if str(type(res)) == "<class '_csv.reader'>":
@@ -404,17 +698,22 @@ def run_users(userConnected, username, form):
             # print(res["status"], res["user"]["role"], res["user"]["username"])
             if res["status"] == "OK" and res["user"]["role"] in ["admin", "user"] and res["user"]["username"] == "adminTestJson" and userConnected == "TheUltraSuperAdmin":
                 print("PASSED", check_mark.decode("utf-8"))
+                return
             else:
                 print("FAILED, wrong response data")
+                return
         elif keys == ["status", "message"]:
             if res["status"] == "failed" and res["message"] == "User unauthorized to continue!" and userConnected != "TheUltraSuperAdmin":
                 print("PASSED", check_mark.decode("utf-8"))
+                return
             # elif res["status"] == "failed" and res["message"] == "Invalid input data. A password must have at least 8 characters" and len(password):
             #     print("PASSED", check_mark.decode("utf-8"))
             else:
                 print("FAILED, wrong response data")
+                return 
         else:
             print("FAILED, wrong response data")
+            return
 
     elif form == "csv":
         csv_string = result.stdout.decode('utf-8')
@@ -427,19 +726,26 @@ def run_users(userConnected, username, form):
         if len(res) == 2:
             if res[0][0] == "status" and res[1][0] == "OK" and res[0][1] == "username" and res[1][1] == username and res[0][2] == "role" and res[1][2] in ["admin", "user"] and userConnected == "TheUltraSuperAdmin":
                 print("PASSED", check_mark.decode("utf-8"))
+                return
             if res[0][0] == "status" and res[1][0] == "OK" and res[0][1] == "username" and res[1][1] == username and res[0][2] == "role" and res[1][2] in ["admin", "user"] and userConnected == "TheUltraSuperAdmin":
                 print("PASSED", check_mark.decode("utf-8"))
+                return
             else:
                 print("FAILED, wrong response data")
+                return
         elif len(res) == 2:
             if res[0][0] == "status" and res[1][0] == "failed" and res[1][0] == "message" and res[1][1] == "User unauthorized to continue!" and userConnected != "TheUltraSuperAdmin":
                 print("PASSED", check_mark.decode("utf-8"))
+                return
             else:
                 print("FAILED, wrong response data")
+                return
         else:
             print("FAILED, wrong response data")
+            return
     else:
         print("FAILED, wrong input data")
+        return
 
     return
 
@@ -454,7 +760,7 @@ if __name__ == '__main__':
     sources = ['jtest.json']
     forms = ['json', 'csv']
     i = 1
-    
+
     # ====================================================================================
     # ================================== START TESTING ===================================
     # ====================================================================================
@@ -470,6 +776,12 @@ if __name__ == '__main__':
     # print("Test", str(i).ljust(2, ' ').rjust(2, ' '), end = " - ")
     # toPrint = "Login with super admin test (format = " + forms[0] + "):"
     # print(toPrint, end = "."*(79 - len(toPrint)))
+
+    message = toPrint(i, "Temp ", forms[0])
+    print(message, end = "")
+    run_login(usernames["adminCsv"][0], usernames["adminCsv"][1], forms[0], False)
+    run_questionnaire(usernames["adminCsv"][0], "TEST0", forms[1])
+    i += 1
 
     message = toPrint(i, "Login with super admin test ", forms[0])
     print(message, end = "")
@@ -615,6 +927,32 @@ if __name__ == '__main__':
     message = toPrint(i, "Questionnaire_upd test with admin (should be authorized) ", forms[0])
     print(message, end = "")
     run_questionnaire_upd(usernames["adminJson"][0], "jtest.txt", forms[0])
+    i += 1
+
+    message = toPrint(i, "Questionnaire test with admin (should be authorized) ", forms[0])
+    print(message, end = "")
+    run_questionnaire(usernames["adminJson"][0], "ADJ01", forms[0])
+    i += 1
+
+    # adminJson: ADJ01, Q01, 1234, a
+    message = toPrint(i, "Question test with admin (should be authorized) ", forms[0])
+    print(message, end = "")
+    run_question(usernames["adminJson"][0], "ADJ01", "Q01", forms[0])
+    i += 1
+
+    message = toPrint(i, "Doanswer test with admin (should be authorized) ", forms[0])
+    print(message, end = "")
+    run_doanswer("ADJ01", "Q01", "1234", "a", usernames["adminJson"][0], forms[0])
+    i += 1
+
+    message = toPrint(i, "Getsessionanswers test with admin (should be authorized) ", forms[0])
+    print(message, end = "")
+    run_getsessionanswers(usernames["adminJson"][0], "ADJ01", "1234", forms[0])
+    i += 1
+
+    message = toPrint(i, "Question test with admin (should be authorized) ", forms[0])
+    print(message, end = "")
+    run_getquestionanswers(usernames["adminJson"][0], "ADJ01", "Q01", forms[0])
     i += 1
 
     print("=========================== Admin Testing with json format Completed  ==========================")

@@ -153,9 +153,11 @@ def healthcheck(form):
 # resetall: TO CHECK
 def resetall(form):
     print("Will resetall")
+    return
+    
     resetallUrl = baseUrl + "admin/resetall" + "?format=" + form
     vescookie = getCookie()
-    response = handlePost(resetallUrl)
+    response = handlePost(resetallUrl, False, vescookie=vescookie)
     handleResponse(response, form)
     
     return
@@ -182,7 +184,8 @@ def questionnaire_upd(source, form):
 def resetq(questionnaire_id, form):
     resetqUrl = baseUrl + f"admin/resetq/{questionnaire_id}" + "?format=" + form
     print("Will reset questionnaire at", resetqUrl)
-    response = handlePost(resetqUrl)
+    vescookie = getCookie()
+    response = handlePost(resetqUrl, False, vescookie=vescookie)
     handleResponse(response, form)
     
     return
@@ -229,7 +232,7 @@ def doanswer(questionnaire_id, question_id, session_id, option_id, form):
     
     return
 
-# getsessionanswers: TO CHECK (need an admin!)
+# getsessionanswers: DONE
 def getsessionanswers(questionnaire_id, session_id, form):
     # print("Will get session answers of questionnaire with id:", questionnaire_id, "and session with id:", session_id)
     getsessionanswersUrl = baseUrl + f"getsessionanswers/{questionnaire_id}/{session_id}" + "?format=" + form
@@ -239,7 +242,7 @@ def getsessionanswers(questionnaire_id, session_id, form):
 
     return
 
-# getquestionanswers: TO CHECK (need an admin!)
+# getquestionanswers: DONE
 def getquestionanswers(questionnaire_id, question_id, form):
     # print("Will get question answers of questionnaire with id:", questionnaire_id, "and question with id:", question_id)
     getquestionanswers = baseUrl + f"getquestionanswers/{questionnaire_id}/{question_id}" + "?format=" + form
@@ -374,20 +377,140 @@ admin_parser.add_argument("--users", help="list of users")
 admin_parser.add_argument("--format", nargs = 1)
 ####################
 
+
 known = ["command", "usermod", "username", "passw",
          "source", "questionnaire_id", "question_id",
          "session_id", "option_id", "users", "format"]
 
 #args, unknown = parser.parse_known_args(known)
 
-try:
-    args = parser.parse_args()
-    #args, unknown = parser.parse_known_args(known)
-    if '--format' not in sys.argv:
-        parser.error("Incorrect format, it should be --format json")
-except Exception as e:
-    print("Exception!")
-    exit()
+if __name__ == '__main__':
+    if len(sys.argv) < 2:
+        print("Error: at least 1 argument is required")
+        sys.exit(1)
+    try:
+        print(sys.argv)
+        
+        unrecognized = []
+        knownCommands = ["login", "logout", "healthcheck", "resetall", "questionnaire_upd",
+                         "resetq", "questionnaire", "question", "doanswer", "getsessionanswers",
+                         "getquestionanswers", "admin", "usermod"]
+        if sys.argv[1] not in knownCommands:
+            print("Unknown scope \"" + sys.argv[1] + "\".\nExpected one of", knownCommands)
+            exit()
+
+        if sys.argv[1] == "login":
+            if len(sys.argv) != 8:
+                print("Invalid number of arguments passed! Exiting...")
+                exit()
+            if sys.argv[2] not in ["--username", "--passw"] or sys.argv[4] not in ["--username", "--passw"] or sys.argv[2] != sys.argv[4]:
+                print("Invalid arguments passed! Exiting...")
+                exit()
+        elif sys.argv[1] == "logout":
+            if len(sys.argv) != 4:
+                print("Invalid number of arguments passed! Exiting...")
+                exit()
+        elif sys.argv[1] == "healthcheck":
+            if len(sys.argv) != 4:
+                print("Invalid number of arguments passed! Exiting...")
+                exit()
+        elif sys.argv[1] == "resetall":
+            if len(sys.argv) != 4:
+                print("Invalid number of arguments passed! Exiting...")
+                exit()
+        elif sys.argv[1] == "questionnaire_upd":
+            if len(sys.argv) != 6:
+                print("Invalid number of arguments passed! Exiting...")
+                exit()
+            if sys.argv[2] != "--source":
+                print("Invalid arguments passed! Exiting...")
+                exit()
+        elif sys.argv[1] == "resetq":
+            if len(sys.argv) != 6:
+                print("Invalid number of arguments passed! Exiting...")
+                exit()
+            if sys.argv[2] != "--questionnaire_id":
+                print("Invalid arguments passed! Exiting...")
+                exit()
+        elif sys.argv[1] == "questionnaire":
+            if len(sys.argv) != 6:
+                print("Invalid number of arguments passed! Exiting...")
+                exit()
+            if sys.argv[2] != "--questionnaire_id":
+                print("Invalid arguments passed! Exiting...")
+                exit()
+        elif sys.argv[1] == "question":
+            if len(sys.argv) != 8:
+                print("Invalid number of arguments passed! Exiting...")
+                exit()
+            if sys.argv[2] not in ["--questionnaire_id", "--question_id"] or sys.argv[4] not in ["--questionnaire_id", "--question_id"] or sys.argv[2] != sys.argv[4]:
+                print("Invalid arguments passed! Exiting...")
+                exit()
+        elif sys.argv[1] == "doanswer":
+            if len(sys.argv) != 12:
+                print("Invalid number of arguments passed! Exiting...")
+                exit()
+            if (sys.argv[2] not in ["--questionnaire_id", "--question_id", "--session_id", "--option_id"] or
+                sys.argv[4] not in ["--questionnaire_id", "--question_id", "--session_id", "--option_id"] or
+                sys.argv[6] not in ["--questionnaire_id", "--question_id", "--session_id", "--option_id"] or
+                sys.argv[8] not in ["--questionnaire_id", "--question_id", "--session_id", "--option_id"] or
+                sys.argv[2] in [sys.argv[4], sys.argv[6], sys.argv[8]] or sys.argv[4] in [sys.argv[6], sys.argv[8]] or sys.argv[6] == sys.argv[8]):
+                print("Invalid arguments passed! Exiting...")
+                exit()
+        elif sys.argv[1] == "getsessionanswers":
+            if len(sys.argv) != 8:
+                print("Invalid number of arguments passed! Exiting...")
+                exit()
+            if sys.argv[2] not in ["--questionnaire_id", "--session_id"] or sys.argv[4] not in ["--questionnaire_id", "--session_id"] or sys.argv[2] != sys.argv[4]:
+                print("Invalid arguments passed! Exiting...")
+                exit()
+        elif sys.argv[1] == "getquestionanswers":
+            if len(sys.argv) != 8:
+                print("Invalid number of arguments passed! Exiting...")
+                exit()
+            if sys.argv[2] not in ["--questionnaire_id", "--question_id"] or sys.argv[4] not in ["--questionnaire_id", "--question_id"] or sys.argv[2] != sys.argv[4]:
+                print("Invalid arguments passed! Exiting...")
+                exit()
+        elif sys.argv[1] == "admin":
+            if len(sys.argv) != 6 and len(sys.argv) != 10:
+                print("Invalid number of arguments passed! Exiting...")
+                exit()
+            if len(sys.argv) == 6:
+                # if sys.argv[2] not in ["--users", "--username"] or sys.argv[4] not in ["--users", "--username"] or sys.argv[2] != sys.argv[4]:
+                #     print("Invalid arguments passed! Exiting...")
+                #     exit()
+                if sys.argv[2] != "--users":
+                    print("Invalid arguments passed! Exiting...")
+                    exit()
+            if len(sys.argv) == 10:
+                if (sys.argv[2] not in ["--usermod", "--username", "--passw"] or
+                    sys.argv[4] not in ["--usermod", "--username", "--passw"] or 
+                    sys.argv[6] not in ["--usermod", "--username", "--passw"] or
+                    sys.argv[2] in [sys.argv[4], sys.argv[6]] or sys.argv[4] == sys.argv[6]):
+                    print("Invalid arguments passed! Exiting...")
+                    exit()
+
+
+
+        # for arg in sys.argv[1:]:
+        #     if (arg not in known):
+        #         unrecognized.append(arg)
+        # if len(unrecognized) > 0:
+        #     print("Invalid arguments passed:", unrecognized)
+        #     exit()
+        args = parser.parse_args()
+        print(sys.argv)
+        
+        if len(sys.argv[1:]) < 2:
+            print("Error: at least 1 argument is required")
+            sys.exit(1)
+        
+        #args, unknown = parser.parse_known_args(known)
+        if '--format' not in sys.argv:
+            parser.error("Incorrect format, it should be --format json")
+    except ValueError as e:
+        print("Exception!")
+        exit()
 
 # print(vars(args))
 
@@ -469,3 +592,4 @@ elif args.command == "admin":
         usersReq(args.users, args.format[0])
     else:
         print("Invalid parameters for admin scope")
+
