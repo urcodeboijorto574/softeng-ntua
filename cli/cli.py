@@ -191,7 +191,7 @@ def questionnaire_upd(source, form):
         print("Timeout error, the server took more than 10 seconds to respond")
         exit()
 
-    print(response)
+    # print(response)
     # response = handlePost(updUrl, False, vescookie, json_data, headers={'Content-Type': 'multipart/form-data'})
     handleResponse(response, form)
     
@@ -200,7 +200,7 @@ def questionnaire_upd(source, form):
 # resetq: TO CHECK
 def resetq(questionnaire_id, form):
     resetqUrl = baseUrl + f"admin/resetq/{questionnaire_id}" + "?format=" + form
-    print("Will reset questionnaire at", resetqUrl)
+    # print("Will reset questionnaire at", resetqUrl)
     vescookie = getCookie()
     response = handlePost(resetqUrl, False, vescookie=vescookie)
     handleResponse(response, form)
@@ -267,6 +267,19 @@ def getquestionanswers(questionnaire_id, question_id, form):
     response = handleGet(getquestionanswers, vescookie = vescookie)
     handleResponse(response, form)
 
+    return
+
+def deleteq(questionnaire_id, form):
+    deleteqUrl = baseUrl + f"questionnaire/deletequestionnaire/{questionnaire_id}"
+    # print("Will reset questionnaire at", deleteqUrl)
+    vescookie = getCookie()
+    try:
+        response = requests.delete(deleteqUrl, cookies=vescookie, verify = False, timeout=10)
+    except requests.exceptions.ReadTimeout:
+        print("Timeout error, the server took more than 10 seconds to respond")
+        exit()
+    handleResponse(response, form)
+    
     return
 
 # usermodReq: DONE
@@ -355,6 +368,12 @@ questionnaire_parser.add_argument("--questionnaire_id", nargs = 1)
 questionnaire_parser.add_argument("--format", nargs = 1)
 ############################
 
+### DELETE QUESTIONNAIRE PARSER ###
+questionnaire_parser = subparser.add_parser("deleteq", help = "deleteq")
+questionnaire_parser.add_argument("--questionnaire_id", nargs = 1)
+questionnaire_parser.add_argument("--format", nargs = 1)
+############################
+
 ### QUESTION PARSER ###
 question_parser = subparser.add_parser("question", help = "question")
 question_parser.add_argument("--questionnaire_id", nargs = 1)
@@ -406,11 +425,11 @@ if __name__ == '__main__':
         print("Error: at least 1 argument is required")
         sys.exit(1)
     try:
-        print(sys.argv)
+        # print(sys.argv)
         
         unrecognized = []
         knownCommands = ["login", "logout", "healthcheck", "resetall", "questionnaire_upd",
-                         "resetq", "questionnaire", "question", "doanswer", "getsessionanswers",
+                         "resetq", "questionnaire", "deleteq", "question", "doanswer", "getsessionanswers",
                          "getquestionanswers", "admin", "usermod"]
         if sys.argv[1] not in knownCommands:
             print("Unknown scope \"" + sys.argv[1] + "\".\nExpected one of", knownCommands)
@@ -517,7 +536,7 @@ if __name__ == '__main__':
         #     print("Invalid arguments passed:", unrecognized)
         #     exit()
         args = parser.parse_args()
-        print(sys.argv)
+        # print(sys.argv)
         
         if len(sys.argv[1:]) < 2:
             print("Error: at least 1 argument is required")
@@ -545,7 +564,7 @@ if args.format[0] not in allowed_formats:
 
 allowed_commands = ["login", "logout", "healthcheck", "resetall",
                     "questionnaire_upd", "resetq", "questionnaire",
-                    "question", "doanswer", "getsessionanswers",
+                    "deleteq", "question", "doanswer", "getsessionanswers",
                     "getquestionanswers", "admin"]
 
 if args.command not in allowed_commands:
@@ -572,6 +591,9 @@ elif (args.command == "resetq"):
 
 elif (args.command == "questionnaire"):
     questionnaire(args.questionnaire_id[0], args.format[0])
+
+elif (args.command == "deleteq"):
+    deleteq(args.questionnaire_id[0], args.format[0])
 
 elif (args.command == "question"):
     question(args.questionnaire_id[0], args.question_id[0], args.format[0])

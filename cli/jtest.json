@@ -1,6 +1,6 @@
 {
-    "questionnaireID": "TEST1",
-    "questionnaireTitle": "Another example questionnaire",
+    "questionnaireID": "USERTEST",
+    "questionnaireTitle": "A test questionnaire",
     "keywords": ["keyword1", "keyword2", "keyword3"],
     "questions": [
         {
