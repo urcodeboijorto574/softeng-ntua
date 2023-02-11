@@ -416,7 +416,10 @@ if __name__ == '__main__':
             if len(sys.argv) != 8:
                 print("Invalid number of arguments passed! Exiting...")
                 exit()
-            if sys.argv[2] not in ["--username", "--passw"] or sys.argv[4] not in ["--username", "--passw"] or sys.argv[2] != sys.argv[4]:
+            if sys.argv[2] not in ["--username", "--passw"] or sys.argv[4] not in ["--username", "--passw"] or sys.argv[2] == sys.argv[4]:
+                print(">>> HERE <<<")
+                print(sys.argv[2] not in ["--username", "--passw"])
+                print(sys.argv[4] not in ["--username", "--passw"])
                 print("Invalid arguments passed! Exiting...")
                 exit()
         elif sys.argv[1] == "logout":
@@ -456,7 +459,7 @@ if __name__ == '__main__':
             if len(sys.argv) != 8:
                 print("Invalid number of arguments passed! Exiting...")
                 exit()
-            if sys.argv[2] not in ["--questionnaire_id", "--question_id"] or sys.argv[4] not in ["--questionnaire_id", "--question_id"] or sys.argv[2] != sys.argv[4]:
+            if sys.argv[2] not in ["--questionnaire_id", "--question_id"] or sys.argv[4] not in ["--questionnaire_id", "--question_id"] or sys.argv[2] == sys.argv[4]:
                 print("Invalid arguments passed! Exiting...")
                 exit()
         elif sys.argv[1] == "doanswer":
@@ -474,14 +477,14 @@ if __name__ == '__main__':
             if len(sys.argv) != 8:
                 print("Invalid number of arguments passed! Exiting...")
                 exit()
-            if sys.argv[2] not in ["--questionnaire_id", "--session_id"] or sys.argv[4] not in ["--questionnaire_id", "--session_id"] or sys.argv[2] != sys.argv[4]:
+            if sys.argv[2] not in ["--questionnaire_id", "--session_id"] or sys.argv[4] not in ["--questionnaire_id", "--session_id"] or sys.argv[2] == sys.argv[4]:
                 print("Invalid arguments passed! Exiting...")
                 exit()
         elif sys.argv[1] == "getquestionanswers":
             if len(sys.argv) != 8:
                 print("Invalid number of arguments passed! Exiting...")
                 exit()
-            if sys.argv[2] not in ["--questionnaire_id", "--question_id"] or sys.argv[4] not in ["--questionnaire_id", "--question_id"] or sys.argv[2] != sys.argv[4]:
+            if sys.argv[2] not in ["--questionnaire_id", "--question_id"] or sys.argv[4] not in ["--questionnaire_id", "--question_id"] or sys.argv[2] == sys.argv[4]:
                 print("Invalid arguments passed! Exiting...")
                 exit()
         elif sys.argv[1] == "admin":
