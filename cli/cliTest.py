@@ -197,11 +197,14 @@ def run_resetall():
     # ...
     return
 
-def run_questionnaire_upd(username, title, idCheck, source, form):
+def run_questionnaire_upd(username, title, idCheck, source, form, show = True):
     # print("BUG NEEDS TO BE FIXED!")
     # return
     # run_login(username, password, form, False)
     result = subprocess.run(['python', 'cli.py', 'questionnaire_upd', '--source', source, '--format', form], capture_output=True)
+
+    if not show:
+        return
 
     if result.returncode != 0:
         print("FAILED, returned code " + str(result.returncode))
@@ -389,7 +392,7 @@ def run_question(userConnected, questionnaire_id, question_id, form):
         res = [x for x in res if x]
 
     # NOT READY YET
-    if isinstance(res, dict) and len(res) == 2:
+    if isinstance(res, dict):
         if list(res.keys()) == ["status", "data"]:
             if res["status"] == "OK" and isinstance(res["data"], dict) and userConnected in ["adminTestJson", "adminTestCsv"]:
                 print("PASSED", check_mark.decode("utf-8"))
@@ -398,7 +401,7 @@ def run_question(userConnected, questionnaire_id, question_id, form):
                 print("FAILED, wrong response data")
                 return
         elif list(res.keys()) == ["status", "message"]:
-            if res["status"] == "failed" and res["message"] == "Access denied" and userConnected not in ["adminTestJson", "adminTestCsv"]:
+            if res["status"] == "failed" and res["message"] == "User unauthorized to continue!" and userConnected not in ["adminTestJson", "adminTestCsv"]:
                 print("PASSED", check_mark.decode("utf-8"))
                 return
             else:
@@ -476,17 +479,14 @@ def run_doanswer(questionnaire_id, question_id, session_id, option_id, username,
         res = list(reader)
         res = [x for x in res if x]
 
+    # print("RES:", res)
     # NOT READY YET
     if isinstance(res, dict):
-        if list(res.keys()) == ["status", "dbconnection"]:
+        if list(res.keys()) == ["status", "message"]:
             if res["status"] == "OK" and res["message"] == "Answer submitted!" and username in ["userTestJson", "userTestCsv"]:
                 print("PASSED", check_mark.decode("utf-8"))
                 return
-            else:
-                print("FAILED, wrong response data")
-                return
-        elif list(res.keys()) == ["status", "message"]:
-            if res["status"] == "failed" and username not in ["userTestJson", "userTestCsv"]:
+            elif res["status"] == "failed" and username not in ["userTestJson", "userTestCsv"]:
                 print("PASSED", check_mark.decode("utf-8"))
                 return
             else:
@@ -579,7 +579,7 @@ def run_resetq(userConnected, questionnaire_id, form):
         
     # NOT READY YET. WAIT FOR QUESTIONNAIRE
     elif isinstance(res, list):
-        print("RES:", res)
+        # print("RES:", res)
         if res[0][0] == "status" and res[1][0] == "OK" and userConnected in ["adminTestJson", "adminTestCsv"]:
             print("PASSED", check_mark.decode("utf-8"))
             return
@@ -625,7 +625,7 @@ def run_getsessionanswers(userConnected, questionnaire_id, session_id, form):
                 print("FAILED, wrong response data")
                 return
         elif list(res.keys()) == ["status", "message"]:
-            if res["status"] == "failed" and res["message"] == "Access denied" and userConnected not in ["adminTestJson", "adminTestCsv"]:
+            if res["status"] == "failed" and res["message"] == "User unauthorized to continue!" and userConnected not in ["adminTestJson", "adminTestCsv"]:
                 print("PASSED", check_mark.decode("utf-8"))
                 return
             else:
@@ -707,7 +707,7 @@ def run_getquestionanswers(userConnected, questionnaire_id, question_id, form):
                 print("FAILED, wrong response data")
                 return
         elif list(res.keys()) == ["status", "message"]:
-            if res["status"] == "failed" and res["message"] == "Access denied" and userConnected not in ["adminTestJson", "adminTestCsv"]:
+            if res["status"] == "failed" and res["message"] == "User unauthorized to continue!" and userConnected not in ["adminTestJson", "adminTestCsv"]:
                 print("PASSED", check_mark.decode("utf-8"))
                 return
             else:
@@ -1135,7 +1135,7 @@ if __name__ == '__main__':
         print(message, end = "")
         run_questionnaire(usernames["adminJson"][0], "UTEST", forms[0])
         i += 1
-        
+
         # adminJson: ADJ01, Q01, 1234, a
         message = toPrint(i, "Question test with admin (should be authorized) ", forms[0])
         print(message, end = "")
@@ -1295,10 +1295,54 @@ if __name__ == '__main__':
         # print("Questionnaire_upd test with user (should not be authorized) (format = " + forms[0] + ")", end = ":\t")
 
         #!!!!!!!!!!!!!!!!
-        # message = toPrint(i, "Questionnaire_upd test with user (should be authorized) ", forms[0])
-        # print(message, end = "")
-        # run_questionnaire_upd(usernames["userJson"][0], "jtest.txt", forms[0])
-        # i += 1
+
+        # run_delete("UTEST", forms[0])
+
+        message = toPrint(i, "Questionnaire_upd test with user (should not be authorized) ", forms[0])
+        print(message, end = "")
+        run_questionnaire_upd(usernames["userJson"][0], "UTEST", False, "jtest.txt", forms[0])
+        i += 1
+
+        message = toPrint(i, "Questionnaire test with user (should not be authorized) ", forms[0])
+        print(message, end = "")
+        run_questionnaire(usernames["userJson"][0], "UTEST", forms[0])
+        i += 1
+
+        # userJson: ADJ01, Q01, 1234, a
+        message = toPrint(i, "Question test with user (should not be authorized) ", forms[0])
+        print(message, end = "")
+        run_question(usernames["userJson"][0], "UTEST", "U01", forms[0])
+        i += 1
+
+        run_login(usernames["adminJson"][0], usernames["adminJson"][1], forms[0], False)
+        # run_resetq(usernames["adminJson"][0], "UTEST", forms[0])
+        run_delete("UTEST", forms[0])
+        run_questionnaire_upd(usernames["adminJson"][0], "UTEST", False, "jtest.txt", forms[0], False)
+        run_login(usernames["userJson"][0], usernames["userJson"][1], forms[0], False)
+        
+        message = toPrint(i, "Doanswer test with user (should be authorized) ", forms[0])
+        print(message, end = "")
+        run_doanswer("UTEST", "U01", "1234", "U01A1", usernames["userJson"][0], forms[0])
+        i += 1
+
+        # # run_login(usernames["userJson"][0], usernames["userJson"][1], forms[0], False)
+        # run_doanswer("UTEST", "U01", "1234", "U01A1", usernames["userJson"][0], forms[0], False)
+        # # run_login(usernames["userJson"][0], usernames["userJson"][1], forms[0], False)
+
+        message = toPrint(i, "Getsessionanswers test with user (should not be authorized) ", forms[0])
+        print(message, end = "")
+        run_getsessionanswers(usernames["userJson"][0], "UTEST", "1234", forms[0])
+        i += 1
+
+        message = toPrint(i, "Getquestionanswers test with user (should not be authorized) ", forms[0])
+        print(message, end = "")
+        run_getquestionanswers(usernames["userJson"][0], "UTEST", "U01", forms[0])
+        i += 1
+
+        message = toPrint(i, "Resetq test with user (should not be authorized) ", forms[0])
+        print(message, end = "")
+        run_resetq(usernames["userJson"][0], "UTEST", forms[0])
+        i += 1
 
         print("=========================== user Testing with json format Completed  ===========================")
 
@@ -1345,6 +1389,54 @@ if __name__ == '__main__':
         # print(message, end = "")
         # run_questionnaire_upd(usernames["userCsv"][0], "jtest.txt", forms[1])
         # i += 1
+
+        # run_delete("UTEST", forms[0])
+
+        message = toPrint(i, "Questionnaire_upd test with user (should not be authorized) ", forms[1])
+        print(message, end = "")
+        run_questionnaire_upd(usernames["userCsv"][0], "CTEST", False, "jtest.txt", forms[1])
+        i += 1
+
+        message = toPrint(i, "Questionnaire test with user (should not be authorized) ", forms[1])
+        print(message, end = "")
+        run_questionnaire(usernames["userCsv"][0], "CTEST", forms[1])
+        i += 1
+
+        # userCsv: ADJ01, Q01, 1234, a
+        message = toPrint(i, "Question test with user (should not be authorized) ", forms[1])
+        print(message, end = "")
+        run_question(usernames["userCsv"][0], "CTEST", "U01", forms[1])
+        i += 1
+
+        run_login(usernames["adminJson"][0], usernames["adminJson"][1], forms[1], False)
+        # run_resetq(usernames["adminJson"][0], "CTEST", forms[1])
+        run_delete("CTEST", forms[1])
+        run_questionnaire_upd(usernames["adminJson"][0], "CTEST", False, "jtest.txt", forms[1], False)
+        run_login(usernames["userCsv"][0], usernames["userCsv"][1], forms[1], False)
+        
+        message = toPrint(i, "Doanswer test with user (should be authorized) ", forms[1])
+        print(message, end = "")
+        run_doanswer("CTEST", "U01", "1234", "U01A1", usernames["userCsv"][0], forms[1])
+        i += 1
+
+        # # run_login(usernames["userCsv"][0], usernames["userCsv"][1], forms[1], False)
+        # run_doanswer("CTEST", "U01", "1234", "U01A1", usernames["userCsv"][0], forms[1], False)
+        # # run_login(usernames["userCsv"][0], usernames["userCsv"][1], forms[1], False)
+
+        message = toPrint(i, "Getsessionanswers test with user (should not be authorized) ", forms[1])
+        print(message, end = "")
+        run_getsessionanswers(usernames["userCsv"][0], "CTEST", "1234", forms[1])
+        i += 1
+
+        message = toPrint(i, "Getquestionanswers test with user (should not be authorized) ", forms[1])
+        print(message, end = "")
+        run_getquestionanswers(usernames["userCsv"][0], "CTEST", "U01", forms[1])
+        i += 1
+
+        message = toPrint(i, "Resetq test with user (should not be authorized) ", forms[1])
+        print(message, end = "")
+        run_resetq(usernames["userCsv"][0], "CTEST", forms[1])
+        i += 1
 
         print("============================ user Testing with csv format Completed  ===========================")
 
