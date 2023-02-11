@@ -23,7 +23,13 @@ const DB = process.env.DATABASE.replace(
 
 // error-handling functions
 const handleDuplicateFieldsDB = (req, res, err) => {
-    const message = 'All IDs must be unique';
+    let message;
+    if (err.keyValue.questionnaireTitle) {
+      message = 'Questionnaire Title must be unique';
+    }
+    else {
+      message = 'All IDs must be unique';
+    }   
     if (req.query.format === 'csv') {
       return res.status(400).csv([{ status: 'failed', message: message }], true);
     }
