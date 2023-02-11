@@ -25,30 +25,33 @@ const DB = process.env.DATABASE.replace(
 const handleDuplicateFieldsDB = (req, res, err) => {
     let message;
     if (err.keyValue.questionnaireTitle) {
-      message = 'Questionnaire Title must be unique';
+        message = 'Questionnaire Title must be unique';
+    } else {
+        message = 'All IDs must be unique';
     }
-    else {
-      message = 'All IDs must be unique';
-    }   
     if (req.query.format === 'csv') {
-      return res.status(400).csv([{ status: 'failed', message: message }], true);
+        return res
+            .status(400)
+            .csv([{ status: 'failed', message: message }], true);
     }
     return res.status(400).json({
-      status: 'failed',
-      message: message,
+        status: 'failed',
+        message: message,
     });
 };
 
 const handleValidationErrorDB = (req, res, err) => {
     const errors = Object.values(err.errors).map((el) => el.message);
-  
+
     const message = `Invalid input data. ${errors.join('. ')}`;
     if (req.query.format === 'csv') {
-      return res.status(400).csv([{ status: 'failed', message: message }], true);
+        return res
+            .status(400)
+            .csv([{ status: 'failed', message: message }], true);
     }
     return res.status(400).json({
-      status: 'failed',
-      message: message,
+        status: 'failed',
+        message: message,
     });
 };
 
@@ -64,39 +67,45 @@ exports.getHealthcheck = async (req, res, next) => {
     try {
         const state = mongoose.connection.readyState;
         if (!req.query.format || req.query.format === 'json') {
-          if (state === 1) {
-            return res.status(200).json({
-              status: 'OK',
-              dbconnection: DB,
-            });
-          } else {
-            return res.status(500).json({
-              status: 'failed',
-              dbconnection: DB,
-            });
-          }
+            if (state === 1) {
+                return res.status(200).json({
+                    status: 'OK',
+                    dbconnection: DB,
+                });
+            } else {
+                return res.status(500).json({
+                    status: 'failed',
+                    dbconnection: DB,
+                });
+            }
         } else if (req.query.format === 'csv') {
-          if (state === 1) {
-            return res.status(200).csv([{ status: 'OK', dbconnection: DB }], true);
-          } else {
-            return res.status(500).csv([{ status: 'failed', dbconnection: DB }], true);
-          }
+            if (state === 1) {
+                return res
+                    .status(200)
+                    .csv([{ status: 'OK', dbconnection: DB }], true);
+            } else {
+                return res
+                    .status(500)
+                    .csv([{ status: 'failed', dbconnection: DB }], true);
+            }
         } else {
-          return res.status(400).json({
-            status: 'failed',
-            message: 'Response format must be either json or csv!',
-          });
+            return res.status(400).json({
+                status: 'failed',
+                message: 'Response format must be either json or csv!',
+            });
         }
-      } catch (err) {
+    } catch (err) {
         if (req.query.format === 'csv') {
-          return res.status(500).csv([{ status: 'failed', message: err }], true);
+            return res
+                .status(500)
+                .csv([{ status: 'failed', message: err }], true);
         } else {
-          return res.status(500).json({
-            status: 'failed',
-            message: err,
-          });
+            return res.status(500).json({
+                status: 'failed',
+                message: err,
+            });
         }
-      }
+    }
 };
 
 /**
@@ -111,167 +120,251 @@ exports.questionnaireUpdate = async (req, res, next) => {
     try {
         const file = req.file;
         fs.readFile(
-          `${file.destination}/${file.originalname}`,
-          'utf8',
-          async (err, data) => {
-            if (err) {
-              console.error(err);
-              if (req.query.format === 'csv') {
-                return res
-                  .status(500)
-                  .csv([{ status: 'failed', message: 'Could not read file' }], true);
-              }
-              return res.status(500).json({
-                status: 'failed',
-                message: 'Could not read file',
-              });
-            }
-            try {
-              const info = JSON.parse(data);
-              try {
-                if (
-                  !req.query.format ||
-                  req.query.format === 'json' ||
-                  req.query.format === 'csv'
-                ) {
-                  const newQuestionnaire = await Questionnaire.create({
-                    questionnaireID: info.questionnaireID,
-                    questionnaireTitle: info.questionnaireTitle,
-                    keywords: info.keywords,
-                    creator: req.username,
-                  });
-                  try {
-                    let len = info.questions.length;
-                    for (let i = 0; i < len; i += 1) {
-                      // eslint-disable-next-line no-await-in-loop
-                      let newQuestion = await Question.create({
-                        qID: info.questions[i].qID,
-                        qtext: info.questions[i].qtext,
-                        required: info.questions[i].required,
-                        type: info.questions[i].type,
-                        wasAnsweredBy: 0,
-                        questionnaireID: info.questionnaireID,
-                      });
-                      let len1 = info.questions[i].options.length;
-                      for (let j = 0; j < len1; j += 1) {
-                        // eslint-disable-next-line no-await-in-loop
-                        let newOption = await Option.create({
-                          optID: info.questions[i].options[j].optID,
-                          opttxt: info.questions[i].options[j].opttxt,
-                          nextqID: info.questions[i].options[j].nextqID,
-                          questionnaireID: info.questionnaireID,
-                          qID: info.questions[i].qID,
-                          wasChosenBy: 0,
-                        });
-                        // check if a question with one option is open-type (optID should end with 'TXT')
-                        if (len1 == 1 && !info.questions[i].options[j].optID.endsWith('TXT')) {
-                            throw new AppError(`Question ${newQuestion.qID}, Option ${newOption.optID}: Questions with only one option are open-type questions so optID should end with 'TXT'`, 400);
-                        }
-                        // check if a question with more than one options is closed-type (all optIDs shouldn't end with 'TXT')
-                        else if (len1 > 1 && info.questions[i].options[j].optID.endsWith('TXT')) {
-                            throw new AppError(`Question ${newQuestion.qID}, Option ${newOption.optID}: Questions with more than one options are close-type questions so optID shouldn't end with 'TXT'`, 400);
-                        }
-    
-                        // eslint-disable-next-line no-await-in-loop
-                        let addOption = await Question.updateOne(
-                          { qID: info.questions[i].qID },
-                          { $push: { options: newOption } }
-                        );
-                      }
-    
-                      // eslint-disable-next-line no-await-in-loop
-                      let addQuestion = await Questionnaire.updateOne(
-                        { questionnaireID: info.questionnaireID },
-                        { $push: { questions: newQuestion } }
-                      );
-                    }
+            `${file.destination}/${file.originalname}`,
+            'utf8',
+            async (err, data) => {
+                if (err) {
+                    console.error(err);
                     if (req.query.format === 'csv') {
-                      return res.status(200).csv([{ status: 'OK' }], true);
-                    } else {
-                      return res.status(200).json({
-                        status: 'OK',
-                      });
-                    }
-                  } catch (error) {
-                    await Promise.all([
-                      Questionnaire.deleteMany({
-                        questionnaireID: info.questionnaireID,
-                      }),
-                      Question.deleteMany({
-                        questionnaireID: info.questionnaireID,
-                      }),
-                      Option.deleteMany({
-                        questionnaireID: info.questionnaireID,
-                      }),
-                    ]);
-                    if (error.code === 11000) {
-                      error = handleDuplicateFieldsDB(req, res, error);
-                    } else if (error.name === 'ValidationError') {
-                      error = handleValidationErrorDB(req, res, error);
-                    }
-                    // handle error related to open-close type questions 
-                    else if (error.message.endsWith("'TXT'")) {
-                        return handleResponse(req, res, error.statusCode, {status: error.status, message: error.message});
-                    } 
-                    else {
-                      if (req.query.format === 'csv') {
                         return res
-                          .status(500)
-                          .csv([{ status: 'failed', message: err }], true);
-                      }
-                      return res.status(500).json({
-                        status: 'failed',
-                        message: err,
-                      });
+                            .status(500)
+                            .csv(
+                                [
+                                    {
+                                        status: 'failed',
+                                        message: 'Could not read file',
+                                    },
+                                ],
+                                true
+                            );
                     }
-                  }
-                } else {
-                  return res.status(400).json({
-                    status: 'failed',
-                    message: 'Response format must be either json or csv!',
-                  });
+                    return res.status(500).json({
+                        status: 'failed',
+                        message: 'Could not read file',
+                    });
                 }
-              } catch (error) {
-                if (error.code === 11000) {
-                  error = handleDuplicateFieldsDB(req, res, error);
-                } else if (error.name === 'ValidationError') {
-                  error = handleValidationErrorDB(req, res, error);
-                } else {
-                  if (req.query.format === 'csv') {
-                    return res
-                      .status(500)
-                      .csv([{ status: 'failed', message: err }], true);
-                  }
-                  return res.status(500).json({
-                    status: 'failed',
-                    message: err,
-                  });
+                try {
+                    const info = JSON.parse(data);
+                    try {
+                        if (
+                            !req.query.format ||
+                            req.query.format === 'json' ||
+                            req.query.format === 'csv'
+                        ) {
+                            const newQuestionnaire = await Questionnaire.create(
+                                {
+                                    questionnaireID: info.questionnaireID,
+                                    questionnaireTitle: info.questionnaireTitle,
+                                    keywords: info.keywords,
+                                    creator: req.username,
+                                }
+                            );
+                            try {
+                                let len = info.questions.length;
+                                for (let i = 0; i < len; i += 1) {
+                                    // eslint-disable-next-line no-await-in-loop
+                                    let newQuestion = await Question.create({
+                                        qID: info.questions[i].qID,
+                                        qtext: info.questions[i].qtext,
+                                        required: info.questions[i].required,
+                                        type: info.questions[i].type,
+                                        wasAnsweredBy: 0,
+                                        questionnaireID: info.questionnaireID,
+                                    });
+                                    let len1 = info.questions[i].options.length;
+                                    for (let j = 0; j < len1; j += 1) {
+                                        // eslint-disable-next-line no-await-in-loop
+                                        let newOption = await Option.create({
+                                            optID: info.questions[i].options[j]
+                                                .optID,
+                                            opttxt: info.questions[i].options[j]
+                                                .opttxt,
+                                            nextqID:
+                                                info.questions[i].options[j]
+                                                    .nextqID,
+                                            questionnaireID:
+                                                info.questionnaireID,
+                                            qID: info.questions[i].qID,
+                                            wasChosenBy: 0,
+                                        });
+                                        // check if a question with one option is open-type (optID should end with 'TXT')
+                                        if (
+                                            len1 == 1 &&
+                                            !info.questions[i].options[
+                                                j
+                                            ].optID.endsWith('TXT')
+                                        ) {
+                                            throw new AppError(
+                                                `Question ${newQuestion.qID}, Option ${newOption.optID}: Questions with only one option are open-type questions so optID should end with 'TXT'`,
+                                                400
+                                            );
+                                        }
+                                        // check if a question with more than one options is closed-type (all optIDs shouldn't end with 'TXT')
+                                        else if (
+                                            len1 > 1 &&
+                                            info.questions[i].options[
+                                                j
+                                            ].optID.endsWith('TXT')
+                                        ) {
+                                            throw new AppError(
+                                                `Question ${newQuestion.qID}, Option ${newOption.optID}: Questions with more than one options are close-type questions so optID shouldn't end with 'TXT'`,
+                                                400
+                                            );
+                                        }
+
+                                        // eslint-disable-next-line no-await-in-loop
+                                        let addOption =
+                                            await Question.updateOne(
+                                                { qID: info.questions[i].qID },
+                                                {
+                                                    $push: {
+                                                        options: newOption,
+                                                    },
+                                                }
+                                            );
+                                    }
+
+                                    // eslint-disable-next-line no-await-in-loop
+                                    let addQuestion =
+                                        await Questionnaire.updateOne(
+                                            {
+                                                questionnaireID:
+                                                    info.questionnaireID,
+                                            },
+                                            {
+                                                $push: {
+                                                    questions: newQuestion,
+                                                },
+                                            }
+                                        );
+                                }
+                                if (req.query.format === 'csv') {
+                                    return res
+                                        .status(200)
+                                        .csv([{ status: 'OK' }], true);
+                                } else {
+                                    return res.status(200).json({
+                                        status: 'OK',
+                                    });
+                                }
+                            } catch (error) {
+                                await Promise.all([
+                                    Questionnaire.deleteMany({
+                                        questionnaireID: info.questionnaireID,
+                                    }),
+                                    Question.deleteMany({
+                                        questionnaireID: info.questionnaireID,
+                                    }),
+                                    Option.deleteMany({
+                                        questionnaireID: info.questionnaireID,
+                                    }),
+                                ]);
+                                if (error.code === 11000) {
+                                    error = handleDuplicateFieldsDB(
+                                        req,
+                                        res,
+                                        error
+                                    );
+                                } else if (error.name === 'ValidationError') {
+                                    error = handleValidationErrorDB(
+                                        req,
+                                        res,
+                                        error
+                                    );
+                                }
+                                // handle error related to open-close type questions
+                                else if (error.message.endsWith("'TXT'")) {
+                                    return handleResponse(
+                                        req,
+                                        res,
+                                        error.statusCode,
+                                        {
+                                            status: error.status,
+                                            message: error.message,
+                                        }
+                                    );
+                                } else {
+                                    if (req.query.format === 'csv') {
+                                        return res
+                                            .status(500)
+                                            .csv(
+                                                [
+                                                    {
+                                                        status: 'failed',
+                                                        message: err,
+                                                    },
+                                                ],
+                                                true
+                                            );
+                                    }
+                                    return res.status(500).json({
+                                        status: 'failed',
+                                        message: err,
+                                    });
+                                }
+                            }
+                        } else {
+                            return res.status(400).json({
+                                status: 'failed',
+                                message:
+                                    'Response format must be either json or csv!',
+                            });
+                        }
+                    } catch (error) {
+                        if (error.code === 11000) {
+                            error = handleDuplicateFieldsDB(req, res, error);
+                        } else if (error.name === 'ValidationError') {
+                            error = handleValidationErrorDB(req, res, error);
+                        } else {
+                            if (req.query.format === 'csv') {
+                                return res
+                                    .status(500)
+                                    .csv(
+                                        [{ status: 'failed', message: err }],
+                                        true
+                                    );
+                            }
+                            return res.status(500).json({
+                                status: 'failed',
+                                message: err,
+                            });
+                        }
+                    }
+                } catch (err2) {
+                    if (req.query.format === 'csv') {
+                        return res
+                            .status(400)
+                            .csv(
+                                [
+                                    {
+                                        status: 'failed',
+                                        message: 'Invalid file structure',
+                                    },
+                                ],
+                                true
+                            );
+                    }
+                    return res.status(400).json({
+                        status: 'failed',
+                        message: 'Invalid file structure',
+                    });
                 }
-              }
-            } catch (err2) {
-              if (req.query.format === 'csv') {
-                return res
-                  .status(500)
-                  .csv([{ status: 'failed', message: 'Invalid file structure' }], true);
-              }
-              return res.status(500).json({
-                status: 'failed',
-                message: 'Invalid file structure',
-              });
             }
-          }
         );
-      } catch (err) {
+    } catch (err) {
         if (req.query.format === 'csv') {
-          return res
-            .status(500)
-            .csv([{ status: 'failed', message: 'Could not read file' }], true);
+            return res
+                .status(500)
+                .csv(
+                    [{ status: 'failed', message: 'Could not read file' }],
+                    true
+                );
         }
         return res.status(500).json({
-          status: 'failed',
-          message: 'Could not read file',
+            status: 'failed',
+            message: 'Could not read file',
         });
-      }
+    }
 };
 
 /**
@@ -285,41 +378,43 @@ exports.questionnaireUpdate = async (req, res, next) => {
 exports.resetAll = async (req, res, next) => {
     try {
         if (
-          !req.query.format ||
-          req.query.format === 'json' ||
-          req.query.format === 'csv'
+            !req.query.format ||
+            req.query.format === 'json' ||
+            req.query.format === 'csv'
         ) {
-          await Promise.all([
-            User.deleteMany({ role: { $ne: 'super-admin' } }),
-            Answer.deleteMany(),
-            Option.deleteMany(),
-            Question.deleteMany(),
-            Questionnaire.deleteMany(),
-            Session.deleteMany(),
-          ]);
-          if (req.query.format === 'csv') {
-            return res.status(200).csv([{ status: 'OK' }], true);
-          } else {
-            return res.status(200).json({
-              status: 'OK',
+            await Promise.all([
+                User.deleteMany({ role: { $ne: 'super-admin' } }),
+                Answer.deleteMany(),
+                Option.deleteMany(),
+                Question.deleteMany(),
+                Questionnaire.deleteMany(),
+                Session.deleteMany(),
+            ]);
+            if (req.query.format === 'csv') {
+                return res.status(200).csv([{ status: 'OK' }], true);
+            } else {
+                return res.status(200).json({
+                    status: 'OK',
+                });
+            }
+        } else {
+            return res.status(400).json({
+                status: 'failed',
+                reason: 'Response format must be either json or csv!',
             });
-          }
-        } else {
-          return res.status(400).json({
-            status: 'failed',
-            reason: 'Response format must be either json or csv!',
-          });
         }
-      } catch (err) {
+    } catch (err) {
         if (req.query.format === 'csv') {
-          return res.status(500).csv([{ status: 'failed', reason: err }], true);
+            return res
+                .status(500)
+                .csv([{ status: 'failed', reason: err }], true);
         } else {
-          return res.status(500).json({
-            status: 'failed',
-            reason: err,
-          });
+            return res.status(500).json({
+                status: 'failed',
+                reason: err,
+            });
         }
-      }
+    }
 };
 
 /**
@@ -333,67 +428,84 @@ exports.resetAll = async (req, res, next) => {
 exports.resetQuestionnaire = async (req, res, next) => {
     try {
         if (
-          !req.query.format ||
-          req.query.format === 'json' ||
-          req.query.format === 'csv'
+            !req.query.format ||
+            req.query.format === 'json' ||
+            req.query.format === 'csv'
         ) {
-          const ID = req.params.questionnaireID;
-          const valid = await Questionnaire.findOne({ questionnaireID: ID }).select('creator');
-          if (!valid) {
-            return res.status(400).json({
-              status: 'failed',
-              reason: 'Invalid questionnaireID',
-            });
-          }
-          if (req.userRole !== 'super-admin' && req.username !== valid.creator) {
+            const ID = req.params.questionnaireID;
+            const valid = await Questionnaire.findOne({
+                questionnaireID: ID,
+            }).select('creator');
+            if (!valid) {
+                return res.status(400).json({
+                    status: 'failed',
+                    reason: 'Invalid questionnaireID',
+                });
+            }
+            if (
+                req.userRole !== 'super-admin' &&
+                req.username !== valid.creator
+            ) {
+                if (req.query.format === 'csv') {
+                    return res
+                        .status(401)
+                        .csv(
+                            [
+                                {
+                                    status: 'failed',
+                                    reason: 'User unauthorized to continue!',
+                                },
+                            ],
+                            true
+                        );
+                } else {
+                    return res.status(401).json({
+                        status: 'failed',
+                        reason: 'User unauthorized to continue!',
+                    });
+                }
+            }
+            await Promise.all([
+                Answer.deleteMany({ questionnaireID: ID }),
+                Session.deleteMany({ questionnaireID: ID }),
+                Option.updateMany(
+                    { questionnaireID: ID },
+                    { $set: { wasChosenBy: 0 } }
+                ),
+                Question.updateMany(
+                    { questionnaireID: ID },
+                    { $set: { wasAnsweredBy: 0 } }
+                ),
+                User.updateMany(
+                    { questionnairesAnswered: { $in: [valid._id] } },
+                    { $pull: { questionnairesAnswered: valid._id } }
+                ),
+            ]);
             if (req.query.format === 'csv') {
-              return res.status(401).csv([{ status: 'failed', reason: 'User unauthorized to continue!' }], true);
+                return res.status(200).csv([{ status: 'OK' }], true);
             } else {
-              return res.status(401).json({
+                return res.status(200).json({
+                    status: 'OK',
+                });
+            }
+        } else {
+            return res.status(400).json({
                 status: 'failed',
-                reason: 'User unauthorized to continue!',
-              });
-          }
-        }
-          await Promise.all([
-            Answer.deleteMany({ questionnaireID: ID }),
-            Session.deleteMany({ questionnaireID: ID }),
-            Option.updateMany(
-              { questionnaireID: ID },
-              { $set: { wasChosenBy: 0 } }
-            ),
-            Question.updateMany(
-              { questionnaireID: ID },
-              { $set: { wasAnsweredBy: 0 } }
-            ),
-            User.updateMany(
-              { questionnairesAnswered: { $in: [valid._id] } },
-              { $pull: { questionnairesAnswered: valid._id } }
-            ),
-          ]);
-          if (req.query.format === 'csv') {
-            return res.status(200).csv([{ status: 'OK' }], true);
-          } else {
-            return res.status(200).json({
-              status: 'OK',
+                reason: 'Response format must be either json or csv!',
             });
-          }
-        } else {
-          return res.status(400).json({
-            status: 'failed',
-            reason: 'Response format must be either json or csv!',
-          });
         }
-      } catch (err) {
+    } catch (err) {
         if (req.query.format === 'csv') {
-          return res.status(500).csv([{ status: 'failed', reason: err }], true);
+            return res
+                .status(500)
+                .csv([{ status: 'failed', reason: err }], true);
         } else {
-          return res.status(500).json({
-            status: 'failed',
-            reason: err,
-          });
+            return res.status(500).json({
+                status: 'failed',
+                reason: err,
+            });
         }
-      }
+    }
 };
 
 exports.deleteUser = async (req, res) => {
