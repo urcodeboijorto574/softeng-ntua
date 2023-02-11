@@ -6,7 +6,7 @@ const Option = require(`${__dirname}/../models/optionModel.js`);
 const Session = require(`${__dirname}/../models/sessionModel.js`);
 const Answer = require(`${__dirname}/../models/answerModel.js`);
 const User = require(`${__dirname}/../models/userModel.js`);
-const Models = [Answer, Session, Option, Question, Questionnaire, User];
+const Models = [Option, Question, Questionnaire, Answer, Session, User];
 const handleResponse = require(`${__dirname}/../utils/handleResponse.js`).handleResponse;
 
 /**
@@ -19,72 +19,88 @@ const handleResponse = require(`${__dirname}/../utils/handleResponse.js`).handle
  * URL: {baseURL}/dummy-data/import
  */
 exports.importData = async (req, res, next) => {
-    /* Read JSON files */
-    let questionnairesInFiles, questionsInFiles, optionsInFiles, sessionsInFiles, answersInFiles, usersInFiles,
-        collectionsFiles;
     try {
-        const prefix = `${__dirname}\\..\\..\\data\\test\\import\\`;
-        questionnairesInFiles = JSON.parse(fs.readFileSync(prefix + 'questionnaires.json', 'utf-8'));
-        questionsInFiles = JSON.parse(fs.readFileSync(prefix + 'questions.json', 'utf-8'));
-        optionsInFiles = JSON.parse(fs.readFileSync(prefix + 'options.json', 'utf-8'));
-        sessionsInFiles = JSON.parse(fs.readFileSync(prefix + 'sessions.json', 'utf-8'));
-        answersInFiles = JSON.parse(fs.readFileSync(prefix + 'answers.json', 'utf-8'));
-        usersInFiles = JSON.parse(fs.readFileSync(prefix + 'users.json', 'utf-8'));
-        collectionsFiles = [answersInFiles, sessionsInFiles, optionsInFiles, questionsInFiles, questionnairesInFiles, usersInFiles];
-    } catch (error) {
-        console.log('Error while reading files');
-        return handleResponse(req, res, 500, {
-            status: 'failed',
-            message: error
-        });
-    }
+        /* Read JSON files */
+        const prefix = `${__dirname}\\..\\..\\data\\test\\import\\`, postfix = '.json';
+        const sourceFiles = ['options', 'questions', 'questionnaires', 'answers', 'sessions', 'users'].map(str => prefix + str + postfix);
+        let collectionsFiles = [];
+        for (let i = 0, limit = sourceFiles.length; i < limit; ++i) {
+            collectionsFiles.push(JSON.parse(fs.readFileSync(sourceFiles[i], 'utf-8')));
+        }
 
-    /* (Optional) Change the prefixes of the '_id's of all the documents in DB */
-    const prefix_id = (req.body.prefix_id != undefined ? req.body.prefix_id : '');
-    if (prefix_id !== '') {
-        collectionsFiles.forEach(collection => {
-            collection.forEach(doc => {
-                doc._id = mongoose.Types.ObjectId(prefix_id.concat(doc._id.toString().slice(prefix_id.length)));
-                if (doc.questions != undefined) {
-                    doc.questions = doc.questions.map(el => mongoose.Types.ObjectId(prefix_id.concat(el.toString().slice(prefix_id.length))));
-                } else if (doc.options != undefined) {
-                    doc.options = doc.options.map(el => mongoose.Types.ObjectId(prefix_id.concat(el.toString().slice(prefix_id.length))));
-                } else if (doc.answers != undefined) {
-                    doc.answers = doc.answers.map(el => mongoose.Types.ObjectId(prefix_id.concat(el.toString().slice(prefix_id.length))));
-                } else if (doc.questionnairesAnswered != undefined) {
-                    doc.questionnairesAnswered = doc.questionnairesAnswered.map(el => mongoose.Types.ObjectId(prefix_id.concat(el.toString().slice(prefix_id.length))));
+        /* (Optional) Change the prefixes of the '_id's of all the documents read from the file system */
+        const prefixId = ((req.body != undefined) && (req.body.prefixId != undefined)) ? req.body.prefixId : '';
+        const prefixId_tooLong = prefixId.length > 24;
+        if (prefixId_tooLong)
+            throw { myMessage: 'prefixId can\'t be more than 24 characters long' };
+        const is_NaN16 = prefixId.split('').some(digit => {
+            let charCode = digit.charCodeAt(0);
+            let inRange = (l, h) => ((charCode >= l.charCodeAt(0)) && (charCode <= h.charCodeAt(0)));
+            return !(inRange('0', '9') || inRange('a', 'f') || inRange('A', 'F'));
+        });
+        if (is_NaN16)
+            throw { myMessage: 'prefixId must be a hexademical number' };
+
+        if (prefixId !== '') {
+            for (let i = 0; i < collectionsFiles.length; ++i) {
+                for (let j = 0; j < collectionsFiles[i].length; ++j) {
+                    collectionsFiles[i][j]._id = { $oid: prefixId.concat(collectionsFiles[i][j]._id.slice(prefixId.length)) };
+
+                    if (collectionsFiles[i][j].questions != undefined) {
+                        for (let k = 0; k < collectionsFiles[i][j].questions.length; ++k)
+                            collectionsFiles[i][j].questions.splice(k, 1,
+                                { $oid: mongoose.Types.ObjectId(prefixId.concat(collectionsFiles[i][j].questions[k].slice(prefixId.length))) }
+                            );
+                    } else if (collectionsFiles[i][j].options != undefined) {
+                        for (let k = 0; k < collectionsFiles[i][j].options.length; ++k)
+                            collectionsFiles[i][j].options.splice(k, 1,
+                                { $oid: mongoose.Types.ObjectId(prefixId.concat(collectionsFiles[i][j].options[k].slice(prefixId.length))) }
+                            );
+                    } else if (collectionsFiles[i][j].answers != undefined) {
+                        for (let k = 0; k < collectionsFiles[i][j].answers.length; ++k)
+                            collectionsFiles[i][j].answers.splice(k, 1,
+                                { $oid: mongoose.Types.ObjectId(prefixId.concat(collectionsFiles[i][j].answers[k].slice(prefixId.length))) }
+                            );
+                    } else if (collectionsFiles[i][j].questionnairesAnswered != undefined) {
+                        for (let k = 0; k < collectionsFiles[i][j].questionnairesAnswered.length; ++k)
+                            collectionsFiles[i][j].questionnairesAnswered.splice(k, 1,
+                                { $oid: mongoose.Types.ObjectId(prefixId.concat(collectionsFiles[i][j].questionnairesAnswered[k].slice(prefixId.length))) }
+                            );
+                    }
                 }
-            });
-        });
-    }
+            }
+        }
 
-    /* Create the documents in the DB */
-    try {
-        const limit = Models.length;
-        for (let i = 0; i < limit; ++i) {
-            await Models[i].create(collectionsFiles[i]);
-            process.stdout.write(`...${i + 1}/${limit}${i == limit - 1 ? '\n' : ''}`);
+        /* Create the documents in the DB */
+        let resultArr = await Promise.allSettled([
+            Models[0].create(collectionsFiles[0]),
+            Models[1].create(collectionsFiles[1]),
+            Models[2].create(collectionsFiles[2]),
+            Models[3].create(collectionsFiles[3]),
+            Models[4].create(collectionsFiles[4]),
+            Models[5].create(collectionsFiles[5])
+        ]);
+        for (let i = 0; i < resultArr.length; ++i) {
+            if (resultArr[i].status === 'rejected') {
+                console.log(resultArr[i]);
+                return handleResponse(req, res, 500, {
+                    status: 'failed',
+                    message: 'Assertion error caught'
+                });
+            }
         }
 
         /* Return response */
-        const message = 'Documents imported successfully.';
-        console.log(message);
         return handleResponse(req, res, 200, {
             status: 'OK',
-            message,
-            // data: {
-            //     answers: collectionsFiles[0],
-            //     sessions: collectionsFiles[1],
-            //     options: collectionsFiles[2],
-            //     questions: collectionsFiles[3],
-            //     questionnaires: collectionsFiles[4],
-            //     users: collectionsFiles[5]
-            // }
+            message: 'Documents imported successfully.'
         });
+
     } catch (error) {
-        return handleResponse(req, res, 500, {
+        const myMessageExists = error.myMessage != undefined;
+        return handleResponse(req, res, myMessageExists ? 400 : 500, {
             status: 'failed',
-            message: error
+            message: myMessageExists ? error.myMessage : error
         });
     }
     next();
@@ -113,12 +129,13 @@ exports.exportData = async (req, res, next) => {
         usersInDB = await User.find();
         let collectionsDB = [answersInDB, sessionsInDB, optionsInDB, questionsInDB, questionnairesInDB, usersInDB];
 
-        /* (Optional) Change the prefixes of the '_id's of all the documents in DB */
-        let prefixId = ((req.body != undefined) && (req.body.prefixId != undefined)) ? req.body.prefixId : '';
 
-        const prefixId_tooLong = prefixId.length > 23;
+        /* (Optional) Change the prefixes of the '_id's of all the documents in DB */
+        const prefixId = ((req.body != undefined) && (req.body.prefixId != undefined)) ? req.body.prefixId : '';
+
+        const prefixId_tooLong = prefixId.length > 24;
         if (prefixId_tooLong)
-            throw { myMessage: 'prefixId can\'t be more than 23 characters long' };
+            throw { myMessage: 'prefixId can\'t be more than 24 characters long' };
 
         const is_NaN = prefixId.split('').some(digit => {
             let charCode = digit.charCodeAt(0);
@@ -147,9 +164,8 @@ exports.exportData = async (req, res, next) => {
 
 
         /* Write the data into the files */
-        let prefix = `${__dirname}\\..\\..\\data\\test\\export\\`, postfix = prefixId + '.json'; // fifle type can't change for the time being
+        let prefix = `${__dirname}\\..\\..\\data\\test\\export\\`, postfix = '.json';
         const targetFiles = ['answers', 'sessions', 'options', 'questions', 'questionnaires', 'users'].map(str => prefix + str + postfix);
-        let dataExported = [false, false, false, false, false, false];
 
         for (let i = 0, preLen = prefix.length; i < collectionsDB.length; ++i) {
             fs.writeFileSync(targetFiles[i], JSON.stringify(collectionsDB[i]), { flag: 'w' });
@@ -162,7 +178,8 @@ exports.exportData = async (req, res, next) => {
         });
     } catch (error) {
         const myMessageExists = error.myMessage != undefined;
-        return handleResponse(req, res, 500, {
+        console.log(`myMessageExists: ${myMessageExists}`);
+        return handleResponse(req, res, myMessageExists ? 400 : 500, {
             status: 'failed',
             message: myMessageExists ? error.myMessage : error
         });
