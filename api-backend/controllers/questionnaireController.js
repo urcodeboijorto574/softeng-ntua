@@ -4,8 +4,11 @@ const Option = require(`${__dirname}/../models/optionModel.js`);
 const Session = require(`${__dirname}/../models/sessionModel.js`);
 const Answer = require(`${__dirname}/../models/answerModel.js`);
 const User = require(`${__dirname}/../models/userModel.js`);
+const handleResponse =
+    require(`${__dirname}/../utils/handleResponse`).handleResponse;
 const mongoose = require('mongoose');
-
+const converter = require('json-2-csv');
+const json2csv = require('json2csv');
 /**
  * Middleware that returns all the questionnaires that have been created by the logged-in admin.
  * @param {JSON} req - JSON request object containing the username of the logged-in admin (req.username).
@@ -222,6 +225,7 @@ exports.deleteQuestionnaire = async (req, res, next) => {
  */
 exports.getQuestionnaire = async (req, res) => {
     try {
+        let responseMessage;
         const questionnaire = await Questionnaire.findOne({
             questionnaireID: req.params.questionnaireID,
         })
@@ -238,23 +242,48 @@ exports.getQuestionnaire = async (req, res) => {
                 options: { sort: { qID: 1 } },
             });
         if (!questionnaire) {
-            return res.status(400).json({
-                status: 'failed',
-                message: `Questionnaire ID ${req.params.questionnaireID} not found`,
-            });
+            responseMessage = { status: 'failed', message: `Questionnaire ID ${req.params.questionnaireID} not found` };
+            return handleResponse(req, res, 400, responseMessage);         
         }
 
         if (!(req.username === questionnaire.creator)) {
-            return res
-                .status(401)
-                .json({ status: 'failed', message: 'Access denied' });
+            responseMessage = { status: 'failed', message: 'Access denied' };
+            return handleResponse(req, res, 401, responseMessage);
         }
         questionnaire.creator = undefined;
+        if (req.query.format === 'json' || !req.query.format) {
+            return res.status(200).json({ status: 'OK', data: questionnaire });
+        }
+        else if (req.query.format === 'csv') {
+            
+            // json to be converted to csv
+            let retval = [];
 
-        return res.status(200).json({ status: 'OK', data: questionnaire });
+            /* Fill retval array */
+            for (let i = 0, index = 0; i < questionnaire.questions.length; ++i) {
+                for (let j = 0; j < questionnaire.keywords.length; ++j) {
+                    retval[index++] = {
+                        status: 'OK',
+                        questionnaireID: questionnaire.questionnaireID,
+                        questionnaireTitle: questionnaire.questionnaireTitle,
+                        keyword: questionnaire.keywords[j],
+                        qID: questionnaire.questions[i].qID,
+                        qtext: questionnaire.questions[i].qtext,
+                        required: questionnaire.questions[i].type
+                    };
+                }
+            }
+           return handleResponse(req, res, 200, retval);          
+        }
+        else {
+            return res.status(400).json({
+                status: 'failed',
+                message: 'Response format must be either json or csv!',
+            });
+        }
+        
     } catch (err) {
-        return res
-            .status(500)
-            .json({ status: 'failed', message: 'Internal server error' });
+        responseMessage = { status: 'failed', message: 'Internal server error' };
+        return handleResponse(req, res, 500, responseMessage);
     }
 };
