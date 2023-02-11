@@ -252,26 +252,31 @@ exports.getSessionAnswers = async (req, res, next) => {
  */
 exports.getQuestionAnswers = async (req, res, next) => {
     try {
-        const getanswers = await Answer.find({
+        let questionnaireCreator = await Questionnaire.findOne({
+            questionnaireID: req.params.questionnaireID,
+        }).select({ creator: 1, _id: 0 });
+        if (!(req.username === questionnaireCreator.creator)) {
+            return res.json({ status: 'failed', message: 'Access denied' });
+        }
+        let questionanswers = await Answer.find({
             questionnaireID: req.params.questionnaireID,
             qID: req.params.questionID,
-        }).select({ _id: 0, __v: 0, optID: 0 });
-
-        if (!getanswers) {
+        }).select({ _id: 0,   submittedAt: 1,  sessionID: 1, optID: 1}).sort( {submittedAt: 1}).lean(true);
+        for( let i = 0; i < questionanswers.length; i++){
+            questionanswers[i].submittedAt=undefined;
+            questionanswers[i].ans = questionanswers[i].optID;
+            delete questionanswers[i].optID;
+            questionanswers[i].session = questionanswers[i].sessionID;
+            delete questionanswers[i].sessionID;
+        }
+        if (!questionanswers) {
             return res.status(400).json({
                 status: 'failed',
                 message: `Answers not found`,
-            });
-        }
-        /* if (!(req.username === Questionnaire.creator)) {
-            return res
-                .status(401)
-                .json({ status: 'failed', message: 'Access denied' });
-        }*/
-        return res.status(200).json({ status: 'OK', data: getanswers });
-    } catch (err) {
-        return res
-            .status(500)
-            .json({ status: 'failed', message: 'Internal server error' });
+            });        }
+        data={questionnnaireID: req.params.questionnaireID, questionID: req.params.questionID, answers: questionanswers} ;   
+        return res.status(200).json({ status: 'OK', data: data });
+    } catch (err) { console.log(err);
+        return res.status(500).json({ status: 'failed', message: 'Internal server error' });
     }
 };
