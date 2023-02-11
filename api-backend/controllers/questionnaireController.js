@@ -219,7 +219,7 @@ exports.getQuestionnaire = async (req, res) => {
         if (!(req.username === questionnaire.creator)) {
             return res
                 .status(401)
-                .json({ status: 'Failed', message: 'Access denied' });
+                .json({ status: 'Failed', message: 'User unauthorized to continue!' });
         }
 
         return res

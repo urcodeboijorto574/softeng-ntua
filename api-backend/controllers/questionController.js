@@ -47,7 +47,7 @@ exports.getQuestion = async (req, res) => {
         if (!(req.username === questionnaire.creator)) {
             return res
                 .status(401)
-                .json({ status: 'failed', message: 'Access denied' });
+                .json({ status: 'failed', message: 'User unauthorized to continue!' });
         }
         return res.status(200).json({ status: 'OK', question: question });
     } catch (err) {
