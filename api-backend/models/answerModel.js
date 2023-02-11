@@ -18,7 +18,7 @@ const answerSchema = new mongoose.Schema({
     },
     answertext: {
         type: String,
-        default: '',
+        default: ' ',
     },
     submittedAt: {
         type: Date,
