@@ -31,22 +31,14 @@ router
         adminController.getHealthcheck
     );
 
-router.route('/questionnaire_upd').post(
-    authController.protect,
-    authController.restrictTo('admin'),
-    function (req, res, next) {
-        if (!req.body.file) {
-            responseMessage = {
-                status: 'failed',
-                message: 'Request body must have property file',
-            };
-            return handleResponse(req, res, 400, responseMessage);
-        }
-        upload.single('file');
-        next();
-    },
-    adminController.questionnaireUpdate
-);
+router
+    .route('/questionnaire_upd')
+    .post(
+        authController.protect,
+        authController.restrictTo('admin'),
+        upload.single('file'),
+        adminController.questionnaireUpdate
+    );
 
 router
     .route('/resetall')
