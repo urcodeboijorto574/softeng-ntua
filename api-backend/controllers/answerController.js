@@ -192,8 +192,14 @@ exports.getSessionAnswers = async (req, res, next) => {
         let questionnaireCreator = await Questionnaire.findOne({
             questionnaireID: req.params.questionnaireID,
         }).select({ creator: 1, _id: 0 });
+        if (!questionnaireCreator) {
+            return res.status(400).json({
+                status: 'failed',
+                message: `Questionnaire ID ${req.params.questionnaireID} not found`,
+            });
+        }
         if (!(req.username === questionnaireCreator.creator)) {
-            return res.json({ status: 'failed', message: 'Access denied' });
+            return res.status(401).json({ status: 'failed', message: 'User unauthorized to continue!' });
         }
         let sessionanswers = await Session.findOne({
             questionnaireID: req.params.questionnaireID,
@@ -219,8 +225,9 @@ exports.getSessionAnswers = async (req, res, next) => {
         }
 
         for (let i = 0; i < sessionanswers.answers.length; i++) {
+            sessionanswers.answers[i].submittedAt = undefined;
             // questions with type question
-            if (sessionanswers.answers[i].answertext === '') {
+            if (sessionanswers.answers[i].answertext === ' ') {
                 sessionanswers.answers[i].answertext = undefined;
                 sessionanswers.answers[i].ans = sessionanswers.answers[i].optID;
                 delete sessionanswers.answers[i].optID;
@@ -237,7 +244,7 @@ exports.getSessionAnswers = async (req, res, next) => {
     } catch (err) {
         return res.status(500).json({
             status: 'failed',
-            message: 'Internal server error'
+            message: 'Internal server error',
         });
     }
 };
