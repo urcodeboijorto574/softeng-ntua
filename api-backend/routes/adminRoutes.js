@@ -2,27 +2,26 @@ const express = require('express');
 const multer = require('multer');
 const adminController = require(`${__dirname}/../controllers/adminController.js`);
 const authController = require('./../controllers/authController.js');
+const handleResponse =
+    require(`${__dirname}/../utils/handleResponse.js`).handleResponse;
 
 const router = express.Router();
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-      cb(
-        null,
-        './'
-      ); //you tell where to upload the files,
+        cb(null, './'); //you tell where to upload the files,
     },
     filename: function (req, file, cb) {
-      cb(null, file.originalname);
+        cb(null, file.originalname);
     },
-  });
+});
 
 const upload = multer({
     storage: storage,
     onFileUploadStart: function (file) {
-      console.log(file.originalname + ' is starting ...');
+        console.log(file.originalname + ' is starting ...');
     },
-  });
+});
 
 router
     .route('/healthcheck')
@@ -32,14 +31,22 @@ router
         adminController.getHealthcheck
     );
 
-router
-    .route('/questionnaire_upd')
-    .post(
-        authController.protect,
-        authController.restrictTo('admin'),
-        upload.single('file'),
-        adminController.questionnaireUpdate
-    );
+router.route('/questionnaire_upd').post(
+    authController.protect,
+    authController.restrictTo('admin'),
+    function (req, res, next) {
+        if (!req.body.file) {
+            responseMessage = {
+                status: 'failed',
+                message: 'Request body must have property file',
+            };
+            return handleResponse(req, res, 400, responseMessage);
+        }
+        upload.single('file');
+        next();
+    },
+    adminController.questionnaireUpdate
+);
 
 router
     .route('/resetall')
