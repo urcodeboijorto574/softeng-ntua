@@ -282,7 +282,7 @@ exports.getQuestionnaire = async (req, res) => {
                     };
                 }
             }
-            return handleResponse(req, res, 200, retval);
+            return res.status(200).csv(retval, true);
         } else {
             return res.status(400).json({
                 status: 'failed',

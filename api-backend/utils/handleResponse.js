@@ -6,11 +6,7 @@ exports.handleResponse = (req, res, statusCode, responseMessage) => {
     if (req.query.format === 'json' || !req.query.format) {
         return res.status(statusCode).json(responseMessage);
     } else if (req.query.format === 'csv') {
-        // for JSON responses that have messages
-        if (Array.isArray(responseMessage)) {
-            return res.status(statusCode).csv(responseMessage, true);
-        }
-        else {
+        {
             return res.status(statusCode).csv([responseMessage], true);
         }        
     } else {

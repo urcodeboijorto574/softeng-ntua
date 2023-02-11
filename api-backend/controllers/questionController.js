@@ -72,7 +72,7 @@ exports.getQuestion = async (req, res) => {
                     nextqID: question.options[i].nextqID
                 };
             }
-            return handleResponse(req, res, 200, retval);
+            return res.status(200).csv(retval, true);
 
         }
         else {

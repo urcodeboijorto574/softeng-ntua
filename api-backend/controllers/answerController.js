@@ -189,17 +189,20 @@ exports.doAnswer = async (req, res, next) => {
  */
 exports.getSessionAnswers = async (req, res, next) => {
     try {
+        let responseMessage;
         let questionnaireCreator = await Questionnaire.findOne({
             questionnaireID: req.params.questionnaireID,
         }).select({ creator: 1, _id: 0 });
         if (!questionnaireCreator) {
-            return res.status(400).json({
+            responseMessage = {
                 status: 'failed',
                 message: `Questionnaire ID ${req.params.questionnaireID} not found`,
-            });
+            }
+            return handleResponse(req, res, 400, responseMessage);
         }
         if (!(req.username === questionnaireCreator.creator)) {
-            return res.status(401).json({ status: 'failed', message: 'User unauthorized to continue!' });
+            responseMessage = { status: 'failed', message: 'User unauthorized to continue!' };
+            return handleResponse(req, res, 401, responseMessage);
         }
         let sessionanswers = await Session.findOne({
             questionnaireID: req.params.questionnaireID,
@@ -218,10 +221,11 @@ exports.getSessionAnswers = async (req, res, next) => {
             })
             .lean(true);
         if (!sessionanswers) {
-            return res.status(400).json({
+            responseMessage = {
                 status: 'failed',
                 message: `Session ID ${req.params.session} not found`,
-            });
+            }
+            return handleResponse(req, res, 400, responseMessage);
         }
 
         for (let i = 0; i < sessionanswers.answers.length; i++) {
@@ -240,12 +244,37 @@ exports.getSessionAnswers = async (req, res, next) => {
                 delete sessionanswers.answers[i].answertext;
             }
         }
-        return res.status(200).json({ status: 'OK', data: sessionanswers });
+        if (req.query.format === 'json' || !req.query.format) {
+            return res.status(200).json({ status: 'OK', data: sessionanswers });
+        }
+        else if (req.query.format === 'csv') {
+            // json to be converted to csv
+            let retval = [];
+
+            /* Fill retval array */
+            for (let i = 0; i < sessionanswers.answers.length; i++) {
+                retval[i] = {
+                    status: 'OK',
+                    questionnaireID: sessionanswers.questionnaireID,
+                    session: sessionanswers.session,
+                    qID: sessionanswers.answers[i].qID,
+                    ans: sessionanswers.answers[i].ans
+                }
+            }
+            return res.status(200).csv(retval, true);
+        }
+        else {
+            return res.status(400).json({
+                status: 'failed',
+                message: 'Response format is json or csv!',
+            })
+        }
     } catch (err) {
-        return res.status(500).json({
+        responseMessage = {
             status: 'failed',
             message: 'Internal server error',
-        });
+        };
+        return handleResponse(req, res, 500, responseMessage);
     }
 };
 
@@ -259,26 +288,30 @@ exports.getSessionAnswers = async (req, res, next) => {
  */
 exports.getQuestionAnswers = async (req, res, next) => {
     try {
+        let responseMessage;
         let questionnaireCreator = await Questionnaire.findOne({
             questionnaireID: req.params.questionnaireID,
         }).select({ creator: 1, _id: 0 });
         if (!questionnaireCreator) {
-            return res.status(400).json({
+            responseMessage = {
                 status: 'failed',
                 message: `Questionnaire ID ${req.params.questionnaireID} not found`,
-            });
+            };
+            return handleResponse(req, res, 400, responseMessage);
         }
         let question = await Question.findOne({
             qID: req.params.questionID, questionnaireID: req.params.questionnaireID,
         });
         if (!question) {
-            return res.status(400).json({
+            responseMessage = {
                 status: 'failed',
                 message: `Question ID ${req.params.questionID} not found`,
-            });
+            };
+            return handleResponse(req, res, 400, responseMessage);
         }
         if (!(req.username === questionnaireCreator.creator)) {
-            return res.status(401).json({ status: 'failed', message: 'User unauthorized to continue!' });
+            responseMessage = { status: 'failed', message: 'User unauthorized to continue!' };
+            return handleResponse(req, res, 401, responseMessage);
         }
         let questionanswers = await Answer.find({
             questionnaireID: req.params.questionnaireID,
@@ -310,15 +343,40 @@ exports.getQuestionAnswers = async (req, res, next) => {
                 delete questionanswers[i].answertext;
             }
         }       
-        data = {
-            questionnnaireID: req.params.questionnaireID,
+        let data = {
+            questionnaireID: req.params.questionnaireID,
             questionID: req.params.questionID,
             answers: questionanswers,
         };
-        return res.status(200).json({ status: 'OK', data: data });
+        console.log(data);
+        if (req.query.format === 'json' || !req.query.format) {
+            return res.status(200).json({ status: 'OK', data: data }); 
+        }
+        else if (req.query.format === 'csv') {
+            // json to be converted to csv
+            let retval = [];
+
+            /* Fill retval array */
+            for (let i = 0; i < data.answers.length; i++) {
+                retval[i] = {
+                    status: 'OK',
+                    questionnaireID: data.questionnaireID,
+                    questionID: data.questionID,
+                    session: data.answers[i].session,
+                    ans: data.answers[i].ans
+                }
+            }
+            return res.status(200).csv(retval, true);
+        }
+        else {
+            return res.status(400).json({
+                status: 'failed',
+                message: 'Response format is json or csv!',
+            })
+        }
+       
     } catch (err) {
-        return res
-            .status(500)
-            .json({ status: 'failed', message: 'Internal server error' });
+        responseMessage = { status: 'failed', message: 'Internal server error' };
+        return handleResponse(req, res, 500, responseMessage);
     }
 };
