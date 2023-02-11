@@ -1,122 +1,76 @@
-[
-    {
-        "_id": "63b57c04edfc7d4fccdb9a2d",
-        "keywords": [
-            "footbal",
-            "islands",
-            "timezone"
-        ],
-        "questions": [
-            {
-                "_id": "63b57c04edfc7d4fccdb9a29"
-            },
-            {
-                "_id": "63b57c04edfc7d4fccdb9a2b"
-            }
-        ],
-        "questionnaireID": "QQ000",
-        "questionnaireTitle": "My first research questionnaire"
-    },
-    {
-        "_id": "63b57c16edfc7d4fccdb9a4b",
-        "keywords": [
-            "footbal",
-            "islands",
-            "timezone"
-        ],
-        "questions": [
-            {
-                "_id": "63b57c15edfc7d4fccdb9a43"
-            },
-            {
-                "_id": "63b57c16edfc7d4fccdb9a45"
-            },
-            {
-                "_id": "63b57c16edfc7d4fccdb9a47"
-            },
-            {
-                "_id": "63b57c16edfc7d4fccdb9a49"
-            }
-        ],
-        "questionnaireID": "QQ001",
-        "questionnaireTitle": "My second research questionnaire"
-    },
-    {
-        "_id": "63b6f8cd945aba5410493f82",
-        "keywords": [
-            "footbal",
-            "islands",
-            "timezone"
-        ],
-        "questions": [
-            {
-                "_id": "63b6f8cc945aba5410493f7a"
-            },
-            {
-                "_id": "63b6f8cd945aba5410493f7c"
-            },
-            {
-                "_id": "63b6f8cd945aba5410493f7e"
-            },
-            {
-                "_id": "63b6f8cd945aba5410493f80"
-            }
-        ],
-        "questionnaireID": "QQ042",
-        "questionnaireTitle": "My third research questionnaire"
-    },
-    {
-        "_id": "63bc110ded7ab64f38d39687",
-        "keywords": [
-            "footbal",
-            "islands",
-            "timezone"
-        ],
-        "questions": [
-            {
-                "_id": "63bc110ded7ab64f38d3967d"
-            },
-            {
-                "_id": "63bc110ded7ab64f38d3967f"
-            },
-            {
-                "_id": "63bc110ded7ab64f38d39681"
-            },
-            {
-                "_id": "63bc110ded7ab64f38d39683"
-            },
-            {
-                "_id": "63bc110ded7ab64f38d39685"
-            }
-        ],
-        "questionnaireID": "QQ052",
-        "questionnaireTitle": "My fourth research questionnaire"
-    },
-    {
-        "_id": "63bd62925397442ec4c12440",
-        "keywords": [
-            "footbal",
-            "islands",
-            "timezone"
-        ],
-        "questions": [
-            {
-                "_id": "63bd62915397442ec4c12436"
-            },
-            {
-                "_id": "63bd62915397442ec4c12438"
-            },
-            {
-                "_id": "63bd62915397442ec4c1243a"
-            },
-            {
-                "_id": "63bd62925397442ec4c1243c"
-            },
-            {
-                "_id": "63bd62925397442ec4c1243e"
-            }
-        ],
-        "questionnaireID": "QQ062",
-        "questionnaireTitle": "My fifth research questionnaire"
-    }
-]
+{
+    "questionnaireID": "TEST1",
+    "questionnaireTitle": "Another example questionnaire",
+    "keywords": ["keyword1", "keyword2", "keyword3"],
+    "questions": [
+        {
+            "qID": "V00",
+            "qtext": "This is Question 0",
+            "required": "FALSE",
+            "type": "profile",
+            "options": [
+                {
+                    "optID": "V00TXT",
+                    "opttxt": "<open string>",
+                    "nextqID": "V01"
+                }
+            ]
+        },
+        {
+            "qID": "V01",
+            "qtext": "This is Question 1",
+            "required": "TRUE",
+            "type": "profile",
+            "options": [
+                {
+                    "optID": "V01A1",
+                    "opttxt": "option 1",
+                    "nextqID": "V02"
+                },
+                {
+                    "optID": "V01A2",
+                    "opttxt": "option 2",
+                    "nextqID": "V02"
+                },
+                {
+                    "optID": "V01A3",
+                    "opttxt": "option 3",
+                    "nextqID": "-"
+                },
+                {
+                    "optID": "V01A4",
+                    "opttxt": "option 4",
+                    "nextqID": "V02"
+                }
+            ]
+        },
+        {
+            "qID": "V02",
+            "qtext": "This is Question 2",
+            "required": "TRUE",
+            "type": "profile",
+            "options": [
+                {
+                    "optID": "V02A1",
+                    "opttxt": "option 1",
+                    "nextqID": "-"
+                },
+                {
+                    "optID": "V02A2",
+                    "opttxt": "option 2",
+                    "nextqID": "-"
+                },
+                {
+                    "optID": "V02A3",
+                    "opttxt": "option 3",
+                    "nextqID": "-"
+                },
+                {
+                    "optID": "V02A4",
+                    "opttxt": "option 4",
+                    "nextqID": "-"
+                }
+            ]
+        }
+    ]
+}

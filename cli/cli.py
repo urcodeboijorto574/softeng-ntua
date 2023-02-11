@@ -164,12 +164,25 @@ def resetall(form):
 
 # questionnaire_upd: NOT GOOD
 def questionnaire_upd(source, form):
+    import uuid
+    # source = "C:\\Users\\steli\\SoftEng22-36\\cli\\jtest.txt"
     updUrl = baseUrl + "admin/questionnaire_upd" + "?format=" + form
     vescookie = getCookie()
-    headers={'Content-Type': 'multipart/form-data'}
-    file = {'file': (source, open(source, 'rb'), 'application/json')}
+    # headers={'Content-Type': 'multipart/form-data'}
+    boundary = str(uuid.uuid4())
+    headers = {'Content-Type': 'multipart/form-data; boundary=' + boundary}
+    headers = {'Content-Type': 'multipart/form-data; boundary=<calculated when request is sent>'}
+
+    
+    # file = {'file': (source, open(source, 'rb'), 'application/json')}
+
+    # file = {'file': (source, open(source, 'rb'))}
+    # print(file["file"])
     try:
-        response = requests.post(updUrl, cookies=vescookie, files = file, headers = headers, verify = False, timeout=10)
+        files = [('file', open(source, 'rb'))]
+        contents = files[0][1].read()
+        print(contents)
+        response = requests.post(updUrl, cookies=vescookie, files = files, headers = headers, verify = False, timeout=10)
     except requests.exceptions.ReadTimeout:
         print("Timeout error, the server took more than 10 seconds to respond")
         exit()
@@ -490,8 +503,6 @@ if __name__ == '__main__':
                     print("Invalid arguments passed! Exiting...")
                     exit()
 
-
-
         # for arg in sys.argv[1:]:
         #     if (arg not in known):
         #         unrecognized.append(arg)
@@ -511,8 +522,6 @@ if __name__ == '__main__':
     except ValueError as e:
         print("Exception!")
         exit()
-
-# print(vars(args))
 
 unknown = [arg for arg in vars(args) if arg not in known]
 
