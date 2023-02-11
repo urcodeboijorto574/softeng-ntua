@@ -197,9 +197,9 @@ def run_resetall():
     # ...
     return
 
-def run_questionnaire_upd(username, source, form): #(username, password, source, form):
-    print("BUG NEEDS TO BE FIXED!")
-    return
+def run_questionnaire_upd(username, title, idCheck, source, form): #(username, password, source, form):
+    # print("BUG NEEDS TO BE FIXED!")
+    # return
     # run_login(username, password, form, False)
     result = subprocess.run(['python', 'cli.py', 'questionnaire_upd', '--source', source, '--format', form], capture_output=True)
 
@@ -210,6 +210,29 @@ def run_questionnaire_upd(username, source, form): #(username, password, source,
 
     if form == "json":
         res = json.loads(result.stdout.decode('utf-8'))
+        if list(res.keys()) == ["status"]:
+            if res["status"] == "OK" and (username == "adminTestJson" or username == "adminTestCsv"):
+                print("PASSED", check_mark.decode("utf-8"))
+                return
+            else:
+                print("FAILED, wrong response data")
+                return
+        elif list(res.keys()) == ["status", "message"]:
+            if res["status"] == "failed" and res["message"] == "User unauthorized to continue!" and (username == "TheUltraSuperAdmin" or username == "userTestJson" or username == "userTestCsv"):
+                print("PASSED", check_mark.decode("utf-8"))
+                return
+            elif res["status"] == "failed" and res["message"] == "Invalid input data. A questionnaire id must have 5 characters" and len(title) != 5:
+                print("PASSED", check_mark.decode("utf-8"))
+                return
+            elif res["status"] == "failed" and res["message"] == "All IDs must be unique" and idCheck == True:
+                print("PASSED", check_mark.decode("utf-8"))
+                return
+            else:
+                print("FAILED, wrong response data")
+                return
+        else:
+            print("FAILED!, wrong response data")
+            return
     else:
         # res = json.loads(result.stdout.decode('utf-8')) # TEMPORARY UNTIL CSV BUG FIXED        
         # csv_reader = csv.reader(result.stdout.decode('utf-8').splitlines())
@@ -578,6 +601,13 @@ def run_getquestionanswers(userConnected, questionnaire_id, question_id, form):
 
     return
 
+def run_delete(questionnaire_id, form):
+    result = subprocess.run(['python', 'cli.py', 'deleteq', '--questionnaire_id', questionnaire_id, '--format', form], capture_output=True)
+
+    if result.returncode != 0:
+        raise Exception('Getsessionanswers failed with return code {}'.format(result.returncode))
+
+    return
 
 def run_usermod(role, username, password, form):
     result = subprocess.run(['python', 'cli.py', 'admin', '--usermod', role, '--username', username, '--passw', password, '--format', form], capture_output=True)
@@ -924,9 +954,16 @@ if __name__ == '__main__':
     # print("Test", str(i).ljust(2, ' '), end = " - ")
     # print("Questionnaire_upd test with admin (should be authorized) (format = " + forms[0] + ")", end = ":\t")
 
+    run_delete("UTEST", forms[0])
+
     message = toPrint(i, "Questionnaire_upd test with admin (should be authorized) ", forms[0])
     print(message, end = "")
-    run_questionnaire_upd(usernames["adminJson"][0], "jtest.txt", forms[0])
+    run_questionnaire_upd(usernames["adminJson"][0], "UTEST", False, "jtest.txt", forms[0])
+    i += 1
+
+    message = toPrint(i, "Questionnaire_upd test with admin (duplicate IDs, should reject) ", forms[0])
+    print(message, end = "")
+    run_questionnaire_upd(usernames["adminJson"][0], "UTEST", True, "jtest.txt", forms[0])
     i += 1
 
     message = toPrint(i, "Questionnaire test with admin (should be authorized) ", forms[0])
