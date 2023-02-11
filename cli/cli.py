@@ -6,6 +6,7 @@ import pandas as pd
 from io import StringIO
 import urllib3
 import csv
+import os
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 requests.packages.urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
@@ -162,7 +163,7 @@ def resetall(form):
     
     return
 
-# questionnaire_upd: NOT GOOD
+# questionnaire_upd: GOOD
 def questionnaire_upd(source, form):
     import uuid
     # source = "C:\\Users\\steli\\SoftEng22-36\\cli\\jtest.txt"
@@ -170,8 +171,10 @@ def questionnaire_upd(source, form):
     vescookie = getCookie()
     # headers={'Content-Type': 'multipart/form-data'}
     boundary = str(uuid.uuid4())
-    headers = {'Content-Type': 'multipart/form-data; boundary=' + boundary}
-    headers = {'Content-Type': 'multipart/form-data; boundary=<calculated when request is sent>'}
+    #headers = {'Content-Type': 'multipart/form-data; boundary=' + boundary, 'Accept': '*/*', 'Accept-Encoding': 'gzip, deflate, br'}
+    #headers = {'Content-Type': 'multipart/form-data; boundary=<calculated when request is sent>', 'Accept': '*/*', 'Accept-Encoding': 'gzip, deflate, br'}
+
+    #headers = {'Content-Type': 'multipart/form-data; boundary=<calculated when request is sent>'}
 
     
     # file = {'file': (source, open(source, 'rb'), 'application/json')}
@@ -179,10 +182,11 @@ def questionnaire_upd(source, form):
     # file = {'file': (source, open(source, 'rb'))}
     # print(file["file"])
     try:
-        files = [('file', open(source, 'rb'))]
-        contents = files[0][1].read()
-        print(contents)
-        response = requests.post(updUrl, cookies=vescookie, files = files, headers = headers, verify = False, timeout=10)
+        #files = [('file', open(source, 'rb'), 'application/json')]
+        files = {
+         'file': (os.path.basename(source), open(source, 'rb'), 'application/octet-stream')
+        }
+        response = requests.post(updUrl, cookies=vescookie, files = files, verify = False, timeout=10)
     except requests.exceptions.ReadTimeout:
         print("Timeout error, the server took more than 10 seconds to respond")
         exit()
