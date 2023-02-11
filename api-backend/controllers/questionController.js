@@ -35,7 +35,7 @@ exports.getQuestion = async (req, res) => {
                 status: 'failed',
                 message: `Question not found`,
             };
-            return handleResponse(req, res, 402, responseMessage);
+            return handleResponse(req, res, 400, responseMessage);
         }  
         const questionnaire = await Questionnaire.findOne({
             questionnaireID: req.params.questionnaireID,
@@ -49,7 +49,7 @@ exports.getQuestion = async (req, res) => {
         });   
         if (!(req.username === questionnaire.creator)) {
             responseMessage = { status: 'failed', message: 'Access denied' }
-            return handleResponse(req, res, 400, responseMessage);
+            return handleResponse(req, res, 401, responseMessage);
         } 
         
         if (req.query.format === 'json' || !req.query.format) {

@@ -71,7 +71,7 @@ exports.getUser = async (req, res) => {
                 message: 'No user found with the given username.',
             };
 
-            return handleResponse(req, res, 402, responseMessage);
+            return handleResponse(req, res, 400, responseMessage);
         } else {
             responseMessage = {
                 status: 'OK',
