@@ -78,7 +78,7 @@ exports.getHealthcheck = async (req, res, next) => {
         } else {
           return res.status(400).json({
             status: 'failed',
-            message: 'Response format is json or csv',
+            message: 'Response format must be either json or csv!',
           });
         }
       } catch (err) {
@@ -222,7 +222,7 @@ exports.questionnaireUpdate = async (req, res, next) => {
                 } else {
                   return res.status(400).json({
                     status: 'failed',
-                    message: 'Response format is json or csv',
+                    message: 'Response format must be either json or csv!',
                   });
                 }
               } catch (error) {
@@ -301,7 +301,7 @@ exports.resetAll = async (req, res, next) => {
         } else {
           return res.status(400).json({
             status: 'failed',
-            reason: 'Response format is json or csv',
+            reason: 'Response format must be either json or csv!',
           });
         }
       } catch (err) {
@@ -341,11 +341,11 @@ exports.resetQuestionnaire = async (req, res, next) => {
           }
           if (req.userRole !== 'super-admin' && req.username !== valid.creator) {
             if (req.query.format === 'csv') {
-              return res.status(401).csv([{ status: 'failed', reason: 'Not authorised' }], true);
+              return res.status(401).csv([{ status: 'failed', reason: 'User unauthorized to continue!' }], true);
             } else {
               return res.status(401).json({
                 status: 'failed',
-                reason: 'Not authorised',
+                reason: 'User unauthorized to continue!',
               });
           }
         }
@@ -375,7 +375,7 @@ exports.resetQuestionnaire = async (req, res, next) => {
         } else {
           return res.status(400).json({
             status: 'failed',
-            reason: 'Response format is json or csv',
+            reason: 'Response format must be either json or csv!',
           });
         }
       } catch (err) {
