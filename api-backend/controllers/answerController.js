@@ -192,8 +192,14 @@ exports.getSessionAnswers = async (req, res, next) => {
         let questionnaireCreator = await Questionnaire.findOne({
             questionnaireID: req.params.questionnaireID,
         }).select({ creator: 1, _id: 0 });
+        if (!questionnaireCreator) {
+            return res.status(400).json({
+                status: 'failed',
+                message: `Questionnaire ID ${req.params.questionnaireID} not found`,
+            });
+        }
         if (!(req.username === questionnaireCreator.creator)) {
-            return res.json({ status: 'failed', message: 'Access denied' });
+            return res.status(401).json({ status: 'failed', message: 'User unauthorized to continue!' });
         }
         let sessionanswers = await Session.findOne({
             questionnaireID: req.params.questionnaireID,
@@ -219,8 +225,9 @@ exports.getSessionAnswers = async (req, res, next) => {
         }
 
         for (let i = 0; i < sessionanswers.answers.length; i++) {
+            sessionanswers.answers[i].submittedAt = undefined;
             // questions with type question
-            if (sessionanswers.answers[i].answertext === '') {
+            if (sessionanswers.answers[i].answertext === ' ') {
                 sessionanswers.answers[i].answertext = undefined;
                 sessionanswers.answers[i].ans = sessionanswers.answers[i].optID;
                 delete sessionanswers.answers[i].optID;
@@ -237,7 +244,7 @@ exports.getSessionAnswers = async (req, res, next) => {
     } catch (err) {
         return res.status(500).json({
             status: 'failed',
-            message: 'Internal server error'
+            message: 'Internal server error',
         });
     }
 };
@@ -255,28 +262,63 @@ exports.getQuestionAnswers = async (req, res, next) => {
         let questionnaireCreator = await Questionnaire.findOne({
             questionnaireID: req.params.questionnaireID,
         }).select({ creator: 1, _id: 0 });
+        if (!questionnaireCreator) {
+            return res.status(400).json({
+                status: 'failed',
+                message: `Questionnaire ID ${req.params.questionnaireID} not found`,
+            });
+        }
+        let question = await Question.findOne({
+            qID: req.params.questionID, questionnaireID: req.params.questionnaireID,
+        });
+        if (!question) {
+            return res.status(400).json({
+                status: 'failed',
+                message: `Question ID ${req.params.questionID} not found`,
+            });
+        }
         if (!(req.username === questionnaireCreator.creator)) {
-            return res.json({ status: 'failed', message: 'Access denied' });
+            return res.status(401).json({ status: 'failed', message: 'User unauthorized to continue!' });
         }
         let questionanswers = await Answer.find({
             questionnaireID: req.params.questionnaireID,
             qID: req.params.questionID,
-        }).select({ _id: 0,   submittedAt: 1,  sessionID: 1, optID: 1}).sort( {submittedAt: 1}).lean(true);
-        for( let i = 0; i < questionanswers.length; i++){
-            questionanswers[i].submittedAt=undefined;
-            questionanswers[i].ans = questionanswers[i].optID;
-            delete questionanswers[i].optID;
+        })
+            .select({
+                _id: 0,
+                submittedAt: 1,
+                sessionID: 1,
+                optID: 1,
+                answertext: 1,
+            })
+            .sort({ submittedAt: 1 })
+            .lean(true);
+
+        for (let i = 0; i < questionanswers.length; i++) {
+            questionanswers[i].submittedAt = undefined;
             questionanswers[i].session = questionanswers[i].sessionID;
             delete questionanswers[i].sessionID;
-        }
-        if (!questionanswers) {
-            return res.status(400).json({
-                status: 'failed',
-                message: `Answers not found`,
-            });        }
-        data={questionnnaireID: req.params.questionnaireID, questionID: req.params.questionID, answers: questionanswers} ;   
+            if (questionanswers[i].answertext === ' ') {
+                questionanswers[i].answertext = undefined;
+                questionanswers[i].ans = questionanswers[i].optID;
+                delete questionanswers[i].optID;
+            }
+            // questions with type profile
+            else {
+                questionanswers[i].optID = undefined;
+                questionanswers[i].ans = questionanswers[i].answertext;
+                delete questionanswers[i].answertext;
+            }
+        }       
+        data = {
+            questionnnaireID: req.params.questionnaireID,
+            questionID: req.params.questionID,
+            answers: questionanswers,
+        };
         return res.status(200).json({ status: 'OK', data: data });
-    } catch (err) { console.log(err);
-        return res.status(500).json({ status: 'failed', message: 'Internal server error' });
+    } catch (err) {
+        return res
+            .status(500)
+            .json({ status: 'failed', message: 'Internal server error' });
     }
 };

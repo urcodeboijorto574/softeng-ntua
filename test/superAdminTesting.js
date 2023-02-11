@@ -543,7 +543,7 @@ describe("Get User bad scenario 3, the user that is get does not exist", () => {
         .get("/intelliq_api/admin/users/aAuserThatDoesNotExist")
         .set("Cookie", `jwt=${token}`)
         .end((err, res) => {
-          res.should.have.status(402);
+          res.should.have.status(400);
           res.body.should.have.property("status");
           res.body.status.should.equal("failed");
           res.body.should.have.property("message");

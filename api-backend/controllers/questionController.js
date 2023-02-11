@@ -48,7 +48,7 @@ exports.getQuestion = async (req, res) => {
             questionnaireTitle: 0,
         });   
         if (!(req.username === questionnaire.creator)) {
-            responseMessage = { status: 'failed', message: 'Access denied' }
+            responseMessage = { status: 'failed', message: 'User unauthorized to continue!' }
             return handleResponse(req, res, 401, responseMessage);
         } 
         
