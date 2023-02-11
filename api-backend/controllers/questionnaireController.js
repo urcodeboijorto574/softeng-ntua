@@ -243,7 +243,7 @@ exports.getQuestionnaire = async (req, res) => {
             });
         if (!questionnaire) {
             responseMessage = { status: 'failed', message: `Questionnaire ID ${req.params.questionnaireID} not found` };
-            return handleResponse(req, res, 400, responseMessage);         
+            return handleResponse(req, res, 402, responseMessage);         
         }
 
         if (!(req.username === questionnaire.creator)) {
