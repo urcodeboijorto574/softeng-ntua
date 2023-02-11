@@ -266,7 +266,7 @@ class _UserLoginScreenState extends State<UserLoginScreen> {
                                     await logInUser();
                                   } catch (e) {
                                     MyMessageHandler.showSnackbar(
-                                        _scaffoldKey, e.toString());
+                                        _scaffoldKey, 'Something went wrong!');
                                   }
 
                                   setState(() {
