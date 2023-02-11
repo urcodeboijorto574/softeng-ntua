@@ -186,19 +186,23 @@ exports.deleteQuestionnaire = async (req, res, next) => {
         ) {
             return res.status(401).json({
                 status: 'failed',
-                reason: 'Not authorised',
+                message: 'Not authorised',
             });
         }
 
         const retQuestionnaireObj = await Questionnaire.deleteMany(req.params);
 
-        console.log('retQuestionnaireObj:', retQuestionnaireObj);
+        // console.log('retQuestionnaireObj:', retQuestionnaireObj);
 
         if (retQuestionnaireObj.deletedCount == 1) {
             await Question.deleteMany(req.params);
             await Option.deleteMany(req.params);
             await Session.deleteMany(req.params);
             await Answer.deleteMany(req.params);
+            await User.updateMany(
+                { questionnairesAnswered: { $in: [questionnaire._id] } },
+                { $pull: { questionnairesAnswered: questionnaire._id } }
+            );
         }
 
         return res.status(200).json({
@@ -242,8 +246,11 @@ exports.getQuestionnaire = async (req, res) => {
                 options: { sort: { qID: 1 } },
             });
         if (!questionnaire) {
-            responseMessage = { status: 'failed', message: `Questionnaire ID ${req.params.questionnaireID} not found` };
-            return handleResponse(req, res, 400, responseMessage);         
+            responseMessage = {
+                status: 'failed',
+                message: `Questionnaire ID ${req.params.questionnaireID} not found`,
+            };
+            return handleResponse(req, res, 400, responseMessage);
         }
 
         if (!(req.username === questionnaire.creator)) {
@@ -253,14 +260,16 @@ exports.getQuestionnaire = async (req, res) => {
         questionnaire.creator = undefined;
         if (req.query.format === 'json' || !req.query.format) {
             return res.status(200).json({ status: 'OK', data: questionnaire });
-        }
-        else if (req.query.format === 'csv') {
-            
+        } else if (req.query.format === 'csv') {
             // json to be converted to csv
             let retval = [];
 
             /* Fill retval array */
-            for (let i = 0, index = 0; i < questionnaire.questions.length; ++i) {
+            for (
+                let i = 0, index = 0;
+                i < questionnaire.questions.length;
+                ++i
+            ) {
                 for (let j = 0; j < questionnaire.keywords.length; ++j) {
                     retval[index++] = {
                         status: 'OK',
@@ -269,21 +278,22 @@ exports.getQuestionnaire = async (req, res) => {
                         keyword: questionnaire.keywords[j],
                         qID: questionnaire.questions[i].qID,
                         qtext: questionnaire.questions[i].qtext,
-                        required: questionnaire.questions[i].type
+                        required: questionnaire.questions[i].type,
                     };
                 }
             }
-           return handleResponse(req, res, 200, retval);          
-        }
-        else {
+            return handleResponse(req, res, 200, retval);
+        } else {
             return res.status(400).json({
                 status: 'failed',
                 message: 'Response format must be either json or csv!',
             });
         }
-        
     } catch (err) {
-        responseMessage = { status: 'failed', message: 'Internal server error' };
+        responseMessage = {
+            status: 'failed',
+            message: 'Internal server error',
+        };
         return handleResponse(req, res, 500, responseMessage);
     }
 };
