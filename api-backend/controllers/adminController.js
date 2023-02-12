@@ -511,6 +511,12 @@ exports.deleteUser = async (req, res) => {
                 message: 'No user found with the given username.',
             });
         }
+        if (user.role === 'super-admin' && user.username === 'TheUltraSuperAdmin') {
+            return res.status(400).json({
+                status: 'failed',
+                message: 'No user found with the given username.'
+            })
+        }
         await User.deleteOne({
             username: req.params.username,
         });
