@@ -126,17 +126,15 @@ exports.questionnaireUpdate = async (req, res, next) => {
                 if (err) {
                     console.error(err);
                     if (req.query.format === 'csv') {
-                        return res
-                            .status(500)
-                            .csv(
-                                [
-                                    {
-                                        status: 'failed',
-                                        message: 'Could not read file',
-                                    },
-                                ],
-                                true
-                            );
+                        return res.status(500).csv(
+                            [
+                                {
+                                    status: 'failed',
+                                    message: 'Could not read file',
+                                },
+                            ],
+                            true
+                        );
                     }
                     return res.status(500).json({
                         status: 'failed',
@@ -285,17 +283,15 @@ exports.questionnaireUpdate = async (req, res, next) => {
                                     );
                                 } else {
                                     if (req.query.format === 'csv') {
-                                        return res
-                                            .status(500)
-                                            .csv(
-                                                [
-                                                    {
-                                                        status: 'failed',
-                                                        message: err,
-                                                    },
-                                                ],
-                                                true
-                                            );
+                                        return res.status(500).csv(
+                                            [
+                                                {
+                                                    status: 'failed',
+                                                    message: err,
+                                                },
+                                            ],
+                                            true
+                                        );
                                     }
                                     return res.status(500).json({
                                         status: 'failed',
@@ -320,7 +316,7 @@ exports.questionnaireUpdate = async (req, res, next) => {
                                 return res
                                     .status(500)
                                     .csv(
-                                        [{ status: 'failed', message: err }],
+                                        [{ status: 'failed', message: error }],
                                         true
                                     );
                             }
@@ -332,17 +328,15 @@ exports.questionnaireUpdate = async (req, res, next) => {
                     }
                 } catch (err2) {
                     if (req.query.format === 'csv') {
-                        return res
-                            .status(400)
-                            .csv(
-                                [
-                                    {
-                                        status: 'failed',
-                                        message: 'Invalid file structure',
-                                    },
-                                ],
-                                true
-                            );
+                        return res.status(400).csv(
+                            [
+                                {
+                                    status: 'failed',
+                                    message: 'Invalid file structure',
+                                },
+                            ],
+                            true
+                        );
                     }
                     return res.status(400).json({
                         status: 'failed',
@@ -447,17 +441,15 @@ exports.resetQuestionnaire = async (req, res, next) => {
                 req.username !== valid.creator
             ) {
                 if (req.query.format === 'csv') {
-                    return res
-                        .status(401)
-                        .csv(
-                            [
-                                {
-                                    status: 'failed',
-                                    reason: 'User unauthorized to continue!',
-                                },
-                            ],
-                            true
-                        );
+                    return res.status(401).csv(
+                        [
+                            {
+                                status: 'failed',
+                                reason: 'User unauthorized to continue!',
+                            },
+                        ],
+                        true
+                    );
                 } else {
                     return res.status(401).json({
                         status: 'failed',

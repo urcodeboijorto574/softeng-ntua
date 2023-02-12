@@ -1,0 +1,285 @@
+{
+ "questionnaireID": "12346",
+ "questionnaireTitle": "Test Questionnaire1",
+ "keywords": [
+ "footbal",
+ "islands",
+ "timezone"
+ ],
+ "questions": [
+ {
+ "qID": "P90",
+ "qtext": "Ποιο είναι το mail σας;",
+ "required": "FALSE",
+ "type": "profile",
+ "options": [
+ {
+ "optID": "P90TXT",
+ "opttxt": "<open string>",
+ "nextqID": "P91"
+ }
+ ]
+ },
+ {
+ "qID": "P91",
+ "qtext": "Ποια είναι η ηλικία σας;",
+ "required": "TRUE",
+ "type": "profile",
+ "options": [
+ {
+ "optID": "P91A1",
+ "opttxt": "<30",
+ "nextqID": "Q91"
+ },
+ {
+ "optID": "P91A2",
+ "opttxt": "30-50",
+ "nextqID": "Q91"
+ },
+ {
+ "optID": "P91A3",
+ "opttxt": "50-70",
+ "nextqID": "Q91"
+ },
+ {
+ "optID": "P91A4",
+ "opttxt": ">70",
+ "nextqID": "Q91"
+ }
+ ]
+ },
+ {
+ "qID": "Q91",
+ "qtext": "Ποιο είναι το αγαπημένο σας χρώμα;",
+ "required": "TRUE",
+ "type": "question",
+ "options": [
+ {
+ "optID": "Q91A1",
+ "opttxt": "Πράσινο",
+"nextqID": "Q92"
+ },
+ 
+{
+ "optID": "Q91A2"
+,
+ "opttxt": 
+"Κόκκινο",
+ "nextqID": "Q92"
+ },
+ 
+{
+ "optID": "Q91A3"
+,
+ "opttxt": 
+"Κίτρινο",
+ "nextqID": "Q92"
+ 
+}
+ 
+]
+ },
+ 
+{
+ "qID": "Q92"
+,
+ "qtext": 
+"Ασχολείστε με το ποδόσφαιρο;"
+,
+ "required": "TRUE"
+,
+ "type": "question"
+,
+ "options": [
+ 
+{
+ "optID": "Q92A1"
+,
+ "opttxt": 
+"Ναι",
+ "nextqID": "Q93"
+ },
+ 
+{
+ "optID": "Q92A2"
+,
+ "opttxt": 
+"Οχι",
+ "nextqID": "Q94"
+ 
+}
+ 
+]
+ },
+ 
+{
+ "qID": "Q93"
+,
+ "qtext": 
+"Τι ομάδα είστε;"
+,
+ "required": "TRUE"
+,
+ "type": "question"
+,
+ "options": [
+ 
+{
+ "optID": "Q93A1"
+,
+ "opttxt": 
+"Παναθηναϊκός",
+ "nextqID": "Q94"
+ },
+ 
+{
+ "optID": "Q93A2"
+,
+ "opttxt": 
+"Ολυμπιακός "
+,
+ "nextqID": "Q94"
+ },
+ 
+{
+ "optID": "Q93A3"
+,
+ "opttxt": 
+"ΑΕΚ"
+,
+ "nextqID": "Q94"
+ 
+}
+ 
+]
+ },
+ 
+{
+ "qID": "Q94"
+,
+ "qtext": 
+"Έχετε ζήσει σε νησί;"
+,
+ "required": "TRUE"
+,
+ "type": "question"
+,
+ "options": [
+ 
+{
+ "optID": "Q94A1"
+,
+ "opttxt": 
+"Ναι"
+,
+ "nextqID": "Q95"
+ },
+{
+ "optID": "Q94A2",
+ "opttxt": "Οχι",
+ "nextqID": "Q96"
+ }
+ ]
+ },
+ {
+ "qID": "Q95",
+ "qtext": "Με δεδομένο ότι απαντήσατε [*Q04A1] στην ερώτηση [*Q04]: Ποια η σχέση σας με το θαλάσσιο σκι;",
+ "required": "TRUE",
+ "type": "question",
+ "options": [
+ {
+ "optID": "Q95A1",
+ "opttxt": "Καμία",
+ "nextqID": "Q97"
+ },
+ {
+ "optID": "Q95A2",
+ "opttxt": "Μικρή",
+ "nextqID": "Q97"
+ },
+ {
+ "optID": "Q95A3",
+ "opttxt": "Μεγάλη",
+ "nextqID": "Q97"
+ }
+ ]
+ },
+ {
+ "qID": "Q96",
+ "qtext": "Είστε χειμερινός κολυμβητής",
+ "required": "TRUE",
+ "type": "question",
+ "options": [
+ {
+ "optID": "Q96A1",
+ "opttxt": "Ναι",
+ "nextqID": "Q97"
+ },
+ {
+ "optID": "Q96A2",
+ "opttxt": "Οχι",
+ "nextqID": "Q97"
+ }
+ ]
+ },
+ {
+ "qID": "Q97",
+ "qtext": "Κάνετε χειμερινό σκι;",
+ "required": "TRUE",
+ "type": "question",
+ "options": [
+ {
+ "optID": "Q97A1",
+ "opttxt": "Σπάνια - καθόλου",
+ "nextqID": "Q98"
+ },
+ {
+ "optID": "Q97A2",
+ "opttxt": "Περιστασιακά",
+ "nextqID": "Q98"
+ },
+ {
+"optID": "Q97A3",
+ "opttxt": "Τακτικά",
+ "nextqID": "Q98"
+ }
+ ]
+ },
+ {
+ "qID": "Q98",
+ "qtext": "Συμφωνείτε να αλλάζει η ώρα κάθε χρόνο;",
+ "required": "TRUE",
+ "type": "question",
+ "options": [
+ {
+ "optID": "Q98A1",
+ "opttxt": "Ναι",
+ "nextqID": "Q99"
+ },
+ {
+ "optID": "Q98A2",
+ "opttxt": "Οχι",
+ "nextqID": "-"
+ }
+ ]
+ },
+ {
+ "qID": "Q99",
+ "qtext": "Με δεδομένο ότι απαντήσατε [*Q08A2] στην ερώτηση [*Q08]: Προτιμάτε τη θερινή ή την χειμερινή ώρα;",
+ "required": "TRUE",
+ "type": "question",
+ "options": [
+ {
+ "optID": "Q99A1",
+ "opttxt": "Θερινή",
+ "nextqID": "-"
+ },
+ {
+ "optID": "Q99A2",
+ "opttxt": "Χειμερινή",
+ "nextqID": "-"
+ }
+ ]
+ }
+ ]
+}
