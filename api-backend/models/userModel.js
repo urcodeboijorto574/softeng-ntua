@@ -15,6 +15,7 @@ const userSchema = new mongoose.Schema({
         unique: [true, 'Username taken! Please provide a new username'],
         required: [true, 'Please provide a username'],
         maxlength: [20, 'A username must have at most 20 characters'],
+        minlength: [1, 'A username must have at least 1 character'],
     },
     password: {
         type: String,
