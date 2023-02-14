@@ -500,6 +500,14 @@ exports.resetQuestionnaire = async (req, res, next) => {
     }
 };
 
+/**
+ * Endpoint to delete a user.
+ * @param {JSON} req - JSON request object containing the username,  in path parameters.
+ * @param {JSON} res - JSON response object that returns the confirmation or rejection of the request
+ * @return {JSON} - The response object created.
+ *
+ * URL: {baseURL}/admin/users/deleteUser/:username
+ */
 exports.deleteUser = async (req, res) => {
     try {
         let user = await User.findOne({
@@ -510,6 +518,12 @@ exports.deleteUser = async (req, res) => {
                 status: 'failed',
                 message: 'No user found with the given username.',
             });
+        }
+        if (user.role === 'super-admin' && user.username === 'TheUltraSuperAdmin') {
+            return res.status(400).json({
+                status: 'failed',
+                message: 'No user found with the given username.'
+            })
         }
         await User.deleteOne({
             username: req.params.username,

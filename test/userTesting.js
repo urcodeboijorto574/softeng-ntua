@@ -515,7 +515,7 @@ describe("Get User bad scenario 2, unauthorized user tries to get a user", () =>
 });
 
 //---------------------------------------------------------BAD SCENARIO 3---------------------------------------------------------//
-//------------------------------------------------------THE USER THAT IS GET DOEN'T EXIST-----------------------------------------//
+//------------------------------------------------------THE USER THAT IS GET DOESN'T EXIST-----------------------------------------//
 describe("Get User bad scenario 3, the user that is get does not exist", () => {
   describe("/login", () => {
     it("it should login the Super Admin to have access to the rest of the endpoints", (done) => {
@@ -555,7 +555,33 @@ describe("Get User bad scenario 3, the user that is get does not exist", () => {
         .timeout(1000000);
     });
   });
-  describe("/logout", () => {
+});
+
+
+//------------------------------------------------------DELETE USER TESTING-------------------------------------------------------//
+//-----------------------------------------------------------BAD SCENARIOS-------------------------------------------------------//
+//----------------------------------------------BAD SCENARIO 1: USER WITH USERNAME DOES NOT EXIST--------------------------------//
+describe("Delete user bad-scenario 1 username does not exist", () => {
+  describe("/intelliq_api/admin/users/:username", () => {
+    it("it should throw an error becase user with given username does not exist", (done) => {
+      chai
+        .request(server)
+        .delete("/intelliq_api/admin/users/deleteUser/UserNameDoesNoteExisttttttttt")
+        .set("Cookie", `jwt=${token}`)
+        .end((err, res) => {
+          res.should.have.status(400);
+          res.body.should.have.property("status");
+          res.body.status.should.equal("failed");
+          res.body.should.have.property("message");
+          res.body.message.should.equal("No user found with the given username.");
+          done();
+        })
+        .timeout(1000000);
+    });
+  });
+});
+
+describe("/logout", () => {
     it("it should logout the Super Admin", (done) => {
       chai
         .request(server)
@@ -567,6 +593,26 @@ describe("Get User bad scenario 3, the user that is get does not exist", () => {
           res.body.status.should.equal("OK");
           res.body.should.have.property("message");
           res.body.message.should.equal("You are successfully logged out.");
+          token = " ";
+          done();
+        })
+        .timeout(1000000);
+    });
+  });
+//------------------------------------------BAD SCENARIO 2: NO LOGGED IN USER TRIES TO DELETE USER-------------------------------//
+describe("Delete user bad-scenario 2 no logged-in user tries to delete a user", () => {
+  describe("/intelliq_api/admin/users/:username", () => {
+    it("it should throw an error becase user is not logged in", (done) => {
+      chai
+        .request(server)
+        .delete("/intelliq_api/admin/users/deleteUser/test-user1")
+        .set("Cookie", `jwt=${token}`)
+        .end((err, res) => {
+          res.should.have.status(401);
+          res.body.should.have.property("status");
+          res.body.status.should.equal("failed");
+          res.body.should.have.property("message");
+          res.body.message.should.equal("Please log in to get access.");
           done();
         })
         .timeout(1000000);
@@ -574,8 +620,67 @@ describe("Get User bad scenario 3, the user that is get does not exist", () => {
   });
 });
 
-//------------------------------------------------------CLEAN THE DATABASE-------------------------------------------------------//
-describe("Delete the test-user1", () => {
+//------------------------------------------BAD SCENARIO 3: UNAUTHORIZED USER TRIES TO DELETE A USER-----------------------------//
+describe("Delete user bad scenario 3 unahuthorized user tries to delete a user", () => {
+  describe("/login", () => {
+    it("it should login test-user1", (done) => {
+      const user = {
+        username: "test-user1",
+        password: "test1234567",
+      };
+      chai
+        .request(server)
+        .post("/intelliq_api/login")
+        .send(user)
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.have.property("token");
+          token = res.body.token;
+          done();
+        })
+        .timeout(1000000);
+    });
+  });
+  describe("/intelliq_api/admin/users/:username", () => {
+    it("it should throw an error because user is unauthorized", (done) => {
+      chai
+        .request(server)
+        .delete("/intelliq_api/admin/users/deleteUser/test-user1")
+        .set("Cookie", `jwt=${token}`)
+        .end((err, res) => {
+          res.should.have.status(401);
+          res.body.should.have.property("status");
+          res.body.status.should.equal("failed");
+          res.body.should.have.property("message");
+          res.body.message.should.equal("User unauthorized to continue!");
+          done();
+        })
+        .timeout(1000000);
+    });
+  });
+  describe("/logout", () => {
+    it("it should logout test-user1", (done) => {
+      chai
+        .request(server)
+        .post("/intelliq_api/logout")
+        .set("Cookie", `jwt=${token}`)
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.have.property("status");
+          res.body.status.should.equal("OK");
+          res.body.should.have.property("message");
+          res.body.message.should.equal("You are successfully logged out.");
+          token = " ";
+          done();
+        })
+        .timeout(1000000);
+    });
+  });
+});
+
+
+//------------------------------------------------------GOOD SCENARIO: Super-Admin logs in and deletes the user-------------------//
+describe("Delete the test-user1 good scenario", () => {
   describe("/login", () => {
     it("it should login the Super Admin to have access to the rest of the endpoints", (done) => {
       const user = {
@@ -610,4 +715,24 @@ describe("Delete the test-user1", () => {
         .timeout(1000000);
     });
   });
+  describe("/logout", () => {
+    it("it should logout the super admin", (done) => {
+      chai
+        .request(server)
+        .post("/intelliq_api/logout")
+        .set("Cookie", `jwt=${token}`)
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.have.property("status");
+          res.body.status.should.equal("OK");
+          res.body.should.have.property("message");
+          res.body.message.should.equal("You are successfully logged out.");
+          token = " ";
+          done();
+        })
+        .timeout(1000000);
+    });
+  });
 });
+
+
