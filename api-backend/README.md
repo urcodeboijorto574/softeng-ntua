@@ -1,3 +1,84 @@
+# API-BACKEND
+
+# Project Setup And Configuration
+
+## Libraries And Packages Installation
+
+-   If you don't have nodejs installed, follow the next link https://nodejs.org/en/
+-   Open a command line interface on your cloned directory and type the following commands in order to install all the libraries and packages necessary for the backend environment:
+
+> ```
+> cd ./api-backend
+> npm install
+> ```
+
+## Node Packages
+
+```json
+{
+    "name": "intelliq",
+    "version": "1.0.0",
+    "description": "Project for course Software Engineering, NTUA-ECE 7th Semester",
+    "main": "app.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "nodemon server.js",
+        "start:prod": "set NODE_ENV=production&&nodemon server.js",
+        "debug": "ndb server.js"
+    },
+    "author": "SoftEng22-36",
+    "license": "ISC",
+    "dependencies": {
+        "bcryptjs": "^2.4.3",
+        "body-parser": "^1.20.1",
+        "cookie-parser": "^1.4.6",
+        "csv-express": "^1.2.2",
+        "dotenv": "^16.0.3",
+        "express": "^4.18.2",
+        "express-mongo-sanitize": "^2.2.0",
+        "express-rate-limit": "^6.6.0",
+        "helmet": "^6.0.0",
+        "hpp": "^0.2.3",
+        "json-2-csv": "^3.18.0",
+        "json2csv": "^6.0.0-alpha.2",
+        "jsonwebtoken": "^8.5.1",
+        "mongoose": "^5.13.15",
+        "morgan": "^1.10.0",
+        "multer": "^1.4.5-lts.1",
+        "ndb": "^1.1.5",
+        "nodemailer": "^6.8.0",
+        "slugify": "^1.6.5",
+        "validator": "^13.7.0",
+        "xss-clean": "^0.1.1"
+    },
+    "devDependencies": {
+        "eslint": "^8.25.0",
+        "eslint-config-airbnb": "^19.0.4",
+        "eslint-config-prettier": "^8.5.0",
+        "eslint-plugin-import": "^2.26.0",
+        "eslint-plugin-jsx-a11y": "^6.6.1",
+        "eslint-plugin-node": "^11.1.0",
+        "eslint-plugin-prettier": "^4.2.1",
+        "eslint-plugin-react": "^7.31.10",
+        "prettier": "^2.7.1"
+    }
+}
+```
+
+## Creating a database connection
+
+-   Navigate to MongDB website and create an account if you don't have one: https://www.mongodb.com/cloud/atlas/register
+-
+
+## Customize the config.env file by setting up the folowing environmental variables
+
+> ```
+> DATABASE= your connection string from MongoDB Atlas
+> DATABASE_PASSWORD= the password you inserted on MongoDB Atlas
+> ```
+
+⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃
+
 # REST-API DOCUMENTATION
 
 # Project: IntelliQ
