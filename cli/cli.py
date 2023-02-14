@@ -99,51 +99,45 @@ def handleResponse(response, form):
 
 # login: NOT DONE
 def login(username, password, form):
-    """"""
     headers = {'Content-Type': 'application/x-www-form-urlencoded'}
-    #json_data = {'username' : username, 'password' : password}
     data = "username=" + username + "&password=" + password
     loginUrl = baseUrl + "login" + "?format=" + form
     cert_path = "cert.pem"
-    response = handlePost(loginUrl, verify=cert_path, json_data = data, headers = headers)
-    # print(">>> Cookie:", response.cookies["jwt"])
+    cert_path = False
+    
+    response = handlePost(loginUrl, verify = cert_path, json_data = data, headers = headers)
+    
     jwt = response.cookies["jwt"]
     save_variable_to_file(jwt)
+    
     handleResponse(response, form)
     
     return response
 
 # logout: NOT DONE
 def logout(form):
-    """ Posts with no body and expect a response.
-        If status == 200: success
-        Else: gives reason"""
     logoutUrl = baseUrl + "logout?format=" + form
     vescookie = getCookie()
     if vescookie["jwt"] in ["loggedout", ""]:
         print("The user is not signed in!")
         exit()
+    
     response = handlePost(logoutUrl, verify = False, vescookie = vescookie)
+    
     jwt = response.cookies["jwt"]
     save_variable_to_file(jwt)
+    
     handleResponse(response, form)
 
     return
 
 # healthcheck: DONE
 def healthcheck(form):
-    """ Performs healthcheck.
-        If status_code == 200:
-            If status == OK: prints dbconnection
-            Else: prints dbconnection
-        Else: gives reason"""
-    #healthUrl = baseUrl + "admin/healthcheck"
     healthUrl = baseUrl + "admin/healthcheck?format=" + form
-
     vescookie = getCookie()
-    # print(vescookie)
 
     response = handleGet(healthUrl, vescookie)
+    
     handleResponse(response, form)
     
     return
@@ -162,34 +156,15 @@ def resetall(form):
 
 # questionnaire_upd: GOOD
 def questionnaire_upd(source, form):
-    import uuid
-    # source = "C:\\Users\\steli\\SoftEng22-36\\cli\\jtest.txt"
     updUrl = baseUrl + "admin/questionnaire_upd" + "?format=" + form
     vescookie = getCookie()
-    # headers={'Content-Type': 'multipart/form-data'}
-    boundary = str(uuid.uuid4())
-    #headers = {'Content-Type': 'multipart/form-data; boundary=' + boundary, 'Accept': '*/*', 'Accept-Encoding': 'gzip, deflate, br'}
-    #headers = {'Content-Type': 'multipart/form-data; boundary=<calculated when request is sent>', 'Accept': '*/*', 'Accept-Encoding': 'gzip, deflate, br'}
-
-    #headers = {'Content-Type': 'multipart/form-data; boundary=<calculated when request is sent>'}
-
-    
-    # file = {'file': (source, open(source, 'rb'), 'application/json')}
-
-    # file = {'file': (source, open(source, 'rb'))}
-    # print(file["file"])
     try:
-        #files = [('file', open(source, 'rb'), 'application/json')]
-        files = {
-         'file': (os.path.basename(source), open(source, 'rb'), 'application/octet-stream')
-        }
+        files = {'file': (os.path.basename(source), open(source, 'rb'), 'application/octet-stream')}
         response = requests.post(updUrl, cookies=vescookie, files = files, verify = False, timeout=10)
     except requests.exceptions.ReadTimeout:
         print("Timeout error, the server took more than 10 seconds to respond")
         exit()
 
-    # print(response)
-    # response = handlePost(updUrl, False, vescookie, json_data, headers={'Content-Type': 'multipart/form-data'})
     handleResponse(response, form)
     
     return
@@ -197,38 +172,38 @@ def questionnaire_upd(source, form):
 # resetq: TO CHECK
 def resetq(questionnaire_id, form):
     resetqUrl = baseUrl + f"admin/resetq/{questionnaire_id}" + "?format=" + form
-    # print("Will reset questionnaire at", resetqUrl)
     vescookie = getCookie()
+    
     response = handlePost(resetqUrl, False, vescookie=vescookie)
+    
     handleResponse(response, form)
     
     return
 
 # questionnaire: DONE
 def questionnaire(questionnaire_id, form):
-    # print("Will get questionnaire with id:", questionnaire_id)
     questionnaireUrl = baseUrl + f"questionnaire/{questionnaire_id}" + "?format=" + form
     vescookie = getCookie()
+    
     response = handleGet(questionnaireUrl, vescookie = vescookie)
+    
     handleResponse(response, form)
     
     return
 
 # question: DONE
 def question(questionnaire_id, question_id, form):
-    # print("Will get from questionnaire with id:", questionnaire_id, "question with id:", question_id)
     questionUrl = baseUrl + f"question/{questionnaire_id}/{question_id}" + "?format=" + form
     vescookie = getCookie()
+    
     response = handleGet(questionUrl, vescookie = vescookie)
+    
     handleResponse(response, form)
 
     return
 
 # doanswer: TO CHECK (almost checked)
 def doanswer(questionnaire_id, question_id, session_id, option_id, form):
-    # print("Will answer from questionnaire with id:", questionnaire_id,
-    #       "question with id:", question_id, "of session with id:", session_id,
-    #       "and option with id:", option_id)
     doanswerUrl = baseUrl + f"doanswer/{questionnaire_id}/{question_id}/{session_id}/{option_id}"  + "?format=" + form
     json_data = {
         "questionnaireID" : questionnaire_id,
@@ -241,40 +216,44 @@ def doanswer(questionnaire_id, question_id, session_id, option_id, form):
         answerText = input("Give your answer: ")
         answerJson = {"answertext" : answerText}
     vescookie = getCookie()
+    
     response = handlePost(doanswerUrl, json_data, vescookie = vescookie, json_data = answerJson)
+    
     handleResponse(response, form)
     
     return
 
 # getsessionanswers: DONE
 def getsessionanswers(questionnaire_id, session_id, form):
-    # print("Will get session answers of questionnaire with id:", questionnaire_id, "and session with id:", session_id)
     getsessionanswersUrl = baseUrl + f"getsessionanswers/{questionnaire_id}/{session_id}" + "?format=" + form
     vescookie = getCookie()
+    
     response = handleGet(getsessionanswersUrl, vescookie = vescookie)
+    
     handleResponse(response, form)
 
     return
 
 # getquestionanswers: DONE
 def getquestionanswers(questionnaire_id, question_id, form):
-    # print("Will get question answers of questionnaire with id:", questionnaire_id, "and question with id:", question_id)
     getquestionanswers = baseUrl + f"getquestionanswers/{questionnaire_id}/{question_id}" + "?format=" + form
     vescookie = getCookie()
+    
     response = handleGet(getquestionanswers, vescookie = vescookie)
+    
     handleResponse(response, form)
 
     return
 
 def deleteq(questionnaire_id, form):
     deleteqUrl = baseUrl + f"questionnaire/deletequestionnaire/{questionnaire_id}"
-    # print("Will reset questionnaire at", deleteqUrl)
     vescookie = getCookie()
     try:
         response = requests.delete(deleteqUrl, cookies=vescookie, verify = False, timeout=10)
     except requests.exceptions.ReadTimeout:
         print("Timeout error, the server took more than 10 seconds to respond")
         exit()
+    
     handleResponse(response, form)
     
     return
@@ -283,7 +262,9 @@ def deleteq(questionnaire_id, form):
 def usermodReq(usermod, username, passw, form):
     usermodUrl = baseUrl + f"admin/{usermod}/{username}/{passw}" + "?format=" + form
     vescookie = getCookie()
+    
     response = handlePost(usermodUrl, verify = False, vescookie = vescookie)
+    
     handleResponse(response, form)
 
     return
@@ -292,7 +273,9 @@ def usermodReq(usermod, username, passw, form):
 def usersReq(username, form):
     usermodUrl = baseUrl + f"admin/users/{username}" + "?format=" + form
     vescookie = getCookie()
+    
     response = handleGet(usermodUrl, vescookie = vescookie)
+    
     handleResponse(response, form)
 
     return
@@ -484,9 +467,6 @@ if __name__ == '__main__':
                 print("Invalid number of arguments passed! Exiting...")
                 exit()
             if len(sys.argv) == 6:
-                # if sys.argv[2] not in ["--users", "--username"] or sys.argv[4] not in ["--users", "--username"] or sys.argv[2] != sys.argv[4]:
-                #     print("Invalid arguments passed! Exiting...")
-                #     exit()
                 if sys.argv[2] != "--users":
                     print("Invalid arguments passed! Exiting...")
                     exit()
