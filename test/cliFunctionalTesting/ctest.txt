@@ -1,0 +1,35 @@
+{
+    "questionnaireID": "CTEST",
+    "questionnaireTitle": "Another test questionnaire",
+    "keywords": ["ctest1", "ctest2", "ctest3"],
+    "questions": [
+        {
+            "qID": "C01",
+            "qtext": "This is Question 1",
+            "required": "TRUE",
+            "type": "profile",
+            "options": [
+                {
+                    "optID": "C01A1",
+                    "opttxt": "option 1",
+                    "nextqID": "-"
+                },
+                {
+                    "optID": "C01A2",
+                    "opttxt": "option 2",
+                    "nextqID": "-"
+                },
+                {
+                    "optID": "C01A3",
+                    "opttxt": "option 3",
+                    "nextqID": "-"
+                },
+                {
+                    "optID": "C01A4",
+                    "opttxt": "option 4",
+                    "nextqID": "-"
+                }
+            ]
+        }
+    ]
+}
