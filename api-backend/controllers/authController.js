@@ -22,7 +22,14 @@ const handleValidationErrorDB = (err) => {
 };
 
 //-------------------------------------------------------------------//
-// endpoint to sign up a user
+/**
+ * Endpoint to signup a user
+ * @param {JSON} req - JSON request object containing the username, password and role of the user.
+ * @param {JSON} res - JSON response object that contains a confirmation/rejection of the request.
+ * @return {JSON} - The response object created.
+ *
+ * URL: {baseURL}/signup
+ */
 exports.signup = async (req, res) => {
     try {
         let responseMessage;
@@ -52,7 +59,14 @@ exports.signup = async (req, res) => {
     }
 };
 
-// endpoint to get a user's profile
+/**
+ * Endpoint to get a user's profile
+ * @param {JSON} req - JSON request object containing the username in path parameters.
+ * @param {JSON} res - JSON response object that returns the username and role of the user, or an error if it occured
+ * @return {JSON} - The response object created.
+ *
+ * URL: {baseURL}/admin/users/:username
+ */
 exports.getUser = async (req, res) => {
     try {
         let responseMessage;
@@ -106,7 +120,14 @@ exports.getUser = async (req, res) => {
     }
 };
 
-// endpoint to create a user and update a user's password if user already exists
+/**
+ * Endpoint to create a user and update a user's password if user already exists
+ * @param {JSON} req - JSON request object containing the username, password and role in path parameters.
+ * @param {JSON} res - JSON response object that returns the confirmation or rejection of the request
+ * @return {JSON} - The response object created.
+ *
+ * URL: {baseURL}/admin/:usermod/:username/:password
+ */
 exports.createUser = async (req, res) => {
     try {
         let responseMessage;
@@ -152,7 +173,14 @@ exports.createUser = async (req, res) => {
     }
 };
 
-//endpoint to logout a user
+/**
+ * Endpoint to logout a user
+ * @param {JSON} req - JSON request object
+ * @param {JSON} res - JSON response object that contains a confirmation/rejection of the request.
+ * @return {JSON} - The response object.
+ *
+ * URL: {baseURL}/logout
+ */
 exports.logout = async (req, res) => {
     try {
         let responseMessage;
@@ -176,7 +204,14 @@ exports.logout = async (req, res) => {
     }
 };
 
-//endpoint to login a user
+/**
+ * Endpoint to login a user
+ * @param {JSON} req - JSON request object containing the username and password in x-form-url-encoded.
+ * @param {JSON} res - JSON response object that contains a confirmation/rejection of the request.
+ * @return {JSON} - The response object.
+ *
+ * URL: {baseURL}/login
+ */
 exports.login = async (req, res, next) => {
     try {
         let responseMessage;

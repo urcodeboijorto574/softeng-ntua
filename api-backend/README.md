@@ -464,6 +464,43 @@ Endpoint that submits the option that was given on a question of a certain quest
 }
 ```
 
+### Response: 400
+
+```json
+{
+    "status": "failed",
+    "message": "Arguments provided are invalid"
+}
+```
+
+### Response: 400
+
+```json
+{
+    "status": "failed",
+    "message": "An answer has already been submitted for this question",
+    "previous answer": "option 1"
+}
+```
+
+### Response: 400
+
+```json
+{
+    "status": "failed",
+    "message": "You have already submitted a session for this questionnaire"
+}
+```
+
+### Response: 401
+
+```json
+{
+    "status": "failed",
+    "message": "User unauthorized to continue!"
+}
+```
+
 ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃
 
 ## End-point: Get Session's Answers
@@ -2331,6 +2368,24 @@ Endpoint to import data in the database.
 | ------ | ----------- | -------------- |
 | Cookie | jwt=eyJh... | JSON web token |
 
+### Response: 200
+
+```json
+{
+    "status": "OK",
+    "message": "Documents imported successfully."
+}
+```
+
+### Response: 401
+
+```json
+{
+    "status": "failed",
+    "message": "User unauthorized to continue!"
+}
+```
+
 ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃
 
 ## End-point: Export Dummy Data
@@ -2340,7 +2395,7 @@ Endpoint to export data from the database.
 ### Method: GET
 
 > ```
-> /dummy-data/delete
+> /dummy-data/export
 > ```
 
 ### 🔑 Authentication jwt with cookie
@@ -2349,4 +2404,22 @@ Endpoint to export data from the database.
 | ------ | ----------- | -------------- |
 | Cookie | jwt=eyJh... | JSON web token |
 
+### Response: 200
+
+```json
+{
+    "status": "OK",
+    "message": "Documents exported successfully."
+}
+```
+
+### Response: 401
+
+```json
+{
+    "status": "failed",
+    "message": "User unauthorized to continue!"
+}
+
 ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃
+```
