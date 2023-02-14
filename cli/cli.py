@@ -2,10 +2,7 @@ import argparse
 import requests
 import sys
 import json
-import pandas as pd
-from io import StringIO
 import urllib3
-import csv
 import os
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
@@ -29,7 +26,6 @@ def load_variable_from_file():
 
 def getCookie():
     return {"jwt" : load_variable_from_file()}
-    # return load_variable_from_file()
 
 def unknownArgsHandler(unknown):
     print("Error: Unrecognized arguments passed.\nGot: ")
