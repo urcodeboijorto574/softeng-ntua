@@ -2,7 +2,7 @@
 
 # Project: IntelliQ
 
-IntelliQ is a web application that is created by 4th-year students of the department of Electrical And Computer Engineering, NTUA, Athens. This application is used for the creation, submission and management of "smart" questionnaires. A questionnaire is considered "smart" when the next provided question depends on the answer of the previous one. In this documentation, the provided services of the REST API are explained so that the user can send requests with the appropriate parameters.
+IntelliQ is a web application that is created by undergraduate students of the department of Electrical And Computer Engineering, NTUA, Athens. This application is used for the creation, submission and management of "smart" questionnaires. A questionnaire is considered "smart" when the next provided question depends on the answer of the previous one. In this documentation, the provided services of the REST API are explained so that the user can send requests with the appropriate parameters.
 
 ## End-point: Sign Up
 
@@ -27,6 +27,42 @@ Endpoint to signup a user.
 ```json
 {
     "status": "OK"
+}
+```
+
+### Response: 400
+
+```json
+{
+    "status": "failed",
+    "message": "Invalid input data. A password must have at least 8 characters"
+}
+```
+
+### Response: 400
+
+```json
+{
+    "status": "failed",
+    "message": "Username taken! Please provide a new username."
+}
+```
+
+### Response: 400
+
+```json
+{
+    "status": "failed",
+    "message": "Invalid input data. Please provide a username"
+}
+```
+
+### Response: 400
+
+```json
+{
+    "status": "failed",
+    "message": "Invalid input data. Please provide a password"
 }
 ```
 
@@ -63,6 +99,15 @@ Endpoint to logout a user.
 }
 ```
 
+### Response: 401
+
+```json
+{
+    "status": "failed",
+    "message": "Please log in to get access."
+}
+```
+
 ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃
 
 ## End-point: Login
@@ -88,6 +133,24 @@ Endpoint to login a user.
 ```json
 {
     "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZTIyNjIwYmM3NWI4YjMwY2QzZTA4NSIsImlhdCI6MTY3NTc4MjAwNCwiZXhwIjoxNjgzNTU4MDA0fQ.zlKnLrxPKr2K2NhFZsNd0HdD3Wn3hHa4iEIlFllwTKs"
+}
+```
+
+### Response: 401
+
+```json
+{
+    "status": "failed",
+    "message": "Incorrect username or password!"
+}
+```
+
+### Response: 400
+
+```json
+{
+    "status": "failed",
+    "message": "Please provide username and password!"
 }
 ```
 
@@ -129,11 +192,38 @@ Endpoint to create a questionnaire. Admin provides the questionnaire as a json f
 }
 ```
 
+### Response: 400
+
+```json
+{
+    "status": "failed",
+    "message": "All IDs must be unique"
+}
+```
+
+### Response: 400
+
+```json
+{
+    "status": "failed",
+    "message": "Invalid input data. A questionnaire must have a title"
+}
+```
+
+### Response: 401
+
+```json
+{
+    "status": "failed",
+    "message": "User unauthorized to continue!"
+}
+```
+
 ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃
 
 ## End-point: Reset Questionnaire
 
-Endpoint to reset all the answers of a certain questionnaire, based on it's ID. This endpoint is accessible only to the creartor of the given questionnaire.
+Endpoint to reset all the answers of a certain questionnaire, based on it's ID. This endpoint is accessible only to the creator of the given questionnaire.
 
 ### Method: POST
 
@@ -158,6 +248,24 @@ Endpoint to reset all the answers of a certain questionnaire, based on it's ID. 
 ```json
 {
     "status": "OK"
+}
+```
+
+### Response: 400
+
+```json
+{
+    "status": "failed",
+    "reason": "Invalid questionnaireID"
+}
+```
+
+### Response: 401
+
+```json
+{
+    "status": "failed",
+    "message": "User unauthorized to continue!"
 }
 ```
 
@@ -215,6 +323,24 @@ Endpoint that returns an object that contains general information and the questi
         "questionnaireID": "TEST0",
         "questionnaireTitle": "An example questionnaire"
     }
+}
+```
+
+### Response: 400
+
+```json
+{
+    "status": "failed",
+    "message": "Questionnaire ID TES not found"
+}
+```
+
+### Response: 401
+
+```json
+{
+    "status": "failed",
+    "message": "User unauthorized to continue!"
 }
 ```
 
@@ -276,6 +402,24 @@ Returns an object that contains all the information of a certain question belong
         "type": "profile",
         "questionnaireID": "TEST0"
     }
+}
+```
+
+### Response: 400
+
+```json
+{
+    "status": "failed",
+    "message": "Question not found"
+}
+```
+
+### Response: 401
+
+```json
+{
+    "status": "failed",
+    "message": "User unauthorized to continue!"
 }
 ```
 
@@ -370,6 +514,33 @@ Endpoint that returns an object with the answers that were given to all the ques
 }
 ```
 
+### Response: 400
+
+```json
+{
+    "status": "failed",
+    "message": "Questionnaire ID TES not found"
+}
+```
+
+### Response: 400
+
+```json
+{
+    "status": "failed",
+    "message": "Session ID TST0SS not found"
+}
+```
+
+### Response: 400
+
+```json
+{
+    "status": "failed",
+    "message": "User unauthorized to continue!"
+}
+```
+
 ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃
 
 ## End-point: Get Question's Answers
@@ -393,6 +564,42 @@ Endpoint that returns an object with all the answers that were given in a certai
 | Param  | value       | type           |
 | ------ | ----------- | -------------- |
 | Cookie | jwt=eyJh... | JSON web token |
+
+### Response: 200
+
+```json
+{
+    "status": "OK",
+    "data": {
+        "questionnaireID": "TEST0",
+        "questionID": "T00",
+        "answers": [
+            {
+                "session": "TST0",
+                "ans": "My answertext"
+            }
+        ]
+    }
+}
+```
+
+### Response: 400
+
+```json
+{
+    "status": "failed",
+    "message": "Question ID T00aa not found"
+}
+```
+
+### Response: 401
+
+```json
+{
+    "status": "failed",
+    "message": "User unauthorized to continue!"
+}
+```
 
 ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃
 
@@ -509,6 +716,26 @@ Endpoint that returns all the questionnaires created by the logged in admin. Thi
 }
 ```
 
+### Response: 402
+
+```json
+{
+    "status": "no data",
+    "data": {
+        "questionnaires": []
+    }
+}
+```
+
+### Response: 401
+
+```json
+{
+    "status": "failed",
+    "message": "User unauthorized to continue!"
+}
+```
+
 ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃
 
 ## End-point: Get User's Answered Questionnaires
@@ -616,6 +843,26 @@ Endpoint that returns all the questionnaires answered by the logged in user. Thi
             }
         ]
     }
+}
+```
+
+### Response: 402
+
+```json
+{
+    "status": "no data",
+    "data": {
+        "answeredQuestionnaires": []
+    }
+}
+```
+
+### Response: 401
+
+```json
+{
+    "status": "failed",
+    "message": "User unauthorized to continue!"
 }
 ```
 
@@ -1565,6 +1812,15 @@ Endpoint that returns all the questionnaires that are not answered by the logged
 }
 ```
 
+### Response: 401
+
+```json
+{
+    "status": "failed",
+    "message": "User unauthorized to continue!"
+}
+```
+
 ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃
 
 ## End-point: Delete Questionnaire
@@ -1587,7 +1843,26 @@ Endpoint that deletes a certain questionnaire and all it's related data (questio
 
 ```json
 {
-    "status": "OK"
+    "status": "OK",
+    "message": "Questionnaire and related documents deleted successfully"
+}
+```
+
+### Response: 400
+
+```json
+{
+    "status": "failed",
+    "message": "bad request"
+}
+```
+
+### Response: 401
+
+```json
+{
+    "status": "failed",
+    "message": "User unauthorized to continue!"
 }
 ```
 
@@ -1595,7 +1870,7 @@ Endpoint that deletes a certain questionnaire and all it's related data (questio
 
 ## End-point: Get All Questionnaire's Sessions
 
-Endpoint that returns all the sessions of a certain questionnaire. This endpoint is accessible only to the admin that has cretted the igven questionnaire.
+Endpoint that returns all the sessions of a certain questionnaire. This endpoint is accessible only to the admin that has created the given questionnaire.
 
 ### Method: GET
 
@@ -1638,6 +1913,26 @@ Endpoint that returns all the sessions of a certain questionnaire. This endpoint
             }
         ]
     }
+}
+```
+
+### Response: 402
+
+```json
+{
+    "status": "no data",
+    "data": {
+        "sessions": []
+    }
+}
+```
+
+### Response: 401
+
+```json
+{
+    "status": "failed",
+    "message": "User unauthorized to continue!"
 }
 ```
 
@@ -1689,6 +1984,15 @@ Endpoint that returns all the session IDs currently stored in the database. This
 }
 ```
 
+### Response: 401
+
+```json
+{
+    "status": "failed",
+    "message": "User unauthorized to continue!"
+}
+```
+
 ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃
 
 ## End-point: Get User's Questionnaire's Session
@@ -1735,6 +2039,26 @@ Endpoint that returns the session submitted by the logged-in user. This endpoint
 }
 ```
 
+### Response: 402
+
+```json
+{
+    "status": "no data",
+    "data": {
+        "sessions": []
+    }
+}
+```
+
+### Response: 401
+
+```json
+{
+    "status": "failed",
+    "message": "User unauthorized to continue!"
+}
+```
+
 ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃
 
 ## End-point: Get Healthcheck
@@ -1765,6 +2089,24 @@ Endpoint that confirms the connection of the server with the database.
 {
     "status": "OK",
     "dbconnection": "mongodb+srv://jimv:<password>@cluster0.oav8j31.mongodb.net/?retryWrites=true&w=majority"
+}
+```
+
+### Response: 500
+
+```json
+{
+    "status": "failed",
+    "dbconnection": "mongodb+srv://jimv:<password>@cluster0.oav8j31.mongodb.net/?retryWrites=true&w=majority"
+}
+```
+
+### Response: 401
+
+```json
+{
+    "status": "failed",
+    "message": "User unauthorized to continue!"
 }
 ```
 
@@ -1805,6 +2147,15 @@ Endpoint that resets all the data stored in the database.
 }
 ```
 
+### Response: 401
+
+```json
+{
+    "status": "failed",
+    "message": "User unauthorized to continue!"
+}
+```
+
 ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃
 
 ## End-point: Create User
@@ -1834,6 +2185,33 @@ Endpoint that creates a new user with the given role, username and password.
 ```json
 {
     "status": "OK"
+}
+```
+
+### Response: 400
+
+```json
+{
+    "status": "failed",
+    "message": "Username taken! Please provide a new username."
+}
+```
+
+### Response: 400
+
+```json
+{
+    "status": "failed",
+    "message": "Invalid input data. A password must have at least 8 characters"
+}
+```
+
+### Response: 401
+
+```json
+{
+    "status": "failed",
+    "message": "User unauthorized to continue!"
 }
 ```
 
@@ -1873,6 +2251,24 @@ Endpoint that returns an object with information about a certain user.
 }
 ```
 
+### Response: 400
+
+```json
+{
+    "status": "failed",
+    "message": "No user found with the given username."
+}
+```
+
+### Response: 401
+
+```json
+{
+    "status": "failed",
+    "message": "User unauthorized to continue!"
+}
+```
+
 ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃
 
 ## End-point: Delete User
@@ -1899,6 +2295,24 @@ Endpoint that deletes a certain user.
 }
 ```
 
+### Response: 400
+
+```json
+{
+    "status": "failed",
+    "message": "No user found with the given username."
+}
+```
+
+### Response: 401
+
+```json
+{
+    "status": "failed",
+    "message": "User unauthorized to continue!"
+}
+```
+
 ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃
 
 ## End-point: Import Dummy Data
@@ -1919,11 +2333,11 @@ Endpoint to import data in the database.
 
 ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃
 
-## End-point: Delete Dummy Data
+## End-point: Export Dummy Data
 
-Endpoint to delete data from the database.
+Endpoint to export data from the database.
 
-### Method: DELETE
+### Method: GET
 
 > ```
 > /dummy-data/delete
