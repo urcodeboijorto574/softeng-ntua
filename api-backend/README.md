@@ -76,27 +76,36 @@
     ![mongodbCreateProject2](https://user-images.githubusercontent.com/115047054/218852192-f8c6de79-e4f3-4f8e-80b3-90bfdaa70af4.png)
 
 -   Add members if you want and select Create Project
-    mongodbCreateProject3.png
+    ![mongodbCreateProject3](https://user-images.githubusercontent.com/115047054/218852464-98fc14f1-2f18-49a3-969a-a6e464ada7e4.png)
+
 -   Make sure to select Add Current IP Address and select Build a Database
-    mongodbCreateProject4.png
+    ![mongodbCreateProject4](https://user-images.githubusercontent.com/115047054/218852520-8faf42ed-a5d9-4300-baaf-29abe381355c.png)
+
 -   Select Create with Free of charge
 -   On the bottom select Create Cluster
-    mongodbCreateProject5.png
+    ![mongodbCreateProject5](https://user-images.githubusercontent.com/115047054/218852557-daa33503-319d-4519-b732-1148f2813f4c.png)
+
 -   On the text fields add your desired username and password and select Create User
-    mongodbCreateProject6.png
+    ![mongodbCreateProject6](https://user-images.githubusercontent.com/115047054/218852584-a46b347e-67e9-4386-ab36-8747069a9b3e.png)
+
 -   Scroll on the bottom and select Finish And Close
 -   You will be prompted to the initial screen and you can see your project on the upper left on your screen
-    mongodbCreateProject7.png
+    ![mongodbCreateProject7](https://user-images.githubusercontent.com/115047054/218852613-7a133ece-5766-498b-8cdb-2310ab38965d.png)
+
 -   Now on Cluster0 select Connect
-    mongodbCreateProject8.png
+    ![mongodbCreateProject8](https://user-images.githubusercontent.com/115047054/218852689-fefb50ef-20d8-4ef9-b839-1bb13d17ff06.png)
+
 -   On the menu appeared, select Connect using MongoDB Compass. If you don't have Compass installed, you can download
     it from here https://www.mongodb.com/try/download/compass
-    mongodbCreateProject9.png
+    ![mongodbCreateProject9](https://user-images.githubusercontent.com/115047054/218852753-f1c812e1-e6ad-4523-8fc7-b23e5cd497ed.png)
+
 -   After Compass is installed select I have MongoDB Compass and copy the connection string from the menu appeared
-    mongodbCreateProject10.png
+    ![mongodbCreateProject10](https://user-images.githubusercontent.com/115047054/218852771-fd7fc10a-8d88-49df-8ede-7e3ba2eceb98.png)
+
 -   Close the window and open Compass. On the top left select New Connection. Copy your connection string in the URI and
     replace "<password>" with the password you provided earlier. Select Connect
-    mongodbCreateProject11.png
+    ![mongodbCreateProject11](https://user-images.githubusercontent.com/115047054/218852810-6bedcea8-3077-43d3-87fa-ea1c145c1486.png)
+
 -   Congratulations! The database is ready and is waiting for your queries!
 
 ## Customize the config.env file by setting up the folowing environmental variables
