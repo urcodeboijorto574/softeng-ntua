@@ -76,7 +76,6 @@
     ![mongodbCreateProject2](https://user-images.githubusercontent.com/115047054/218852192-f8c6de79-e4f3-4f8e-80b3-90bfdaa70af4.png)
 
 -   Add members if you want and select Create Project
-    ![mongodbCreateProject3](https://user-images.githubusercontent.com/115047054/218852464-98fc14f1-2f18-49a3-969a-a6e464ada7e4.png)
 
 -   Make sure to select Add Current IP Address and select Build a Database
     ![mongodbCreateProject4](https://user-images.githubusercontent.com/115047054/218852520-8faf42ed-a5d9-4300-baaf-29abe381355c.png)
@@ -108,13 +107,31 @@
 
 -   Congratulations! The database is ready and is waiting for your queries!
 
-## Customize the config.env file by setting up the folowing environmental variables
+## Create a config.env file by setting up the folowing environmental variables
 
 Setup the following parameters in the config.env file:
 
 > ```
-> DATABASE= your connection string from MongoDB Atlas
-> DATABASE_PASSWORD= the password you inserted on MongoDB Atlas
+> NODE_ENV=development
+> PORT=your_desired_port
+> HOST=localhost
+> USERNAME=your_username
+> PASSWORD=your_password
+> DATABASE=your_connection_string_from_MongoDB_Atlas
+> DATABASE_PASSWORD=the_password_you_inserted_on_MongoDB_Atlas
+> PASS_PHRASE=hellothere
+> ```
+
+# JWT_SECRET variable is saved on the server and is used for the decoding of the access token. Make sure you are the only one who knows it's value for security reasons.
+
+# JWT_EXPIRES_IN variable determines the time that the token is valid.
+
+# JWT_COOKIE_EXPIRES_IN variable determines the time that the cookie is valid.
+
+> ```
+> JWT_SECRET=your_secret
+> JWT_EXPIRES_IN=you_expiration_time
+> JWT_COOKIE_EXPIRES_IN=your_expiration_time
 > ```
 
 ## Run the server
@@ -2549,6 +2566,6 @@ Endpoint to export data from the database.
     "status": "failed",
     "message": "User unauthorized to continue!"
 }
+```
 
 ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃
-```
