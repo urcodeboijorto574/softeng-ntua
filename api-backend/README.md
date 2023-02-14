@@ -70,9 +70,11 @@
 
 -   Navigate to MongDB website and create an account if you don't have one: https://www.mongodb.com/cloud/atlas/register
 -   On the left menu, under Organization, select Projects and click New Project
-    mongodbCreateProject.png
+    ![mongodbCreateProject](https://user-images.githubusercontent.com/115047054/218852130-25b48110-5ed4-4aed-8892-f7d3a901e72f.png)
+
 -   Name yout project and select Next
-    mongodbCreateProject2.png
+    ![mongodbCreateProject2](https://user-images.githubusercontent.com/115047054/218852192-f8c6de79-e4f3-4f8e-80b3-90bfdaa70af4.png)
+
 -   Add members if you want and select Create Project
     mongodbCreateProject3.png
 -   Make sure to select Add Current IP Address and select Build a Database
