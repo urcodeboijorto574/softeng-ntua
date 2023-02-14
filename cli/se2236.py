@@ -165,6 +165,9 @@ def questionnaire_upd(source, form):
     except requests.exceptions.ReadTimeout:
         print("Timeout error, the server took more than 10 seconds to respond")
         return
+    except Exception as e:
+        print("No such file exists!")
+        return
 
     handleResponse(response, form)
     
