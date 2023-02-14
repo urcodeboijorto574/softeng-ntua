@@ -5,7 +5,8 @@
 ## Libraries And Packages Installation
 
 -   If you don't have nodejs installed, follow the next link https://nodejs.org/en/
--   Open a command line interface on your cloned directory and type the following commands in order to install all the libraries and packages necessary for the backend environment:
+-   Open a command line interface on your cloned directory and type the following commands in order to install all
+    the libraries and packages necessary for the backend environment:
 
 > ```
 > cd ./api-backend
@@ -68,14 +69,50 @@
 ## Creating a database connection
 
 -   Navigate to MongDB website and create an account if you don't have one: https://www.mongodb.com/cloud/atlas/register
--
+-   On the left menu, under Organization, select Projects and click New Project
+    mongodbCreateProject.png
+-   Name yout project and select Next
+    mongodbCreateProject2.png
+-   Add members if you want and select Create Project
+    mongodbCreateProject3.png
+-   Make sure to select Add Current IP Address and select Build a Database
+    mongodbCreateProject4.png
+-   Select Create with Free of charge
+-   On the bottom select Create Cluster
+    mongodbCreateProject5.png
+-   On the text fields add your desired username and password and select Create User
+    mongodbCreateProject6.png
+-   Scroll on the bottom and select Finish And Close
+-   You will be prompted to the initial screen and you can see your project on the upper left on your screen
+    mongodbCreateProject7.png
+-   Now on Cluster0 select Connect
+    mongodbCreateProject8.png
+-   On the menu appeared, select Connect using MongoDB Compass. If you don't have Compass installed, you can download
+    it from here https://www.mongodb.com/try/download/compass
+    mongodbCreateProject9.png
+-   After Compass is installed select I have MongoDB Compass and copy the connection string from the menu appeared
+    mongodbCreateProject10.png
+-   Close the window and open Compass. On the top left select New Connection. Copy your connection string in the URI and
+    replace "<password>" with the password you provided earlier. Select Connect
+    mongodbCreateProject11.png
+-   Congratulations! The database is ready and is waiting for your queries!
 
 ## Customize the config.env file by setting up the folowing environmental variables
+
+Setup the following parameters in the config.env file:
 
 > ```
 > DATABASE= your connection string from MongoDB Atlas
 > DATABASE_PASSWORD= the password you inserted on MongoDB Atlas
 > ```
+
+## Run the server
+
+-   Open your command line and make sure your directory is /api-backen
+-   Type the following command to start the server
+    > ```
+    > npm start
+    > ```
 
 ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃
 
