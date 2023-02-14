@@ -52,6 +52,9 @@ def handlePost(url, verify, vescookie = False, json_data = {}, headers = {}):
     except requests.exceptions.ReadTimeout:
         print("Timeout error, the server took more than 10 seconds to respond")
         exit()
+    except Exception as e:
+        print("Unexpected error occurred")
+        exit()
 
     return response
 
@@ -60,6 +63,9 @@ def handleGet(url, vescookie):
         response = requests.get(url, cookies = vescookie, verify = False, timeout=10)
     except requests.exceptions.ReadTimeout:
         print("Timeout error, the server took more than 10 seconds to respond")
+        exit()
+    except Exception as e:
+        print("Unexpected error occurred")
         exit()
 
     return response
@@ -150,7 +156,7 @@ def resetall(form):
     
     return
 
-# questionnaire_upd: GOOD
+# questionnaire_upd: DONE
 def questionnaire_upd(source, form):
     updUrl = baseUrl + "admin/questionnaire_upd" + "?format=" + form
     vescookie = getCookie()
@@ -165,7 +171,7 @@ def questionnaire_upd(source, form):
     
     return
 
-# resetq: TO CHECK
+# resetq: DONE
 def resetq(questionnaire_id, form):
     resetqUrl = baseUrl + f"admin/resetq/{questionnaire_id}" + "?format=" + form
     vescookie = getCookie()
@@ -289,7 +295,6 @@ login_parser.add_argument("--format", nargs = 1)
 
 ### LOGOUT PARSER ###
 logout_parser = subparser.add_parser("logout", help = "logout")
-# Why format is needed in logout???
 logout_parser.add_argument("--format", nargs = 1)
 #####################
 
@@ -375,7 +380,6 @@ if __name__ == '__main__':
         print("Error: at least 1 argument is required")
         sys.exit(1)
     try:
-        # unrecognized = []
         knownCommands = ["login", "logout", "healthcheck", "resetall", "questionnaire_upd",
                          "resetq", "questionnaire", "deleteq", "question", "doanswer", "getsessionanswers",
                          "getquestionanswers", "admin", "usermod"]
