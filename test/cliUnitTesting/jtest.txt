@@ -1,0 +1,35 @@
+{
+    "questionnaireID": "UTEST",
+    "questionnaireTitle": "A test questionnaire",
+    "keywords": ["test1", "test2", "test3"],
+    "questions": [
+        {
+            "qID": "U01",
+            "qtext": "This is Question 1",
+            "required": "TRUE",
+            "type": "profile",
+            "options": [
+                {
+                    "optID": "U01A1",
+                    "opttxt": "option 1",
+                    "nextqID": "-"
+                },
+                {
+                    "optID": "U01A2",
+                    "opttxt": "option 2",
+                    "nextqID": "-"
+                },
+                {
+                    "optID": "U01A3",
+                    "opttxt": "option 3",
+                    "nextqID": "-"
+                },
+                {
+                    "optID": "U01A4",
+                    "opttxt": "option 4",
+                    "nextqID": "-"
+                }
+            ]
+        }
+    ]
+}
