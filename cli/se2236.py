@@ -145,10 +145,7 @@ def healthcheck(form):
     return
 
 # resetall: TO CHECK
-def resetall(form):
-    print("Will resetall")
-    return
-    
+def resetall(form):    
     resetallUrl = baseUrl + "admin/resetall" + "?format=" + form
     vescookie = getCookie()
     
@@ -518,6 +515,7 @@ if __name__ == '__main__':
             healthcheck(args.format[0])
 
         elif (args.command == "resetall"):
+            
             resetall(args.format[0])
 
         elif (args.command == "questionnaire_upd"):
