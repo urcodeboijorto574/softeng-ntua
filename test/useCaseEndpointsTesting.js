@@ -366,7 +366,7 @@ describe("Use case endpoints bad scenario (logged in admin not authorized for th
           res.body.should.have.property("status");
           res.body.should.have.property("message");
           res.body.status.should.equal("failed");
-          res.body.message.should.equal("Access denied");
+          res.body.message.should.equal("User unauthorized to continue!");
           done();
         })
         .timeout(1000000);
@@ -384,7 +384,7 @@ describe("Use case endpoints bad scenario (logged in admin not authorized for th
           res.body.should.have.property("status");
           res.body.should.have.property("message");
           res.body.status.should.equal("failed");
-          res.body.message.should.equal("Access denied");
+          res.body.message.should.equal("User unauthorized to continue!");
           done();
         })
         .timeout(1000000);
