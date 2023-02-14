@@ -11,7 +11,7 @@ def load_variable_from_file():
         return str(file.read())
 
 def run_login(username, password, form, output = True):
-    result = subprocess.run(['python', 'cli.py', 'login', '--username', username, '--passw', password, '--format', form], capture_output=True)
+    result = subprocess.run(['python', 'se2236.py', 'login', '--username', username, '--passw', password, '--format', form], capture_output=True)
 
     if form == "json":
         res = json.loads(result.stdout.decode('utf-8'))
@@ -46,7 +46,7 @@ def run_login(username, password, form, output = True):
     return
 
 def run_logout(form): # (username, password, form):
-    result = subprocess.run(['python', 'cli.py', 'logout', '--format', form], capture_output=True)
+    result = subprocess.run(['python', 'se2236.py', 'logout', '--format', form], capture_output=True)
     if form == "json":
         res = json.loads(result.stdout.decode('utf-8'))
     else:
@@ -77,7 +77,7 @@ def run_logout(form): # (username, password, form):
     return
 
 def run_healthcheck(username, form): # (username, password, form):
-    result = subprocess.run(['python', 'cli.py', 'healthcheck', '--format', form], capture_output=True)
+    result = subprocess.run(['python', 'se2236.py', 'healthcheck', '--format', form], capture_output=True)
 
     if result.returncode != 0:
         raise Exception('Healthcheck failed with return code {}'.format(result.returncode))
@@ -140,7 +140,7 @@ def run_healthcheck(username, form): # (username, password, form):
 # NOT DONE!!!
 def run_resetall():
     return
-    # result = subprocess.run(['python', 'cli.py', 'resetall', '--format', 'json'], capture_output=True)
+    # result = subprocess.run(['python', 'se2236.py', 'resetall', '--format', 'json'], capture_output=True)
     # # response = json.loads(result.stdout)
     # print("=====")
     # print(result.stdout.decode())
@@ -169,7 +169,7 @@ def run_resetall():
     return
 
 def run_questionnaire_upd(username, title, idCheck, source, form, show = True):
-    result = subprocess.run(['python', 'cli.py', 'questionnaire_upd', '--source', source, '--format', form], capture_output=True)
+    result = subprocess.run(['python', 'se2236.py', 'questionnaire_upd', '--source', source, '--format', form], capture_output=True)
 
     if not show:
         return
@@ -231,7 +231,7 @@ def run_questionnaire_upd(username, title, idCheck, source, form, show = True):
     return
 
 def run_questionnaire(userConnected, questionnaire_id, form):
-    result = subprocess.run(['python', 'cli.py', 'questionnaire', '--questionnaire_id', questionnaire_id, '--format', form], capture_output=True)
+    result = subprocess.run(['python', 'se2236.py', 'questionnaire', '--questionnaire_id', questionnaire_id, '--format', form], capture_output=True)
 
     if result.returncode != 0:
         raise Exception('Healthcheck failed with return code {}'.format(result.returncode))
@@ -281,7 +281,7 @@ def run_questionnaire(userConnected, questionnaire_id, form):
     return
 
 def run_question(userConnected, questionnaire_id, question_id, form):
-    result = subprocess.run(['python', 'cli.py', 'question', '--questionnaire_id', questionnaire_id, '--question_id', question_id, '--format', form], capture_output=True)
+    result = subprocess.run(['python', 'se2236.py', 'question', '--questionnaire_id', questionnaire_id, '--question_id', question_id, '--format', form], capture_output=True)
 
     if result.returncode != 0:
         raise Exception('Question failed with return code {}'.format(result.returncode))
@@ -332,7 +332,7 @@ def run_question(userConnected, questionnaire_id, question_id, form):
     return
 
 def run_doanswer(questionnaire_id, question_id, session_id, option_id, username, form, show = True):
-    result = subprocess.run(['python', 'cli.py', 'doanswer', '--questionnaire_id', questionnaire_id, '--question_id', question_id,
+    result = subprocess.run(['python', 'se2236.py', 'doanswer', '--questionnaire_id', questionnaire_id, '--question_id', question_id,
                              '--session_id', session_id, '--option_id', option_id, '--format', form], capture_output=True)
 
     if not show:
@@ -382,7 +382,7 @@ def run_doanswer(questionnaire_id, question_id, session_id, option_id, username,
     return
 
 def run_resetq(userConnected, questionnaire_id, form):
-    result = subprocess.run(['python', 'cli.py', 'resetq', '--questionnaire_id', questionnaire_id, '--format', form], capture_output=True)
+    result = subprocess.run(['python', 'se2236.py', 'resetq', '--questionnaire_id', questionnaire_id, '--format', form], capture_output=True)
 
     if result.returncode != 0:
         raise Exception('Healthcheck failed with return code {}'.format(result.returncode))
@@ -432,7 +432,7 @@ def run_resetq(userConnected, questionnaire_id, form):
     return
 
 def run_getsessionanswers(userConnected, questionnaire_id, session_id, form):
-    result = subprocess.run(['python', 'cli.py', 'getsessionanswers', '--questionnaire_id', questionnaire_id, '--session_id', session_id, '--format', form], capture_output=True)
+    result = subprocess.run(['python', 'se2236.py', 'getsessionanswers', '--questionnaire_id', questionnaire_id, '--session_id', session_id, '--format', form], capture_output=True)
 
     if result.returncode != 0:
         raise Exception('Getsessionanswers failed with return code {}'.format(result.returncode))
@@ -483,7 +483,7 @@ def run_getsessionanswers(userConnected, questionnaire_id, session_id, form):
     return
 
 def run_getquestionanswers(userConnected, questionnaire_id, question_id, form):
-    result = subprocess.run(['python', 'cli.py', 'getquestionanswers', '--questionnaire_id', questionnaire_id, '--question_id', question_id, '--format', form], capture_output=True)
+    result = subprocess.run(['python', 'se2236.py', 'getquestionanswers', '--questionnaire_id', questionnaire_id, '--question_id', question_id, '--format', form], capture_output=True)
 
     if result.returncode != 0:
         raise Exception('Getsessionanswers failed with return code {}'.format(result.returncode))
@@ -536,7 +536,7 @@ def run_getquestionanswers(userConnected, questionnaire_id, question_id, form):
     return
 
 def run_delete(questionnaire_id, form):
-    result = subprocess.run(['python', 'cli.py', 'deleteq', '--questionnaire_id', questionnaire_id, '--format', form], capture_output=True)
+    result = subprocess.run(['python', 'se2236.py', 'deleteq', '--questionnaire_id', questionnaire_id, '--format', form], capture_output=True)
 
     if result.returncode != 0:
         raise Exception('Getsessionanswers failed with return code {}'.format(result.returncode))
@@ -544,7 +544,7 @@ def run_delete(questionnaire_id, form):
     return
 
 def run_usermod(role, username, password, form):
-    result = subprocess.run(['python', 'cli.py', 'admin', '--usermod', role, '--username', username, '--passw', password, '--format', form], capture_output=True)
+    result = subprocess.run(['python', 'se2236.py', 'admin', '--usermod', role, '--username', username, '--passw', password, '--format', form], capture_output=True)
     # response = json.loads(result.stdout)
     # print(result.stdout.decode('utf-8')+"\n====================")
     # print(">>> HERE <<<")
@@ -644,7 +644,7 @@ def run_usermod(role, username, password, form):
     return
 
 def run_users(userConnected, username, form):
-    result = subprocess.run(['python', 'cli.py', 'admin', '--users', username, '--format', form], capture_output=True)
+    result = subprocess.run(['python', 'se2236.py', 'admin', '--users', username, '--format', form], capture_output=True)
     # response = json.loads(result.stdout)
     # print(result.stdout.decode('utf-8')+"\n====================")
     # print(">>> HERE <<<")
@@ -715,7 +715,7 @@ def run_users(userConnected, username, form):
 
 
 if __name__ == '__main__':
-    usernamess = ['TheUltraSuperAdmin', 'jimv']
+    usernamess = ['TheUltraSuperAdmin', 'the-password-is-secret']
     usernames = {"adminJson" : ["adminTestJson", "adminTestJson123"],
                  "adminCsv"  : ["adminTestCsv", "adminTestCsv123"],
                  "userJson"  : ["userTestJson", "userTestJson123"],
@@ -741,8 +741,7 @@ if __name__ == '__main__':
         if True:
             message = toPrint(i, "Login with super admin test ", forms[0])
             print(message, end="")
-            run_login(usernames["adminJson"][0],
-                    usernames["adminJson"][1], forms[0], True)
+            run_login(usernamess[0], usernamess[1], forms[0], True)
             i += 1
 
             # print("Test", str(i).ljust(2, ' ').rjust(2, ' '), end = " - ")
@@ -759,8 +758,7 @@ if __name__ == '__main__':
 
             message = toPrint(i, "Login with super admin test ", forms[1])
             print(message, end="")
-            run_login(usernames["adminJson"][0],
-                    usernames["adminJson"][1], forms[1], True)
+            run_login(usernamess[0], usernamess[1], forms[0], True)
             i += 1
 
             # print("Test", str(i).ljust(2, ' ').rjust(2, ' '), end = " - ")
