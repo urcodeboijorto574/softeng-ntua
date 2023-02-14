@@ -736,405 +736,403 @@ if __name__ == '__main__':
             K = 69
         return "Test" + str(i).ljust(2, ' ') + " - " + message + "(format = " + form + ")" + "."*(K - len(message))
 
-    # Super admin Testing
-    if True:
-        message = toPrint(i, "Login with super admin test ", forms[0])
-        print(message, end="")
-        run_login(usernames["adminJson"][0],
-                usernames["adminJson"][1], forms[0], True)
-        i += 1
-
-        # print("Test", str(i).ljust(2, ' ').rjust(2, ' '), end = " - ")
-        # toPrint = "Logout with super admin test (format = " + forms[0] + "):"
-
-        message = toPrint(i, "Logout with super admin test ", forms[0])
-        print(message, end="")
-        # print(toPrint, end = "."*(78 - len(toPrint)))
-        run_logout(forms[0])
-        i += 1
-
-        # print("Test", str(i).ljust(2, ' ').rjust(2, ' '), end = " - ")
-        # print("Login with super admin test (format = " + forms[1] + ")", end = ":\t\t\t\t\t")
-
-        message = toPrint(i, "Login with super admin test ", forms[1])
-        print(message, end="")
-        run_login(usernames["adminJson"][0],
-                usernames["adminJson"][1], forms[1], True)
-        i += 1
-
-        # print("Test", str(i).ljust(2, ' ').rjust(2, ' '), end = " - ")
-        # print("Logout with super admin test (format = " + forms[1] + ")", end = ":\t\t\t\t\t")
-
-        message = toPrint(i, "Logout with super admin test ", forms[1])
-        print(message, end="")
-        run_logout(forms[0])
-        i += 1
-
-        run_login("TheUltraSuperAdmin", "the-password-is-secret", forms[0], False)
-
-        # Healthcheck test
-        # print("Test", str(i).ljust(2, ' '), end = " - ")
-        # print("Healthcheck test with super admin (should be authorized) (format = " + forms[0] + ")", end = ":\t")
-
-        message = toPrint(
-            i, "Healthcheck test with super admin (should be authorized) ", forms[0])
-        print(message, end="")
-        run_healthcheck("TheUltraSuperAdmin", forms[0])
-        i += 1
-
-        # print("Test", str(i).ljust(2, ' '), end = " - ")
-        # print("Healthcheck test with super admin (should be authorized) (format = " + forms[1] + ")", end = ":\t")
-
-        message = toPrint(
-            i, "Healthcheck test with super admin (should be authorized) ", forms[1])
-        print(message, end="")
-        run_healthcheck("TheUltraSuperAdmin", forms[1])
-        i += 1
-
-        print('================================ Super admin Testing completed! ================================')
-
-    # Creating Admin/User Testing
-    if True:
-        # Create admin with json format
-        # print("Test", str(i).ljust(2, ' '), end = " - ")
-        # print("Create admin test (format = " + forms[0] + ")", end = ":\t\t\t\t\t\t")
-        
-        message = toPrint(i, "Create admin test ", forms[0])
-        print(message, end = "")
-        run_usermod("admin", usernames["adminJson"][0], usernames["adminJson"][1], forms[0])
-        i += 1
-        
-        # Create admin with csv format
-        # print("Test", str(i).ljust(2, ' '), end = " - ")
-        # print("Create admin test (format = " + forms[1] + ")", end = ":\t\t\t\t\t\t")
-        
-        message = toPrint(i, "Create admin test ", forms[1])
-        print(message, end = "")
-        run_usermod("admin", usernames["adminCsv"][0], usernames["adminCsv"][1], forms[1])
-        i += 1
-
-        # Create user with json format
-        # print("Test", str(i).ljust(2, ' '), end = " - ")
-        # print("Create user test (format = " + forms[0] + ")", end = ":\t\t\t\t\t\t")
-
-        message = toPrint(i, "Create user test ", forms[0])
-        print(message, end = "")
-        run_usermod("user", usernames["userJson"][0], usernames["userJson"][1], forms[0])
-        i += 1
-
-        # Create user with csv format
-        # print("Test", str(i).ljust(2, ' '), end = " - ")
-        # print("Create user test (format = " + forms[1] + ")", end = ":\t\t\t\t\t\t")
-
-        message = toPrint(i, "Create user test ", forms[1])
-        print(message, end = "")
-        run_usermod("user", usernames["userCsv"][0], usernames["userCsv"][1], forms[1])
-        i += 1
-
-        message = toPrint(i, "Users test with super admin (should be authorized) ", forms[0])
-        print(message, end = "")
-        run_users("TheUltraSuperAdmin", "adminTestJson", forms[0])
-        i += 1
-
-        message = toPrint(i, "Users test with super admin (should be authorized) ", forms[1])
-        print(message, end = "")
-        run_users("TheUltraSuperAdmin", "userTestJson", forms[1])
-        i += 1
-
-        print('============================ Creating Admin/User Testing completed! ============================')
-
-    # ====================================================================================
-    # At this point 2 admins and 2 users are created. We will use them for further testing
-    # ====================================================================================
-
-    # Admin Testing with json format
-    if True:
-        # ======================= Admin Testing with json format only ========================
-
-        message = toPrint(i, "Login test with admin ", forms[0])
-        print(message, end = "")
-        run_login(usernames["adminJson"][0], usernames["adminJson"][1], forms[0], True)
-        i += 1
-
-        message = toPrint(i, "Logout test with admin ", forms[0])
-        print(message, end = "")
-        run_logout(forms[0])
-        i += 1
-
-        run_login(usernames["adminJson"][0], usernames["adminJson"][1], forms[0], False)
-
-        message = toPrint(i, "Healthcheck test with admin (should not be authorized) ", forms[0])
-        print(message, end = "")
-        run_healthcheck(usernames["adminJson"][0], forms[0])
-        i += 1
-
-        run_delete("UTEST", forms[0])
-
-        message = toPrint(i, "Questionnaire_upd test with admin (should be authorized) ", forms[0])
-        print(message, end = "")
-        run_questionnaire_upd(usernames["adminJson"][0], "UTEST", False, "jtest.txt", forms[0])
-        i += 1
-
-        message = toPrint(i, "Questionnaire_upd test with admin (duplicate IDs, should reject) ", forms[0])
-        print(message, end = "")
-        run_questionnaire_upd(usernames["adminJson"][0], "UTEST", True, "jtest.txt", forms[0])
-        i += 1
-
-        message = toPrint(i, "Questionnaire test with admin (should be authorized) ", forms[0])
-        print(message, end = "")
-        run_questionnaire(usernames["adminJson"][0], "UTEST", forms[0])
-        i += 1
-
-        message = toPrint(i, "Question test with admin (should be authorized) ", forms[0])
-        print(message, end = "")
-        run_question(usernames["adminJson"][0], "UTEST", "U01", forms[0])
-        i += 1
-
-        message = toPrint(i, "Doanswer test with admin (should not be authorized) ", forms[0])
-        print(message, end = "")
-        run_doanswer("UTEST", "U01", "1234", "U01A1", usernames["adminJson"][0], forms[0])
-        i += 1
-
-        run_login(usernames["userJson"][0], usernames["userJson"][1], forms[0], False)
-        run_doanswer("UTEST", "U01", "1234", "U01A1", usernames["userJson"][0], forms[0], False)
-        run_login(usernames["adminJson"][0], usernames["adminJson"][1], forms[0], False)
-
-        message = toPrint(i, "Getsessionanswers test with admin (should be authorized) ", forms[0])
-        print(message, end = "")
-        run_getsessionanswers(usernames["adminJson"][0], "UTEST", "1234", forms[0])
-        i += 1
-
-        message = toPrint(i, "Getquestionanswers test with admin (should be authorized) ", forms[0])
-        print(message, end = "")
-        run_getquestionanswers(usernames["adminJson"][0], "UTEST", "U01", forms[0])
-        i += 1
-
-        message = toPrint(i, "Resetq test with admin (should be authorized) ", forms[0])
-        print(message, end = "")
-        run_resetq(usernames["adminJson"][0], "UTEST", forms[0])
-        i += 1
-
-        print("=========================== Admin Testing with json format Completed  ==========================")
-
-    # Admin Testing with csv format
-    if True:
-        # =====================================================================================
-        # ======================== Admin Testing with csv format only  ========================
-
-        # Login admin with csv format
-        # print("Test", str(i).ljust(2, ' '), end = " - ")
-        # print("Login test with admin (format = " + forms[1] + ")", end = ":\t\t\t\t\t\t")
-
-        message = toPrint(i, "Login test with admin ", forms[1])
-        print(message, end = "")
-        run_login(usernames["adminCsv"][0], usernames["adminCsv"][1], forms[1], True)
-        i += 1
-
-        # Logout admin with csv format
-        # print("Test", str(i).ljust(2, ' '), end = " - ")
-        # print("Logout test with admin (format = " + forms[1] + ")", end = ":\t\t\t\t\t")
-
-        message = toPrint(i, "Logout test with admin ", forms[1])
-        print(message, end = "")
-        run_logout(forms[1])
-        i += 1
-
-        run_login(usernames["adminCsv"][0], usernames["adminCsv"][1], forms[1], False)
-
-        # Healthcheck admin with json format
-        # print("Test", str(i).ljust(2, ' '), end = " - ")
-        # print("Healthcheck test with admin (should not be authorized) (format = " + forms[1] + ")", end = ":\t")
-
-        message = toPrint(i, "Healthcheck test with admin (should not be authorized) ", forms[1])
-        print(message, end = "")
-        run_healthcheck(usernames["adminCsv"][0], forms[1])
-        i += 1
-
-        # Questionnaire_upd admin with json format
-        # print("Test", str(i).ljust(2, ' '), end = " - ")
-        # print("Questionnaire_upd test with admin (should be authorized) (format = " + forms[1] + ")", end = ":\t")
-
-        run_delete("CTEST", forms[0])
-
-        #!!!!!!!!!!!!!!!!
-        message = toPrint(i, "Questionnaire_upd test with admin (should be authorized) ", forms[1])
-        print(message, end = "")
-        run_questionnaire_upd(usernames["adminCsv"][0], "CTEST", False, "ctest.txt", forms[1])
-        i += 1
-
-        message = toPrint(i, "Questionnaire_upd test with admin (duplicate IDs, should reject) ", forms[1])
-        print(message, end = "")
-        run_questionnaire_upd(usernames["adminCsv"][0], "CTEST", True, "ctest.txt", forms[1])
-        i += 1
-
-        message = toPrint(i, "Questionnaire test with admin (should be authorized) ", forms[1])
-        print(message, end = "")
-        run_questionnaire(usernames["adminCsv"][0], "CTEST", forms[1])
-        i += 1
-        
-        # adminJson: ADJ01, Q01, 1234, a
-        message = toPrint(i, "Question test with admin (should be authorized) ", forms[1])
-        print(message, end = "")
-        run_question(usernames["adminCsv"][0], "CTEST", "C01", forms[1])
-        i += 1
-
-        message = toPrint(i, "Doanswer test with admin (should not be authorized) ", forms[1])
-        print(message, end = "")
-        run_doanswer("CTEST", "C01", "1234", "C01A1", usernames["adminCsv"][0], forms[1])
-        i += 1
-
-        run_login(usernames["userCsv"][0], usernames["userCsv"][1], forms[1], False)
-        run_doanswer("CTEST", "C01", "1234", "C01A1", usernames["adminCsv"][0], forms[1], False)
-        run_login(usernames["adminCsv"][0], usernames["adminCsv"][1], forms[1], False)
-
-        message = toPrint(i, "Getsessionanswers test with admin (should be authorized) ", forms[1])
-        print(message, end = "")
-        run_getsessionanswers(usernames["adminCsv"][0], "CTEST", "1234", forms[1])
-        i += 1
-
-        message = toPrint(i, "Getquestionanswers test with admin (should be authorized) ", forms[1])
-        print(message, end = "")
-        run_getquestionanswers(usernames["adminCsv"][0], "CTEST", "C01", forms[1])
-        i += 1
-
-        message = toPrint(i, "Resetq test with admin (should be authorized) ", forms[1])
-        print(message, end = "")
-        run_resetq(usernames["adminCsv"][0], "CTEST", forms[1])
-        i += 1
-
-        print("=========================== Admin Testing with csv format Completed  ===========================")
-
-    # user Testing with json format
-    if True:
-        # =====================================================================================
-        # ======================== User Testing with json format only =========================
-
-        message = toPrint(i, "Login test with user ", forms[0])
-        print(message, end = "")
-        run_login(usernames["userJson"][0], usernames["userJson"][1], forms[0], True)
-        i += 1
-
-        message = toPrint(i, "Logout test with user ", forms[0])
-        print(message, end = "")
-        run_logout(forms[1])
-        i += 1
-
-        run_login(usernames["userJson"][0], usernames["userJson"][1], forms[0], False)
-
-        message = toPrint(i, "Healthcheck test with user (should not be authorized) ", forms[0])
-        print(message, end = "")
-        run_healthcheck(usernames["userJson"][0], forms[0])
-        i += 1
-
-        message = toPrint(i, "Questionnaire_upd test with user (should not be authorized) ", forms[0])
-        print(message, end = "")
-        run_questionnaire_upd(usernames["userJson"][0], "UTEST", False, "jtest.txt", forms[0])
-        i += 1
-
-        message = toPrint(i, "Questionnaire test with user (should not be authorized) ", forms[0])
-        print(message, end = "")
-        run_questionnaire(usernames["userJson"][0], "UTEST", forms[0])
-        i += 1
-
-        # userJson: ADJ01, Q01, 1234, a
-        message = toPrint(i, "Question test with user (should not be authorized) ", forms[0])
-        print(message, end = "")
-        run_question(usernames["userJson"][0], "UTEST", "U01", forms[0])
-        i += 1
-
-        run_login(usernames["adminJson"][0], usernames["adminJson"][1], forms[0], False)
-        run_delete("UTEST", forms[0])
-        run_questionnaire_upd(usernames["adminJson"][0], "UTEST", False, "jtest.txt", forms[0], False)
-        run_login(usernames["userJson"][0], usernames["userJson"][1], forms[0], False)
-        
-        message = toPrint(i, "Doanswer test with user (should be authorized) ", forms[0])
-        print(message, end = "")
-        run_doanswer("UTEST", "U01", "1234", "U01A1", usernames["userJson"][0], forms[0])
-        i += 1
-
-        message = toPrint(i, "Getsessionanswers test with user (should not be authorized) ", forms[0])
-        print(message, end = "")
-        run_getsessionanswers(usernames["userJson"][0], "UTEST", "1234", forms[0])
-        i += 1
-
-        message = toPrint(i, "Getquestionanswers test with user (should not be authorized) ", forms[0])
-        print(message, end = "")
-        run_getquestionanswers(usernames["userJson"][0], "UTEST", "U01", forms[0])
-        i += 1
-
-        message = toPrint(i, "Resetq test with user (should not be authorized) ", forms[0])
-        print(message, end = "")
-        run_resetq(usernames["userJson"][0], "UTEST", forms[0])
-        i += 1
-
-        print("=========================== user Testing with json format Completed  ===========================")
-
-    # user Testing with csv format
-    if True:
-        # =====================================================================================
-        # ========================= User Testing with csv format only  ========================
-
-        message = toPrint(i, "Login test with user ", forms[1])
-        print(message, end = "")
-        run_login(usernames["userCsv"][0], usernames["userCsv"][1], forms[1], True)
-        i += 1
-
-        message = toPrint(i, "Logout test with user ", forms[1])
-        print(message, end = "")
-        run_logout(forms[1])
-        i += 1
-
-        run_login(usernames["userCsv"][0], usernames["userCsv"][1], forms[1], False)
-
-        message = toPrint(i, "Healthcheck test with user (should not be authorized) ", forms[1])
-        print(message, end = "")
-        run_healthcheck(usernames["userCsv"][0], forms[1])
-        i += 1
-
-        message = toPrint(i, "Questionnaire_upd test with user (should not be authorized) ", forms[1])
-        print(message, end = "")
-        run_questionnaire_upd(usernames["userCsv"][0], "CTEST", False, "jtest.txt", forms[1])
-        i += 1
-
-        message = toPrint(i, "Questionnaire test with user (should not be authorized) ", forms[1])
-        print(message, end = "")
-        run_questionnaire(usernames["userCsv"][0], "CTEST", forms[1])
-        i += 1
-
-        message = toPrint(i, "Question test with user (should not be authorized) ", forms[1])
-        print(message, end = "")
-        run_question(usernames["userCsv"][0], "CTEST", "C01", forms[1])
-        i += 1
-
-        run_login(usernames["adminJson"][0], usernames["adminJson"][1], forms[1], False)
-        run_delete("CTEST", forms[1])
-        run_questionnaire_upd(usernames["adminJson"][0], "CTEST", False, "jtest.txt", forms[1], False)
-        run_login(usernames["userCsv"][0], usernames["userCsv"][1], forms[1], False)
-        
-        message = toPrint(i, "Doanswer test with user (should be authorized) ", forms[1])
-        print(message, end = "")
-        run_doanswer("CTEST", "C01", "1234", "C01A1", usernames["userCsv"][0], forms[1])
-        i += 1
-
-        message = toPrint(i, "Getsessionanswers test with user (should not be authorized) ", forms[1])
-        print(message, end = "")
-        run_getsessionanswers(usernames["userCsv"][0], "CTEST", "1234", forms[1])
-        i += 1
-
-        message = toPrint(i, "Getquestionanswers test with user (should not be authorized) ", forms[1])
-        print(message, end = "")
-        run_getquestionanswers(usernames["userCsv"][0], "CTEST", "C01", forms[1])
-        i += 1
-
-        message = toPrint(i, "Resetq test with user (should not be authorized) ", forms[1])
-        print(message, end = "")
-        run_resetq(usernames["userCsv"][0], "CTEST", forms[1])
-        i += 1
-
-        print("============================ user Testing with csv format Completed  ===========================")
-
     try:
-        print("e")
+        # Super admin Testing
+        if True:
+            message = toPrint(i, "Login with super admin test ", forms[0])
+            print(message, end="")
+            run_login(usernames["adminJson"][0],
+                    usernames["adminJson"][1], forms[0], True)
+            i += 1
+
+            # print("Test", str(i).ljust(2, ' ').rjust(2, ' '), end = " - ")
+            # toPrint = "Logout with super admin test (format = " + forms[0] + "):"
+
+            message = toPrint(i, "Logout with super admin test ", forms[0])
+            print(message, end="")
+            # print(toPrint, end = "."*(78 - len(toPrint)))
+            run_logout(forms[0])
+            i += 1
+
+            # print("Test", str(i).ljust(2, ' ').rjust(2, ' '), end = " - ")
+            # print("Login with super admin test (format = " + forms[1] + ")", end = ":\t\t\t\t\t")
+
+            message = toPrint(i, "Login with super admin test ", forms[1])
+            print(message, end="")
+            run_login(usernames["adminJson"][0],
+                    usernames["adminJson"][1], forms[1], True)
+            i += 1
+
+            # print("Test", str(i).ljust(2, ' ').rjust(2, ' '), end = " - ")
+            # print("Logout with super admin test (format = " + forms[1] + ")", end = ":\t\t\t\t\t")
+
+            message = toPrint(i, "Logout with super admin test ", forms[1])
+            print(message, end="")
+            run_logout(forms[0])
+            i += 1
+
+            run_login("TheUltraSuperAdmin", "the-password-is-secret", forms[0], False)
+
+            # Healthcheck test
+            # print("Test", str(i).ljust(2, ' '), end = " - ")
+            # print("Healthcheck test with super admin (should be authorized) (format = " + forms[0] + ")", end = ":\t")
+
+            message = toPrint(
+                i, "Healthcheck test with super admin (should be authorized) ", forms[0])
+            print(message, end="")
+            run_healthcheck("TheUltraSuperAdmin", forms[0])
+            i += 1
+
+            # print("Test", str(i).ljust(2, ' '), end = " - ")
+            # print("Healthcheck test with super admin (should be authorized) (format = " + forms[1] + ")", end = ":\t")
+
+            message = toPrint(
+                i, "Healthcheck test with super admin (should be authorized) ", forms[1])
+            print(message, end="")
+            run_healthcheck("TheUltraSuperAdmin", forms[1])
+            i += 1
+
+            print('================================== Super admin Testing completed! ==================================')
+
+        # Creating Admin/User Testing
+        if True:
+            # Create admin with json format
+            # print("Test", str(i).ljust(2, ' '), end = " - ")
+            # print("Create admin test (format = " + forms[0] + ")", end = ":\t\t\t\t\t\t")
+            
+            message = toPrint(i, "Create admin test ", forms[0])
+            print(message, end = "")
+            run_usermod("admin", usernames["adminJson"][0], usernames["adminJson"][1], forms[0])
+            i += 1
+            
+            # Create admin with csv format
+            # print("Test", str(i).ljust(2, ' '), end = " - ")
+            # print("Create admin test (format = " + forms[1] + ")", end = ":\t\t\t\t\t\t")
+            
+            message = toPrint(i, "Create admin test ", forms[1])
+            print(message, end = "")
+            run_usermod("admin", usernames["adminCsv"][0], usernames["adminCsv"][1], forms[1])
+            i += 1
+
+            # Create user with json format
+            # print("Test", str(i).ljust(2, ' '), end = " - ")
+            # print("Create user test (format = " + forms[0] + ")", end = ":\t\t\t\t\t\t")
+
+            message = toPrint(i, "Create user test ", forms[0])
+            print(message, end = "")
+            run_usermod("user", usernames["userJson"][0], usernames["userJson"][1], forms[0])
+            i += 1
+
+            # Create user with csv format
+            # print("Test", str(i).ljust(2, ' '), end = " - ")
+            # print("Create user test (format = " + forms[1] + ")", end = ":\t\t\t\t\t\t")
+
+            message = toPrint(i, "Create user test ", forms[1])
+            print(message, end = "")
+            run_usermod("user", usernames["userCsv"][0], usernames["userCsv"][1], forms[1])
+            i += 1
+
+            message = toPrint(i, "Users test with super admin (should be authorized) ", forms[0])
+            print(message, end = "")
+            run_users("TheUltraSuperAdmin", "adminTestJson", forms[0])
+            i += 1
+
+            message = toPrint(i, "Users test with super admin (should be authorized) ", forms[1])
+            print(message, end = "")
+            run_users("TheUltraSuperAdmin", "userTestJson", forms[1])
+            i += 1
+
+            print('============================== Creating Admin/User Testing completed! ==============================')
+
+        # ====================================================================================
+        # At this point 2 admins and 2 users are created. We will use them for further testing
+        # ====================================================================================
+
+        # Admin Testing with json format
+        if True:
+            # ======================= Admin Testing with json format only ========================
+
+            message = toPrint(i, "Login test with admin ", forms[0])
+            print(message, end = "")
+            run_login(usernames["adminJson"][0], usernames["adminJson"][1], forms[0], True)
+            i += 1
+
+            message = toPrint(i, "Logout test with admin ", forms[0])
+            print(message, end = "")
+            run_logout(forms[0])
+            i += 1
+
+            run_login(usernames["adminJson"][0], usernames["adminJson"][1], forms[0], False)
+
+            message = toPrint(i, "Healthcheck test with admin (should not be authorized) ", forms[0])
+            print(message, end = "")
+            run_healthcheck(usernames["adminJson"][0], forms[0])
+            i += 1
+
+            run_delete("UTEST", forms[0])
+
+            message = toPrint(i, "Questionnaire_upd test with admin (should be authorized) ", forms[0])
+            print(message, end = "")
+            run_questionnaire_upd(usernames["adminJson"][0], "UTEST", False, "jtest.txt", forms[0])
+            i += 1
+
+            message = toPrint(i, "Questionnaire_upd test with admin (duplicate IDs, should reject) ", forms[0])
+            print(message, end = "")
+            run_questionnaire_upd(usernames["adminJson"][0], "UTEST", True, "jtest.txt", forms[0])
+            i += 1
+
+            message = toPrint(i, "Questionnaire test with admin (should be authorized) ", forms[0])
+            print(message, end = "")
+            run_questionnaire(usernames["adminJson"][0], "UTEST", forms[0])
+            i += 1
+
+            message = toPrint(i, "Question test with admin (should be authorized) ", forms[0])
+            print(message, end = "")
+            run_question(usernames["adminJson"][0], "UTEST", "U01", forms[0])
+            i += 1
+
+            message = toPrint(i, "Doanswer test with admin (should not be authorized) ", forms[0])
+            print(message, end = "")
+            run_doanswer("UTEST", "U01", "1234", "U01A1", usernames["adminJson"][0], forms[0])
+            i += 1
+
+            run_login(usernames["userJson"][0], usernames["userJson"][1], forms[0], False)
+            run_doanswer("UTEST", "U01", "1234", "U01A1", usernames["userJson"][0], forms[0], False)
+            run_login(usernames["adminJson"][0], usernames["adminJson"][1], forms[0], False)
+
+            message = toPrint(i, "Getsessionanswers test with admin (should be authorized) ", forms[0])
+            print(message, end = "")
+            run_getsessionanswers(usernames["adminJson"][0], "UTEST", "1234", forms[0])
+            i += 1
+
+            message = toPrint(i, "Getquestionanswers test with admin (should be authorized) ", forms[0])
+            print(message, end = "")
+            run_getquestionanswers(usernames["adminJson"][0], "UTEST", "U01", forms[0])
+            i += 1
+
+            message = toPrint(i, "Resetq test with admin (should be authorized) ", forms[0])
+            print(message, end = "")
+            run_resetq(usernames["adminJson"][0], "UTEST", forms[0])
+            i += 1
+
+            print("============================= Admin Testing with json format Completed  ============================")
+
+        # Admin Testing with csv format
+        if True:
+            # =====================================================================================
+            # ======================== Admin Testing with csv format only  ========================
+
+            # Login admin with csv format
+            # print("Test", str(i).ljust(2, ' '), end = " - ")
+            # print("Login test with admin (format = " + forms[1] + ")", end = ":\t\t\t\t\t\t")
+
+            message = toPrint(i, "Login test with admin ", forms[1])
+            print(message, end = "")
+            run_login(usernames["adminCsv"][0], usernames["adminCsv"][1], forms[1], True)
+            i += 1
+
+            # Logout admin with csv format
+            # print("Test", str(i).ljust(2, ' '), end = " - ")
+            # print("Logout test with admin (format = " + forms[1] + ")", end = ":\t\t\t\t\t")
+
+            message = toPrint(i, "Logout test with admin ", forms[1])
+            print(message, end = "")
+            run_logout(forms[1])
+            i += 1
+
+            run_login(usernames["adminCsv"][0], usernames["adminCsv"][1], forms[1], False)
+
+            # Healthcheck admin with json format
+            # print("Test", str(i).ljust(2, ' '), end = " - ")
+            # print("Healthcheck test with admin (should not be authorized) (format = " + forms[1] + ")", end = ":\t")
+
+            message = toPrint(i, "Healthcheck test with admin (should not be authorized) ", forms[1])
+            print(message, end = "")
+            run_healthcheck(usernames["adminCsv"][0], forms[1])
+            i += 1
+
+            # Questionnaire_upd admin with json format
+            # print("Test", str(i).ljust(2, ' '), end = " - ")
+            # print("Questionnaire_upd test with admin (should be authorized) (format = " + forms[1] + ")", end = ":\t")
+
+            run_delete("CTEST", forms[0])
+
+            #!!!!!!!!!!!!!!!!
+            message = toPrint(i, "Questionnaire_upd test with admin (should be authorized) ", forms[1])
+            print(message, end = "")
+            run_questionnaire_upd(usernames["adminCsv"][0], "CTEST", False, "ctest.txt", forms[1])
+            i += 1
+
+            message = toPrint(i, "Questionnaire_upd test with admin (duplicate IDs, should reject) ", forms[1])
+            print(message, end = "")
+            run_questionnaire_upd(usernames["adminCsv"][0], "CTEST", True, "ctest.txt", forms[1])
+            i += 1
+
+            message = toPrint(i, "Questionnaire test with admin (should be authorized) ", forms[1])
+            print(message, end = "")
+            run_questionnaire(usernames["adminCsv"][0], "CTEST", forms[1])
+            i += 1
+            
+            # adminJson: ADJ01, Q01, 1234, a
+            message = toPrint(i, "Question test with admin (should be authorized) ", forms[1])
+            print(message, end = "")
+            run_question(usernames["adminCsv"][0], "CTEST", "C01", forms[1])
+            i += 1
+
+            message = toPrint(i, "Doanswer test with admin (should not be authorized) ", forms[1])
+            print(message, end = "")
+            run_doanswer("CTEST", "C01", "1234", "C01A1", usernames["adminCsv"][0], forms[1])
+            i += 1
+
+            run_login(usernames["userCsv"][0], usernames["userCsv"][1], forms[1], False)
+            run_doanswer("CTEST", "C01", "1234", "C01A1", usernames["adminCsv"][0], forms[1], False)
+            run_login(usernames["adminCsv"][0], usernames["adminCsv"][1], forms[1], False)
+
+            message = toPrint(i, "Getsessionanswers test with admin (should be authorized) ", forms[1])
+            print(message, end = "")
+            run_getsessionanswers(usernames["adminCsv"][0], "CTEST", "1234", forms[1])
+            i += 1
+
+            message = toPrint(i, "Getquestionanswers test with admin (should be authorized) ", forms[1])
+            print(message, end = "")
+            run_getquestionanswers(usernames["adminCsv"][0], "CTEST", "C01", forms[1])
+            i += 1
+
+            message = toPrint(i, "Resetq test with admin (should be authorized) ", forms[1])
+            print(message, end = "")
+            run_resetq(usernames["adminCsv"][0], "CTEST", forms[1])
+            i += 1
+
+            print("============================= Admin Testing with csv format Completed  =============================")
+
+        # user Testing with json format
+        if True:
+            # =====================================================================================
+            # ======================== User Testing with json format only =========================
+
+            message = toPrint(i, "Login test with user ", forms[0])
+            print(message, end = "")
+            run_login(usernames["userJson"][0], usernames["userJson"][1], forms[0], True)
+            i += 1
+
+            message = toPrint(i, "Logout test with user ", forms[0])
+            print(message, end = "")
+            run_logout(forms[1])
+            i += 1
+
+            run_login(usernames["userJson"][0], usernames["userJson"][1], forms[0], False)
+
+            message = toPrint(i, "Healthcheck test with user (should not be authorized) ", forms[0])
+            print(message, end = "")
+            run_healthcheck(usernames["userJson"][0], forms[0])
+            i += 1
+
+            message = toPrint(i, "Questionnaire_upd test with user (should not be authorized) ", forms[0])
+            print(message, end = "")
+            run_questionnaire_upd(usernames["userJson"][0], "UTEST", False, "jtest.txt", forms[0])
+            i += 1
+
+            message = toPrint(i, "Questionnaire test with user (should not be authorized) ", forms[0])
+            print(message, end = "")
+            run_questionnaire(usernames["userJson"][0], "UTEST", forms[0])
+            i += 1
+
+            # userJson: ADJ01, Q01, 1234, a
+            message = toPrint(i, "Question test with user (should not be authorized) ", forms[0])
+            print(message, end = "")
+            run_question(usernames["userJson"][0], "UTEST", "U01", forms[0])
+            i += 1
+
+            run_login(usernames["adminJson"][0], usernames["adminJson"][1], forms[0], False)
+            run_delete("UTEST", forms[0])
+            run_questionnaire_upd(usernames["adminJson"][0], "UTEST", False, "jtest.txt", forms[0], False)
+            run_login(usernames["userJson"][0], usernames["userJson"][1], forms[0], False)
+            
+            message = toPrint(i, "Doanswer test with user (should be authorized) ", forms[0])
+            print(message, end = "")
+            run_doanswer("UTEST", "U01", "1234", "U01A1", usernames["userJson"][0], forms[0])
+            i += 1
+
+            message = toPrint(i, "Getsessionanswers test with user (should not be authorized) ", forms[0])
+            print(message, end = "")
+            run_getsessionanswers(usernames["userJson"][0], "UTEST", "1234", forms[0])
+            i += 1
+
+            message = toPrint(i, "Getquestionanswers test with user (should not be authorized) ", forms[0])
+            print(message, end = "")
+            run_getquestionanswers(usernames["userJson"][0], "UTEST", "U01", forms[0])
+            i += 1
+
+            message = toPrint(i, "Resetq test with user (should not be authorized) ", forms[0])
+            print(message, end = "")
+            run_resetq(usernames["userJson"][0], "UTEST", forms[0])
+            i += 1
+
+            print("============================= user Testing with json format Completed  =============================")
+
+        # user Testing with csv format
+        if True:
+            # =====================================================================================
+            # ========================= User Testing with csv format only  ========================
+
+            message = toPrint(i, "Login test with user ", forms[1])
+            print(message, end = "")
+            run_login(usernames["userCsv"][0], usernames["userCsv"][1], forms[1], True)
+            i += 1
+
+            message = toPrint(i, "Logout test with user ", forms[1])
+            print(message, end = "")
+            run_logout(forms[1])
+            i += 1
+
+            run_login(usernames["userCsv"][0], usernames["userCsv"][1], forms[1], False)
+
+            message = toPrint(i, "Healthcheck test with user (should not be authorized) ", forms[1])
+            print(message, end = "")
+            run_healthcheck(usernames["userCsv"][0], forms[1])
+            i += 1
+
+            message = toPrint(i, "Questionnaire_upd test with user (should not be authorized) ", forms[1])
+            print(message, end = "")
+            run_questionnaire_upd(usernames["userCsv"][0], "CTEST", False, "jtest.txt", forms[1])
+            i += 1
+
+            message = toPrint(i, "Questionnaire test with user (should not be authorized) ", forms[1])
+            print(message, end = "")
+            run_questionnaire(usernames["userCsv"][0], "CTEST", forms[1])
+            i += 1
+
+            message = toPrint(i, "Question test with user (should not be authorized) ", forms[1])
+            print(message, end = "")
+            run_question(usernames["userCsv"][0], "CTEST", "C01", forms[1])
+            i += 1
+
+            run_login(usernames["adminJson"][0], usernames["adminJson"][1], forms[1], False)
+            run_delete("CTEST", forms[1])
+            run_questionnaire_upd(usernames["adminJson"][0], "CTEST", False, "jtest.txt", forms[1], False)
+            run_login(usernames["userCsv"][0], usernames["userCsv"][1], forms[1], False)
+            
+            message = toPrint(i, "Doanswer test with user (should be authorized) ", forms[1])
+            print(message, end = "")
+            run_doanswer("CTEST", "C01", "1234", "C01A1", usernames["userCsv"][0], forms[1])
+            i += 1
+
+            message = toPrint(i, "Getsessionanswers test with user (should not be authorized) ", forms[1])
+            print(message, end = "")
+            run_getsessionanswers(usernames["userCsv"][0], "CTEST", "1234", forms[1])
+            i += 1
+
+            message = toPrint(i, "Getquestionanswers test with user (should not be authorized) ", forms[1])
+            print(message, end = "")
+            run_getquestionanswers(usernames["userCsv"][0], "CTEST", "C01", forms[1])
+            i += 1
+
+            message = toPrint(i, "Resetq test with user (should not be authorized) ", forms[1])
+            print(message, end = "")
+            run_resetq(usernames["userCsv"][0], "CTEST", forms[1])
+            i += 1
+
+            print("============================== user Testing with csv format Completed  =============================")
 
     except Exception as e:
         print('Healthcheck failed: {}'.format(e))
