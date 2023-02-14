@@ -2,27 +2,26 @@ const express = require('express');
 const multer = require('multer');
 const adminController = require(`${__dirname}/../controllers/adminController.js`);
 const authController = require('./../controllers/authController.js');
+const handleResponse =
+    require(`${__dirname}/../utils/handleResponse.js`).handleResponse;
 
 const router = express.Router();
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-      cb(
-        null,
-        './'
-      ); //you tell where to upload the files,
+        cb(null, '../api-backend/files/'); //you tell where to upload the files,
     },
     filename: function (req, file, cb) {
-      cb(null, file.originalname);
+        cb(null, file.originalname);
     },
-  });
+});
 
 const upload = multer({
     storage: storage,
     onFileUploadStart: function (file) {
-      console.log(file.originalname + ' is starting ...');
+        console.log(file.originalname + ' is starting ...');
     },
-  });
+});
 
 router
     .route('/healthcheck')

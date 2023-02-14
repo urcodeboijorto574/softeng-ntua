@@ -1,16 +1,35 @@
-# questionnaires_app
+# Front-end
 
-A new Flutter project.
+## Contents
 
-## Getting Started
+User Interface that makes HTTP requests to the API (backend server) and supports the following functions:
 
-This project is a starting point for a Flutter application.
+- Admin and user authentication using cookies (sign up, login, logout)
+- Viewing of statistics for each question of an admin's questionnaire
+- Viewing of all the sessions that were submitted for an admin's questionnaire
+- Submitting users' answers to a questionnaire
+- Viewing of a user's submitted session to a questionnaire
 
-A few resources to get you started if this is your first Flutter project:
+## Flutter packages
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+```sh
+dependencies:
+    cupertino_icons: ^1.0.2
+    animated_text_kit: ^4.2.2
+    font_awesome_flutter: ^10.3.0
+    http: ^0.13.5
+    pie_chart: ^5.3.2
+    flutter_secure_storage: ^7.0.1
+```
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Installation:
+
+While the backend server is running, type the following commands in your command line:
+
+```sh
+flutter pub get
+```
+
+```sh
+flutter run -d chrome
+```
