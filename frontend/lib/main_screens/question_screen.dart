@@ -234,93 +234,96 @@ class _QuestionScreenState extends State<QuestionScreen> {
                           ],
                         ),
                       ),
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.5,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              '${widget.index}. ${widget.question.qtext}',
-                              style: const TextStyle(
-                                color: Colors.black,
-                                fontSize: 22,
-                                fontWeight: FontWeight.w400,
+                      Padding(
+                        padding: const EdgeInsets.only(right: 90),
+                        child: SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.5,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                '${widget.index}. ${widget.question.qtext}',
+                                style: const TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.w400,
+                                ),
                               ),
-                            ),
-                            (widget.question.options.length == 1 &&
-                                    widget.question.options[0]['opttxt'] ==
-                                        '<open string>')
-                                ? Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 20),
-                                    child: SizedBox(
-                                      width: 500,
-                                      child: TextFormField(
-                                        style: const TextStyle(fontSize: 15),
-                                        validator: (value) {
-                                          if (value!.isEmpty) {
-                                            return 'The question is required.';
-                                          } else {
-                                            return null;
-                                          }
-                                        },
-                                        onChanged: (value) {
-                                          answer = value;
-                                        },
-                                        decoration: InputDecoration(
-                                          labelText: 'Write your answer',
-                                          hintText: 'Write your answer',
-                                          border: OutlineInputBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(25),
-                                          ),
-                                          enabledBorder: OutlineInputBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(25),
-                                            borderSide: const BorderSide(
-                                              color: Color.fromARGB(
-                                                  255, 9, 52, 58),
-                                              width: 2,
+                              (widget.question.options.length == 1 &&
+                                      widget.question.options[0]['opttxt'] ==
+                                          '<open string>')
+                                  ? Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 20),
+                                      child: SizedBox(
+                                        width: 500,
+                                        child: TextFormField(
+                                          style: const TextStyle(fontSize: 15),
+                                          validator: (value) {
+                                            if (value!.isEmpty) {
+                                              return 'The question is required.';
+                                            } else {
+                                              return null;
+                                            }
+                                          },
+                                          onChanged: (value) {
+                                            answer = value;
+                                          },
+                                          decoration: InputDecoration(
+                                            labelText: 'Write your answer',
+                                            hintText: 'Write your answer',
+                                            border: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(25),
                                             ),
-                                          ),
-                                          focusedBorder: OutlineInputBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(25),
-                                            borderSide: const BorderSide(
-                                              color: Colors.pinkAccent,
-                                              width: 2,
+                                            enabledBorder: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(25),
+                                              borderSide: const BorderSide(
+                                                color: Color.fromARGB(
+                                                    255, 9, 52, 58),
+                                                width: 2,
+                                              ),
                                             ),
+                                            focusedBorder: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(25),
+                                              borderSide: const BorderSide(
+                                                color: Colors.pinkAccent,
+                                                width: 2,
+                                              ),
+                                            ),
+                                            floatingLabelBehavior:
+                                                FloatingLabelBehavior.never,
                                           ),
-                                          floatingLabelBehavior:
-                                              FloatingLabelBehavior.never,
+                                          cursorColor: Colors.pinkAccent,
                                         ),
-                                        cursorColor: Colors.pinkAccent,
+                                      ),
+                                    )
+                                  : Padding(
+                                      padding: const EdgeInsets.only(top: 10),
+                                      child: ListView.builder(
+                                        shrinkWrap: true,
+                                        itemCount: optionsLength,
+                                        itemBuilder: (context, index) {
+                                          return RadioListTile(
+                                            value: index + 1,
+                                            groupValue: selectedItem,
+                                            onChanged: (int? value) {
+                                              setState(() {
+                                                selectedItem = value!;
+                                              });
+                                            },
+                                            title: Text(widget.question
+                                                .options[index]['opttxt']),
+                                            activeColor: const Color.fromARGB(
+                                                255, 9, 52, 58),
+                                          );
+                                        },
                                       ),
                                     ),
-                                  )
-                                : Padding(
-                                    padding: const EdgeInsets.only(top: 10),
-                                    child: ListView.builder(
-                                      shrinkWrap: true,
-                                      itemCount: optionsLength,
-                                      itemBuilder: (context, index) {
-                                        return RadioListTile(
-                                          value: index + 1,
-                                          groupValue: selectedItem,
-                                          onChanged: (int? value) {
-                                            setState(() {
-                                              selectedItem = value!;
-                                            });
-                                          },
-                                          title: Text(widget.question
-                                              .options[index]['opttxt']),
-                                          activeColor: const Color.fromARGB(
-                                              255, 9, 52, 58),
-                                        );
-                                      },
-                                    ),
-                                  ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                       Padding(
