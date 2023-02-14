@@ -12,19 +12,14 @@ def load_variable_from_file():
 
 def run_login(username, password, form, output = True):
     result = subprocess.run(['python', 'cli.py', 'login', '--username', username, '--passw', password, '--format', form], capture_output=True)
-    # response = json.loads(result.stdout)
-    # print(result.stdout.decode('utf-8')+"\n====================")
-    # print(">>> HERE <<<")
-    # print(result.stdout.decode())
+
     if form == "json":
         res = json.loads(result.stdout.decode('utf-8'))
     else:
         res = csv.reader(io.StringIO(result.stdout.decode()))
     if result.returncode != 0:
         raise Exception('Login failed with return code {}'.format(result.returncode))
-    # print("TYPE =", type(res))
-    # if str(type(res)) == "<class '_csv.reader'>":
-    #     print("GOOD")
+
     if isinstance(res, dict) and len(res) == 1:
         if next(iter(res)) == "token":
             if (output):
@@ -499,7 +494,7 @@ def run_doanswer(questionnaire_id, question_id, session_id, option_id, username,
     if isinstance(res, list):
         # print("RES:", res)
         # print(res[0][0], res[1][0], res[0][1], res[1][1], username)
-
+        # print(res)
         if res[0][0] == "status" and res[1][0] == "OK" and username not in ["adminTestJson", "adminTestCsv"]:
             print("PASSED", check_mark.decode("utf-8"))
             return
@@ -637,13 +632,13 @@ def run_getsessionanswers(userConnected, questionnaire_id, session_id, form):
     
     # CSV NOT READY YET
     if isinstance(res, list):
-        print("RES:", res)
+        # print("RES:", res)
         # print(res[0][0], res[1][0], res[0][1], res[1][1], username)
 
-        if res[0][0] == "status" and res[1][0] == "OK" and userConnected not in ["adminTestJson", "adminTestCsv"]:
+        if res[0][0] == "status" and res[1][0] == "OK" and userConnected in ["adminTestJson", "adminTestCsv"]:
             print("PASSED", check_mark.decode("utf-8"))
             return
-        elif res[0][0] == "status" and res[0][1] == "message" and res[1][0] == "failed" and res[1][1] == "User unauthorized to continue!" and userConnected in ["adminTestJson", "adminTestCsv"]:
+        elif res[0][0] == "status" and res[0][1] == "message" and res[1][0] == "failed" and res[1][1] == "User unauthorized to continue!" and userConnected not in ["adminTestJson", "adminTestCsv"]:
             print("PASSED", check_mark.decode("utf-8"))
             return
         # elif res[0][0] == "status" and res[0][1] == "message" and res[1][0] == "failed" and res[1][1] == "All IDs must be unique" and idCheck == True:
@@ -738,13 +733,13 @@ def run_getquestionanswers(userConnected, questionnaire_id, question_id, form):
     #         return
     # CSV NOT READY YET
     if isinstance(res, list):
-        print("RES:", res)
+        # print("RES:", res)
         # print(res[0][0], res[1][0], res[0][1], res[1][1], username)
 
-        if res[0][0] == "status" and res[1][0] == "OK" and userConnected not in ["adminTestJson", "adminTestCsv"]:
+        if res[0][0] == "status" and res[1][0] == "OK" and userConnected in ["adminTestJson", "adminTestCsv"]:
             print("PASSED", check_mark.decode("utf-8"))
             return
-        elif res[0][0] == "status" and res[0][1] == "message" and res[1][0] == "failed" and res[1][1] == "User unauthorized to continue!" and userConnected in ["adminTestJson", "adminTestCsv"]:
+        elif res[0][0] == "status" and res[0][1] == "message" and res[1][0] == "failed" and res[1][1] == "User unauthorized to continue!" and userConnected not in ["adminTestJson", "adminTestCsv"]:
             print("PASSED", check_mark.decode("utf-8"))
             return
         # elif res[0][0] == "status" and res[0][1] == "message" and res[1][0] == "failed" and res[1][1] == "All IDs must be unique" and idCheck == True:
@@ -1405,7 +1400,7 @@ if __name__ == '__main__':
         # userCsv: ADJ01, Q01, 1234, a
         message = toPrint(i, "Question test with user (should not be authorized) ", forms[1])
         print(message, end = "")
-        run_question(usernames["userCsv"][0], "CTEST", "U01", forms[1])
+        run_question(usernames["userCsv"][0], "CTEST", "C01", forms[1])
         i += 1
 
         run_login(usernames["adminJson"][0], usernames["adminJson"][1], forms[1], False)
@@ -1416,7 +1411,7 @@ if __name__ == '__main__':
         
         message = toPrint(i, "Doanswer test with user (should be authorized) ", forms[1])
         print(message, end = "")
-        run_doanswer("CTEST", "U01", "1234", "U01A1", usernames["userCsv"][0], forms[1])
+        run_doanswer("CTEST", "C01", "1234", "C01A1", usernames["userCsv"][0], forms[1])
         i += 1
 
         # # run_login(usernames["userCsv"][0], usernames["userCsv"][1], forms[1], False)
@@ -1430,7 +1425,7 @@ if __name__ == '__main__':
 
         message = toPrint(i, "Getquestionanswers test with user (should not be authorized) ", forms[1])
         print(message, end = "")
-        run_getquestionanswers(usernames["userCsv"][0], "CTEST", "U01", forms[1])
+        run_getquestionanswers(usernames["userCsv"][0], "CTEST", "C01", forms[1])
         i += 1
 
         message = toPrint(i, "Resetq test with user (should not be authorized) ", forms[1])

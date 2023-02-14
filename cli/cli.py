@@ -61,8 +61,7 @@ def handlePost(url, verify, vescookie = False, json_data = {}, headers = {}):
 
 def handleGet(url, vescookie):
     try:
-        # print(">>> HERE <<<")
-        response = requests.get(url, cookies=vescookie, verify = False, timeout=10)
+        response = requests.get(url, cookies = vescookie, verify = False, timeout=10)
     except requests.exceptions.ReadTimeout:
         print("Timeout error, the server took more than 10 seconds to respond")
         exit()
@@ -130,8 +129,6 @@ def logout(form):
     handleResponse(response, form)
 
     return
-
-# login -> returned response with json containing username and a field blah 
 
 # healthcheck: DONE
 def healthcheck(form):
@@ -300,32 +297,9 @@ def usersReq(username, form):
 
     return
 
-# def admin(args):
-#     print("HERE")
-#     # print("Will sent username:", username, "and password:", password)
-#     if args.usermod:
-#         print("user modification")
-#     if args.username:
-#         print("username :", args.username)
-#     if args.passw:
-#         print("password :", args.passw)
-#     if args.users:
-#         print("users :", args.users)
-
-#     return
-
 parser = argparse.ArgumentParser()#add_help=False)
 
 subparser = parser.add_subparsers(dest = "command")
-
-# def loginParser():
-#     ### LOGIN PARSER ###
-#     login_parser = subparser.add_parser("login", help = "login")
-#     login_parser.add_argument("--username", nargs = 1)
-#     login_parser.add_argument("--passw", nargs = 1)
-#     login_parser.add_argument("--format", nargs = 1)
-#     ####################
-#     return
 
 ### LOGIN PARSER ###
 login_parser = subparser.add_parser("login", help = "login")
@@ -413,21 +387,16 @@ admin_parser.add_argument("--users", help="list of users")
 admin_parser.add_argument("--format", nargs = 1)
 ####################
 
-
 known = ["command", "usermod", "username", "passw",
          "source", "questionnaire_id", "question_id",
          "session_id", "option_id", "users", "format"]
-
-#args, unknown = parser.parse_known_args(known)
 
 if __name__ == '__main__':
     if len(sys.argv) < 2:
         print("Error: at least 1 argument is required")
         sys.exit(1)
     try:
-        # print(sys.argv)
-        
-        unrecognized = []
+        # unrecognized = []
         knownCommands = ["login", "logout", "healthcheck", "resetall", "questionnaire_upd",
                          "resetq", "questionnaire", "deleteq", "question", "doanswer", "getsessionanswers",
                          "getquestionanswers", "admin", "usermod"]
@@ -529,20 +498,12 @@ if __name__ == '__main__':
                     print("Invalid arguments passed! Exiting...")
                     exit()
 
-        # for arg in sys.argv[1:]:
-        #     if (arg not in known):
-        #         unrecognized.append(arg)
-        # if len(unrecognized) > 0:
-        #     print("Invalid arguments passed:", unrecognized)
-        #     exit()
         args = parser.parse_args()
-        # print(sys.argv)
         
         if len(sys.argv[1:]) < 2:
             print("Error: at least 1 argument is required")
             sys.exit(1)
         
-        #args, unknown = parser.parse_known_args(known)
         if '--format' not in sys.argv:
             parser.error("Incorrect format, it should be --format json")
     except ValueError as e:
@@ -550,8 +511,6 @@ if __name__ == '__main__':
         exit()
 
 unknown = [arg for arg in vars(args) if arg not in known]
-
-# print(unknown)
 
 if len(unknown) != 0:
     unknownArgsHandler(unknown)
@@ -615,19 +574,9 @@ elif (args.command == "getquestionanswers"):
         print("getquestionanswers requires --questionnaire_id and --question_id and --format")
 
 elif args.command == "admin":
-    # print("In admin")
     if args.usermod and args.username and args.passw and not args.users:
-        # print("user modification for username :", args.username, "with password :", args.passw)
         usermodReq(args.usermod, args.username, args.passw, args.format[0])
-    # elif args.username and args.passw and not args.usermod and not args.users:
-    #     print("username :", args.username, "with password :", args.passw)
-
-    # elif args.passw and not args.usermod and not args.username and not args.users:
-    #     print("password :", args.passw)
-        
     elif args.users and not args.username and not args.usermod and not args.passw:
-        # print("users :", args.users)
         usersReq(args.users, args.format[0])
     else:
         print("Invalid parameters for admin scope")
-
