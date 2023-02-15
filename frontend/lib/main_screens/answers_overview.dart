@@ -362,7 +362,8 @@ class _AnswersOverviewScreenState extends State<AnswersOverviewScreen> {
                     );
                   } else {
                     return Padding(
-                      padding: const EdgeInsets.only(top: 60, left: 100),
+                      padding:
+                          const EdgeInsets.only(top: 60, left: 100, right: 100),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [

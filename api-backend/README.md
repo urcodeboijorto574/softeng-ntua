@@ -122,11 +122,11 @@ Setup the following parameters in the config.env file:
 > PASS_PHRASE=hellothere
 > ```
 
-# JWT_SECRET variable is saved on the server and is used for the decoding of the access token. Make sure you are the only one who knows it's value for security reasons.
+JWT_SECRET variable is saved on the server and is used for the decoding of the access token. Make sure you are the only one who knows it's value for security reasons.
 
-# JWT_EXPIRES_IN variable determines the time that the token is valid.
+JWT_EXPIRES_IN variable determines the time that the token is valid.
 
-# JWT_COOKIE_EXPIRES_IN variable determines the time that the cookie is valid.
+JWT_COOKIE_EXPIRES_IN variable determines the time that the cookie is valid.
 
 > ```
 > JWT_SECRET=your_secret
@@ -145,10 +145,6 @@ Setup the following parameters in the config.env file:
 ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃
 
 # REST-API DOCUMENTATION
-
-# Project: IntelliQ
-
-IntelliQ is a web application that is created by undergraduate students of the department of Electrical And Computer Engineering, NTUA, Athens. This application is used for the creation, submission and management of "smart" questionnaires. A questionnaire is considered "smart" when the next provided question depends on the answer of the previous one. In this documentation, the provided services of the REST API are explained so that the user can send requests with the appropriate parameters.
 
 ## End-point: Sign Up
 
