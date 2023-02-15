@@ -146,6 +146,8 @@ JWT_COOKIE_EXPIRES_IN variable determines the time that the cookie is valid.
 
 # REST-API DOCUMENTATION
 
+In this documentation, the provided services of the REST API are explained so that the user can send requests with the appropriate parameters.
+
 ## End-point: Sign Up
 
 Endpoint to signup a user.
