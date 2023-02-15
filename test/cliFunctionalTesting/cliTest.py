@@ -2,7 +2,6 @@ import subprocess
 import json
 import csv
 import io
-import pandas as pd
 
 check_mark = "\u2713".encode("utf-8")
 
@@ -1133,4 +1132,4 @@ if __name__ == '__main__':
             print("============================== user Testing with csv format Completed  =============================")
 
     except Exception as e:
-        print('Healthcheck failed: {}'.format(e))
+        print('Unexpected error occurred: {}'.format(e))
