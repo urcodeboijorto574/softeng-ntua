@@ -1,0 +1,81 @@
+{
+ "questionnaireID": "myQue",
+ "questionnaireTitle": "Dilemmas Questionnaire",
+ "creator": "my-test-admin",
+ "keywords": [
+ "dilemma",
+ "critical thinking",
+ "funny"
+ ],
+ "questions": [
+ {
+ "qID": "QJ0",
+ "qtext": "What color is your favorite Power-Ranger?",
+ "required": "TRUE",
+ "type": "profile",
+ "options": [
+ {
+ "optID": "PJ0TXT",
+ "opttxt": "<open string>",
+ "nextqID": "QJ1"
+ }
+ ]
+ },
+ {
+ "qID": "QJ1",
+ "qtext": "What if your wardrobe could talk?",
+ "required": "FALSE",
+ "type": "question",
+ "options": [
+ {
+ "optID": "PJ1A0",
+ "opttxt": "It would ask for a raise",
+ "nextqID": "QJ2"
+ },
+ {
+ "optID": "PJ1A1",
+ "opttxt": "It would talk about its hopes and dreams",
+ "nextqID": "QJ2"
+ },
+ {
+ "optID": "PJ1A2",
+ "opttxt": "It would make the best Joe Rogan impersonation",
+ "nextqID": "QJ2"
+ },
+ {
+ "optID": "PJ1A3",
+ "opttxt": "It would ask me to change pyjamas more than once a year... that's fair",
+ "nextqID": "QJ2"
+ }
+ ]
+ },
+ {
+ "qID": "QJ2",
+ "qtext": "What if you could live as a goat?",
+ "required": "FALSE",
+ "type": "question",
+ "options": [
+ {
+ "optID": "PJ2A0",
+ "opttxt": "I'd go rock climbing",
+ "nextqID": "-"
+ },
+ {
+ "optID": "PJ2A1",
+ "opttxt": "I'd try the peculiar vegan diet",
+ "nextqID": "-"
+ },
+ {
+ "optID": "PJ2A2",
+ "opttxt": "I'd travel to see the world on panoramic-mode on",
+ "nextqID": "-"
+ },
+ {
+ "optID": "PJ2A3",
+ "opttxt": "I'd be a software engineer",
+ "nextqID": "-"
+ }
+ ]
+ }
+ ]
+}
