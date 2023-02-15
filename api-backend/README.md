@@ -151,7 +151,7 @@ appropriate parameters. Note that the API supports JSON and CSV return types via
 The base url is the following:
 
 > ```
-> https://localhost:9103/intelliq_api/
+> https://{{host}}:{{port}}/intelliq_api/
 > ```
 
 ## End-point: Sign Up
