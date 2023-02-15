@@ -481,16 +481,17 @@ if __name__ == '__main__':
                     sys.argv[2] in [sys.argv[4], sys.argv[6]] or sys.argv[4] == sys.argv[6]):
                     print("Invalid arguments passed! Exiting...")
                     sys.exit(1)
-
-        args = parser.parse_args()
         
         if len(sys.argv[1:]) < 2:
             print("Error: at least 1 argument is required")
             sys.exit(1)
         
         if '--format' not in sys.argv:
-            parser.error("Incorrect format, it should be --format json")
+            print("Incorrect format, it should be --format json")
+            sys.exit(1)
         
+        args = parser.parse_args()
+
         unknown = [arg for arg in vars(args) if arg not in known]
 
         if len(unknown) != 0:
@@ -521,7 +522,6 @@ if __name__ == '__main__':
             healthcheck(args.format[0])
 
         elif (args.command == "resetall"):
-            
             resetall(args.format[0])
 
         elif (args.command == "questionnaire_upd"):
