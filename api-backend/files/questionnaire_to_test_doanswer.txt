@@ -1,0 +1,28 @@
+{
+ "questionnaireID": "myQue",
+ "questionnaireTitle": "Dilemmas Questionnaire",
+ "creator": "my-test-admin",
+ "keywords": [
+ "dilemma",
+ "critical thinking",
+ "funny"
+ ],
+ "questions": [
+ {
+ "qID": "QJ1",
+ "qtext": "What if your wardrobe could talk?",
+ "required": "FALSE",
+ "type": "question",
+ "options": []
+ },
+ {
+ "qID": "QJ2",
+ "qtext": "What if you could live as a goat?",
+ "required": "FALSE",
+ "type": "question",
+ "options": [
+
+ ]
+ }
+ ]
+}
