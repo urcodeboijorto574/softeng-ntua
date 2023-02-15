@@ -1,0 +1,45 @@
+[
+    {
+        "answers": [
+            "02d69d250686a24acc8554de",
+            "02d69d260686a24acc8554ea",
+            "02d69d270686a24acc8554f7",
+            "02d69d280686a24acc855504",
+            "02d69d280686a24acc855511",
+            "02d69d290686a24acc85551e",
+            "02d69d2a0686a24acc85552b",
+            "02d69d2b0686a24acc855538"
+        ],
+        "_id": "02d69d250686a24acc8554dc",
+        "sessionID": "kXS2",
+        "questionnaireID": "12345",
+        "submitter": "test-user"
+    },
+    {
+        "answers": [
+            "02d69d052d5e3963f0413432",
+            "02d69d0c2d5e3963f0413450"
+        ],
+        "_id": "02d69d052d5e3963f0413430",
+        "sessionID": "1234",
+        "questionnaireID": "UTEST",
+        "submitter": "userTestJson"
+    },
+    {
+        "answers": [
+            "02d69d4389265806ac5457f6",
+            "02d69d4489265806ac545802",
+            "02d69d4589265806ac54580f",
+            "02d69d4689265806ac54581c",
+            "02d69d4789265806ac545829",
+            "02d69d4889265806ac545836",
+            "02d69d4989265806ac545843",
+            "02d69d4a89265806ac545850",
+            "02d69d4a89265806ac54585d"
+        ],
+        "_id": "02d69d4389265806ac5457f4",
+        "sessionID": "P8mC",
+        "questionnaireID": "12345",
+        "submitter": "test-user2"
+    }
+]
