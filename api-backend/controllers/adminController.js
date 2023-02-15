@@ -1,12 +1,12 @@
 const mongoose = require('mongoose');
 const fs = require('fs');
 const dotenv = require('dotenv');
-const User = require(`${__dirname}/../models/userModel.js`);
 
 dotenv.config({ path: `${__dirname}/../config.env` });
 
 const csv = require('csv-express');
 
+const User = require(`${__dirname}/../models/userModel.js`);
 const Answer = require('../models/answerModel');
 const Option = require('../models/optionModel');
 const Question = require('../models/questionModel');
