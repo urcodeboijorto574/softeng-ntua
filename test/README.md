@@ -16,7 +16,7 @@
     "mocha": "^10.2.0"
   },
   "scripts": {
-    "start": "mocha --timeout 100000"
+    "start": "mocha --timeout 100000 --exit"
   }
 }
 ```
