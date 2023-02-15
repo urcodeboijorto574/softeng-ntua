@@ -146,10 +146,6 @@ JWT_COOKIE_EXPIRES_IN variable determines the time that the cookie is valid.
 
 # REST-API DOCUMENTATION
 
-# Project: IntelliQ
-
-IntelliQ is a web application that is created by undergraduate students of the department of Electrical And Computer Engineering, NTUA, Athens. This application is used for the creation, submission and management of "smart" questionnaires. A questionnaire is considered "smart" when the next provided question depends on the answer of the previous one. In this documentation, the provided services of the REST API are explained so that the user can send requests with the appropriate parameters.
-
 ## End-point: Sign Up
 
 Endpoint to signup a user.
