@@ -146,7 +146,13 @@ JWT_COOKIE_EXPIRES_IN variable determines the time that the cookie is valid.
 
 # REST-API DOCUMENTATION
 
-In this documentation, the provided services of the REST API are explained so that the user can send requests with the appropriate parameters.
+In this documentation, the provided services of the REST API are explained so that the user can send requests with the
+appropriate parameters. Note that the API supports JSON and CSV return types via query variable format.
+The base url is the following:
+
+> ```
+> https://localhost:9103/intelliq_api/
+> ```
 
 ## End-point: Sign Up
 
