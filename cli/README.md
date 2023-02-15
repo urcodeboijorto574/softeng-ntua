@@ -1,4 +1,4 @@
-# Python script for interacting with an API with functions to handle HTTP requests and responses
+# Python script for interacting with the API with functions to handle HTTP requests and responses
 This code is a Python script that interacts with the API. It has functions to make HTTP GET and POST requests to the API and to handle the responses.
 
 ### Summary
