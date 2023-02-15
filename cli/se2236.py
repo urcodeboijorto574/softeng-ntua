@@ -19,10 +19,13 @@ def save_variable_to_file(variable):
 
 # reading from a file
 def load_variable_from_file():
-    with open("token.txt", "r") as file:
-        return str(file.read())
-    
-    return 
+    try:
+        with open("token.txt", "r") as file:
+            return str(file.read())
+    except FileNotFoundError:
+        with open("token.txt", "w") as file:
+            file.write("loggedout")
+        return "loggedout"
 
 def getCookie():
     return {"jwt" : load_variable_from_file()}
