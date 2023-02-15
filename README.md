@@ -19,7 +19,7 @@ An overall documentation of the project is provided on a Visual Paradigm file wi
 | Giannoukos Ioannis    |
 | Zarifis Stylianos     |
 | Lampraki Dimitra      |
-| Misiri Vassiliki      |
+| Missiri Vassiliki      |
 
 ## Technologies Used
 
