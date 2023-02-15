@@ -23,13 +23,13 @@ An overall documentation of th project is provided on a Visual Paradigm file wit
 
 ## Technologies Used
 
-| Component     | Technology               |
-| ------------- | ------------------------ |
-| Frontend      | Flutter/Dart             |
-| CLI           | Python                   |
-| API-backend   | nodejs/express           |
-| ODM           | Mongoose                 |
-| Database      | MongoDB                  |
-| Documentation | Visual Paradigm/Postmans |
+| Component     | Technology              |
+| ------------- | ----------------------- |
+| Frontend      | Flutter/Dart            |
+| CLI           | Python                  |
+| API-backend   | nodejs/express          |
+| ODM           | Mongoose                |
+| Database      | MongoDB                 |
+| Documentation | Visual Paradigm/Postman |
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
