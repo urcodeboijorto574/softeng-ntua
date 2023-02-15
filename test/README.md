@@ -9,7 +9,7 @@
 ## Node packages
 
 ```sh
-    {
+  {
   "dependencies": {
     "chai": "^4.3.7",
     "chai-http": "^4.3.0",
