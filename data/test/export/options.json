@@ -1,1 +1,650 @@
-[{"wasChosenBy":7,"_id":"00b57c15edfc7d4fccdb9a2f","optID":"Q01A1","opttxt":"Prasino","nextqID":"Q02","__v":0},{"wasChosenBy":0,"_id":"00b57c15edfc7d4fccdb9a31","optID":"Q01A2","opttxt":"Kokkino","nextqID":"Q02","__v":0},{"wasChosenBy":0,"_id":"00b57c15edfc7d4fccdb9a33","optID":"Q01A3","opttxt":"Kitrino","nextqID":"Q02","__v":0},{"wasChosenBy":0,"_id":"00b57c15edfc7d4fccdb9a35","optID":"Q02A1","opttxt":"Ναι","nextqID":"Q03","__v":0},{"wasChosenBy":0,"_id":"00b57c15edfc7d4fccdb9a37","optID":"Q02A2","opttxt":"Οχι","nextqID":"Q04","__v":0},{"wasChosenBy":11,"_id":"00b57c15edfc7d4fccdb9a39","optID":"Q03A1","opttxt":"Pao","nextqID":"Q04","__v":0},{"wasChosenBy":0,"_id":"00b57c15edfc7d4fccdb9a3b","optID":"Q03A2","opttxt":"Osfp ","nextqID":"Q04","__v":0},{"wasChosenBy":0,"_id":"00b57c15edfc7d4fccdb9a3d","optID":"Q03A3","opttxt":"AEK","nextqID":"Q04","__v":0},{"wasChosenBy":0,"_id":"00b57c15edfc7d4fccdb9a3f","optID":"Q04A1","opttxt":"Nai","nextqID":"Q03","__v":0},{"wasChosenBy":0,"_id":"00b57c15edfc7d4fccdb9a41","optID":"Q04A2","opttxt":"Oxi","nextqID":"Q03","__v":0},{"wasChosenBy":0,"_id":"00b6f8cc945aba5410493f66","optID":"Q11A1","opttxt":"Prasino","nextqID":"Q12","__v":0},{"wasChosenBy":0,"_id":"00b6f8cc945aba5410493f68","optID":"Q11A2","opttxt":"Kokkino","nextqID":"Q12","__v":0},{"wasChosenBy":0,"_id":"00b6f8cc945aba5410493f6a","optID":"Q11A3","opttxt":"Kitrino","nextqID":"Q12","__v":0},{"wasChosenBy":0,"_id":"00b6f8cc945aba5410493f6c","optID":"Q12A1","opttxt":"Ναι","nextqID":"Q13","__v":0},{"wasChosenBy":0,"_id":"00b6f8cc945aba5410493f6e","optID":"Q12A2","opttxt":"Οχι","nextqID":"Q14","__v":0},{"wasChosenBy":0,"_id":"00b6f8cc945aba5410493f70","optID":"Q13A1","opttxt":"Pao","nextqID":"Q14","__v":0},{"wasChosenBy":0,"_id":"00b6f8cc945aba5410493f72","optID":"Q13A2","opttxt":"Osfp ","nextqID":"Q14","__v":0},{"wasChosenBy":0,"_id":"00b6f8cc945aba5410493f74","optID":"Q13A3","opttxt":"AEK","nextqID":"Q14","__v":0},{"wasChosenBy":0,"_id":"00b6f8cc945aba5410493f76","optID":"Q14A1","opttxt":"Nai","nextqID":"-","__v":0},{"wasChosenBy":0,"_id":"00b6f8cc945aba5410493f78","optID":"Q14A2","opttxt":"Oxi","nextqID":"-","__v":0},{"wasChosenBy":1,"_id":"00bc110ced7ab64f38d39667","optID":"P20TXT","opttxt":"<open string>","nextqID":"Q21","__v":0},{"wasChosenBy":2,"_id":"00bc110ced7ab64f38d39669","optID":"Q21A1","opttxt":"Prasino","nextqID":"Q22","__v":0},{"wasChosenBy":1,"_id":"00bc110ced7ab64f38d3966b","optID":"Q21A2","opttxt":"Kokkino","nextqID":"Q22","__v":0},{"wasChosenBy":0,"_id":"00bc110ced7ab64f38d3966d","optID":"Q21A3","opttxt":"Kitrino","nextqID":"Q22","__v":0},{"wasChosenBy":2,"_id":"00bc110ced7ab64f38d3966f","optID":"Q22A1","opttxt":"Ναι","nextqID":"Q23","__v":0},{"wasChosenBy":1,"_id":"00bc110ced7ab64f38d39671","optID":"Q22A2","opttxt":"Οχι","nextqID":"Q24","__v":0},{"wasChosenBy":0,"_id":"00bc110ced7ab64f38d39673","optID":"Q23A1","opttxt":"Pao","nextqID":"Q24","__v":0},{"wasChosenBy":2,"_id":"00bc110ced7ab64f38d39675","optID":"Q23A2","opttxt":"Osfp ","nextqID":"Q24","__v":0},{"wasChosenBy":0,"_id":"00bc110ced7ab64f38d39677","optID":"Q23A3","opttxt":"AEK","nextqID":"Q24","__v":0},{"wasChosenBy":1,"_id":"00bc110ded7ab64f38d39679","optID":"Q24A1","opttxt":"Nai","nextqID":"-","__v":0},{"wasChosenBy":2,"_id":"00bc110ded7ab64f38d3967b","optID":"Q24A2","opttxt":"Oxi","nextqID":"-","__v":0},{"wasChosenBy":0,"_id":"00bd62905397442ec4c12420","optID":"P30TXT","opttxt":"<open string>","nextqID":"Q31","__v":0},{"wasChosenBy":0,"_id":"00bd62905397442ec4c12422","optID":"Q31A1","opttxt":"Prasino","nextqID":"Q32","__v":0},{"wasChosenBy":0,"_id":"00bd62905397442ec4c12424","optID":"Q31A2","opttxt":"Kokkino","nextqID":"Q32","__v":0},{"wasChosenBy":0,"_id":"00bd62905397442ec4c12426","optID":"Q31A3","opttxt":"Kitrino","nextqID":"Q32","__v":0},{"wasChosenBy":0,"_id":"00bd62905397442ec4c12428","optID":"Q32A1","opttxt":"Ναι","nextqID":"Q33","__v":0},{"wasChosenBy":0,"_id":"00bd62905397442ec4c1242a","optID":"Q32A2","opttxt":"Οχι","nextqID":"Q34","__v":0},{"wasChosenBy":0,"_id":"00bd62915397442ec4c1242c","optID":"Q33A1","opttxt":"Pao","nextqID":"Q34","__v":0},{"wasChosenBy":0,"_id":"00bd62915397442ec4c1242e","optID":"Q33A2","opttxt":"Osfp ","nextqID":"Q34","__v":0},{"wasChosenBy":0,"_id":"00bd62915397442ec4c12430","optID":"Q33A3","opttxt":"AEK","nextqID":"Q34","__v":0},{"wasChosenBy":0,"_id":"00bd62915397442ec4c12432","optID":"Q34A1","opttxt":"Nai","nextqID":"-","__v":0},{"wasChosenBy":0,"_id":"00bd62915397442ec4c12434","optID":"Q34A2","opttxt":"Oxi","nextqID":"-","__v":0},{"wasChosenBy":0,"_id":"00cc68e3759bff09749fe4c9","optID":"F01A1","opttxt":"Prasino","nextqID":"Q02","__v":0},{"wasChosenBy":0,"_id":"00cc68e3759bff09749fe4cc","optID":"F01A2","opttxt":"Kokkino","nextqID":"Q02","__v":0},{"wasChosenBy":0,"_id":"00cc68e4759bff09749fe4cf","optID":"F01A3","opttxt":"Kitrino","nextqID":"Q02","__v":0},{"wasChosenBy":0,"_id":"00cc68e4759bff09749fe4d5","optID":"F02A1","opttxt":"Ναι","nextqID":"Q03","__v":0},{"wasChosenBy":0,"_id":"00cc68e4759bff09749fe4d8","optID":"F02A2","opttxt":"Οχι","nextqID":"Q04","__v":0},{"wasChosenBy":0,"_id":"00cc68e4759bff09749fe4de","optID":"F03A1","opttxt":"Pao","nextqID":"Q04","__v":0},{"wasChosenBy":0,"_id":"00cc68e4759bff09749fe4e1","optID":"F03A2","opttxt":"Osfp ","nextqID":"Q04","__v":0},{"wasChosenBy":0,"_id":"00cc68e4759bff09749fe4e4","optID":"F03A3","opttxt":"AEK","nextqID":"F04","__v":0},{"wasChosenBy":0,"_id":"00d7a0d352683873aca8bd09","optID":"M00TXT","opttxt":"<open string>","nextqID":"M01","__v":0},{"wasChosenBy":0,"_id":"00d7a0d452683873aca8bd0f","optID":"M01A1","opttxt":"<30","nextqID":"-","__v":0},{"wasChosenBy":0,"_id":"00d7a0d452683873aca8bd12","optID":"M01A2","opttxt":"30-50","nextqID":"-","__v":0},{"wasChosenBy":1,"_id":"00d989469f6e9e2ff013f9ca","optID":"M14TXT","opttxt":"<open string>","nextqID":"M015","__v":0},{"wasChosenBy":0,"_id":"00d989469f6e9e2ff013f9d0","optID":"M015A1","opttxt":"<30","nextqID":"-","__v":0},{"wasChosenBy":1,"_id":"00d989469f6e9e2ff013f9d3","optID":"M01A3","opttxt":"30-50","nextqID":"-","__v":0},{"wasChosenBy":0,"_id":"00de966845d41ef8a4e6582e","optID":"PJ1A0","opttxt":"I'd go rock climbing","nextqID":"-"},{"wasChosenBy":0,"_id":"00de97ab45d41ef8a4e6583a","optID":"PJ1A1","opttxt":"I'd eat a lot of grass","nextqID":"-"},{"wasChosenBy":0,"_id":"00de97fa45d41ef8a4e6583b","optID":"PJ1A2","opttxt":"I'd travel to see the world on panoramic-mode on","nextqID":"-"},{"wasChosenBy":0,"_id":"00de986f45d41ef8a4e6583d","optID":"PJ1A3","opttxt":"I'd be a software engineer","nextqID":"-"},{"wasChosenBy":1,"_id":"00e10ced2444d9d1cdd51807","optID":"PJ0A0","opttxt":"It would ask for a raise","nextqID":"QJ1"},{"wasChosenBy":0,"_id":"00e10d552444d9d1cdd51808","optID":"PJ0A1","opttxt":"It would talk about its hopes and dreams","nextqID":"QJ1"},{"wasChosenBy":0,"_id":"00e10dae2444d9d1cdd51809","optID":"PJ0A2","opttxt":"It would make the best Joe Rogan impression","nextqID":"QJ1"},{"wasChosenBy":0,"_id":"00e10e222444d9d1cdd5180a","optID":"PJ0A3","opttxt":"It would ask me to change pyjamas more than once a year.. that's fair","nextqID":"QJ1"},{"wasChosenBy":1,"_id":"00e243cba9bca93a346fff0c","optID":"T00OPT","opttxt":"<open string>","nextqID":"T01","__v":0},{"wasChosenBy":2,"_id":"00e243cba9bca93a346fff12","optID":"T01A1","opttxt":"option 1","nextqID":"T02","__v":0},{"wasChosenBy":0,"_id":"00e243cba9bca93a346fff15","optID":"T01A2","opttxt":"option 2","nextqID":"T02","__v":0},{"wasChosenBy":0,"_id":"00e243cba9bca93a346fff18","optID":"T01A3","opttxt":"option 3","nextqID":"-","__v":0},{"wasChosenBy":0,"_id":"00e243cba9bca93a346fff1b","optID":"T01A4","opttxt":"option 4","nextqID":"T02","__v":0},{"wasChosenBy":3,"_id":"00e243cca9bca93a346fff21","optID":"T02A1","opttxt":"option 1","nextqID":"-","__v":0},{"wasChosenBy":0,"_id":"00e243cca9bca93a346fff24","optID":"T02A2","opttxt":"option 2","nextqID":"-","__v":0},{"wasChosenBy":0,"_id":"00e243cca9bca93a346fff27","optID":"T02A3","opttxt":"option 3","nextqID":"-","__v":0},{"wasChosenBy":0,"_id":"00e243cca9bca93a346fff2a","optID":"T02A4","opttxt":"option 4","nextqID":"-","__v":0},{"wasChosenBy":0,"_id":"00e63eebd7b778aae0d8beb9","optID":"V00TXT","opttxt":"<open string>","nextqID":"V01","__v":0},{"wasChosenBy":0,"_id":"00e63eecd7b778aae0d8bebf","optID":"V01A1","opttxt":"option 1","nextqID":"V02","__v":0},{"wasChosenBy":0,"_id":"00e63eecd7b778aae0d8bec2","optID":"V01A2","opttxt":"option 2","nextqID":"V02","__v":0},{"wasChosenBy":0,"_id":"00e63eecd7b778aae0d8bec5","optID":"V01A3","opttxt":"option 3","nextqID":"-","__v":0},{"wasChosenBy":0,"_id":"00e63eecd7b778aae0d8bec8","optID":"V01A4","opttxt":"option 4","nextqID":"V02","__v":0},{"wasChosenBy":0,"_id":"00e63eecd7b778aae0d8bece","optID":"V02A1","opttxt":"option 1","nextqID":"-","__v":0},{"wasChosenBy":0,"_id":"00e63eecd7b778aae0d8bed1","optID":"V02A2","opttxt":"option 2","nextqID":"-","__v":0},{"wasChosenBy":0,"_id":"00e63eecd7b778aae0d8bed4","optID":"V02A3","opttxt":"option 3","nextqID":"-","__v":0},{"wasChosenBy":0,"_id":"00e63eedd7b778aae0d8bed7","optID":"V02A4","opttxt":"option 4","nextqID":"-","__v":0}]
+[
+    {
+        "wasChosenBy": 7,
+        "_id": "00b57c15edfc7d4fccdb9a2f",
+        "optID": "Q01A1",
+        "opttxt": "Prasino",
+        "nextqID": "Q02",
+        "__v": 0
+    },
+    {
+        "wasChosenBy": 0,
+        "_id": "00b57c15edfc7d4fccdb9a31",
+        "optID": "Q01A2",
+        "opttxt": "Kokkino",
+        "nextqID": "Q02",
+        "__v": 0
+    },
+    {
+        "wasChosenBy": 0,
+        "_id": "00b57c15edfc7d4fccdb9a33",
+        "optID": "Q01A3",
+        "opttxt": "Kitrino",
+        "nextqID": "Q02",
+        "__v": 0
+    },
+    {
+        "wasChosenBy": 0,
+        "_id": "00b57c15edfc7d4fccdb9a35",
+        "optID": "Q02A1",
+        "opttxt": "Ναι",
+        "nextqID": "Q03",
+        "__v": 0
+    },
+    {
+        "wasChosenBy": 0,
+        "_id": "00b57c15edfc7d4fccdb9a37",
+        "optID": "Q02A2",
+        "opttxt": "Οχι",
+        "nextqID": "Q04",
+        "__v": 0
+    },
+    {
+        "wasChosenBy": 11,
+        "_id": "00b57c15edfc7d4fccdb9a39",
+        "optID": "Q03A1",
+        "opttxt": "Pao",
+        "nextqID": "Q04",
+        "__v": 0
+    },
+    {
+        "wasChosenBy": 0,
+        "_id": "00b57c15edfc7d4fccdb9a3b",
+        "optID": "Q03A2",
+        "opttxt": "Osfp ",
+        "nextqID": "Q04",
+        "__v": 0
+    },
+    {
+        "wasChosenBy": 0,
+        "_id": "00b57c15edfc7d4fccdb9a3d",
+        "optID": "Q03A3",
+        "opttxt": "AEK",
+        "nextqID": "Q04",
+        "__v": 0
+    },
+    {
+        "wasChosenBy": 0,
+        "_id": "00b57c15edfc7d4fccdb9a3f",
+        "optID": "Q04A1",
+        "opttxt": "Nai",
+        "nextqID": "Q03",
+        "__v": 0
+    },
+    {
+        "wasChosenBy": 0,
+        "_id": "00b57c15edfc7d4fccdb9a41",
+        "optID": "Q04A2",
+        "opttxt": "Oxi",
+        "nextqID": "Q03",
+        "__v": 0
+    },
+    {
+        "wasChosenBy": 0,
+        "_id": "00b6f8cc945aba5410493f66",
+        "optID": "Q11A1",
+        "opttxt": "Prasino",
+        "nextqID": "Q12",
+        "__v": 0
+    },
+    {
+        "wasChosenBy": 0,
+        "_id": "00b6f8cc945aba5410493f68",
+        "optID": "Q11A2",
+        "opttxt": "Kokkino",
+        "nextqID": "Q12",
+        "__v": 0
+    },
+    {
+        "wasChosenBy": 0,
+        "_id": "00b6f8cc945aba5410493f6a",
+        "optID": "Q11A3",
+        "opttxt": "Kitrino",
+        "nextqID": "Q12",
+        "__v": 0
+    },
+    {
+        "wasChosenBy": 0,
+        "_id": "00b6f8cc945aba5410493f6c",
+        "optID": "Q12A1",
+        "opttxt": "Ναι",
+        "nextqID": "Q13",
+        "__v": 0
+    },
+    {
+        "wasChosenBy": 0,
+        "_id": "00b6f8cc945aba5410493f6e",
+        "optID": "Q12A2",
+        "opttxt": "Οχι",
+        "nextqID": "Q14",
+        "__v": 0
+    },
+    {
+        "wasChosenBy": 0,
+        "_id": "00b6f8cc945aba5410493f70",
+        "optID": "Q13A1",
+        "opttxt": "Pao",
+        "nextqID": "Q14",
+        "__v": 0
+    },
+    {
+        "wasChosenBy": 0,
+        "_id": "00b6f8cc945aba5410493f72",
+        "optID": "Q13A2",
+        "opttxt": "Osfp ",
+        "nextqID": "Q14",
+        "__v": 0
+    },
+    {
+        "wasChosenBy": 0,
+        "_id": "00b6f8cc945aba5410493f74",
+        "optID": "Q13A3",
+        "opttxt": "AEK",
+        "nextqID": "Q14",
+        "__v": 0
+    },
+    {
+        "wasChosenBy": 0,
+        "_id": "00b6f8cc945aba5410493f76",
+        "optID": "Q14A1",
+        "opttxt": "Nai",
+        "nextqID": "-",
+        "__v": 0
+    },
+    {
+        "wasChosenBy": 0,
+        "_id": "00b6f8cc945aba5410493f78",
+        "optID": "Q14A2",
+        "opttxt": "Oxi",
+        "nextqID": "-",
+        "__v": 0
+    },
+    {
+        "wasChosenBy": 1,
+        "_id": "00bc110ced7ab64f38d39667",
+        "optID": "P20TXT",
+        "opttxt": "<open string>",
+        "nextqID": "Q21",
+        "__v": 0
+    },
+    {
+        "wasChosenBy": 2,
+        "_id": "00bc110ced7ab64f38d39669",
+        "optID": "Q21A1",
+        "opttxt": "Prasino",
+        "nextqID": "Q22",
+        "__v": 0
+    },
+    {
+        "wasChosenBy": 1,
+        "_id": "00bc110ced7ab64f38d3966b",
+        "optID": "Q21A2",
+        "opttxt": "Kokkino",
+        "nextqID": "Q22",
+        "__v": 0
+    },
+    {
+        "wasChosenBy": 0,
+        "_id": "00bc110ced7ab64f38d3966d",
+        "optID": "Q21A3",
+        "opttxt": "Kitrino",
+        "nextqID": "Q22",
+        "__v": 0
+    },
+    {
+        "wasChosenBy": 2,
+        "_id": "00bc110ced7ab64f38d3966f",
+        "optID": "Q22A1",
+        "opttxt": "Ναι",
+        "nextqID": "Q23",
+        "__v": 0
+    },
+    {
+        "wasChosenBy": 1,
+        "_id": "00bc110ced7ab64f38d39671",
+        "optID": "Q22A2",
+        "opttxt": "Οχι",
+        "nextqID": "Q24",
+        "__v": 0
+    },
+    {
+        "wasChosenBy": 0,
+        "_id": "00bc110ced7ab64f38d39673",
+        "optID": "Q23A1",
+        "opttxt": "Pao",
+        "nextqID": "Q24",
+        "__v": 0
+    },
+    {
+        "wasChosenBy": 2,
+        "_id": "00bc110ced7ab64f38d39675",
+        "optID": "Q23A2",
+        "opttxt": "Osfp ",
+        "nextqID": "Q24",
+        "__v": 0
+    },
+    {
+        "wasChosenBy": 0,
+        "_id": "00bc110ced7ab64f38d39677",
+        "optID": "Q23A3",
+        "opttxt": "AEK",
+        "nextqID": "Q24",
+        "__v": 0
+    },
+    {
+        "wasChosenBy": 1,
+        "_id": "00bc110ded7ab64f38d39679",
+        "optID": "Q24A1",
+        "opttxt": "Nai",
+        "nextqID": "-",
+        "__v": 0
+    },
+    {
+        "wasChosenBy": 2,
+        "_id": "00bc110ded7ab64f38d3967b",
+        "optID": "Q24A2",
+        "opttxt": "Oxi",
+        "nextqID": "-",
+        "__v": 0
+    },
+    {
+        "wasChosenBy": 0,
+        "_id": "00bd62905397442ec4c12420",
+        "optID": "P30TXT",
+        "opttxt": "<open string>",
+        "nextqID": "Q31",
+        "__v": 0
+    },
+    {
+        "wasChosenBy": 0,
+        "_id": "00bd62905397442ec4c12422",
+        "optID": "Q31A1",
+        "opttxt": "Prasino",
+        "nextqID": "Q32",
+        "__v": 0
+    },
+    {
+        "wasChosenBy": 0,
+        "_id": "00bd62905397442ec4c12424",
+        "optID": "Q31A2",
+        "opttxt": "Kokkino",
+        "nextqID": "Q32",
+        "__v": 0
+    },
+    {
+        "wasChosenBy": 0,
+        "_id": "00bd62905397442ec4c12426",
+        "optID": "Q31A3",
+        "opttxt": "Kitrino",
+        "nextqID": "Q32",
+        "__v": 0
+    },
+    {
+        "wasChosenBy": 0,
+        "_id": "00bd62905397442ec4c12428",
+        "optID": "Q32A1",
+        "opttxt": "Ναι",
+        "nextqID": "Q33",
+        "__v": 0
+    },
+    {
+        "wasChosenBy": 0,
+        "_id": "00bd62905397442ec4c1242a",
+        "optID": "Q32A2",
+        "opttxt": "Οχι",
+        "nextqID": "Q34",
+        "__v": 0
+    },
+    {
+        "wasChosenBy": 0,
+        "_id": "00bd62915397442ec4c1242c",
+        "optID": "Q33A1",
+        "opttxt": "Pao",
+        "nextqID": "Q34",
+        "__v": 0
+    },
+    {
+        "wasChosenBy": 0,
+        "_id": "00bd62915397442ec4c1242e",
+        "optID": "Q33A2",
+        "opttxt": "Osfp ",
+        "nextqID": "Q34",
+        "__v": 0
+    },
+    {
+        "wasChosenBy": 0,
+        "_id": "00bd62915397442ec4c12430",
+        "optID": "Q33A3",
+        "opttxt": "AEK",
+        "nextqID": "Q34",
+        "__v": 0
+    },
+    {
+        "wasChosenBy": 0,
+        "_id": "00bd62915397442ec4c12432",
+        "optID": "Q34A1",
+        "opttxt": "Nai",
+        "nextqID": "-",
+        "__v": 0
+    },
+    {
+        "wasChosenBy": 0,
+        "_id": "00bd62915397442ec4c12434",
+        "optID": "Q34A2",
+        "opttxt": "Oxi",
+        "nextqID": "-",
+        "__v": 0
+    },
+    {
+        "wasChosenBy": 0,
+        "_id": "00cc68e3759bff09749fe4c9",
+        "optID": "F01A1",
+        "opttxt": "Prasino",
+        "nextqID": "Q02",
+        "__v": 0
+    },
+    {
+        "wasChosenBy": 0,
+        "_id": "00cc68e3759bff09749fe4cc",
+        "optID": "F01A2",
+        "opttxt": "Kokkino",
+        "nextqID": "Q02",
+        "__v": 0
+    },
+    {
+        "wasChosenBy": 0,
+        "_id": "00cc68e4759bff09749fe4cf",
+        "optID": "F01A3",
+        "opttxt": "Kitrino",
+        "nextqID": "Q02",
+        "__v": 0
+    },
+    {
+        "wasChosenBy": 0,
+        "_id": "00cc68e4759bff09749fe4d5",
+        "optID": "F02A1",
+        "opttxt": "Ναι",
+        "nextqID": "Q03",
+        "__v": 0
+    },
+    {
+        "wasChosenBy": 0,
+        "_id": "00cc68e4759bff09749fe4d8",
+        "optID": "F02A2",
+        "opttxt": "Οχι",
+        "nextqID": "Q04",
+        "__v": 0
+    },
+    {
+        "wasChosenBy": 0,
+        "_id": "00cc68e4759bff09749fe4de",
+        "optID": "F03A1",
+        "opttxt": "Pao",
+        "nextqID": "Q04",
+        "__v": 0
+    },
+    {
+        "wasChosenBy": 0,
+        "_id": "00cc68e4759bff09749fe4e1",
+        "optID": "F03A2",
+        "opttxt": "Osfp ",
+        "nextqID": "Q04",
+        "__v": 0
+    },
+    {
+        "wasChosenBy": 0,
+        "_id": "00cc68e4759bff09749fe4e4",
+        "optID": "F03A3",
+        "opttxt": "AEK",
+        "nextqID": "F04",
+        "__v": 0
+    },
+    {
+        "wasChosenBy": 0,
+        "_id": "00d7a0d352683873aca8bd09",
+        "optID": "M00TXT",
+        "opttxt": "<open string>",
+        "nextqID": "M01",
+        "__v": 0
+    },
+    {
+        "wasChosenBy": 0,
+        "_id": "00d7a0d452683873aca8bd0f",
+        "optID": "M01A1",
+        "opttxt": "<30",
+        "nextqID": "-",
+        "__v": 0
+    },
+    {
+        "wasChosenBy": 0,
+        "_id": "00d7a0d452683873aca8bd12",
+        "optID": "M01A2",
+        "opttxt": "30-50",
+        "nextqID": "-",
+        "__v": 0
+    },
+    {
+        "wasChosenBy": 1,
+        "_id": "00d989469f6e9e2ff013f9ca",
+        "optID": "M14TXT",
+        "opttxt": "<open string>",
+        "nextqID": "M015",
+        "__v": 0
+    },
+    {
+        "wasChosenBy": 0,
+        "_id": "00d989469f6e9e2ff013f9d0",
+        "optID": "M015A1",
+        "opttxt": "<30",
+        "nextqID": "-",
+        "__v": 0
+    },
+    {
+        "wasChosenBy": 1,
+        "_id": "00d989469f6e9e2ff013f9d3",
+        "optID": "M01A3",
+        "opttxt": "30-50",
+        "nextqID": "-",
+        "__v": 0
+    },
+    {
+        "wasChosenBy": 0,
+        "_id": "00de966845d41ef8a4e6582e",
+        "optID": "PJ1A0",
+        "opttxt": "I'd go rock climbing",
+        "nextqID": "-"
+    },
+    {
+        "wasChosenBy": 0,
+        "_id": "00de97ab45d41ef8a4e6583a",
+        "optID": "PJ1A1",
+        "opttxt": "I'd eat a lot of grass",
+        "nextqID": "-"
+    },
+    {
+        "wasChosenBy": 0,
+        "_id": "00de97fa45d41ef8a4e6583b",
+        "optID": "PJ1A2",
+        "opttxt": "I'd travel to see the world on panoramic-mode on",
+        "nextqID": "-"
+    },
+    {
+        "wasChosenBy": 0,
+        "_id": "00de986f45d41ef8a4e6583d",
+        "optID": "PJ1A3",
+        "opttxt": "I'd be a software engineer",
+        "nextqID": "-"
+    },
+    {
+        "wasChosenBy": 1,
+        "_id": "00e10ced2444d9d1cdd51807",
+        "optID": "PJ0A0",
+        "opttxt": "It would ask for a raise",
+        "nextqID": "QJ1"
+    },
+    {
+        "wasChosenBy": 0,
+        "_id": "00e10d552444d9d1cdd51808",
+        "optID": "PJ0A1",
+        "opttxt": "It would talk about its hopes and dreams",
+        "nextqID": "QJ1"
+    },
+    {
+        "wasChosenBy": 0,
+        "_id": "00e10dae2444d9d1cdd51809",
+        "optID": "PJ0A2",
+        "opttxt": "It would make the best Joe Rogan impression",
+        "nextqID": "QJ1"
+    },
+    {
+        "wasChosenBy": 0,
+        "_id": "00e10e222444d9d1cdd5180a",
+        "optID": "PJ0A3",
+        "opttxt": "It would ask me to change pyjamas more than once a year.. that's fair",
+        "nextqID": "QJ1"
+    },
+    {
+        "wasChosenBy": 1,
+        "_id": "00e243cba9bca93a346fff0c",
+        "optID": "T00OPT",
+        "opttxt": "<open string>",
+        "nextqID": "T01",
+        "__v": 0
+    },
+    {
+        "wasChosenBy": 2,
+        "_id": "00e243cba9bca93a346fff12",
+        "optID": "T01A1",
+        "opttxt": "option 1",
+        "nextqID": "T02",
+        "__v": 0
+    },
+    {
+        "wasChosenBy": 0,
+        "_id": "00e243cba9bca93a346fff15",
+        "optID": "T01A2",
+        "opttxt": "option 2",
+        "nextqID": "T02",
+        "__v": 0
+    },
+    {
+        "wasChosenBy": 0,
+        "_id": "00e243cba9bca93a346fff18",
+        "optID": "T01A3",
+        "opttxt": "option 3",
+        "nextqID": "-",
+        "__v": 0
+    },
+    {
+        "wasChosenBy": 0,
+        "_id": "00e243cba9bca93a346fff1b",
+        "optID": "T01A4",
+        "opttxt": "option 4",
+        "nextqID": "T02",
+        "__v": 0
+    },
+    {
+        "wasChosenBy": 3,
+        "_id": "00e243cca9bca93a346fff21",
+        "optID": "T02A1",
+        "opttxt": "option 1",
+        "nextqID": "-",
+        "__v": 0
+    },
+    {
+        "wasChosenBy": 0,
+        "_id": "00e243cca9bca93a346fff24",
+        "optID": "T02A2",
+        "opttxt": "option 2",
+        "nextqID": "-",
+        "__v": 0
+    },
+    {
+        "wasChosenBy": 0,
+        "_id": "00e243cca9bca93a346fff27",
+        "optID": "T02A3",
+        "opttxt": "option 3",
+        "nextqID": "-",
+        "__v": 0
+    },
+    {
+        "wasChosenBy": 0,
+        "_id": "00e243cca9bca93a346fff2a",
+        "optID": "T02A4",
+        "opttxt": "option 4",
+        "nextqID": "-",
+        "__v": 0
+    },
+    {
+        "wasChosenBy": 0,
+        "_id": "00e63eebd7b778aae0d8beb9",
+        "optID": "V00TXT",
+        "opttxt": "<open string>",
+        "nextqID": "V01",
+        "__v": 0
+    },
+    {
+        "wasChosenBy": 0,
+        "_id": "00e63eecd7b778aae0d8bebf",
+        "optID": "V01A1",
+        "opttxt": "option 1",
+        "nextqID": "V02",
+        "__v": 0
+    },
+    {
+        "wasChosenBy": 0,
+        "_id": "00e63eecd7b778aae0d8bec2",
+        "optID": "V01A2",
+        "opttxt": "option 2",
+        "nextqID": "V02",
+        "__v": 0
+    },
+    {
+        "wasChosenBy": 0,
+        "_id": "00e63eecd7b778aae0d8bec5",
+        "optID": "V01A3",
+        "opttxt": "option 3",
+        "nextqID": "-",
+        "__v": 0
+    },
+    {
+        "wasChosenBy": 0,
+        "_id": "00e63eecd7b778aae0d8bec8",
+        "optID": "V01A4",
+        "opttxt": "option 4",
+        "nextqID": "V02",
+        "__v": 0
+    },
+    {
+        "wasChosenBy": 0,
+        "_id": "00e63eecd7b778aae0d8bece",
+        "optID": "V02A1",
+        "opttxt": "option 1",
+        "nextqID": "-",
+        "__v": 0
+    },
+    {
+        "wasChosenBy": 0,
+        "_id": "00e63eecd7b778aae0d8bed1",
+        "optID": "V02A2",
+        "opttxt": "option 2",
+        "nextqID": "-",
+        "__v": 0
+    },
+    {
+        "wasChosenBy": 0,
+        "_id": "00e63eecd7b778aae0d8bed4",
+        "optID": "V02A3",
+        "opttxt": "option 3",
+        "nextqID": "-",
+        "__v": 0
+    },
+    {
+        "wasChosenBy": 0,
+        "_id": "00e63eedd7b778aae0d8bed7",
+        "optID": "V02A4",
+        "opttxt": "option 4",
+        "nextqID": "-",
+        "__v": 0
+    }
+]
