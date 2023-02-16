@@ -79,3 +79,37 @@ The `main()` function is the entry point for the command line interface. It firs
 The arguments are then parsed based on the command passed and appropriate validation checks are made for each command. If any of the validation checks fail, an error message is printed and the program exits. If all the validation checks pass, the relevant function for the command is called with the arguments passed.
 
 The program exits with a status code of 1 if an error occurs during execution. The status code is used to indicate the success or failure of the program to other programs that invoke it.
+
+# Libraries used in `se2236.py`:
+
+`argparse`: This library allows the programmer to write user-friendly command-line interfaces. It is included in the Python standard library, so there is no need to install it separately.
+
+`requests`: This library allows the programmer to send HTTP requests using Python. It is not included in the Python standard library, so it must be installed using pip.
+
+`sys`: This library provides access to some variables used or maintained by the interpreter and to functions that interact strongly with the interpreter. It is included in the Python standard library.
+
+`json`: This library allows the programmer to encode and decode JSON data. It is included in the Python standard library.
+
+`urllib3`: This library is a powerful, sanity-friendly HTTP client for Python. It is used in conjunction with requests library, and provides advanced features such as connection pooling and reusing HTTP connections.
+
+`os`: This library provides a way of using operating system dependent functionality. It is included in the Python standard library.
+
+## Installation
+
+Use the package manager [pip](https://pip.pypa.io/en/stable/) to install the required libraries.
+
+To install requests and urllib3, run the following commands in your command prompt or terminal:
+>```
+>pip install requests
+>pip install urllib3
+
+## Contributing
+
+Pull requests are welcome. For major changes, please open an issue first
+to discuss what you would like to change.
+
+Please make sure to update tests as appropriate.
+
+## License
+
+[MIT](https://choosealicense.com/licenses/mit/)
