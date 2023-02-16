@@ -11,7 +11,7 @@ chai.use(chaiHttp);
 
 //----------------------------------------CREATE TEST QUESTIONNAIRE----------------------------------------//
 
-describe("Create test questionnaire for deleteQuestionnaire testing", () => {
+describe("Create test questionnaire for Questionnaire testing", () => {
   describe("/login", () => {
     it("it should login an admin to create the test questionnaire", (done) => {
       const user = {
