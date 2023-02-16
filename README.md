@@ -12,14 +12,14 @@ An overall documentation of the project is provided on a Visual Paradigm file wi
 
 ## Contributors
 
-| Name                  |
-| --------------------- |
-| Astreinidis Zafeirios |
-| Vassiliou Dimitrios   |
-| Giannoukos Ioannis    |
-| Zarifis Stylianos     |
-| Lampraki Dimitra      |
-| Missiri Vassiliki     |
+| Name                       |
+| -------------------------- |
+| Astreinidis Zafeirios      |
+| Vassiliou Dimitrios        |
+| Giannoukos Ioannis         |
+| Zarifis Stylianos          |
+| Lampraki Dimitra-Stamatina |
+| Missiri Vassiliki          |
 
 ## Technologies Used
 
