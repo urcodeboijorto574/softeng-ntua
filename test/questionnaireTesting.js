@@ -12,10 +12,52 @@ chai.use(chaiHttp);
 //----------------------------------------CREATE TEST QUESTIONNAIRE----------------------------------------//
 
 describe("Create test questionnaire for Questionnaire testing", () => {
+  describe("/signup", () => {
+    it("it should create a new user in database", (done) => {
+      const newUser = {
+        username: "test-user1",
+        password: "test1234",
+        usermod: "user",
+      };
+      chai
+        .request(server)
+        .post("/intelliq_api/signup")
+        .send(newUser)
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.have.property("status");
+          res.body.status.should.equal("OK");
+          done();
+        })
+        .timeout(1000000);
+    });
+  });
+
+  describe("/signup", () => {
+    it("it should create a new user in database", (done) => {
+      const newUser = {
+        username: "test-admin1",
+        password: "test1234",
+        usermod: "admin",
+      };
+      chai
+        .request(server)
+        .post("/intelliq_api/signup")
+        .send(newUser)
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.have.property("status");
+          res.body.status.should.equal("OK");
+          done();
+        })
+        .timeout(1000000);
+    });
+  });
+
   describe("/login", () => {
     it("it should login an admin to create the test questionnaire", (done) => {
       const user = {
-        username: "test-admin",
+        username: "test-admin1",
         password: "test1234",
       };
       chai
@@ -58,7 +100,7 @@ describe("Questionnaire endpoints good scenario (returning '200 OK' or '402 no d
     describe("/login", () => {
       it("it should login a user to have access to the endpoints", (done) => {
         const user = {
-          username: "test-user",
+          username: "test-user1",
           password: "test1234",
         };
         chai
@@ -145,7 +187,7 @@ describe("Questionnaire endpoints good scenario (returning '200 OK' or '402 no d
     describe("/login", () => {
       it("it should login an admin to have access to the endpoints", (done) => {
         const user = {
-          username: "test-admin",
+          username: "test-admin1",
           password: "test1234",
         };
         chai
@@ -232,7 +274,7 @@ describe("Create test questionnaire for deleteQuestionnaire testing", () => {
   describe("/login", () => {
     it("it should login an admin to create the test questionnaire", (done) => {
       const user = {
-        username: "test-admin",
+        username: "test-admin1",
         password: "test1234",
       };
       chai
@@ -377,7 +419,7 @@ describe("Questionnaire endpoints bad scenario (logged in user/admin not authori
     describe("/login", () => {
       it("it should login an admin to cause an error", (done) => {
         const user = {
-          username: "test-admin",
+          username: "test-admin1",
           password: "test1234",
         };
         chai
@@ -454,7 +496,7 @@ describe("Questionnaire endpoints bad scenario (logged in user/admin not authori
     describe("/login", () => {
       it("it should login a user to cause an error", (done) => {
         const user = {
-          username: "test-user",
+          username: "test-user1",
           password: "test1234",
         };
         chai
@@ -536,7 +578,7 @@ describe("Questionnaire endpoints bad scenario (logged in admin not authorized f
   describe("/signup", () => {
     it("it should create a new admin in database", (done) => {
       const newUser = {
-        username: "test-admin1",
+        username: "test-admin3",
         password: "test1234",
         usermod: "admin",
       };
@@ -557,7 +599,7 @@ describe("Questionnaire endpoints bad scenario (logged in admin not authorized f
   describe("/login", () => {
     it("it should login the new admin to cause an error", (done) => {
       const user = {
-        username: "test-admin1",
+        username: "test-admin3",
         password: "test1234",
       };
       chai
@@ -619,7 +661,7 @@ describe("Questionnaire endpoints bad scenario (the specified questionnaire ID d
   describe("/login", () => {
     it("it should login the creator admin to have acces to the endpoints", (done) => {
       const user = {
-        username: "test-admin",
+        username: "test-admin1",
         password: "test1234",
       };
       chai
@@ -742,6 +784,80 @@ describe("Delete the test-admin1", () => {
       chai
         .request(server)
         .delete("/intelliq_api/admin/users/deleteUser/test-admin1")
+        .set("Cookie", `jwt=${token}`)
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.have.property("status");
+          res.body.status.should.equal("OK");
+          done();
+        })
+        .timeout(1000000);
+    });
+  });
+});
+
+describe("Delete the test-user1", () => {
+  describe("/login", () => {
+    it("it should login the Super Admin to have access to the rest of the endpoints", (done) => {
+      const user = {
+        username: "TheUltraSuperAdmin",
+        password: "the-password-is-secret",
+      };
+      chai
+        .request(server)
+        .post("/intelliq_api/login")
+        .send(user)
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.have.property("token");
+          token = res.body.token;
+          done();
+        })
+        .timeout(1000000);
+    });
+  });
+  describe("/intelliq_api/admin/users/:username", () => {
+    it("it should delete the test-admin1", (done) => {
+      chai
+        .request(server)
+        .delete("/intelliq_api/admin/users/deleteUser/test-user1")
+        .set("Cookie", `jwt=${token}`)
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.have.property("status");
+          res.body.status.should.equal("OK");
+          done();
+        })
+        .timeout(1000000);
+    });
+  });
+});
+
+describe("Delete the test-admin3", () => {
+  describe("/login", () => {
+    it("it should login the Super Admin to have access to the rest of the endpoints", (done) => {
+      const user = {
+        username: "TheUltraSuperAdmin",
+        password: "the-password-is-secret",
+      };
+      chai
+        .request(server)
+        .post("/intelliq_api/login")
+        .send(user)
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.have.property("token");
+          token = res.body.token;
+          done();
+        })
+        .timeout(1000000);
+    });
+  });
+  describe("/intelliq_api/admin/users/:username", () => {
+    it("it should delete the test-admin3", (done) => {
+      chai
+        .request(server)
+        .delete("/intelliq_api/admin/users/deleteUser/test-admin3")
         .set("Cookie", `jwt=${token}`)
         .end((err, res) => {
           res.should.have.status(200);
