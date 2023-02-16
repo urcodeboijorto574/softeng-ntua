@@ -32,9 +32,11 @@ An overall documentation of the project is provided on a Visual Paradigm file wi
 | Database      | MongoDB                 |
 | Documentation | Visual Paradigm/Postman |
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-
 ## Contributing
 
 Pull requests are welcome. For major changes, please open an issue first
 to discuss what you would like to change.
+
+## License
+
+[MIT](https://choosealicense.com/licenses/mit/)
