@@ -38,18 +38,18 @@ mongoose
 const port = process.env.PORT || 3000;
 
 // http server (just for testing)
-/* const server = app.listen(port, () => {
+const server = app.listen(port, () => {
     console.log(`App running on port ${port}...`);
-}); */
+});
 
 //-----------------------------------------------------------------------//
 
 // https server
-const server = https
-    .createServer({ key: key, cert: cert }, app)
-    .listen(port, () => {
-        console.log(`App running on port ${port}...`);
-    });
+// const server = https
+//     .createServer({ key: key, cert: cert }, app)
+//     .listen(port, () => {
+//         console.log(`App running on port ${port}...`);
+//     });
 
 // αυτος ο listener χειριζεται τα error Που δεν γινονται, δλδ τα promise rejections.
 process.on('unhandledRejection', (err) => {
