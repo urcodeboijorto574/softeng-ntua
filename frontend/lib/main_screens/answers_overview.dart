@@ -388,8 +388,12 @@ class _AnswersOverviewScreenState extends State<AnswersOverviewScreen> {
                                         groupValue: widget.answers[index - 1]
                                                 .optionIndex +
                                             1,
-                                        title: Text(widget.answers[index - 1]
-                                            .options[index2]['opttxt']),
+                                        title: Padding(
+                                          padding:
+                                              const EdgeInsets.only(bottom: 5),
+                                          child: Text(widget.answers[index - 1]
+                                              .options[index2]['opttxt']),
+                                        ),
                                         activeColor: const Color.fromARGB(
                                             255, 9, 52, 58),
                                         onChanged: (int? value) {},
