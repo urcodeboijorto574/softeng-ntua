@@ -40,16 +40,16 @@ def unknownArgsHandler(unknown):
     print("\nExiting...")
     sys.exit(1)
 
-def handlePost(url, verify, vescookie = False, json_data = {}, headers = {}):
+def handlePost(url, verify, biscuits = False, json_data = {}, headers = {}):
     try:
         if (json_data == {} and headers == {}):
-            response = requests.post(url, cookies=vescookie, verify = False, timeout=10)
+            response = requests.post(url, cookies=biscuits, verify = False, timeout=10)
         elif isinstance(json_data, str):
-            response = requests.post(url, cookies=vescookie, data = json_data,
+            response = requests.post(url, cookies=biscuits, data = json_data,
                                     headers = headers, verify = False,
                                     timeout=10)
         else:
-            response = requests.post(url, cookies=vescookie, json = json_data,
+            response = requests.post(url, cookies=biscuits, json = json_data,
                                     headers = headers, verify = False,
                                     timeout=10)
     except requests.exceptions.ReadTimeout:
@@ -61,9 +61,9 @@ def handlePost(url, verify, vescookie = False, json_data = {}, headers = {}):
 
     return response
 
-def handleGet(url, vescookie):
+def handleGet(url, biscuits):
     try:
-        response = requests.get(url, cookies = vescookie, verify = False, timeout=10)
+        response = requests.get(url, cookies = biscuits, verify = False, timeout=10)
     except requests.exceptions.ReadTimeout:
         print("Timeout error, the server took more than 10 seconds to respond")
         return
@@ -112,8 +112,9 @@ def login(username, password, form):
     
     response = handlePost(loginUrl, verify = cert_path, json_data = data, headers = headers)
     
-    jwt = response.cookies["jwt"]
-    save_variable_to_file(jwt)
+    if response.status_code == 200:
+        jwt = response.cookies["jwt"]
+        save_variable_to_file(jwt)
     
     handleResponse(response, form)
     
@@ -122,12 +123,12 @@ def login(username, password, form):
 # logout: NOT DONE
 def logout(form):
     logoutUrl = baseUrl + "logout?format=" + form
-    vescookie = getCookie()
-    if vescookie["jwt"] in ["loggedout", ""]:
+    biscuits = getCookie()
+    if biscuits["jwt"] in ["loggedout", ""]:
         print("The user is not signed in!")
         return
     
-    response = handlePost(logoutUrl, verify = False, vescookie = vescookie)
+    response = handlePost(logoutUrl, verify = False, biscuits = biscuits)
     
     jwt = response.cookies["jwt"]
     save_variable_to_file(jwt)
@@ -139,9 +140,9 @@ def logout(form):
 # healthcheck: DONE
 def healthcheck(form):
     healthUrl = baseUrl + "admin/healthcheck?format=" + form
-    vescookie = getCookie()
+    biscuits = getCookie()
 
-    response = handleGet(healthUrl, vescookie)
+    response = handleGet(healthUrl, biscuits)
     
     handleResponse(response, form)
     
@@ -150,9 +151,9 @@ def healthcheck(form):
 # resetall: TO CHECK
 def resetall(form):    
     resetallUrl = baseUrl + "admin/resetall" + "?format=" + form
-    vescookie = getCookie()
+    biscuits = getCookie()
     
-    response = handlePost(resetallUrl, verify = False, vescookie = vescookie)
+    response = handlePost(resetallUrl, verify = False, biscuits = biscuits)
     
     handleResponse(response, form)
     
@@ -161,10 +162,10 @@ def resetall(form):
 # questionnaire_upd: DONE
 def questionnaire_upd(source, form):
     updUrl = baseUrl + "admin/questionnaire_upd" + "?format=" + form
-    vescookie = getCookie()
+    biscuits = getCookie()
     try:
         files = {'file': (os.path.basename(source), open(source, 'rb'), 'application/octet-stream')}
-        response = requests.post(updUrl, cookies=vescookie, files = files, verify = False, timeout=10)
+        response = requests.post(updUrl, cookies=biscuits, files = files, verify = False, timeout=10)
     except requests.exceptions.ReadTimeout:
         print("Timeout error, the server took more than 10 seconds to respond")
         return
@@ -179,9 +180,9 @@ def questionnaire_upd(source, form):
 # resetq: DONE
 def resetq(questionnaire_id, form):
     resetqUrl = baseUrl + f"admin/resetq/{questionnaire_id}" + "?format=" + form
-    vescookie = getCookie()
+    biscuits = getCookie()
     
-    response = handlePost(resetqUrl, False, vescookie=vescookie)
+    response = handlePost(resetqUrl, False, biscuits=biscuits)
     
     handleResponse(response, form)
     
@@ -190,9 +191,9 @@ def resetq(questionnaire_id, form):
 # questionnaire: DONE
 def questionnaire(questionnaire_id, form):
     questionnaireUrl = baseUrl + f"questionnaire/{questionnaire_id}" + "?format=" + form
-    vescookie = getCookie()
+    biscuits = getCookie()
     
-    response = handleGet(questionnaireUrl, vescookie = vescookie)
+    response = handleGet(questionnaireUrl, biscuits = biscuits)
     
     handleResponse(response, form)
     
@@ -201,9 +202,9 @@ def questionnaire(questionnaire_id, form):
 # question: DONE
 def question(questionnaire_id, question_id, form):
     questionUrl = baseUrl + f"question/{questionnaire_id}/{question_id}" + "?format=" + form
-    vescookie = getCookie()
+    biscuits = getCookie()
     
-    response = handleGet(questionUrl, vescookie = vescookie)
+    response = handleGet(questionUrl, biscuits = biscuits)
     
     handleResponse(response, form)
 
@@ -221,9 +222,9 @@ def doanswer(questionnaire_id, question_id, session_id, option_id, form):
     if option_id[-3:] == "TXT":
         answerText = input("Give your answer: ")
         answerJson = {"answertext" : answerText}
-    vescookie = getCookie()
+    biscuits = getCookie()
     
-    response = handlePost(doanswerUrl, json_data = answerJson, verify = False, vescookie = vescookie)
+    response = handlePost(doanswerUrl, json_data = answerJson, verify = False, biscuits = biscuits)
     
     handleResponse(response, form)
     
@@ -232,9 +233,9 @@ def doanswer(questionnaire_id, question_id, session_id, option_id, form):
 # getsessionanswers: DONE
 def getsessionanswers(questionnaire_id, session_id, form):
     getsessionanswersUrl = baseUrl + f"getsessionanswers/{questionnaire_id}/{session_id}" + "?format=" + form
-    vescookie = getCookie()
+    biscuits = getCookie()
     
-    response = handleGet(getsessionanswersUrl, vescookie = vescookie)
+    response = handleGet(getsessionanswersUrl, biscuits = biscuits)
     
     handleResponse(response, form)
 
@@ -243,9 +244,9 @@ def getsessionanswers(questionnaire_id, session_id, form):
 # getquestionanswers: DONE
 def getquestionanswers(questionnaire_id, question_id, form):
     getquestionanswers = baseUrl + f"getquestionanswers/{questionnaire_id}/{question_id}" + "?format=" + form
-    vescookie = getCookie()
+    biscuits = getCookie()
     
-    response = handleGet(getquestionanswers, vescookie = vescookie)
+    response = handleGet(getquestionanswers, biscuits = biscuits)
     
     handleResponse(response, form)
 
@@ -253,9 +254,9 @@ def getquestionanswers(questionnaire_id, question_id, form):
 
 def deleteq(questionnaire_id, form):
     deleteqUrl = baseUrl + f"questionnaire/deletequestionnaire/{questionnaire_id}"
-    vescookie = getCookie()
+    biscuits = getCookie()
     try:
-        response = requests.delete(deleteqUrl, cookies=vescookie, verify = False, timeout=10)
+        response = requests.delete(deleteqUrl, cookies = biscuits, verify = False, timeout=10)
     except requests.exceptions.ReadTimeout:
         print("Timeout error, the server took more than 10 seconds to respond")
         return
@@ -267,9 +268,9 @@ def deleteq(questionnaire_id, form):
 # usermodReq: DONE
 def usermodReq(usermod, username, passw, form):
     usermodUrl = baseUrl + f"admin/{usermod}/{username}/{passw}" + "?format=" + form
-    vescookie = getCookie()
+    biscuits = getCookie()
     
-    response = handlePost(usermodUrl, verify = False, vescookie = vescookie)
+    response = handlePost(usermodUrl, verify = False, biscuits = biscuits)
     
     handleResponse(response, form)
 
@@ -278,9 +279,9 @@ def usermodReq(usermod, username, passw, form):
 # usersReq: DONE
 def usersReq(username, form):
     usermodUrl = baseUrl + f"admin/users/{username}" + "?format=" + form
-    vescookie = getCookie()
+    biscuits = getCookie()
     
-    response = handleGet(usermodUrl, vescookie = vescookie)
+    response = handleGet(usermodUrl, biscuits = biscuits)
     
     handleResponse(response, form)
 
@@ -396,7 +397,6 @@ if __name__ == '__main__':
                 print("Invalid number of arguments passed! Exiting...")
                 sys.exit(1)
             if sys.argv[2] not in ["--username", "--passw"] or sys.argv[4] not in ["--username", "--passw"] or sys.argv[2] == sys.argv[4]:
-                print(">>> HERE <<<")
                 print(sys.argv[2] not in ["--username", "--passw"])
                 print(sys.argv[4] not in ["--username", "--passw"])
                 print("Invalid arguments passed! Exiting...")
