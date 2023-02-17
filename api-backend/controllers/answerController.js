@@ -36,7 +36,7 @@ exports.doAnswer = async (req, res, next) => {
             optID: req.params.optionID,
             sessionID: req.params.session,
             questionnaireID: req.params.questionnaireID,
-            answertext: req.body.answertext ? req.body.answertext : '',
+            answertext: req.body.answertext ? req.body.answertext : ' ',
         },
         newAnswerCreated = false, optionUpdated = false, questionUpdated = false;
     try {
@@ -113,7 +113,7 @@ exports.doAnswer = async (req, res, next) => {
                     status: 'failed',
                     message: 'An answer has already been submitted for this question',
                     'previous answer':
-                        session.answers[answerIndex].answertext !== ''
+                        session.answers[answerIndex].answertext !== ' '
                             ? session.answers[answerIndex].answertext
                             : (await Option.findOne({ optID: session.answers[answerIndex].optID, }, '-_id opttxt')).opttxt,
                 });
