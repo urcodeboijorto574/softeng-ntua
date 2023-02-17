@@ -13,10 +13,31 @@ chai.use(chaiHttp);
 //-----------------------------------------------GOOD SCENARIO---------------------------------------------//
 
 describe("Questionnaire update endpoint good scenario (returning '200 OK')", () => {
+  describe("/signup", () => {
+    it("it should create a new user in database", (done) => {
+      const newUser = {
+        username: "test-admin1",
+        password: "test1234",
+        usermod: "admin",
+      };
+      chai
+        .request(server)
+        .post("/intelliq_api/signup")
+        .send(newUser)
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.have.property("status");
+          res.body.status.should.equal("OK");
+          done();
+        })
+        .timeout(1000000);
+    });
+  });
+
   describe("/login", () => {
     it("it should login an admin to create the questionnaire", (done) => {
       const user = {
-        username: "test-admin",
+        username: "test-admin1",
         password: "test1234",
       };
       chai
@@ -184,7 +205,7 @@ describe("Questionnaire update endpoint bad scenario (wrong JSON format in input
   describe("/login", () => {
     it("it should login an admin to create the questionnaire", (done) => {
       const user = {
-        username: "test-admin",
+        username: "test-admin1",
         password: "test1234",
       };
       chai
@@ -247,7 +268,7 @@ describe("Questionnaire update endpoint bad scenario (duplicate questionnaire ti
   describe("/login", () => {
     it("it should login an admin to create the questionnaire", (done) => {
       const user = {
-        username: "test-admin",
+        username: "test-admin1",
         password: "test1234",
       };
       chai
@@ -310,7 +331,7 @@ describe("Questionnaire update endpoint bad scenario (duplicate questionnaire ID
   describe("/login", () => {
     it("it should login an admin to create the questionnaire", (done) => {
       const user = {
-        username: "test-admin",
+        username: "test-admin1",
         password: "test1234",
       };
       chai
@@ -373,7 +394,7 @@ describe("Questionnaire update endpoint bad scenario (duplicate question ID)", (
   describe("/login", () => {
     it("it should login an admin to create the questionnaire", (done) => {
       const user = {
-        username: "test-admin",
+        username: "test-admin1",
         password: "test1234",
       };
       chai
@@ -436,7 +457,7 @@ describe("Questionnaire update endpoint bad scenario (duplicate option ID)", () 
   describe("/login", () => {
     it("it should login an admin to create the questionnaire", (done) => {
       const user = {
-        username: "test-admin",
+        username: "test-admin1",
         password: "test1234",
       };
       chai
@@ -499,7 +520,7 @@ describe("Questionnaire update endpoint bad scenario (validation errors)", () =>
   describe("/login", () => {
     it("it should login an admin to create the questionnaire", (done) => {
       const user = {
-        username: "test-admin",
+        username: "test-admin1",
         password: "test1234",
       };
       chai
@@ -585,7 +606,7 @@ describe("Questionnaire update endpoint bad scenario (open-type options error)",
   describe("/login", () => {
     it("it should login an admin to create the questionnaire", (done) => {
       const user = {
-        username: "test-admin",
+        username: "test-admin1",
         password: "test1234",
       };
       chai
@@ -733,6 +754,43 @@ describe("Delete the test-user1", () => {
       chai
         .request(server)
         .delete("/intelliq_api/admin/users/deleteUser/test-user1")
+        .set("Cookie", `jwt=${token}`)
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.have.property("status");
+          res.body.status.should.equal("OK");
+          done();
+        })
+        .timeout(1000000);
+    });
+  });
+});
+
+describe("Delete the test-admin1", () => {
+  describe("/login", () => {
+    it("it should login the Super Admin to have access to the rest of the endpoints", (done) => {
+      const user = {
+        username: "TheUltraSuperAdmin",
+        password: "the-password-is-secret",
+      };
+      chai
+        .request(server)
+        .post("/intelliq_api/login")
+        .send(user)
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.have.property("token");
+          token = res.body.token;
+          done();
+        })
+        .timeout(1000000);
+    });
+  });
+  describe("/intelliq_api/admin/users/:username", () => {
+    it("it should delete the test-admin1", (done) => {
+      chai
+        .request(server)
+        .delete("/intelliq_api/admin/users/deleteUser/test-admin1")
         .set("Cookie", `jwt=${token}`)
         .end((err, res) => {
           res.should.have.status(200);

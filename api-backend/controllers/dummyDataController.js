@@ -28,7 +28,6 @@ exports.importData = async (req, res, next) => {
             try {
                 collectionsFiles.push(JSON.parse(fs.readFileSync(sourceFiles[i], 'utf-8')));
             } catch (error) {
-                console.log('error caught while reading files');
                 collectionsFiles.push(JSON.parse('[]'));
             }
         }
@@ -194,7 +193,6 @@ exports.exportData = async (req, res, next) => {
         });
     } catch (error) {
         const myMessageExists = error.myMessage != undefined;
-        console.log(`myMessageExists: ${myMessageExists}`);
         return handleResponse(req, res, myMessageExists ? 400 : 500, {
             status: 'failed',
             message: myMessageExists ? error.myMessage : error
