@@ -1,0 +1,306 @@
+{
+  "questionnaireID": "MM000",
+  "questionnaireTitle": "Music Questionnaire",
+  "keywords": ["music", "band", "singer"],
+  "questions": [
+    {
+      "qID": "M00",
+      "qtext": "What is your email?",
+      "required": "FALSE",
+      "type": "profile",
+      "options": [
+        {
+          "optID": "M00TXT",
+          "opttxt": "<open string>",
+          "nextqID": "M01"
+        }
+      ]
+    },
+    {
+      "qID": "M01",
+      "qtext": "What is your age?",
+      "required": "TRUE",
+      "type": "profile",
+      "options": [
+        {
+          "optID": "M01A1",
+          "opttxt": "<30",
+          "nextqID": "M02"
+        },
+        {
+          "optID": "M01A2",
+          "opttxt": "30-50",
+          "nextqID": "M02"
+        },
+        {
+          "optID": "M01A3",
+          "opttxt": "50-70",
+          "nextqID": "M02"
+        },
+        {
+          "optID": "M01A4",
+          "opttxt": ">70",
+          "nextqID": "M02"
+        }
+      ]
+    },
+    {
+      "qID": "M02",
+      "qtext": "How many hours do you spend listening to music per day?",
+      "required": "TRUE",
+      "type": "question",
+      "options": [
+        {
+          "optID": "M02A1",
+          "opttxt": "0",
+          "nextqID": "M04"
+        },
+
+        {
+          "optID": "M02A2",
+          "opttxt": "1-3",
+          "nextqID": "M03"
+        },
+
+        {
+          "optID": "M02A3",
+          "opttxt": "3-5",
+          "nextqID": "M03"
+        },
+
+        {
+          "optID": "M02A4",
+          "opttxt": ">5",
+          "nextqID": "M03"
+        }
+      ]
+    },
+
+    {
+      "qID": "M03",
+      "qtext": "What is your favourite music genre?",
+      "required": "TRUE",
+      "type": "question",
+      "options": [
+        {
+          "optID": "M03A1",
+          "opttxt": "Rock",
+          "nextqID": "M05"
+        },
+
+        {
+          "optID": "M03A2",
+          "opttxt": "KPOP",
+          "nextqID": "M06"
+        },
+
+        {
+          "optID": "M03A3",
+          "opttxt": "Greek",
+          "nextqID": "M07"
+        }
+      ]
+    },
+
+    {
+      "qID": "M04",
+      "qtext": "Why don't you listen to music?",
+      "required": "TRUE",
+      "type": "question",
+      "options": [
+        {
+          "optID": "M04A1",
+          "opttxt": "I don't have enough free time",
+          "nextqID": "M08"
+        },
+
+        {
+          "optID": "M04A2",
+          "opttxt": "I don't like music",
+          "nextqID": "M08"
+        },
+
+        {
+          "optID": "M04A3",
+          "opttxt": "I have more important things to do",
+          "nextqID": "M08"
+        }
+      ]
+    },
+
+    {
+      "qID": "M05",
+      "qtext": "What is your favourite song?",
+      "required": "TRUE",
+      "type": "question",
+      "options": [
+        {
+          "optID": "M05A1",
+          "opttxt": "House of the rising sun",
+          "nextqID": "M09"
+        },
+        {
+          "optID": "M05A2",
+          "opttxt": "Hotel California",
+          "nextqID": "M09"
+        },
+        {
+          "optID": "M05A3",
+          "opttxt": "Stairway to Heaven",
+          "nextqID": "M09"
+        },
+        {
+          "optID": "M05A4",
+          "opttxt": "Other",
+          "nextqID": "M09"
+        }
+      ]
+    },
+    {
+      "qID": "M06",
+      "qtext": "What is your favourite music group?",
+      "required": "TRUE",
+      "type": "question",
+      "options": [
+        {
+          "optID": "M06A1",
+          "opttxt": "BTS",
+          "nextqID": "M09"
+        },
+        {
+          "optID": "M06A2",
+          "opttxt": "TWICE",
+          "nextqID": "M09"
+        },
+        {
+          "optID": "M06A3",
+          "opttxt": "BIG BANG",
+          "nextqID": "M09"
+        },
+        {
+          "optID": "M06A4",
+          "opttxt": "Other",
+          "nextqID": "M09"
+        }
+      ]
+    },
+    {
+      "qID": "M07",
+      "qtext": "What is your favourite singer?",
+      "required": "TRUE",
+      "type": "question",
+      "options": [
+        {
+          "optID": "M07A1",
+          "opttxt": "Oikonomopoulos",
+          "nextqID": "M09"
+        },
+        {
+          "optID": "M07A2",
+          "opttxt": "Kiamos",
+          "nextqID": "M09"
+        },
+        {
+          "optID": "M07A3",
+          "opttxt": "Argyros",
+          "nextqID": "M09"
+        },
+        {
+          "optID": "M07A4",
+          "opttxt": "Other",
+          "nextqID": "M09"
+        }
+      ]
+    },
+    {
+      "qID": "M08",
+      "qtext": "Are you aware that music can help reduce stress?",
+      "required": "TRUE",
+      "type": "question",
+      "options": [
+        {
+          "optID": "M08A1",
+          "opttxt": "Yes",
+          "nextqID": "-"
+        },
+        {
+          "optID": "M08A2",
+          "opttxt": "No",
+          "nextqID": "-"
+        }
+      ]
+    },
+    {
+      "qID": "M09",
+      "qtext": "Which streaming service/device do you use to listen to music?",
+      "required": "TRUE",
+      "type": "question",
+      "options": [
+        {
+          "optID": "M09A1",
+          "opttxt": "SPOTIFY",
+          "nextqID": "M10"
+        },
+        {
+          "optID": "M09A2",
+          "opttxt": "Youtube",
+          "nextqID": "M11"
+        },
+        {
+          "optID": "M09A3",
+          "opttxt": "Pickup",
+          "nextqID": "M12"
+        }
+      ]
+    },
+    {
+      "qID": "M10",
+      "qtext": "Are you satisfied with your experience with SPOTIFY?",
+      "required": "TRUE",
+      "type": "question",
+      "options": [
+        {
+          "optID": "M10A1",
+          "opttxt": "Yes",
+          "nextqID": "-"
+        },
+        {
+          "optID": "M10A2",
+          "opttxt": "No",
+          "nextqID": "-"
+        }
+      ]
+    },
+    {
+      "qID": "M11",
+      "qtext": "Do you find Youtube ads irritating?",
+      "required": "TRUE",
+      "type": "question",
+      "options": [
+        {
+          "optID": "M11A1",
+          "opttxt": "Yes",
+          "nextqID": "-"
+        },
+        {
+          "optID": "M11A2",
+          "opttxt": "No",
+          "nextqID": "-"
+        }
+      ]
+    },
+    {
+      "qID": "M12",
+      "qtext": "Explain why you prefer to use the pickup:",
+      "required": "FALSE",
+      "type": "question",
+      "options": [
+        {
+          "optID": "M12TXT",
+          "opttxt": "<open string>",
+          "nextqID": "-"
+        }
+      ]
+    }
+  ]
+}
