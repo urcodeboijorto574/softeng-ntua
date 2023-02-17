@@ -314,8 +314,12 @@ class _QuestionScreenState extends State<QuestionScreen> {
                                                 selectedItem = value!;
                                               });
                                             },
-                                            title: Text(widget.question
-                                                .options[index]['opttxt']),
+                                            title: Padding(
+                                              padding: const EdgeInsets.only(
+                                                  bottom: 5),
+                                              child: Text(widget.question
+                                                  .options[index]['opttxt']),
+                                            ),
                                             activeColor: const Color.fromARGB(
                                                 255, 9, 52, 58),
                                           );

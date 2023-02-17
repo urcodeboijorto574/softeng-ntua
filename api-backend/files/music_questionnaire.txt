@@ -5,7 +5,7 @@
   "questions": [
     {
       "qID": "M00",
-      "qtext": "Ποιο είναι το email σας;",
+      "qtext": "What is your email?",
       "required": "FALSE",
       "type": "profile",
       "options": [
@@ -18,7 +18,7 @@
     },
     {
       "qID": "M01",
-      "qtext": "Ποια είναι η ηλικία σας;",
+      "qtext": "What is your age?",
       "required": "TRUE",
       "type": "profile",
       "options": [
@@ -46,39 +46,39 @@
     },
     {
       "qID": "M02",
-      "qtext": "Πόσες ώρες την μέρα ακούτε μουσική;",
+      "qtext": "How many hours do you spend listening to music per day?",
       "required": "TRUE",
       "type": "question",
       "options": [
         {
           "optID": "M02A1",
+          "opttxt": "0",
+          "nextqID": "M04"
+        },
+
+        {
+          "optID": "M02A2",
           "opttxt": "1-3",
           "nextqID": "M03"
         },
 
         {
-          "optID": "M02A2",
+          "optID": "M02A3",
           "opttxt": "3-5",
           "nextqID": "M03"
         },
 
         {
-          "optID": "M02A3",
+          "optID": "M02A4",
           "opttxt": ">5",
           "nextqID": "M03"
-        },
-
-        {
-          "optID": "M02A4",
-          "opttxt": "Καθόλου",
-          "nextqID": "M04"
         }
       ]
     },
 
     {
       "qID": "M03",
-      "qtext": "Ποιο είναι το αγαπημένο σας είδος;",
+      "qtext": "What is your favourite music genre?",
       "required": "TRUE",
       "type": "question",
       "options": [
@@ -96,7 +96,7 @@
 
         {
           "optID": "M03A3",
-          "opttxt": "Ελληνικά",
+          "opttxt": "Greek",
           "nextqID": "M07"
         }
       ]
@@ -104,25 +104,25 @@
 
     {
       "qID": "M04",
-      "qtext": "Για ποιον λόγο δεν ακούτε μουσική;",
+      "qtext": "Why don't you listen to music?",
       "required": "TRUE",
       "type": "question",
       "options": [
         {
           "optID": "M04A1",
-          "opttxt": "έλλειψη χρόνου",
+          "opttxt": "I don't have enough free time",
           "nextqID": "M08"
         },
 
         {
           "optID": "M04A2",
-          "opttxt": "έλλειψη διάθεσης",
+          "opttxt": "I don't like music",
           "nextqID": "M08"
         },
 
         {
           "optID": "M04A3",
-          "opttxt": "έχω σημαντικότερα πράγματα να κάνω",
+          "opttxt": "I have more important things to do",
           "nextqID": "M08"
         }
       ]
@@ -130,7 +130,7 @@
 
     {
       "qID": "M05",
-      "qtext": "Ποιο είναι το αγαπημένο σας τραγούδι;",
+      "qtext": "What is your favourite song?",
       "required": "TRUE",
       "type": "question",
       "options": [
@@ -151,14 +151,14 @@
         },
         {
           "optID": "M05A4",
-          "opttxt": "Άλλο",
+          "opttxt": "Other",
           "nextqID": "M09"
         }
       ]
     },
     {
       "qID": "M06",
-      "qtext": "Ποιο είναι το αγαπημένο σας συγκρότημα;",
+      "qtext": "What is your favourite music group?",
       "required": "TRUE",
       "type": "question",
       "options": [
@@ -179,60 +179,60 @@
         },
         {
           "optID": "M06A4",
-          "opttxt": "Άλλο",
+          "opttxt": "Other",
           "nextqID": "M09"
         }
       ]
     },
     {
       "qID": "M07",
-      "qtext": "Ποιος είναι ο αγαπημένος σας τραγουδιστής;",
+      "qtext": "What is your favourite singer?",
       "required": "TRUE",
       "type": "question",
       "options": [
         {
           "optID": "M07A1",
-          "opttxt": "Οικονομόπουλος",
+          "opttxt": "Oikonomopoulos",
           "nextqID": "M09"
         },
         {
           "optID": "M07A2",
-          "opttxt": "Κιάμος",
+          "opttxt": "Kiamos",
           "nextqID": "M09"
         },
         {
           "optID": "M07A3",
-          "opttxt": "Αργυρός",
+          "opttxt": "Argyros",
           "nextqID": "M09"
         },
         {
           "optID": "M07A4",
-          "opttxt": "Άλλο",
+          "opttxt": "Other",
           "nextqID": "M09"
         }
       ]
     },
     {
       "qID": "M08",
-      "qtext": "Γνωρίζετε ότι η μουσική βοηθάει στην αντιμετώπιση του άγχους;",
+      "qtext": "Are you aware that music can help reduce stress?",
       "required": "TRUE",
       "type": "question",
       "options": [
         {
           "optID": "M08A1",
-          "opttxt": "Ναι",
+          "opttxt": "Yes",
           "nextqID": "-"
         },
         {
           "optID": "M08A2",
-          "opttxt": "Όχι",
+          "opttxt": "No",
           "nextqID": "-"
         }
       ]
     },
     {
       "qID": "M09",
-      "qtext": "Που ακούτε μουσική;",
+      "qtext": "Which streaming service/device do you use to listen to music?",
       "required": "TRUE",
       "type": "question",
       "options": [
@@ -248,50 +248,50 @@
         },
         {
           "optID": "M09A3",
-          "opttxt": "Πικάπ",
+          "opttxt": "Pickup",
           "nextqID": "M12"
         }
       ]
     },
     {
       "qID": "M10",
-      "qtext": "Σας φαίνεται εξυπηρετική η πλατφόρμα του SPOTIFY;",
+      "qtext": "Are you satisfied with your experience with SPOTIFY?",
       "required": "TRUE",
       "type": "question",
       "options": [
         {
           "optID": "M10A1",
-          "opttxt": "Ναι",
+          "opttxt": "Yes",
           "nextqID": "-"
         },
         {
           "optID": "M10A2",
-          "opttxt": "Όχι",
+          "opttxt": "No",
           "nextqID": "-"
         }
       ]
     },
     {
       "qID": "M11",
-      "qtext": "Σας ενοχλούν οι συχνές διαφημίσεις;",
+      "qtext": "Do you find Youtube ads irritating?",
       "required": "TRUE",
       "type": "question",
       "options": [
         {
           "optID": "M11A1",
-          "opttxt": "Ναι",
+          "opttxt": "Yes",
           "nextqID": "-"
         },
         {
           "optID": "M11A2",
-          "opttxt": "Όχι",
+          "opttxt": "No",
           "nextqID": "-"
         }
       ]
     },
     {
       "qID": "M12",
-      "qtext": "Πείτε μας γιατί προτιμάτε ακόμα το Πικάπ:",
+      "qtext": "Explain why you prefer to use the pickup:",
       "required": "FALSE",
       "type": "question",
       "options": [
