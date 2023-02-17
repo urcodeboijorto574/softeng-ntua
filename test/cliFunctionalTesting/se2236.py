@@ -72,30 +72,12 @@ def handleGet(url, vescookie):
 
 def handleResponse(response, form):
     if form == "json":
-        # print("form:", form)
         json_data = response.json()
         json_formatted_str = json.dumps(json_data, indent=2)
         print(json_formatted_str)
     else:
-        # print("\n\nform:", form)
-        # print("\n")
-        #print(response.content)
-        # csv_data = response.content.decode('utf-8')
-        # reader = csv.reader(csv_data.splitlines())
-        # for row in reader:
-        #     print(row[0].key)
-        #     print(row[0].value)
-        # decoded_content = response.content.decode('utf-8')
-        # reader = csv.reader(decoded_content.splitlines(), delimiter=',')
-        # for row in reader:
-        #     print(row)
-
-        # csv_data = response.content.decode('utf-8')
         csv_data = response.text
-        # parsed_data = json.loads(csv_data)
         print(csv_data)
-        # df = pd.read_csv(StringIO(csv_data))
-        # print(df.to_string())
 
     return
 
@@ -106,11 +88,12 @@ def login(username, password, form):
     loginUrl = baseUrl + "login" + "?format=" + form
     cert_path = "cert.pem"
     cert_path = False
-    
+
     response = handlePost(loginUrl, verify = cert_path, json_data = data, headers = headers)
     
-    jwt = response.cookies["jwt"]
-    save_variable_to_file(jwt)
+    if response.status_code == 200:
+        jwt = response.cookies["jwt"]
+        save_variable_to_file(jwt)
     
     handleResponse(response, form)
     
@@ -164,6 +147,9 @@ def questionnaire_upd(source, form):
         response = requests.post(updUrl, cookies=vescookie, files = files, verify = False, timeout=10)
     except requests.exceptions.ReadTimeout:
         print("Timeout error, the server took more than 10 seconds to respond")
+        return
+    except Exception as e:
+        print("The specified file does not exist!")
         return
 
     handleResponse(response, form)
