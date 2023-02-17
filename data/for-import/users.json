@@ -1,62 +1,51 @@
 [
   {
     "questionnairesAnswered": [],
-    "_id": "02d69d5b9d16c863f46de17c",
+    "_id": "63d69d5b9d16c863f46de17c",
     "username": "TheUltraSuperAdmin",
     "role": "super-admin",
     "password": "$2a$12$S3EJe8hrH5l.0qPEgx7N4OqRe8YcY1Ofb2/4V/W7RVyoR4cP6jZQa"
   },
   {
     "questionnairesAnswered": [],
-    "_id": "02d69db00686a24acc85544d",
+    "_id": "63f00b6d8d706e46f060b721",
+    "username": "admin-vass",
     "role": "admin",
-    "username": "test-admin",
-    "password": "$2a$12$ffDIAKIx3L9VJNt2IQwbj.3PJ2ZYaFbrHeQVjh9WaEXkqGvu6/JD6"
+    "password": "$2a$12$w2Nk53AToDt0Ger31tzRvOZedbmDzW4lWyH9vUfgVuDGCbRDvEf0u"
   },
   {
-    "questionnairesAnswered": ["02d69dd10686a24acc855451"],
-    "_id": "02d69dfd0686a24acc8554c5",
-    "username": "test-user",
+    "questionnairesAnswered": ["63f00bb48d706e46f060b72f"],
+    "_id": "63f00b738d706e46f060b723",
+    "username": "user-vass1",
     "role": "user",
-    "password": "$2a$12$3SQdQL88bzZMG8F8S4RIVetQ.zGmhuv6UEgLAssXCJ4T690RdYm6W"
+    "password": "$2a$12$mKYocH7whDRGvMoHA38Mw.5hGCaDIchDX5xYO0pZwvqS6pUomUOxO"
   },
   {
-    "questionnairesAnswered": [],
-    "_id": "02d69dfca60bff3eb42af5ab",
-    "role": "admin",
-    "username": "adminTestJson",
-    "password": "$2a$12$gNGd3sC8MIlKmGY/sMAkBeB2jRIj/WYRQv2GQtM8a733MrNpqg.Q.",
-    "passwordChangedAt": "2023-02-15T12:45:26.244Z"
-  },
-  {
-    "questionnairesAnswered": ["02d69d022d5e3963f0413418"],
-    "_id": "02d69dffa60bff3eb42af5b3",
+    "questionnairesAnswered": ["63f00bb48d706e46f060b72f"],
+    "_id": "63f00b778d706e46f060b725",
+    "username": "user-vass2",
     "role": "user",
-    "username": "userTestJson",
-    "password": "$2a$12$GqZvF1rg7/6L7fUqlrIRoe1AQu.L6EV.QOX.bf9hrI0IISM90S5Q2",
-    "passwordChangedAt": "2023-02-15T12:45:27.824Z"
+    "password": "$2a$12$Ubq4RSx2f52lQO/7mIMqX.hjxTpBZnJJ7UTMxma7jVygcCAJpnDDK"
   },
   {
-    "questionnairesAnswered": [],
-    "_id": "02d69dfda60bff3eb42af5af",
-    "role": "admin",
-    "username": "adminTestCsv",
-    "password": "$2a$12$yHOnzhlVjiKjFbRz8Lk7Ruxwe/NPgETU48XCisgBCPYm15pe76hYS",
-    "passwordChangedAt": "2023-02-15T12:45:27.016Z"
-  },
-  {
-    "questionnairesAnswered": ["02d69dd10686a24acc855451"],
-    "_id": "02d69d1d89265806ac5457e4",
-    "username": "test-user2",
+    "questionnairesAnswered": ["63f00bb48d706e46f060b72f"],
+    "_id": "63f00b7b8d706e46f060b727",
+    "username": "user-vass3",
     "role": "user",
-    "password": "$2a$12$n6uhkd8wrcge2vmbXOnJyeQDxOfdCVgHOqtGwcTp8CsmysZl.WaSy"
+    "password": "$2a$12$tO6.vGun7VLy1S60GhfeCOAx4SMeGdNXywPh2Vld3AiMrupn06wtu"
   },
   {
-    "questionnairesAnswered": ["02d69df62d5e3963f04133cc"],
-    "_id": "02d69d00a60bff3eb42af5b7",
+    "questionnairesAnswered": ["63f00bb48d706e46f060b72f"],
+    "_id": "63f00b7e8d706e46f060b729",
+    "username": "user-vass4",
     "role": "user",
-    "username": "userTestCsv",
-    "password": "$2a$12$2z4WStvF9redqk63QNJ0qe38bl7E89.hCL1TEl6kb/rMHScb.3pQK",
-    "passwordChangedAt": "2023-02-15T12:45:28.499Z"
+    "password": "$2a$12$gNl5u9Iel8R4Vnwce56o5uG7qaTrPuM.GmBIJjnHvj/iaQwl5Noai"
+  },
+  {
+    "questionnairesAnswered": ["63f00bb48d706e46f060b72f"],
+    "_id": "63f00b818d706e46f060b72b",
+    "username": "user-vass5",
+    "role": "user",
+    "password": "$2a$12$w1IUDSkab7TewchR/oq9HODhe.cJRFMfuAi98ZW6olqEiiBeHL/HO"
   }
 ]
