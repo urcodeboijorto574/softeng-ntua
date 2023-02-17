@@ -397,8 +397,6 @@ if __name__ == '__main__':
                 print("Invalid number of arguments passed! Exiting...")
                 sys.exit(1)
             if sys.argv[2] not in ["--username", "--passw"] or sys.argv[4] not in ["--username", "--passw"] or sys.argv[2] == sys.argv[4]:
-                print(sys.argv[2] not in ["--username", "--passw"])
-                print(sys.argv[4] not in ["--username", "--passw"])
                 print("Invalid arguments passed! Exiting...")
                 sys.exit(1)
         elif sys.argv[1] == "logout":
